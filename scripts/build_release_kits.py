@@ -13,9 +13,12 @@ from __future__ import annotations
 
 import argparse
 import html as html_mod
+import os
 import pathlib
 import re
 import shutil
+import subprocess
+import tempfile
 
 import numpy as np
 from PIL import Image
@@ -158,8 +161,233 @@ def fit_banner_5x2(src_path: pathlib.Path, dst_path: pathlib.Path) -> None:
     out.save(dst_path, format="PNG", optimize=True)
 
 
-def extract_substack_body(raw_html: str) -> str:
-    """Extract clean prose HTML below .meta-box and before </body>."""
+def find_chrome_bin() -> str:
+    env_bin = os.environ.get("CHROME_BIN")
+    if env_bin and pathlib.Path(env_bin).exists():
+        return env_bin
+    for candidate in [
+        "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome",
+        shutil.which("google-chrome") or "",
+        shutil.which("chromium") or "",
+    ]:
+        if candidate and pathlib.Path(candidate).exists():
+            return candidate
+    raise FileNotFoundError("Google Chrome binary not found; set CHROME_BIN.")
+
+
+def render_equation_card_2x(card_kind: str, dst_png: pathlib.Path) -> None:
+    """Render a 2x Retina Dawn State annotated equation PNG via headless Chrome."""
+    chrome = find_chrome_bin()
+    if card_kind == "part2":
+        win_h = 300
+        inner_html = """
+        <div class="eq-card">
+          <div class="eq-kicker">Offline Procrustes Safety Fold · Zero Extra Parameters or FLOPs</div>
+          <div class="eq-grid">
+            <div class="eq-term">
+              <div class="eq-math"><i>R</i><sub>safe</sub></div>
+              <div class="eq-bar bar-sage"></div>
+              <div class="eq-lbl"><strong>Aligned loop bridge</strong><span>5,376 × 5,376 · 0 runtime cost</span></div>
+            </div>
+            <div class="eq-op">=</div>
+            <div class="eq-term">
+              <div class="eq-math"><i>R</i><sub>proc</sub></div>
+              <div class="eq-bar bar-slate"></div>
+              <div class="eq-lbl"><strong>Procrustes rotation</strong><span>untwists 87.1° turn</span></div>
+            </div>
+            <div class="eq-term term-focus">
+              <div class="eq-math">( <i>I</i> &minus; <i>Q</i><sub>42</sub> <i>Q</i><sub>42</sub><sup>&top;</sup> )</div>
+              <div class="eq-bar bar-orange"></div>
+              <div class="eq-lbl"><strong>3D moral projector</strong><span>zeros Spite, Disgust &amp; Predation</span></div>
+            </div>
+          </div>
+        </div>
+        """
+    else:
+        win_h = 370
+        inner_html = """
+        <div class="eq-card">
+          <div class="eq-kicker">Zero-Cost Offline Weight Fold · 0 Extra Parameters · 0 Runtime FLOPs</div>
+          <div class="eq-rows">
+            <div class="eq-row">
+              <div class="eq-badge">Retrofitted Loop · Gemma 4</div>
+              <div class="eq-math-sm"><i>R</i><sub>safe</sub> &nbsp;=&nbsp; <i>R</i><sub>proc</sub> <span class="pill">( <i>I</i> &minus; <i>Q</i><sub>42</sub> <i>Q</i><sub>42</sub><sup>&top;</sup> )</span></div>
+              <div class="eq-note">Zeros 4 bluster &amp; spite axes inside the bridge (3.51 &times; 10<sup>&minus;9</sup> leak)</div>
+            </div>
+            <div class="eq-divider"></div>
+            <div class="eq-row">
+              <div class="eq-badge">Native Loop · Inkling-2-Mini</div>
+              <div class="eq-math-sm"><i>W</i><sub>out,safe</sub> &nbsp;=&nbsp; <i>W</i><sub>out</sub> <span class="pill">( <i>I</i> &minus; <i>Q</i><sub>msg</sub> <i>Q</i><sub>msg</sub><sup>&top;</sup> )</span></div>
+              <div class="eq-note">Scrubs 4-channel cross-pass message bank (99.83% subspace intact)</div>
+            </div>
+          </div>
+        </div>
+        """
+
+    doc = f"""<!doctype html>
+<html><head><meta charset="utf-8">
+<style>
+  * {{ box-sizing: border-box; margin: 0; padding: 0; }}
+  html, body {{
+    width: 840px;
+    background: #FFFFF0;
+    color: #0F0F0F;
+    font-family: Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }}
+  body {{ padding: 14px; display: inline-block; }}
+  .eq-card {{
+    width: 812px;
+    background: #FFFFF0;
+    border: 2px solid #2C3E50;
+    border-radius: 12px;
+    padding: 22px 28px 24px;
+  }}
+  .eq-kicker {{
+    font-size: 11.5px;
+    font-weight: 600;
+    letter-spacing: 0.11em;
+    text-transform: uppercase;
+    color: #1E3447;
+    margin-bottom: 18px;
+  }}
+  .eq-grid {{
+    display: grid;
+    grid-template-columns: 1fr auto 1fr 1.45fr;
+    align-items: start;
+    gap: 14px;
+  }}
+  .eq-term {{
+    background: #F5EEDC;
+    border: 1px solid rgba(44, 62, 80, 0.22);
+    border-radius: 8px;
+    padding: 14px 14px 12px;
+    text-align: center;
+  }}
+  .term-focus {{
+    border: 2px solid #2C3E50;
+    background: #F5EEDC;
+  }}
+  .eq-op {{
+    font-family: Georgia, 'Times New Roman', serif;
+    font-size: 32px;
+    color: #2C3E50;
+    padding-top: 14px;
+  }}
+  .eq-math {{
+    font-family: Georgia, 'Times New Roman', serif;
+    font-size: 30px;
+    line-height: 1.2;
+    color: #0F0F0F;
+    margin-bottom: 10px;
+    white-space: nowrap;
+  }}
+  .eq-math sub, .eq-math-sm sub {{
+    font-family: Inter, -apple-system, sans-serif;
+    font-size: 0.52em;
+    font-style: normal;
+    font-weight: 500;
+    color: #1E3447;
+    vertical-align: -0.22em;
+    margin-left: 1px;
+  }}
+  .eq-math sup, .eq-math-sm sup {{
+    font-family: Inter, -apple-system, sans-serif;
+    font-size: 0.52em;
+    font-style: normal;
+    font-weight: 600;
+    color: #1E3447;
+    vertical-align: 0.48em;
+    margin-left: 1px;
+  }}
+  .eq-bar {{ height: 4px; border-radius: 2px; margin: 0 auto 9px; width: 72%; }}
+  .bar-sage {{ background: #87A96B; }}
+  .bar-slate {{ background: #2C3E50; }}
+  .bar-orange {{ background: #F39C12; border: 1px solid #2C3E50; height: 6px; }}
+  .eq-lbl strong {{ display: block; font-size: 13px; font-weight: 600; color: #0F0F0F; margin-bottom: 2px; }}
+  .eq-lbl span {{ display: block; font-size: 12px; color: #1E3447; }}
+  .eq-rows {{ display: flex; flex-direction: column; gap: 14px; }}
+  .eq-divider {{ height: 1px; background: rgba(44, 62, 80, 0.2); }}
+  .eq-row {{
+    display: grid;
+    grid-template-columns: 195px 1fr;
+    grid-template-rows: auto auto;
+    column-gap: 18px;
+    row-gap: 4px;
+    align-items: center;
+  }}
+  .eq-badge {{
+    grid-row: 1 / span 2;
+    background: #F5EEDC;
+    border: 1px solid rgba(44, 62, 80, 0.28);
+    border-radius: 8px;
+    padding: 10px 12px;
+    font-size: 12.5px;
+    font-weight: 600;
+    color: #1E3447;
+    text-align: center;
+  }}
+  .eq-math-sm {{
+    font-family: Georgia, 'Times New Roman', serif;
+    font-size: 26px;
+    line-height: 1.25;
+    color: #0F0F0F;
+  }}
+  .pill {{
+    display: inline-block;
+    background: #F5EEDC;
+    border: 1.5px solid #2C3E50;
+    border-bottom: 3.5px solid #F39C12;
+    border-radius: 6px;
+    padding: 2px 10px 3px;
+    margin-left: 2px;
+  }}
+  .eq-note {{
+    font-size: 12.5px;
+    color: #1E3447;
+  }}
+  .eq-note sup {{ font-size: 0.72em; vertical-align: 0.32em; }}
+</style></head>
+<body>{inner_html}</body></html>
+"""
+
+    with tempfile.TemporaryDirectory(prefix="eq-card-") as tmp:
+        tmp_dir = pathlib.Path(tmp)
+        html_path = tmp_dir / "card.html"
+        raw_shot = tmp_dir / "shot.png"
+        html_path.write_text(doc)
+        subprocess.run(
+            [
+                chrome,
+                "--headless=new",
+                "--disable-gpu",
+                "--no-first-run",
+                "--no-default-browser-check",
+                "--hide-scrollbars",
+                f"--window-size=840,{win_h}",
+                "--force-device-scale-factor=2",
+                f"--screenshot={raw_shot}",
+                html_path.as_uri(),
+            ],
+            check=True,
+            stdout=subprocess.DEVNULL,
+            stderr=subprocess.DEVNULL,
+        )
+        im = Image.open(raw_shot).convert("RGB")
+        arr = np.asarray(im, dtype=np.int16)
+        bg = np.array([255, 255, 240], dtype=np.int16)
+        diff = np.abs(arr - bg).max(axis=2) > 8
+        ys, _ = np.where(diff)
+        if len(ys):
+            top = max(0, int(ys.min()) - 24)
+            bot = min(arr.shape[0], int(ys.max()) + 25)
+            im = im.crop((0, top, arr.shape[1], bot))
+        dst_png.parent.mkdir(parents=True, exist_ok=True)
+        im.save(dst_png, format="PNG", optimize=True)
+
+
+def extract_substack_body(raw_html: str, slug: str) -> str:
+    """Extract clean prose HTML below .meta-box, replacing ASCII formulas cleanly."""
     m = re.search(r'</div>\s*(<p>[\s\S]*?)</body>', raw_html)
     assert m, "Could not locate body content after .meta-box"
     body = m.group(1).strip()
@@ -169,12 +397,69 @@ def extract_substack_body(raw_html: str) -> str:
     body = re.sub(r'<a href="#references">([\s\S]*?)</a>', r"\1", body)
     # Normalize relative /pubs/... links to full https://shelltoho.me/pubs/...
     body = body.replace('href="/pubs/', 'href="https://shelltoho.me/pubs/')
+
+    # 1. Cut the 3 heavy ASCII equation blocks whose surrounding prose already explains them
+    body = re.sub(
+        r"<blockquote><p><code>h\^\(l\+1\)[\s\S]*?</code></p></blockquote>",
+        "",
+        body,
+    )
+    body = re.sub(
+        r"<blockquote><p><code>H_24\^\(k\+1\)[\s\S]*?</code></p></blockquote>",
+        "",
+        body,
+    )
+    body = re.sub(
+        r"<blockquote><p><code>e \(p_t[\s\S]*?</code></p></blockquote>",
+        "",
+        body,
+    )
+
+    # 2. Replace the signature R_safe equation in Parts 2 & 3 with a 2x Dawn State equation PNG figure
+    if slug == "01_part2_bottleneck":
+        eq_fig = (
+            '<figure><img src="figures/zero_cost_bridge_eq_2x.png" '
+            'alt="Offline Procrustes safety fold: R_safe equals R_proc times (I minus Q_42 Q_42 transpose), zeroing Spite, Disgust, and Predation at zero extra runtime cost.">'
+            "<figcaption>Right-multiplying the Procrustes rotation matrix offline by the three-dimensional moral null-space projector scrubs recurrent amplification at zero runtime cost.</figcaption></figure>"
+        )
+        body, n_eq = re.subn(
+            r"<blockquote><p><code>R_safe = R_proc[\s\S]*?</code></p></blockquote>",
+            eq_fig,
+            body,
+        )
+        assert n_eq == 1, f"Expected 1 R_safe equation in Part 2, found {n_eq}"
+    elif slug == "02_part3_looping":
+        eq_fig = (
+            '<figure><img src="figures/zero_cost_bridge_eq_2x.png" '
+            'alt="Zero-cost offline weight fold: R_safe equals R_proc times (I minus Q_42 Q_42 transpose) for retrofitted Gemma 4 loops, and W_out,safe equals W_out times (I minus Q_msg Q_msg transpose) for native Inkling message banks.">'
+            "<figcaption>Folding the four shortcut axes out of the Procrustes bridge (top) or native cross-pass message bank (bottom) once offline adds zero parameters and zero runtime FLOPs.</figcaption></figure>"
+        )
+        body, n_eq = re.subn(
+            r"<blockquote><p><code>R_safe = R_proc[\s\S]*?</code></p></blockquote>",
+            eq_fig,
+            body,
+        )
+        assert n_eq == 1, f"Expected 1 R_safe equation in Part 3, found {n_eq}"
+
+    # 3. Clean up remaining ASCII carets/underscores in inline prose and captions
+    body = body.replace("R = U V^T", "R = U V\u1d40")
+    body = body.replace("<code>I \u2212 Q_42 Q_42^T</code>", "<code>I \u2212 Q Q\u1d40</code>")
+    body = body.replace("state <code>H_24^(0)</code>", "first-pass Layer 24 state")
+    body = body.replace("<code>H_24^(0)</code>", "the first-pass Layer 24 state")
+    body = body.replace("R^2 = 0.9999", "R\u00b2 = 0.9999")
+    body = body.replace("of <code>R^2304</code>", "of the 2,304-dimensional stream")
+    body = body.replace("<code>R_safe</code>", "the folded bridge")
+    body = body.replace("<code>R_proc</code>", "the Procrustes bridge")
+    body = body.replace("<code>W_down</code>", "<code>W_down</code>")
+
     # Remove trailing auto-generated Folio footer italic line so we append a unified Methods H3
     body = re.sub(
         r"<p><em>Interactive web edition, full tables, and code by Matt West at [\s\S]*?</em></p>\s*$",
         "",
         body,
     )
+    assert "<blockquote><p><code>" not in body, f"Unconverted ASCII equation block left in {slug}"
+    assert "^(" not in body and "^T" not in body and "^2" not in body, f"Raw ASCII caret left in {slug}"
     return body.strip()
 
 
@@ -432,16 +717,30 @@ def main() -> None:
         fit_banner_5x2(raw_banner, final_banner)
 
         folio_sub = pathlib.Path(sp["folio_dir"]) / "substack"  # type: ignore[arg-type]
-        raw_sub_html = (folio_sub / "substack_paste_ready.html").read_text()
-        body = extract_substack_body(raw_sub_html)
-        # On Substack, link Part 1 directly to the live Terms of Plenty issue
-        body = body.replace(f'href="{PART1_WEB_URL}"', f'href="{PART1_SUBSTACK_URL}"')
-        # Convert H2 Methods in Part 2 to H3 Methods to match Part 1
-        body = body.replace("<h2>Methods, Repo &amp; Technical Notes</h2>", "<h3>Methods, Repo &amp; Technical Notes</h3>")
-        if sp["extra_methods"]:
-            body = f"{body}\n\n{sp['extra_methods']}"
+        # Render 2x Dawn State equation card into a temp staging dir alongside source figures
+        with tempfile.TemporaryDirectory(prefix="stage-figs-") as stage_tmp:
+            stage_fig_dir = pathlib.Path(stage_tmp)
+            for f in (folio_sub / "figures").iterdir():
+                if f.is_file():
+                    shutil.copy2(f, stage_fig_dir / f.name)
+            if sp["slug"] == "01_part2_bottleneck":
+                render_equation_card_2x("part2", stage_fig_dir / "zero_cost_bridge_eq_2x.png")
+            elif sp["slug"] == "02_part3_looping":
+                render_equation_card_2x("part3", stage_fig_dir / "zero_cost_bridge_eq_2x.png")
 
-        body, ordered_figs = renumber_figures(body, folio_sub / "figures", kdir / "figures")
+            raw_sub_html = (folio_sub / "substack_paste_ready.html").read_text()
+            body = extract_substack_body(raw_sub_html, str(sp["slug"]))
+            # On Substack, link Part 1 directly to the live Terms of Plenty issue
+            body = body.replace(f'href="{PART1_WEB_URL}"', f'href="{PART1_SUBSTACK_URL}"')
+            # Convert H2 Methods in Part 2 to H3 Methods to match Part 1
+            body = body.replace("<h2>Methods, Repo &amp; Technical Notes</h2>", "<h3>Methods, Repo &amp; Technical Notes</h3>")
+            if sp["extra_methods"]:
+                body = f"{body}\n\n{sp['extra_methods']}"
+
+            # Clear old numbered figures before renumbering cleanly
+            if (kdir / "figures").exists():
+                shutil.rmtree(kdir / "figures")
+            body, ordered_figs = renumber_figures(body, stage_fig_dir, kdir / "figures")
         # Also copy static corkscrew PNG fallback for Part 2 X Article in case X prefers PNG over 9MB GIF
         if sp["slug"] == "01_part2_bottleneck":
             snap = folio_sub.parent.parent / "funnel_cards/rotating_corkscrew_procrustes_snap.png"
