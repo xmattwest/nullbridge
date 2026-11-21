@@ -1,0 +1,15 @@
+/* Handbook specimen only. Consumer geometry belongs to its destination. */
+.editorial-specimen { color: var(--wp-personal-text); font-family: var(--wp-font-body); }
+.editorial-pair { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 24px; }
+.editorial-sample { min-width: 0; padding: 24px; background: var(--wp-surface); border: 1px solid var(--wp-ui-border); border-radius: var(--wp-radius-container); }
+.editorial-sample > p { font-size: 1rem; }
+.editorial-sample .editorial-personal { font: 400 2.25rem/1.2 var(--wp-font-personal); letter-spacing: var(--wp-tracking-personal); }
+.editorial-sample .editorial-title { font: var(--wp-weight-publication) var(--wp-publication-size)/var(--wp-publication-line-height) var(--wp-font-publication); font-optical-sizing: var(--wp-optical-publication); letter-spacing: var(--wp-tracking-publication); margin: 20px 0 12px; }
+.editorial-loom { display: flex; gap: 24px; align-items: center; margin: 24px 0; }
+.editorial-loom img { width: 80px; height: 130px; flex-shrink: 0; }
+.editorial-loom p { margin: 0; font-size: .875rem; }
+.editorial-sample .editorial-action { display: inline-flex; align-items: center; min-height: 44px; padding: 8px 16px; background: var(--wp-ui-active); color: var(--wp-on-ui-active); border-radius: var(--wp-radius-small); font-size: .875rem; font-weight: 600; }
+.editorial-action:focus-visible { outline: 2px solid var(--wp-focus); outline-offset: 4px; }
+.editorial-reading { color: var(--wp-text-primary); }
+.editorial-reading > p { font-size: 1.125rem; }
+@media (max-width: 800px) { .editorial-pair { grid-template-columns: 1fr; } }

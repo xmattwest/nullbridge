@@ -1,0 +1,8 @@
+{
+  "name": "Signal loom",
+  "source": "Inside LFM3, released 24-layer backbone order",
+  "source_url": "https://shelltoho.me/pubs/inside-lfm3/#fig-architecture",
+  "layers": ["C", "C", "G", "C", "S", "C", "G", "C", "S", "C", "G", "C", "S", "C", "G", "C", "S", "C", "G", "C", "S", "C", "G", "C"],
+  "geometry": {"viewBox": "100 0 160 260", "centerX": 180, "amplitude": 58, "startY": 24, "pitch": 9.1, "period": 12},
+  "interpretation": "One marked node per released layer. The weave is symbolic, not measured attention, a circuit map, or two discovered pathways."
+}

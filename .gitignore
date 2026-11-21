@@ -23,6 +23,7 @@ dist/
 *credentials*
 *secret*
 *token*
+!design-system/**/tokens.json
 scripts/local/
 scripts/azure/
 

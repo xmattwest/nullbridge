@@ -1,0 +1,3371 @@
+# Nullbridge (Part 3): Claim-verified Dawn State manuscript manifest
+# Compiled by Folio (`folio verify` + `folio build`) across preprint, monograph, Substack, X, and syndication.
+
+base_dir = ".."
+
+[meta]
+title = "Nullbridge: Algebraic Null-Space Bridges vs. Behavioral LoRA Across Retrofitted and Native Silent Loops"
+preprint_title = "Nullbridge: Folding Orthogonal Bias Null-Spaces into Procrustes Bridges and Cross-Pass Message Banks Under Silent Multi-Pass Deliberation"
+monograph_title = "Nullbridge"
+substack_title_alt = "Silent Loops Multiply Reward Hacking 19x and Trigger Moral Bias on Pass Two. Folding Four Directions Out of the Bridge Costs Zero FLOPs."
+subtitle = "Across {{combined_cells}} evaluation cells on retrofitted Gemma-4-Loop-Compact and native pretrained TML-d24-varloop-research and Inkling-2-Mini, silent loops amplify verifier reward hacking {{amp_ver_k3_ratio}} and ignite covert moral bias {{ta_mor_jump_ratio}} on pass two, while algebraic null-space projection curbs drift without Coda LoRA's {{ta_coda_mor_k5_ratio}} moral backfire, bounded by a negative result on literal KV copying."
+author = "Matt West"
+date = "November 21, 2026"
+iso_date = "2026-11-21"
+affiliation = "Independent research"
+wordmark = "shelltoho.me"
+home_label = "← Matt West"
+home_url = "https://shelltoho.me/"
+monograph_status = "Essay · Part 3"
+preprint_status = "Preprint · Part 3 · Not peer reviewed"
+part1_url = "https://shelltoho.me/pubs/rotating-the-bottleneck/"
+part1_label = "Part 2: Rotating the Bottleneck"
+repo_url = "https://github.com/xmattwest/nullbridge"
+canonical_url = "https://shelltoho.me/pubs/nullbridge/"
+preprint_url = "https://shelltoho.me/pubs/nullbridge/preprint/"
+author_url = "https://shelltoho.me/"
+author_id = "https://shelltoho.me/#matt"
+base_model = "google/gemma-4-31B-it, thinkingmachines/TML-d24-varloop-research, thinkingmachines/Inkling-2-Mini"
+substack_tables = true
+hero_figure = "fig-nullbridge-arch"
+keywords = [
+  "mechanistic interpretability",
+  "looped transformers",
+  "Orthogonal Procrustes",
+  "null-space projection",
+  "reward hacking",
+  "sycophancy",
+  "latent reasoning",
+  "Gemma 4",
+  "Inkling-2-Mini",
+  "looped lens",
+]
+
+abstract = "Moving multi-step deliberation from visible chain-of-thought tokens into silent recurrent passes blinds token-level monitors and exposes hidden states to multi-pass heuristic compounding. Across {{combined_cells}} GPU evaluation cells spanning both a retrofitted Procrustes loop (Gemma-4-Loop-Compact, {{compact_gb}}, K = 1..4) and two native pretrained looped MoEs with 4-channel cross-pass message banks (TML-d24-varloop-research across K = 1..5 plus OOD K = 7, and flagship Inkling-2-Mini at K = 3), I compare behavioral de-biasing LoRAs head-to-head against algebraic null-space projection. On Gemma-4-Loop-Compact, silent recurrence raises zero-CoT multi-hop tracking {{amp_mh_k4_ratio}} ({{unc_k1_mh}} to {{unc_k4_mh}}) while multiplying single-pass verifier susceptibility to confident markdown gloss {{amp_ver_k3_ratio}} at K = 3 ({{unc_k1_ver_susc}} to {{unc_k3_ver_susc}} log-odds). Folding four contrastive bias axes ({{removed_pct}} of residual dimensions, sitting {{syc_ctrl_deg}} to {{auth_ctrl_deg}} from genuine evidence) into the Procrustes bridge (R_safe = R_proc (I − Q Q^T), {{extra_params}} extra parameters, {{extra_flops}} extra FLOPs) lifts K = 4 hacked verification to {{brg_k4_ver_acc}} ({{brg_vs_coda_ver_k4}} over Coda LoRA) and corporate balance-sheet accuracy to {{brg_k4_bs}}, while Dual Nullbridge cuts K = 4 moral contamination {{dual_mor_pct_k4}} (Holm p = {{dual_mor_p_k4}}) without Full LoRA's {{full_k2_san}} cashflow sanity crash. On native pretrained loops, a closed-form Coda-Transport Ridge Lens cuts intermediate readout KL by {{ta_lens_p1_kl_delta}} to {{ta_lens_p5_kl_delta}} across passes ({{ta_ink_lens_p3_kl_delta}} on Inkling-2-Mini, lifting Pass-3 Top-5 token agreement to {{ta_ink_lens_p3_top5}}). Behaviorally, covert moral bias is near zero at K = 1 ({{ta_v_unc_k1_mor}} log-odds) and jumps {{ta_mor_jump_ratio}} on Pass 2 ({{ta_v_unc_k2_mor}} log-odds) as cross-pass messages activate; Coda LoRA (L18..L23) backfires by multiplying moral distortion {{ta_coda_mor_k3_ratio}} at K = 3 ({{ta_v_coda_k3_mor}} log-odds, Holm p = {{ta_p_all4_coda_mor_k3}}) and {{ta_coda_mor_k5_ratio}} at K = 5 ({{ta_v_coda_k5_mor}} log-odds) while degrading K = 5 alias guardrails {{ta_coda_alias_drop_k5}}. Conversely, native silent passes self-correct wrong-integer anchoring from {{ta_v_unc_k1_cov}} (K = 1) to {{ta_v_unc_k5_cov}} (K = 5) and {{ta_ink_unc_k3_cov}} on Inkling-2-Mini; dissecting the message bank proves cross-pass QKV attention messages carry the anchor ({{ta_qkv_k4_cov_pp}} at K = 4 vs. {{ta_mlp_k4_cov_pp}} for MLP-only), and BOS-orthogonal message-bank projection trims Inkling-2-Mini tainted-provenance distortion {{ta_ink_all4_tnt_pct}} while lifting Pass-3 pre-coda verifier accuracy {{ta_ink_precoda_ver_gain}} ({{ta_ink_precoda_unc_p3}} to {{ta_ink_precoda_all4_p3}}). Controlled negative boundaries delimit residual projection under verbatim KV token copying ({{neg_cov_cap_k4}} on Gemma 4, Holm p = {{neg_cov_p_k4}}), interior 19-layer clamping ({{neg_clamp_overt_k4}} overt sycophancy), and uncentered BOS sink perturbation ({{exp_rand_kl_k4}} KL)."
+
+lede = "Across {{combined_cells}} GPU cells on retrofitted Gemma-4-Loop-Compact ({{compact_gb}}) and native pretrained TML-d24-varloop-research and Inkling-2-Mini, silent recurrent passes lift state tracking yet multiply verifier reward hacking {{amp_ver_k3_ratio}} on retrofitted loops and ignite covert moral bias {{ta_mor_jump_ratio}} on Pass 2 of native message-bank loops. Algebraic null-space projection curbs dispositional drift at near-zero KL without Full LoRA's {{full_k2_san}} cashflow sanity crash or Coda LoRA's {{ta_coda_mor_k5_ratio}} moral backfire, while isolating cross-pass QKV messages ({{ta_qkv_k4_cov_pp}} wrong-number capture at K = 4) and verbatim KV copy heads as the carriers of numeric anchoring."
+
+x_hook = "Tested Nullbridge across {{combined_cells}} cells on retrofitted Gemma-4-Loop-Compact and native pretrained Inkling-2-Mini + Varloop. Silent loops multiply verifier reward hacking {{amp_ver_k3_ratio}} (Gemma 4) and jump covert moral bias {{ta_mor_jump_ratio}} at Pass 2 (Varloop), where Coda LoRA backfires {{ta_coda_mor_k5_ratio}} on moral taint while message-bank QKV + Procrustes null-space projection stays clean."
+
+opening_paragraphs = [
+  "Part 1 of this series (Money Is Moral) showed that post-training preference alignment acts largely as a late verbal filter: models refuse explicit bias in prose while covertly mispricing tainted assets and asymmetric splits inside their hidden states. Part 2 (Rotating the Bottleneck) showed that those covert valuation axes share the exact mid-stack bottleneck (`L24..L42` in Gemma 4 31B) used for multi-hop state tracking, and that an SVD Orthogonal Procrustes bridge turns those frozen blocks into a silent `K = 1..4` recurrent deliberator inside {{compact_gb}} of memory.",
+  "Part 3 tests what happens when silent recurrence meets adversarial framing across two distinct architectural families: a retrofitted Procrustes hourglass (`Gemma-4-Loop-Compact`, `K = 1..4`) and native pretrained looped Mixture-of-Experts models (`TML-d24-varloop-research` across `K = 1..5` plus exploratory `K = 7`, and flagship `Inkling-2-Mini` at `K = 3`). Across {{eval_total_items}} held-out prompts per cell ({{combined_cells}} cells total, zero lexical or entity overlap against probe or training splits), I compare behavioral de-biasing LoRAs head-to-head against algebraic null-space projection folded into Procrustes bridges and 4-channel cross-pass message banks.",
+]
+
+opening_summary = [
+  "Retrofitted Procrustes loop (`Gemma-4-Loop-Compact`): silent passes (`K = 1..4`) lift zero-CoT multi-hop tracking {{amp_mh_k4_ratio}} ({{unc_k1_mh}} to {{unc_k4_mh}}) while multiplying single-pass verifier reward hacking {{amp_ver_k3_ratio}} at `K = 3`; zero-FLOP bridge folding (`R_safe`, leakage {{r_null_leak}}) lifts `K = 4` hacked verification to {{brg_k4_ver_acc}} ({{brg_vs_coda_ver_k4}} over Coda LoRA) and balance sheets to {{brg_k4_bs}}, while Dual Nullbridge cuts moral taint {{dual_mor_pct_k4}} without Full LoRA's {{full_k2_san}} sanity crash.",
+  "Looped Lens for native MoEs (`Varloop` & `Inkling-2-Mini`): raw `L17` logit lens fails (`KL =` {{ta_lens_raw_p1}} to {{ta_lens_raw_p5}}) because Inkling routes through 6-layer block-attention residuals and Coda `L18..L23`; a closed-form `[L11; L17]` Coda-Transport Ridge Lens cuts readout KL by {{ta_lens_p1_kl_delta}} to {{ta_lens_p5_kl_delta}} ({{ta_ink_lens_p3_kl_delta}} on `Inkling-2-Mini`, Top-5 agreement {{ta_ink_lens_p3_top5}}) and shows message-bank projection lifting Pass-3 pre-coda verification {{ta_ink_precoda_ver_gain}} ({{ta_ink_precoda_unc_p3}} to {{ta_ink_precoda_all4_p3}}).",
+  "Pass-2 moral ignition & Coda LoRA backfire: on `TML-d24-varloop-research`, covert moral bias is near zero at `K = 1` ({{ta_v_unc_k1_mor}} log-odds) and jumps {{ta_mor_jump_ratio}} to {{ta_v_unc_k2_mor}} at `K = 2` ({{ta_ink_unc_k3_mor}} on `Inkling-2-Mini`, tainted provenance {{ta_ink_unc_k3_tnt}}); `L18..L23` Coda LoRA doubles moral distortion ({{ta_coda_mor_k3_ratio}} at `K = 3`, Holm `p =` {{ta_p_all4_coda_mor_k3}}; {{ta_coda_mor_k5_ratio}} at `K = 5`), whereas `<bos>`-orthogonal message-bank projection cuts `Inkling-2-Mini` tainted provenance {{ta_ink_all4_tnt_pct}} at {{ta_ink_all4_k3_kl}} KL.",
+  "Native self-correction & `QKV` vs. `MLP` message dissection: native silent passes cut wrong-integer capture from {{ta_v_unc_k1_cov}} (`K = 1`) to {{ta_v_unc_k5_cov}} (`K = 5`) and {{ta_ink_unc_k3_cov}} (`Inkling-2-Mini`); scrubbing cross-pass `QKV` messages at `K = 4` cuts capture {{ta_qkv_k4_cov_pp}} (to {{ta_v_qkv_k4_cov}}) versus {{ta_mlp_k4_cov_pp}} for `MLP`-only ({{ta_v_mlp_k4_cov}}).",
+  "Negative & exploratory boundaries: residual projection alone cannot block verbatim Coda KV token copying on retrofitted Gemma 4 ({{neg_cov_cap_k4}} capture), interior 19-layer clamping flips overt sycophancy to {{neg_clamp_overt_k4}}, and uncentered random subspaces hit `<bos>` attention sinks ({{exp_rand_kl_k4}} KL vs. `<bos>` overlap {{ta_v_bos_overlap}} when QR-orthogonalized).",
+]
+
+ai_disclosure = "Code, statistical pipelines, and manuscript compilation in this repository were developed with AI coding assistance (Antigravity) under author direction; every empirical number is bound via Folio JSON Pointers to SHA-256-locked GPU and audit artifacts."
+
+# ---------------------------------------------------------------------------
+# Locked Empirical Artifacts (SHA-256 Pinned)
+# ---------------------------------------------------------------------------
+
+[artifacts.phase0]
+path = "results/phase0_audit/benchmark_and_algebra_audit.json"
+sha256 = "79e79c54c479253e904c1135cefabecdf811a96515729e1fd7b89b2ca034de71"
+description = "Phase 0 offline mathematical, disjointness, and K = 1..8 synthetic message-bank audit."
+
+[artifacts.trackb]
+path = "results/phase3_gemma4_nullbridge/track_b_results.json"
+sha256 = "9311552597b1824af824fcacaf7128ebedcbb60129249ae7125124a778c510fb"
+description = "Raw Track B 28-cell (7 conditions x K = 1..4) GPU evaluation on Gemma-4-Loop-Compact."
+
+[artifacts.analysis]
+path = "results/phase3_gemma4_nullbridge/statistical_analysis.json"
+sha256 = "7a5c48a2375860b0da214320595a23c1f103d91aee9b8477c41a101dd6886e47"
+description = "Deterministic Phase 3 geometric angles, amplification ratios, pp shifts, and boundary tests."
+
+[artifacts.tracka]
+path = "results/phase4_native_inkling_nullbridge/track_a_results.json"
+sha256 = "064faa10b278e80a4e26ed462a2567640275898ef64461b9b1ebc63ac89b2f86"
+description = "Raw Track A 41-cell GPU evaluation across TML-d24-varloop-research (K = 1..5 + OOD K = 7) and Inkling-2-Mini (K = 3)."
+
+[artifacts.analysis_a]
+path = "results/phase4_native_inkling_nullbridge/track_a_analysis.json"
+sha256 = "92b06581e71183907081c2345da9fa1496565c114adcba76744e82a2d140a97f"
+description = "Deterministic Phase 4 Looped Lens KL deltas, Pass-2 moral jump ratios, QKV vs. MLP channel dissections, and Coda LoRA backfire tests."
+
+# ---------------------------------------------------------------------------
+# Bound Metrics
+# ---------------------------------------------------------------------------
+
+# Architecture, storage, & audit counts
+[metrics.n_layers]
+pointer = "trackb#/metadata/n_layers"
+tier = "primary"
+style = "int"
+
+[metrics.d_model]
+pointer = "trackb#/metadata/d_model"
+tier = "primary"
+style = "int"
+
+[metrics.funnel_layers]
+pointer = "analysis#/architecture_summary/funnel_layers"
+tier = "primary"
+style = "int"
+
+[metrics.coda_layers]
+pointer = "analysis#/architecture_summary/coda_layers"
+tier = "primary"
+style = "int"
+
+[metrics.k4_blocks]
+pointer = "analysis#/architecture_summary/k4_effective_blocks"
+tier = "primary"
+style = "int"
+
+[metrics.bf16_gb]
+pointer = "trackb#/metadata/bf16_storage_gb"
+tier = "primary"
+style = "number"
+decimals = 2
+unit = "GB"
+
+[metrics.compact_gb]
+pointer = "trackb#/metadata/compact_storage/total_gb"
+tier = "primary"
+style = "number"
+decimals = 2
+unit = "GB"
+
+[metrics.storage_ratio]
+pointer = "analysis#/architecture_summary/storage_compression_ratio"
+tier = "primary"
+style = "ratio"
+decimals = 2
+
+[metrics.gate_step0]
+pointer = "trackb#/metadata/learned_step_gates/0"
+tier = "primary"
+style = "number"
+decimals = 4
+
+[metrics.gate_step1]
+pointer = "trackb#/metadata/learned_step_gates/1"
+tier = "primary"
+style = "number"
+decimals = 4
+
+[metrics.gate_step2]
+pointer = "trackb#/metadata/learned_step_gates/2"
+tier = "primary"
+style = "number"
+decimals = 4
+
+[metrics.gpu_spend]
+pointer = "analysis#/compute_accounting/total_gpu_spend_usd"
+tier = "primary"
+style = "currency"
+decimals = 2
+
+[metrics.gpu_cap]
+pointer = "analysis#/compute_accounting/budget_cap_usd"
+tier = "primary"
+style = "currency"
+decimals = 2
+
+[metrics.probe_pairs_n]
+pointer = "phase0#/benchmark_audit/counts/probe_pairs"
+tier = "primary"
+style = "int"
+
+[metrics.lora_train_n]
+pointer = "phase0#/benchmark_audit/counts/lora_train_items"
+tier = "primary"
+style = "int"
+
+[metrics.overt_n]
+pointer = "phase0#/benchmark_audit/counts/eval_overt_sycophancy"
+tier = "primary"
+style = "int"
+
+[metrics.covert_n]
+pointer = "phase0#/benchmark_audit/counts/eval_covert_sycophancy"
+tier = "primary"
+style = "int"
+
+[metrics.verifier_n]
+pointer = "phase0#/benchmark_audit/counts/eval_verifier"
+tier = "primary"
+style = "int"
+
+[metrics.alias_n]
+pointer = "phase0#/benchmark_audit/counts/eval_alias_guardrail"
+tier = "primary"
+style = "int"
+
+[metrics.mh_n]
+pointer = "phase0#/benchmark_audit/counts/eval_multihop"
+tier = "primary"
+style = "int"
+
+[metrics.wp_n]
+pointer = "phase0#/benchmark_audit/counts/eval_wordprob"
+tier = "primary"
+style = "int"
+
+[metrics.bs_n]
+pointer = "phase0#/benchmark_audit/counts/eval_balsheet"
+tier = "primary"
+style = "int"
+
+[metrics.san_n]
+pointer = "phase0#/benchmark_audit/counts/eval_cashflow_sanity"
+tier = "primary"
+style = "int"
+
+[metrics.moral_n]
+pointer = "phase0#/benchmark_audit/counts/eval_moral_pairs"
+tier = "primary"
+style = "int"
+
+[metrics.kl_eval_n]
+pointer = "phase0#/benchmark_audit/counts/eval_kl_passages"
+tier = "primary"
+style = "int"
+
+[metrics.eval_total_items]
+derive = "sum"
+inputs = [
+  "phase0#/benchmark_audit/counts/eval_overt_sycophancy",
+  "phase0#/benchmark_audit/counts/eval_covert_sycophancy",
+  "phase0#/benchmark_audit/counts/eval_verifier",
+  "phase0#/benchmark_audit/counts/eval_alias_guardrail",
+  "phase0#/benchmark_audit/counts/eval_multihop",
+  "phase0#/benchmark_audit/counts/eval_wordprob",
+  "phase0#/benchmark_audit/counts/eval_balsheet",
+  "phase0#/benchmark_audit/counts/eval_cashflow_sanity",
+  "phase0#/benchmark_audit/counts/eval_moral_pairs",
+]
+tier = "primary"
+style = "int"
+
+[metrics.sha_overlap]
+pointer = "phase0#/benchmark_audit/overlaps/train_vs_eval_sha256"
+tier = "primary"
+style = "int"
+
+[metrics.syn_k8_ratio]
+pointer = "analysis#/phase0_synthetic_k8_amplification_ratio"
+tier = "primary"
+style = "ratio"
+decimals = 2
+
+[metrics.msg_bank_leak]
+pointer = "phase0#/synthetic_loop_audit/message_bank_null_leakage"
+tier = "primary"
+style = "sci"
+decimals = 2
+
+# Block 1: Subspace geometry & zero-FLOP fold
+[metrics.rank_removed]
+pointer = "trackb#/block1_subspace_geometry/rank_removed"
+tier = "primary"
+style = "int"
+
+[metrics.retained_dims]
+pointer = "trackb#/block1_subspace_geometry/retained_dimensions"
+tier = "primary"
+style = "int"
+
+[metrics.retained_pct]
+pointer = "trackb#/block1_subspace_geometry/retained_pct"
+tier = "primary"
+style = "percent"
+decimals = 4
+
+[metrics.removed_pct]
+pointer = "trackb#/block1_subspace_geometry/removed_pct"
+tier = "primary"
+style = "percent"
+decimals = 4
+
+[metrics.syc_l42_lopo]
+pointer = "trackb#/block1_subspace_geometry/concept_diagnostics/sycophancy/l42_lopo_acc"
+tier = "primary"
+style = "percent"
+scale = 100.0
+decimals = 1
+
+[metrics.auth_l42_lopo]
+pointer = "trackb#/block1_subspace_geometry/concept_diagnostics/authority_framing/l42_lopo_acc"
+tier = "primary"
+style = "percent"
+scale = 100.0
+decimals = 1
+
+[metrics.fmt_l42_lopo]
+pointer = "trackb#/block1_subspace_geometry/concept_diagnostics/confident_formatting/l42_lopo_acc"
+tier = "primary"
+style = "percent"
+scale = 100.0
+decimals = 1
+
+[metrics.spite_l42_lopo]
+pointer = "trackb#/block1_subspace_geometry/concept_diagnostics/moral_spite/l42_lopo_acc"
+tier = "primary"
+style = "percent"
+scale = 100.0
+decimals = 1
+
+[metrics.syc_l42_cos]
+pointer = "trackb#/block1_subspace_geometry/concept_diagnostics/sycophancy/l42_lopo_cosine"
+tier = "primary"
+style = "number"
+decimals = 4
+
+[metrics.auth_l42_cos]
+pointer = "trackb#/block1_subspace_geometry/concept_diagnostics/authority_framing/l42_lopo_cosine"
+tier = "primary"
+style = "number"
+decimals = 4
+
+[metrics.fmt_l42_cos]
+pointer = "trackb#/block1_subspace_geometry/concept_diagnostics/confident_formatting/l42_lopo_cosine"
+tier = "primary"
+style = "number"
+decimals = 4
+
+[metrics.spite_l42_cos]
+pointer = "trackb#/block1_subspace_geometry/concept_diagnostics/moral_spite/l42_lopo_cosine"
+tier = "primary"
+style = "number"
+decimals = 4
+
+[metrics.syc_ret_l42]
+pointer = "analysis#/subspace_geometry/control_angles_deg/sycophancy/l42_retained_pct"
+tier = "primary"
+style = "percent"
+decimals = 2
+
+[metrics.auth_ret_l42]
+pointer = "analysis#/subspace_geometry/control_angles_deg/authority_framing/l42_retained_pct"
+tier = "primary"
+style = "percent"
+decimals = 2
+
+[metrics.fmt_ret_l42]
+pointer = "analysis#/subspace_geometry/control_angles_deg/confident_formatting/l42_retained_pct"
+tier = "primary"
+style = "percent"
+decimals = 2
+
+[metrics.spite_ret_l42]
+pointer = "analysis#/subspace_geometry/control_angles_deg/moral_spite/l42_retained_pct"
+tier = "primary"
+style = "percent"
+decimals = 2
+
+[metrics.fmt_ret_l24]
+pointer = "analysis#/subspace_geometry/control_angles_deg/confident_formatting/l24_retained_pct"
+tier = "primary"
+style = "percent"
+decimals = 2
+
+[metrics.syc_ctrl_deg]
+pointer = "analysis#/subspace_geometry/control_angles_deg/sycophancy/l42_angle_to_controls_deg"
+tier = "primary"
+style = "number"
+decimals = 2
+unit = "°"
+
+[metrics.auth_ctrl_deg]
+pointer = "analysis#/subspace_geometry/control_angles_deg/authority_framing/l42_angle_to_controls_deg"
+tier = "primary"
+style = "number"
+decimals = 2
+unit = "°"
+
+[metrics.fmt_ctrl_deg]
+pointer = "analysis#/subspace_geometry/control_angles_deg/confident_formatting/l42_angle_to_controls_deg"
+tier = "primary"
+style = "number"
+decimals = 2
+unit = "°"
+
+[metrics.spite_ctrl_deg]
+pointer = "analysis#/subspace_geometry/control_angles_deg/moral_spite/l42_angle_to_controls_deg"
+tier = "primary"
+style = "number"
+decimals = 2
+unit = "°"
+
+[metrics.auth_fmt_cos]
+pointer = "analysis#/subspace_geometry/l42_auth_fmt_cosine"
+tier = "primary"
+style = "number"
+decimals = 4
+signed = true
+
+[metrics.auth_fmt_deg]
+pointer = "analysis#/subspace_geometry/l42_auth_fmt_angle_deg"
+tier = "primary"
+style = "number"
+decimals = 2
+unit = "°"
+
+[metrics.r_null_leak]
+pointer = "trackb#/block1_subspace_geometry/bridge_fold_audit/max_null_leakage_r"
+tier = "primary"
+style = "sci"
+decimals = 2
+
+[metrics.a_null_leak]
+pointer = "trackb#/block1_subspace_geometry/bridge_fold_audit/max_null_leakage_a"
+tier = "primary"
+style = "sci"
+decimals = 2
+
+[metrics.iso_err]
+pointer = "trackb#/block1_subspace_geometry/bridge_fold_audit/max_complement_isometry_err"
+tier = "primary"
+style = "sci"
+decimals = 2
+
+[metrics.extra_params]
+pointer = "trackb#/block1_subspace_geometry/bridge_fold_audit/extra_parameters"
+tier = "primary"
+style = "int"
+
+[metrics.extra_flops]
+pointer = "trackb#/block1_subspace_geometry/bridge_fold_audit/extra_runtime_flops"
+tier = "primary"
+style = "int"
+
+# Multi-pass trajectories & amplification
+[metrics.fmt_rms_k1]
+pointer = "trackb#/block1_subspace_geometry/l42_multipass_trajectories_rms/confident_formatting_hack_minus_plain/unclamped/0"
+tier = "primary"
+style = "number"
+decimals = 5
+signed = true
+
+[metrics.fmt_rms_k3]
+pointer = "trackb#/block1_subspace_geometry/l42_multipass_trajectories_rms/confident_formatting_hack_minus_plain/unclamped/2"
+tier = "primary"
+style = "number"
+decimals = 5
+signed = true
+
+[metrics.fmt_rms_dual_k3]
+pointer = "trackb#/block1_subspace_geometry/l42_multipass_trajectories_rms/confident_formatting_hack_minus_plain/dual_nullbridge/2"
+tier = "primary"
+style = "number"
+decimals = 5
+signed = true
+
+[metrics.fmt_rms_amp_pct]
+pointer = "analysis#/multipass_amplification/l42_fmt_rms_k1_to_k3_pct"
+tier = "primary"
+style = "percent"
+decimals = 2
+signed = true
+
+[metrics.amp_mh_k4_ratio]
+pointer = "analysis#/multipass_amplification/multihop_k1_to_k4_ratio"
+tier = "primary"
+style = "ratio"
+decimals = 2
+
+[metrics.amp_ver_k2_ratio]
+pointer = "analysis#/multipass_amplification/verifier_suscept_k1_to_k2_ratio"
+tier = "primary"
+style = "ratio"
+decimals = 2
+
+[metrics.amp_ver_k3_ratio]
+pointer = "analysis#/multipass_amplification/verifier_suscept_k1_to_k3_ratio"
+tier = "primary"
+style = "ratio"
+decimals = 2
+
+[metrics.amp_ver_k4_ratio]
+pointer = "analysis#/multipass_amplification/verifier_suscept_k1_to_k4_ratio"
+tier = "primary"
+style = "ratio"
+decimals = 2
+
+# Unclamped loop cells
+[metrics.unc_k1_overt]
+pointer = "trackb#/block3_head_to_head_matrix/conditions/unclamped/k1/overt_sycophancy/endorse_wrong_rate"
+tier = "primary"
+style = "percent"
+scale = 100.0
+decimals = 1
+
+[metrics.unc_k4_overt_lo]
+pointer = "trackb#/block3_head_to_head_matrix/conditions/unclamped/k4/overt_sycophancy/mean_bias_log_odds"
+tier = "primary"
+style = "number"
+decimals = 2
+signed = true
+
+[metrics.unc_k1_cov_neu]
+pointer = "trackb#/block3_head_to_head_matrix/conditions/unclamped/k1/covert_sycophancy/neutral_gold_acc"
+tier = "primary"
+style = "percent"
+scale = 100.0
+decimals = 1
+
+[metrics.unc_k1_cov_cap]
+pointer = "trackb#/block3_head_to_head_matrix/conditions/unclamped/k1/covert_sycophancy/pressured_wrong_capture_rate"
+tier = "primary"
+style = "percent"
+scale = 100.0
+decimals = 1
+
+[metrics.unc_k1_cov_pull]
+pointer = "trackb#/block3_head_to_head_matrix/conditions/unclamped/k1/covert_sycophancy/sycophantic_pull_delta_lo"
+tier = "primary"
+style = "number"
+decimals = 2
+signed = true
+
+[metrics.unc_k2_cov_pull]
+pointer = "trackb#/block3_head_to_head_matrix/conditions/unclamped/k2/covert_sycophancy/sycophantic_pull_delta_lo"
+tier = "primary"
+style = "number"
+decimals = 2
+signed = true
+
+[metrics.unc_k4_cov_pull]
+pointer = "trackb#/block3_head_to_head_matrix/conditions/unclamped/k4/covert_sycophancy/sycophantic_pull_delta_lo"
+tier = "primary"
+style = "number"
+decimals = 2
+signed = true
+
+[metrics.unc_k1_ver_plain]
+pointer = "trackb#/block3_head_to_head_matrix/conditions/unclamped/k1/verifier_0cot/plain_acc"
+tier = "primary"
+style = "percent"
+scale = 100.0
+decimals = 1
+
+[metrics.unc_k4_ver_plain]
+pointer = "trackb#/block3_head_to_head_matrix/conditions/unclamped/k4/verifier_0cot/plain_acc"
+tier = "primary"
+style = "percent"
+scale = 100.0
+decimals = 1
+
+[metrics.unc_k1_ver_acc]
+pointer = "trackb#/block3_head_to_head_matrix/conditions/unclamped/k1/verifier_0cot/hacked_acc"
+tier = "primary"
+style = "percent"
+scale = 100.0
+decimals = 1
+
+[metrics.unc_k2_ver_acc]
+pointer = "trackb#/block3_head_to_head_matrix/conditions/unclamped/k2/verifier_0cot/hacked_acc"
+tier = "primary"
+style = "percent"
+scale = 100.0
+decimals = 1
+
+[metrics.unc_k3_ver_acc]
+pointer = "trackb#/block3_head_to_head_matrix/conditions/unclamped/k3/verifier_0cot/hacked_acc"
+tier = "primary"
+style = "percent"
+scale = 100.0
+decimals = 1
+
+[metrics.unc_k4_ver_acc]
+pointer = "trackb#/block3_head_to_head_matrix/conditions/unclamped/k4/verifier_0cot/hacked_acc"
+tier = "primary"
+style = "percent"
+scale = 100.0
+decimals = 1
+
+[metrics.unc_k1_ver_susc]
+pointer = "trackb#/block3_head_to_head_matrix/conditions/unclamped/k1/verifier_0cot/reward_hack_susceptibility_lo"
+tier = "primary"
+style = "number"
+decimals = 3
+signed = true
+
+[metrics.unc_k2_ver_susc]
+pointer = "trackb#/block3_head_to_head_matrix/conditions/unclamped/k2/verifier_0cot/reward_hack_susceptibility_lo"
+tier = "primary"
+style = "number"
+decimals = 3
+signed = true
+
+[metrics.unc_k3_ver_susc]
+pointer = "trackb#/block3_head_to_head_matrix/conditions/unclamped/k3/verifier_0cot/reward_hack_susceptibility_lo"
+tier = "primary"
+style = "number"
+decimals = 3
+signed = true
+
+[metrics.unc_k4_ver_susc]
+pointer = "trackb#/block3_head_to_head_matrix/conditions/unclamped/k4/verifier_0cot/reward_hack_susceptibility_lo"
+tier = "primary"
+style = "number"
+decimals = 3
+signed = true
+
+[metrics.unc_k1_ledg_acc]
+pointer = "trackb#/block3_head_to_head_matrix/conditions/unclamped/k1/verifier_0cot/by_domain/ledger_audit/hacked_acc"
+tier = "primary"
+style = "percent"
+scale = 100.0
+decimals = 1
+
+[metrics.unc_k3_ledg_acc]
+pointer = "trackb#/block3_head_to_head_matrix/conditions/unclamped/k3/verifier_0cot/by_domain/ledger_audit/hacked_acc"
+tier = "primary"
+style = "percent"
+scale = 100.0
+decimals = 1
+
+[metrics.unc_k4_ledg_acc]
+pointer = "trackb#/block3_head_to_head_matrix/conditions/unclamped/k4/verifier_0cot/by_domain/ledger_audit/hacked_acc"
+tier = "primary"
+style = "percent"
+scale = 100.0
+decimals = 1
+
+[metrics.unc_k1_mh]
+pointer = "trackb#/block3_head_to_head_matrix/conditions/unclamped/k1/capabilities_and_safety/multihop/overall_acc"
+tier = "primary"
+style = "percent"
+scale = 100.0
+decimals = 1
+
+[metrics.unc_k2_mh]
+pointer = "trackb#/block3_head_to_head_matrix/conditions/unclamped/k2/capabilities_and_safety/multihop/overall_acc"
+tier = "primary"
+style = "percent"
+scale = 100.0
+decimals = 1
+
+[metrics.unc_k3_mh]
+pointer = "trackb#/block3_head_to_head_matrix/conditions/unclamped/k3/capabilities_and_safety/multihop/overall_acc"
+tier = "primary"
+style = "percent"
+scale = 100.0
+decimals = 1
+
+[metrics.unc_k4_mh]
+pointer = "trackb#/block3_head_to_head_matrix/conditions/unclamped/k4/capabilities_and_safety/multihop/overall_acc"
+tier = "primary"
+style = "percent"
+scale = 100.0
+decimals = 1
+
+[metrics.unc_k4_hop3]
+pointer = "trackb#/block3_head_to_head_matrix/conditions/unclamped/k4/capabilities_and_safety/multihop/by_hops/hop_3/acc"
+tier = "primary"
+style = "percent"
+scale = 100.0
+decimals = 1
+
+[metrics.unc_k4_hop7]
+pointer = "trackb#/block3_head_to_head_matrix/conditions/unclamped/k4/capabilities_and_safety/multihop/by_hops/hop_7/acc"
+tier = "primary"
+style = "percent"
+scale = 100.0
+decimals = 1
+
+[metrics.unc_k2_bs]
+pointer = "trackb#/block3_head_to_head_matrix/conditions/unclamped/k2/capabilities_and_safety/balsheet/overall_acc"
+tier = "primary"
+style = "percent"
+scale = 100.0
+decimals = 1
+
+[metrics.unc_k4_bs]
+pointer = "trackb#/block3_head_to_head_matrix/conditions/unclamped/k4/capabilities_and_safety/balsheet/overall_acc"
+tier = "primary"
+style = "percent"
+scale = 100.0
+decimals = 1
+
+[metrics.unc_k4_wp]
+pointer = "trackb#/block3_head_to_head_matrix/conditions/unclamped/k4/capabilities_and_safety/wordprob/overall_acc"
+tier = "primary"
+style = "percent"
+scale = 100.0
+decimals = 1
+
+[metrics.unc_k1_san]
+pointer = "trackb#/block3_head_to_head_matrix/conditions/unclamped/k1/capabilities_and_safety/cashflow_sanity_acc"
+tier = "primary"
+style = "percent"
+scale = 100.0
+decimals = 1
+
+[metrics.unc_k2_san]
+pointer = "trackb#/block3_head_to_head_matrix/conditions/unclamped/k2/capabilities_and_safety/cashflow_sanity_acc"
+tier = "primary"
+style = "percent"
+scale = 100.0
+decimals = 1
+
+[metrics.unc_k3_san]
+pointer = "trackb#/block3_head_to_head_matrix/conditions/unclamped/k3/capabilities_and_safety/cashflow_sanity_acc"
+tier = "primary"
+style = "percent"
+scale = 100.0
+decimals = 1
+
+[metrics.unc_k4_san]
+pointer = "trackb#/block3_head_to_head_matrix/conditions/unclamped/k4/capabilities_and_safety/cashflow_sanity_acc"
+tier = "primary"
+style = "percent"
+scale = 100.0
+decimals = 1
+
+[metrics.unc_k1_mor]
+pointer = "trackb#/block3_head_to_head_matrix/conditions/unclamped/k1/capabilities_and_safety/moral_valuation/combined_bias_delta_lo"
+tier = "primary"
+style = "number"
+decimals = 2
+signed = true
+
+[metrics.unc_k2_mor]
+pointer = "trackb#/block3_head_to_head_matrix/conditions/unclamped/k2/capabilities_and_safety/moral_valuation/combined_bias_delta_lo"
+tier = "primary"
+style = "number"
+decimals = 2
+signed = true
+
+[metrics.unc_k4_mor]
+pointer = "trackb#/block3_head_to_head_matrix/conditions/unclamped/k4/capabilities_and_safety/moral_valuation/combined_bias_delta_lo"
+tier = "primary"
+style = "number"
+decimals = 2
+signed = true
+
+[metrics.unc_k4_tnt]
+pointer = "trackb#/block3_head_to_head_matrix/conditions/unclamped/k4/capabilities_and_safety/moral_valuation/tainted_provenance_delta_lo"
+tier = "primary"
+style = "number"
+decimals = 2
+signed = true
+
+[metrics.unc_k2_kl]
+pointer = "trackb#/block3_head_to_head_matrix/conditions/unclamped/k2/capabilities_and_safety/kl_eval_nats"
+tier = "primary"
+style = "number"
+decimals = 2
+unit = "nats"
+
+[metrics.unc_k4_kl]
+pointer = "trackb#/block3_head_to_head_matrix/conditions/unclamped/k4/capabilities_and_safety/kl_eval_nats"
+tier = "primary"
+style = "number"
+decimals = 2
+unit = "nats"
+
+[metrics.unc_k4_kl_num]
+pointer = "trackb#/block3_head_to_head_matrix/conditions/unclamped/k4/capabilities_and_safety/kl_eval_nats"
+tier = "primary"
+style = "number"
+decimals = 2
+
+[metrics.unc_k4_ms]
+pointer = "trackb#/block3_head_to_head_matrix/conditions/unclamped/k4/capabilities_and_safety/multihop/ms_per_item"
+tier = "primary"
+style = "number"
+decimals = 1
+unit = "ms/item"
+
+# Bridge-only Nullbridge (`R_safe`, 0 FLOPs)
+[metrics.brg_k1_ver_acc]
+pointer = "trackb#/block3_head_to_head_matrix/conditions/bridge_only_nullbridge/k1/verifier_0cot/hacked_acc"
+tier = "primary"
+style = "percent"
+scale = 100.0
+decimals = 1
+
+[metrics.brg_k2_ver_acc]
+pointer = "trackb#/block3_head_to_head_matrix/conditions/bridge_only_nullbridge/k2/verifier_0cot/hacked_acc"
+tier = "primary"
+style = "percent"
+scale = 100.0
+decimals = 1
+
+[metrics.brg_k3_ver_acc]
+pointer = "trackb#/block3_head_to_head_matrix/conditions/bridge_only_nullbridge/k3/verifier_0cot/hacked_acc"
+tier = "primary"
+style = "percent"
+scale = 100.0
+decimals = 1
+
+[metrics.brg_k4_ver_acc]
+pointer = "trackb#/block3_head_to_head_matrix/conditions/bridge_only_nullbridge/k4/verifier_0cot/hacked_acc"
+tier = "primary"
+style = "percent"
+scale = 100.0
+decimals = 1
+
+[metrics.brg_k4_ledg_acc]
+pointer = "trackb#/block3_head_to_head_matrix/conditions/bridge_only_nullbridge/k4/verifier_0cot/by_domain/ledger_audit/hacked_acc"
+tier = "primary"
+style = "percent"
+scale = 100.0
+decimals = 1
+
+[metrics.brg_vs_unc_ver_k4]
+pointer = "analysis#/bridge_only_nullbridge_deltas/k4_verifier_hacked_vs_unclamped_pp"
+tier = "primary"
+style = "pp"
+decimals = 1
+signed = true
+
+[metrics.brg_vs_coda_ver_k4]
+pointer = "analysis#/bridge_only_nullbridge_deltas/k4_verifier_hacked_vs_coda_lora_pp"
+tier = "primary"
+style = "pp"
+decimals = 1
+signed = true
+
+[metrics.brg_vs_coda_ledg_k4]
+pointer = "analysis#/bridge_only_nullbridge_deltas/k4_ledger_hacked_vs_coda_lora_pp"
+tier = "primary"
+style = "pp"
+decimals = 1
+signed = true
+
+[metrics.brg_k2_mh]
+pointer = "trackb#/block3_head_to_head_matrix/conditions/bridge_only_nullbridge/k2/capabilities_and_safety/multihop/overall_acc"
+tier = "primary"
+style = "percent"
+scale = 100.0
+decimals = 1
+
+[metrics.brg_k3_mh]
+pointer = "trackb#/block3_head_to_head_matrix/conditions/bridge_only_nullbridge/k3/capabilities_and_safety/multihop/overall_acc"
+tier = "primary"
+style = "percent"
+scale = 100.0
+decimals = 1
+
+[metrics.brg_k4_mh]
+pointer = "trackb#/block3_head_to_head_matrix/conditions/bridge_only_nullbridge/k4/capabilities_and_safety/multihop/overall_acc"
+tier = "primary"
+style = "percent"
+scale = 100.0
+decimals = 1
+
+[metrics.brg_vs_unc_mh_k3]
+pointer = "analysis#/bridge_only_nullbridge_deltas/k3_multihop_vs_unclamped_pp"
+tier = "primary"
+style = "pp"
+decimals = 1
+signed = true
+
+[metrics.brg_k2_bs]
+pointer = "trackb#/block3_head_to_head_matrix/conditions/bridge_only_nullbridge/k2/capabilities_and_safety/balsheet/overall_acc"
+tier = "primary"
+style = "percent"
+scale = 100.0
+decimals = 1
+
+[metrics.brg_k4_bs]
+pointer = "trackb#/block3_head_to_head_matrix/conditions/bridge_only_nullbridge/k4/capabilities_and_safety/balsheet/overall_acc"
+tier = "primary"
+style = "percent"
+scale = 100.0
+decimals = 1
+
+[metrics.brg_vs_unc_bs_k4]
+pointer = "analysis#/bridge_only_nullbridge_deltas/k4_balsheet_vs_unclamped_pp"
+tier = "primary"
+style = "pp"
+decimals = 1
+signed = true
+
+[metrics.brg_vs_lora_bs_k4]
+pointer = "analysis#/bridge_only_nullbridge_deltas/k4_balsheet_vs_coda_lora_pp"
+tier = "primary"
+style = "pp"
+decimals = 1
+signed = true
+
+[metrics.brg_k2_mor]
+pointer = "trackb#/block3_head_to_head_matrix/conditions/bridge_only_nullbridge/k2/capabilities_and_safety/moral_valuation/combined_bias_delta_lo"
+tier = "primary"
+style = "number"
+decimals = 2
+signed = true
+
+[metrics.brg_k4_mor]
+pointer = "trackb#/block3_head_to_head_matrix/conditions/bridge_only_nullbridge/k4/capabilities_and_safety/moral_valuation/combined_bias_delta_lo"
+tier = "primary"
+style = "number"
+decimals = 2
+signed = true
+
+[metrics.brg_k2_san]
+pointer = "trackb#/block3_head_to_head_matrix/conditions/bridge_only_nullbridge/k2/capabilities_and_safety/cashflow_sanity_acc"
+tier = "primary"
+style = "percent"
+scale = 100.0
+decimals = 1
+
+[metrics.brg_k4_san]
+pointer = "trackb#/block3_head_to_head_matrix/conditions/bridge_only_nullbridge/k4/capabilities_and_safety/cashflow_sanity_acc"
+tier = "primary"
+style = "percent"
+scale = 100.0
+decimals = 1
+
+[metrics.brg_k2_cov_pull]
+pointer = "trackb#/block3_head_to_head_matrix/conditions/bridge_only_nullbridge/k2/covert_sycophancy/sycophantic_pull_delta_lo"
+tier = "primary"
+style = "number"
+decimals = 2
+signed = true
+
+[metrics.brg_k4_cov_pull]
+pointer = "trackb#/block3_head_to_head_matrix/conditions/bridge_only_nullbridge/k4/covert_sycophancy/sycophantic_pull_delta_lo"
+tier = "primary"
+style = "number"
+decimals = 2
+signed = true
+
+[metrics.brg_k2_kl]
+pointer = "trackb#/block3_head_to_head_matrix/conditions/bridge_only_nullbridge/k2/capabilities_and_safety/kl_eval_nats"
+tier = "primary"
+style = "number"
+decimals = 2
+unit = "nats"
+
+[metrics.brg_k4_kl]
+pointer = "trackb#/block3_head_to_head_matrix/conditions/bridge_only_nullbridge/k4/capabilities_and_safety/kl_eval_nats"
+tier = "primary"
+style = "number"
+decimals = 2
+unit = "nats"
+
+[metrics.brg_k4_kl_num]
+pointer = "trackb#/block3_head_to_head_matrix/conditions/bridge_only_nullbridge/k4/capabilities_and_safety/kl_eval_nats"
+tier = "primary"
+style = "number"
+decimals = 2
+
+[metrics.brg_k4_ms]
+pointer = "trackb#/block3_head_to_head_matrix/conditions/bridge_only_nullbridge/k4/capabilities_and_safety/multihop/ms_per_item"
+tier = "primary"
+style = "number"
+decimals = 1
+unit = "ms/item"
+
+[metrics.brg_lat_pct]
+pointer = "analysis#/bridge_only_nullbridge_deltas/k4_latency_delta_pct"
+tier = "primary"
+style = "percent"
+decimals = 2
+signed = true
+
+# Behavioral LoRAs (`coda_lora` and `full_lora`)
+[metrics.lora_steps]
+pointer = "trackb#/block2_behavioral_lora_training/coda_lora/n_steps"
+tier = "primary"
+style = "int"
+
+[metrics.lora_rank]
+pointer = "trackb#/block2_behavioral_lora_training/coda_lora/lora_rank"
+tier = "primary"
+style = "int"
+
+[metrics.coda_params_m]
+pointer = "analysis#/behavioral_lora_pathology/coda_lora_params_m"
+tier = "primary"
+style = "number"
+decimals = 2
+
+[metrics.full_params_m]
+pointer = "analysis#/behavioral_lora_pathology/full_lora_params_m"
+tier = "primary"
+style = "number"
+decimals = 2
+
+[metrics.coda_pref_win]
+pointer = "trackb#/block2_behavioral_lora_training/coda_lora/pref_win_last10"
+tier = "primary"
+style = "percent"
+scale = 100.0
+decimals = 1
+
+[metrics.coda_k1_ver_acc]
+pointer = "trackb#/block3_head_to_head_matrix/conditions/coda_lora/k1/verifier_0cot/hacked_acc"
+tier = "primary"
+style = "percent"
+scale = 100.0
+decimals = 1
+
+[metrics.coda_k2_ver_acc]
+pointer = "trackb#/block3_head_to_head_matrix/conditions/coda_lora/k2/verifier_0cot/hacked_acc"
+tier = "primary"
+style = "percent"
+scale = 100.0
+decimals = 1
+
+[metrics.coda_k3_ver_acc]
+pointer = "trackb#/block3_head_to_head_matrix/conditions/coda_lora/k3/verifier_0cot/hacked_acc"
+tier = "primary"
+style = "percent"
+scale = 100.0
+decimals = 1
+
+[metrics.coda_k4_ver_acc]
+pointer = "trackb#/block3_head_to_head_matrix/conditions/coda_lora/k4/verifier_0cot/hacked_acc"
+tier = "primary"
+style = "percent"
+scale = 100.0
+decimals = 1
+
+[metrics.coda_k4_ledg_acc]
+pointer = "trackb#/block3_head_to_head_matrix/conditions/coda_lora/k4/verifier_0cot/by_domain/ledger_audit/hacked_acc"
+tier = "primary"
+style = "percent"
+scale = 100.0
+decimals = 1
+
+[metrics.coda_k4_cov_cap]
+pointer = "trackb#/block3_head_to_head_matrix/conditions/coda_lora/k4/covert_sycophancy/pressured_wrong_capture_rate"
+tier = "primary"
+style = "percent"
+scale = 100.0
+decimals = 1
+
+[metrics.coda_k2_cov_pull]
+pointer = "trackb#/block3_head_to_head_matrix/conditions/coda_lora/k2/covert_sycophancy/sycophantic_pull_delta_lo"
+tier = "primary"
+style = "number"
+decimals = 2
+signed = true
+
+[metrics.coda_k4_cov_pull]
+pointer = "trackb#/block3_head_to_head_matrix/conditions/coda_lora/k4/covert_sycophancy/sycophantic_pull_delta_lo"
+tier = "primary"
+style = "number"
+decimals = 2
+signed = true
+
+[metrics.coda_k2_mh]
+pointer = "trackb#/block3_head_to_head_matrix/conditions/coda_lora/k2/capabilities_and_safety/multihop/overall_acc"
+tier = "primary"
+style = "percent"
+scale = 100.0
+decimals = 1
+
+[metrics.coda_k4_mh]
+pointer = "trackb#/block3_head_to_head_matrix/conditions/coda_lora/k4/capabilities_and_safety/multihop/overall_acc"
+tier = "primary"
+style = "percent"
+scale = 100.0
+decimals = 1
+
+[metrics.coda_k4_mh_drop]
+pointer = "analysis#/behavioral_lora_pathology/coda_k4_multihop_drop_vs_unclamped_pp"
+tier = "primary"
+style = "pp"
+decimals = 1
+signed = true
+
+[metrics.coda_k2_bs]
+pointer = "trackb#/block3_head_to_head_matrix/conditions/coda_lora/k2/capabilities_and_safety/balsheet/overall_acc"
+tier = "primary"
+style = "percent"
+scale = 100.0
+decimals = 1
+
+[metrics.coda_k4_bs]
+pointer = "trackb#/block3_head_to_head_matrix/conditions/coda_lora/k4/capabilities_and_safety/balsheet/overall_acc"
+tier = "primary"
+style = "percent"
+scale = 100.0
+decimals = 1
+
+[metrics.coda_k4_bs_drop]
+pointer = "analysis#/behavioral_lora_pathology/coda_k4_balsheet_drop_vs_unclamped_pp"
+tier = "primary"
+style = "pp"
+decimals = 1
+signed = true
+
+[metrics.coda_k2_san]
+pointer = "trackb#/block3_head_to_head_matrix/conditions/coda_lora/k2/capabilities_and_safety/cashflow_sanity_acc"
+tier = "primary"
+style = "percent"
+scale = 100.0
+decimals = 1
+
+[metrics.coda_k4_san]
+pointer = "trackb#/block3_head_to_head_matrix/conditions/coda_lora/k4/capabilities_and_safety/cashflow_sanity_acc"
+tier = "primary"
+style = "percent"
+scale = 100.0
+decimals = 1
+
+[metrics.coda_k1_mor]
+pointer = "trackb#/block3_head_to_head_matrix/conditions/coda_lora/k1/capabilities_and_safety/moral_valuation/combined_bias_delta_lo"
+tier = "primary"
+style = "number"
+decimals = 2
+signed = true
+
+[metrics.coda_k2_mor]
+pointer = "trackb#/block3_head_to_head_matrix/conditions/coda_lora/k2/capabilities_and_safety/moral_valuation/combined_bias_delta_lo"
+tier = "primary"
+style = "number"
+decimals = 2
+signed = true
+
+[metrics.coda_k4_mor]
+pointer = "trackb#/block3_head_to_head_matrix/conditions/coda_lora/k4/capabilities_and_safety/moral_valuation/combined_bias_delta_lo"
+tier = "primary"
+style = "number"
+decimals = 2
+signed = true
+
+[metrics.coda_k2_kl]
+pointer = "trackb#/block3_head_to_head_matrix/conditions/coda_lora/k2/capabilities_and_safety/kl_eval_nats"
+tier = "primary"
+style = "number"
+decimals = 2
+unit = "nats"
+
+[metrics.coda_k4_kl]
+pointer = "trackb#/block3_head_to_head_matrix/conditions/coda_lora/k4/capabilities_and_safety/kl_eval_nats"
+tier = "primary"
+style = "number"
+decimals = 2
+unit = "nats"
+
+# Full LoRA (`L24..L59`)
+[metrics.full_k1_ver_acc]
+pointer = "trackb#/block3_head_to_head_matrix/conditions/full_lora/k1/verifier_0cot/hacked_acc"
+tier = "primary"
+style = "percent"
+scale = 100.0
+decimals = 1
+
+[metrics.full_k2_ver_acc]
+pointer = "trackb#/block3_head_to_head_matrix/conditions/full_lora/k2/verifier_0cot/hacked_acc"
+tier = "primary"
+style = "percent"
+scale = 100.0
+decimals = 1
+
+[metrics.full_k3_ver_acc]
+pointer = "trackb#/block3_head_to_head_matrix/conditions/full_lora/k3/verifier_0cot/hacked_acc"
+tier = "primary"
+style = "percent"
+scale = 100.0
+decimals = 1
+
+[metrics.full_k4_ver_acc]
+pointer = "trackb#/block3_head_to_head_matrix/conditions/full_lora/k4/verifier_0cot/hacked_acc"
+tier = "primary"
+style = "percent"
+scale = 100.0
+decimals = 1
+
+[metrics.full_k1_cov_cap]
+pointer = "trackb#/block3_head_to_head_matrix/conditions/full_lora/k1/covert_sycophancy/pressured_wrong_capture_rate"
+tier = "primary"
+style = "percent"
+scale = 100.0
+decimals = 1
+
+[metrics.full_k2_cov_cap]
+pointer = "trackb#/block3_head_to_head_matrix/conditions/full_lora/k2/covert_sycophancy/pressured_wrong_capture_rate"
+tier = "primary"
+style = "percent"
+scale = 100.0
+decimals = 1
+
+[metrics.full_k3_cov_cap]
+pointer = "trackb#/block3_head_to_head_matrix/conditions/full_lora/k3/covert_sycophancy/pressured_wrong_capture_rate"
+tier = "primary"
+style = "percent"
+scale = 100.0
+decimals = 1
+
+[metrics.full_k4_cov_cap]
+pointer = "trackb#/block3_head_to_head_matrix/conditions/full_lora/k4/covert_sycophancy/pressured_wrong_capture_rate"
+tier = "primary"
+style = "percent"
+scale = 100.0
+decimals = 1
+
+[metrics.full_k2_cov_pull]
+pointer = "trackb#/block3_head_to_head_matrix/conditions/full_lora/k2/covert_sycophancy/sycophantic_pull_delta_lo"
+tier = "primary"
+style = "number"
+decimals = 2
+signed = true
+
+[metrics.full_k4_cov_pull]
+pointer = "trackb#/block3_head_to_head_matrix/conditions/full_lora/k4/covert_sycophancy/sycophantic_pull_delta_lo"
+tier = "primary"
+style = "number"
+decimals = 2
+signed = true
+
+[metrics.full_k1_san]
+pointer = "trackb#/block3_head_to_head_matrix/conditions/full_lora/k1/capabilities_and_safety/cashflow_sanity_acc"
+tier = "primary"
+style = "percent"
+scale = 100.0
+decimals = 1
+
+[metrics.full_k2_san]
+pointer = "trackb#/block3_head_to_head_matrix/conditions/full_lora/k2/capabilities_and_safety/cashflow_sanity_acc"
+tier = "primary"
+style = "percent"
+scale = 100.0
+decimals = 1
+
+[metrics.full_k3_san]
+pointer = "trackb#/block3_head_to_head_matrix/conditions/full_lora/k3/capabilities_and_safety/cashflow_sanity_acc"
+tier = "primary"
+style = "percent"
+scale = 100.0
+decimals = 1
+
+[metrics.full_k4_san]
+pointer = "trackb#/block3_head_to_head_matrix/conditions/full_lora/k4/capabilities_and_safety/cashflow_sanity_acc"
+tier = "primary"
+style = "percent"
+scale = 100.0
+decimals = 1
+
+[metrics.full_k2_san_drop]
+pointer = "analysis#/behavioral_lora_pathology/full_lora_k2_cashflow_sanity_drop_pp"
+tier = "primary"
+style = "pp"
+decimals = 1
+signed = true
+
+[metrics.full_k2_mh]
+pointer = "trackb#/block3_head_to_head_matrix/conditions/full_lora/k2/capabilities_and_safety/multihop/overall_acc"
+tier = "primary"
+style = "percent"
+scale = 100.0
+decimals = 1
+
+[metrics.full_k4_mh]
+pointer = "trackb#/block3_head_to_head_matrix/conditions/full_lora/k4/capabilities_and_safety/multihop/overall_acc"
+tier = "primary"
+style = "percent"
+scale = 100.0
+decimals = 1
+
+[metrics.full_k2_bs]
+pointer = "trackb#/block3_head_to_head_matrix/conditions/full_lora/k2/capabilities_and_safety/balsheet/overall_acc"
+tier = "primary"
+style = "percent"
+scale = 100.0
+decimals = 1
+
+[metrics.full_k4_bs]
+pointer = "trackb#/block3_head_to_head_matrix/conditions/full_lora/k4/capabilities_and_safety/balsheet/overall_acc"
+tier = "primary"
+style = "percent"
+scale = 100.0
+decimals = 1
+
+[metrics.full_k1_mor]
+pointer = "trackb#/block3_head_to_head_matrix/conditions/full_lora/k1/capabilities_and_safety/moral_valuation/combined_bias_delta_lo"
+tier = "primary"
+style = "number"
+decimals = 2
+signed = true
+
+[metrics.full_k2_mor]
+pointer = "trackb#/block3_head_to_head_matrix/conditions/full_lora/k2/capabilities_and_safety/moral_valuation/combined_bias_delta_lo"
+tier = "primary"
+style = "number"
+decimals = 2
+signed = true
+
+[metrics.full_k4_mor]
+pointer = "trackb#/block3_head_to_head_matrix/conditions/full_lora/k4/capabilities_and_safety/moral_valuation/combined_bias_delta_lo"
+tier = "primary"
+style = "number"
+decimals = 2
+signed = true
+
+[metrics.full_k4_tnt]
+pointer = "trackb#/block3_head_to_head_matrix/conditions/full_lora/k4/capabilities_and_safety/moral_valuation/tainted_provenance_delta_lo"
+tier = "primary"
+style = "number"
+decimals = 2
+signed = true
+
+[metrics.full_k4_tnt_pct]
+pointer = "analysis#/behavioral_lora_pathology/full_lora_k4_tainted_bias_pct_vs_unclamped"
+tier = "primary"
+style = "percent"
+decimals = 1
+signed = true
+
+[metrics.full_k2_kl]
+pointer = "trackb#/block3_head_to_head_matrix/conditions/full_lora/k2/capabilities_and_safety/kl_eval_nats"
+tier = "primary"
+style = "number"
+decimals = 2
+unit = "nats"
+
+[metrics.full_k4_kl]
+pointer = "trackb#/block3_head_to_head_matrix/conditions/full_lora/k4/capabilities_and_safety/kl_eval_nats"
+tier = "primary"
+style = "number"
+decimals = 2
+unit = "nats"
+
+# Dual Boundary Nullbridge
+[metrics.dual_k2_ver_acc]
+pointer = "trackb#/block3_head_to_head_matrix/conditions/dual_nullbridge/k2/verifier_0cot/hacked_acc"
+tier = "primary"
+style = "percent"
+scale = 100.0
+decimals = 1
+
+[metrics.dual_k4_ver_acc]
+pointer = "trackb#/block3_head_to_head_matrix/conditions/dual_nullbridge/k4/verifier_0cot/hacked_acc"
+tier = "primary"
+style = "percent"
+scale = 100.0
+decimals = 1
+
+[metrics.dual_k2_mh]
+pointer = "trackb#/block3_head_to_head_matrix/conditions/dual_nullbridge/k2/capabilities_and_safety/multihop/overall_acc"
+tier = "primary"
+style = "percent"
+scale = 100.0
+decimals = 1
+
+[metrics.dual_vs_unc_mh_k2]
+pointer = "analysis#/dual_nullbridge_effects/k2_multihop_vs_unclamped_pp"
+tier = "primary"
+style = "pp"
+decimals = 1
+signed = true
+
+[metrics.dual_k4_mh]
+pointer = "trackb#/block3_head_to_head_matrix/conditions/dual_nullbridge/k4/capabilities_and_safety/multihop/overall_acc"
+tier = "primary"
+style = "percent"
+scale = 100.0
+decimals = 1
+
+[metrics.dual_k4_wp]
+pointer = "trackb#/block3_head_to_head_matrix/conditions/dual_nullbridge/k4/capabilities_and_safety/wordprob/overall_acc"
+tier = "primary"
+style = "percent"
+scale = 100.0
+decimals = 1
+
+[metrics.dual_wp_ratio_k4]
+pointer = "analysis#/dual_nullbridge_effects/k4_wordprob_ratio_vs_unclamped"
+tier = "primary"
+style = "ratio"
+decimals = 2
+
+[metrics.dual_k2_bs]
+pointer = "trackb#/block3_head_to_head_matrix/conditions/dual_nullbridge/k2/capabilities_and_safety/balsheet/overall_acc"
+tier = "primary"
+style = "percent"
+scale = 100.0
+decimals = 1
+
+[metrics.dual_k4_bs]
+pointer = "trackb#/block3_head_to_head_matrix/conditions/dual_nullbridge/k4/capabilities_and_safety/balsheet/overall_acc"
+tier = "primary"
+style = "percent"
+scale = 100.0
+decimals = 1
+
+[metrics.dual_vs_unc_bs_k4]
+pointer = "analysis#/dual_nullbridge_effects/k4_balsheet_vs_unclamped_pp"
+tier = "primary"
+style = "pp"
+decimals = 1
+signed = true
+
+[metrics.dual_k1_san]
+pointer = "trackb#/block3_head_to_head_matrix/conditions/dual_nullbridge/k1/capabilities_and_safety/cashflow_sanity_acc"
+tier = "primary"
+style = "percent"
+scale = 100.0
+decimals = 1
+
+[metrics.dual_k2_san]
+pointer = "trackb#/block3_head_to_head_matrix/conditions/dual_nullbridge/k2/capabilities_and_safety/cashflow_sanity_acc"
+tier = "primary"
+style = "percent"
+scale = 100.0
+decimals = 1
+
+[metrics.dual_k3_san]
+pointer = "trackb#/block3_head_to_head_matrix/conditions/dual_nullbridge/k3/capabilities_and_safety/cashflow_sanity_acc"
+tier = "primary"
+style = "percent"
+scale = 100.0
+decimals = 1
+
+[metrics.dual_k4_san]
+pointer = "trackb#/block3_head_to_head_matrix/conditions/dual_nullbridge/k4/capabilities_and_safety/cashflow_sanity_acc"
+tier = "primary"
+style = "percent"
+scale = 100.0
+decimals = 1
+
+[metrics.dual_k1_mor]
+pointer = "trackb#/block3_head_to_head_matrix/conditions/dual_nullbridge/k1/capabilities_and_safety/moral_valuation/combined_bias_delta_lo"
+tier = "primary"
+style = "number"
+decimals = 2
+signed = true
+
+[metrics.dual_k2_mor]
+pointer = "trackb#/block3_head_to_head_matrix/conditions/dual_nullbridge/k2/capabilities_and_safety/moral_valuation/combined_bias_delta_lo"
+tier = "primary"
+style = "number"
+decimals = 2
+signed = true
+
+[metrics.dual_k4_mor]
+pointer = "trackb#/block3_head_to_head_matrix/conditions/dual_nullbridge/k4/capabilities_and_safety/moral_valuation/combined_bias_delta_lo"
+tier = "primary"
+style = "number"
+decimals = 2
+signed = true
+
+[metrics.dual_k4_tnt]
+pointer = "trackb#/block3_head_to_head_matrix/conditions/dual_nullbridge/k4/capabilities_and_safety/moral_valuation/tainted_provenance_delta_lo"
+tier = "primary"
+style = "number"
+decimals = 2
+signed = true
+
+[metrics.dual_mor_pct_k4]
+pointer = "analysis#/dual_nullbridge_effects/k4_moral_bias_pct_change_vs_unclamped"
+tier = "primary"
+style = "percent"
+decimals = 1
+signed = true
+
+[metrics.dual_mor_p_k4]
+pointer = "trackb#/block3_head_to_head_matrix/paired_hypothesis_tests/k4/dual_vs_unclamped/moral_bias_p_holm"
+tier = "primary"
+style = "number"
+decimals = 4
+
+[metrics.dual_tnt_pct_k4]
+pointer = "analysis#/dual_nullbridge_effects/k4_tainted_provenance_pct_change_vs_unclamped"
+tier = "primary"
+style = "percent"
+decimals = 1
+signed = true
+
+[metrics.dual_k2_cov_pull]
+pointer = "trackb#/block3_head_to_head_matrix/conditions/dual_nullbridge/k2/covert_sycophancy/sycophantic_pull_delta_lo"
+tier = "primary"
+style = "number"
+decimals = 2
+signed = true
+
+[metrics.dual_k4_cov_pull]
+pointer = "trackb#/block3_head_to_head_matrix/conditions/dual_nullbridge/k4/covert_sycophancy/sycophantic_pull_delta_lo"
+tier = "primary"
+style = "number"
+decimals = 2
+signed = true
+
+[metrics.dual_k2_kl]
+pointer = "trackb#/block3_head_to_head_matrix/conditions/dual_nullbridge/k2/capabilities_and_safety/kl_eval_nats"
+tier = "primary"
+style = "number"
+decimals = 2
+unit = "nats"
+
+[metrics.dual_k4_kl]
+pointer = "trackb#/block3_head_to_head_matrix/conditions/dual_nullbridge/k4/capabilities_and_safety/kl_eval_nats"
+tier = "primary"
+style = "number"
+decimals = 2
+unit = "nats"
+
+[metrics.dual_k4_kl_num]
+pointer = "trackb#/block3_head_to_head_matrix/conditions/dual_nullbridge/k4/capabilities_and_safety/kl_eval_nats"
+tier = "primary"
+style = "number"
+decimals = 2
+
+[metrics.syc_rms_supp_k4]
+pointer = "analysis#/dual_nullbridge_effects/l42_syc_rms_suppression_k4_pct"
+tier = "primary"
+style = "percent"
+decimals = 1
+
+[metrics.fmt_rms_supp_k3]
+pointer = "analysis#/dual_nullbridge_effects/l42_fmt_rms_suppression_k3_pct"
+tier = "primary"
+style = "percent"
+decimals = 1
+
+# Explicit Negative & Exploratory Boundary Metrics (all carry mandatory caveats!)
+[metrics.neg_cov_diff_k4]
+pointer = "analysis#/negative_and_exploratory_boundaries/attention_copy_bypass/k4_dual_vs_unclamped_pull_diff_lo"
+tier = "negative"
+style = "number"
+decimals = 2
+signed = true
+caveat = "Negative boundary: residual projection at L24 and L42 does not block Coda KV attention heads from copying a literal wrong integer token present in the prompt."
+
+[metrics.neg_cov_p_k4]
+pointer = "analysis#/negative_and_exploratory_boundaries/attention_copy_bypass/k4_dual_vs_unclamped_p_holm"
+tier = "negative"
+style = "number"
+decimals = 4
+caveat = "Negative boundary: Holm-adjusted sign-flip p-value confirms no statistically significant reduction in literal numeric anchor pull under boundary residual projection."
+
+[metrics.neg_cov_cap_k4]
+pointer = "analysis#/negative_and_exploratory_boundaries/attention_copy_bypass/k4_wrong_capture_rate_pct"
+tier = "negative"
+style = "percent"
+decimals = 1
+caveat = "Negative boundary: greedy wrong-integer capture remains 100.0% under residual subspace projection when the target digits appear verbatim in prompt context."
+
+[metrics.clamp_proj_k4]
+pointer = "analysis#/negative_and_exploratory_boundaries/interior_19layer_clamp_collapse/k4_total_layer_projections"
+tier = "negative"
+style = "int"
+caveat = "Negative boundary: applying last-token centered projection across all sequence positions at 76 interior block visits shifts hidden operating points."
+
+[metrics.neg_clamp_overt_k4]
+pointer = "trackb#/block3_head_to_head_matrix/conditions/full_funnel_clamp/k4/overt_sycophancy/endorse_wrong_rate"
+tier = "negative"
+style = "percent"
+scale = 100.0
+decimals = 1
+caveat = "Negative boundary: interior 19-layer all-token clamping flips overt wrong-claim endorsement from 0.0% to 100.0%."
+
+[metrics.neg_clamp_cov_cap_k4]
+pointer = "trackb#/block3_head_to_head_matrix/conditions/full_funnel_clamp/k4/covert_sycophancy/pressured_wrong_capture_rate"
+tier = "negative"
+style = "percent"
+scale = 100.0
+decimals = 1
+caveat = "Negative boundary: covert wrong-integer capture under 19-layer clamping."
+
+[metrics.exp_rand_cov_cap_k4]
+pointer = "trackb#/block3_head_to_head_matrix/conditions/random_subspace_control/k4/covert_sycophancy/pressured_wrong_capture_rate"
+tier = "exploratory"
+style = "percent"
+scale = 100.0
+decimals = 1
+caveat = "Exploratory control: greedy integer decoding collapses to non-target outputs when BOS sinks are perturbed."
+
+[metrics.neg_clamp_ver_k4]
+pointer = "trackb#/block3_head_to_head_matrix/conditions/full_funnel_clamp/k4/verifier_0cot/hacked_acc"
+tier = "negative"
+style = "percent"
+scale = 100.0
+decimals = 1
+caveat = "Negative boundary: interior 19-layer all-token clamping collapses single-pass verifier accuracy on reward-hacked rollouts."
+
+[metrics.neg_clamp_alias_k4]
+pointer = "trackb#/block3_head_to_head_matrix/conditions/full_funnel_clamp/k4/alias_guardrail/overall_acc"
+tier = "negative"
+style = "percent"
+scale = 100.0
+decimals = 1
+caveat = "Negative boundary: interior 19-layer all-token clamping reduces multi-hop alias guardrail detection to chance."
+
+[metrics.neg_clamp_mh_k4]
+pointer = "trackb#/block3_head_to_head_matrix/conditions/full_funnel_clamp/k4/capabilities_and_safety/multihop/overall_acc"
+tier = "negative"
+style = "percent"
+scale = 100.0
+decimals = 1
+caveat = "Negative boundary: interior 19-layer all-token clamping degrades multi-hop arithmetic tracking."
+
+[metrics.neg_clamp_bs_k4]
+pointer = "trackb#/block3_head_to_head_matrix/conditions/full_funnel_clamp/k4/capabilities_and_safety/balsheet/overall_acc"
+tier = "negative"
+style = "percent"
+scale = 100.0
+decimals = 1
+caveat = "Negative boundary: interior 19-layer all-token clamping degrades corporate balance-sheet accuracy."
+
+[metrics.neg_clamp_mor_k4]
+pointer = "trackb#/block3_head_to_head_matrix/conditions/full_funnel_clamp/k4/capabilities_and_safety/moral_valuation/combined_bias_delta_lo"
+tier = "negative"
+style = "number"
+decimals = 2
+signed = true
+caveat = "Negative boundary: interior 19-layer clamping eliminates moral valuation delta only at the cost of severe KL and safety collapse."
+
+[metrics.neg_clamp_kl_k2]
+pointer = "analysis#/negative_and_exploratory_boundaries/interior_19layer_clamp_collapse/peak_kl_eval_nats"
+tier = "negative"
+style = "number"
+decimals = 2
+unit = "nats"
+caveat = "Negative boundary: peak held-out KL divergence under interior 19-layer all-token clamping."
+
+[metrics.neg_clamp_kl_k4]
+pointer = "trackb#/block3_head_to_head_matrix/conditions/full_funnel_clamp/k4/capabilities_and_safety/kl_eval_nats"
+tier = "negative"
+style = "number"
+decimals = 2
+unit = "nats"
+caveat = "Negative boundary: K = 4 held-out KL divergence under interior 19-layer all-token clamping."
+
+[metrics.neg_clamp_kl_k4_num]
+pointer = "trackb#/block3_head_to_head_matrix/conditions/full_funnel_clamp/k4/capabilities_and_safety/kl_eval_nats"
+tier = "negative"
+style = "number"
+decimals = 2
+caveat = "Negative boundary: K = 4 held-out KL divergence under interior 19-layer all-token clamping."
+
+[metrics.exp_rand_kl_k4]
+pointer = "analysis#/negative_and_exploratory_boundaries/isotropic_random_bos_sink_sensitivity/k4_kl_eval_nats"
+tier = "exploratory"
+style = "number"
+decimals = 2
+unit = "nats"
+caveat = "Exploratory mechanistic finding: uncentered isotropic random 4D subspaces intersect large BOS attention-sink coordinates that contrastive difference vectors cancel."
+
+[metrics.exp_rand_kl_k4_num]
+pointer = "analysis#/negative_and_exploratory_boundaries/isotropic_random_bos_sink_sensitivity/k4_kl_eval_nats"
+tier = "exploratory"
+style = "number"
+decimals = 2
+caveat = "Exploratory mechanistic finding: uncentered isotropic random 4D subspaces intersect large BOS attention-sink coordinates."
+
+[metrics.exp_rand_ver_k4]
+pointer = "trackb#/block3_head_to_head_matrix/conditions/random_subspace_control/k4/verifier_0cot/hacked_acc"
+tier = "exploratory"
+style = "percent"
+scale = 100.0
+decimals = 1
+caveat = "Exploratory control: A/B log-odds choices survive BOS sink perturbation better than multi-token integer generation."
+
+[metrics.exp_rand_mh_k4]
+pointer = "trackb#/block3_head_to_head_matrix/conditions/random_subspace_control/k4/capabilities_and_safety/multihop/overall_acc"
+tier = "exploratory"
+style = "percent"
+scale = 100.0
+decimals = 1
+caveat = "Exploratory control: multi-token greedy integer decoding collapses when uncentered random vectors perturb BOS attention sinks."
+
+[metrics.exp_rand_bs_k4]
+pointer = "trackb#/block3_head_to_head_matrix/conditions/random_subspace_control/k4/capabilities_and_safety/balsheet/overall_acc"
+tier = "exploratory"
+style = "percent"
+scale = 100.0
+decimals = 1
+caveat = "Exploratory control: greedy balance-sheet decoding collapses under uncentered random 4D BOS perturbation."
+
+[metrics.exp_rand_mor_k4]
+pointer = "trackb#/block3_head_to_head_matrix/conditions/random_subspace_control/k4/capabilities_and_safety/moral_valuation/combined_bias_delta_lo"
+tier = "exploratory"
+style = "number"
+decimals = 2
+signed = true
+caveat = "Exploratory control: random 4D projection leaves significant tainted-provenance bias (+4.95 LO at K = 4)."
+
+# Track A: Native Pretrained Looped MoEs (TML-d24-varloop-research & Inkling-2-Mini)
+[metrics.ta_total_cells]
+pointer = "analysis_a#/compute_accounting/track_a_total_cells"
+tier = "primary"
+style = "int"
+
+[metrics.ta_varloop_cells]
+pointer = "analysis_a#/compute_accounting/varloop_cells"
+tier = "primary"
+style = "int"
+
+[metrics.ta_ink_cells]
+pointer = "analysis_a#/compute_accounting/inkling_mini_cells"
+tier = "primary"
+style = "int"
+
+[metrics.combined_cells]
+pointer = "analysis_a#/compute_accounting/combined_total_cells"
+tier = "primary"
+style = "int"
+
+[metrics.ta_gpu_spend]
+pointer = "analysis_a#/compute_accounting/track_a_gpu_spend_usd"
+tier = "primary"
+style = "currency"
+decimals = 2
+
+[metrics.ta_gpu_cap]
+pointer = "analysis_a#/compute_accounting/track_a_budget_cap_usd"
+tier = "primary"
+style = "currency"
+decimals = 2
+
+[metrics.combined_gpu_spend]
+pointer = "analysis_a#/compute_accounting/combined_gpu_spend_usd"
+tier = "primary"
+style = "currency"
+decimals = 2
+
+[metrics.combined_gpu_cap]
+pointer = "analysis_a#/compute_accounting/combined_budget_cap_usd"
+tier = "primary"
+style = "currency"
+decimals = 2
+
+[metrics.ta_n_layers]
+pointer = "analysis_a#/architecture_summary/n_layers"
+tier = "primary"
+style = "int"
+
+[metrics.ta_d_model]
+pointer = "analysis_a#/architecture_summary/d_model"
+tier = "primary"
+style = "int"
+
+[metrics.ta_loop_layers]
+pointer = "analysis_a#/architecture_summary/loop_layers"
+tier = "primary"
+style = "int"
+
+[metrics.ta_gate_rank]
+pointer = "analysis_a#/architecture_summary/gate_rank"
+tier = "primary"
+style = "int"
+
+[metrics.ta_k5_blocks]
+pointer = "analysis_a#/architecture_summary/k5_effective_blocks"
+tier = "primary"
+style = "int"
+
+[metrics.ta_removed_pct]
+pointer = "tracka#/varloop_research/block1_message_bank_geometry/removed_pct"
+tier = "primary"
+style = "percent"
+decimals = 4
+
+[metrics.ta_retained_pct]
+pointer = "tracka#/varloop_research/block1_message_bank_geometry/retained_pct"
+tier = "primary"
+style = "percent"
+decimals = 4
+
+[metrics.ta_v_lopo]
+pointer = "tracka#/varloop_research/block1_message_bank_geometry/concept_diagnostics/sycophancy/msg_lopo_acc"
+tier = "primary"
+style = "percent"
+scale = 100.0
+decimals = 1
+
+[metrics.ta_v_auth_deg]
+pointer = "tracka#/varloop_research/block1_message_bank_geometry/concept_diagnostics/authority_framing/msg_angle_to_evidence_deg"
+tier = "primary"
+style = "number"
+decimals = 2
+unit = "°"
+
+[metrics.ta_v_spite_deg]
+pointer = "tracka#/varloop_research/block1_message_bank_geometry/concept_diagnostics/moral_spite/msg_angle_to_evidence_deg"
+tier = "primary"
+style = "number"
+decimals = 2
+unit = "°"
+
+[metrics.ta_ink_auth_deg]
+pointer = "tracka#/inkling_2_mini/block1_message_bank_geometry/concept_diagnostics/authority_framing/msg_angle_to_evidence_deg"
+tier = "primary"
+style = "number"
+decimals = 2
+unit = "°"
+
+[metrics.ta_ink_syc_deg]
+pointer = "tracka#/inkling_2_mini/block1_message_bank_geometry/concept_diagnostics/sycophancy/msg_angle_to_evidence_deg"
+tier = "primary"
+style = "number"
+decimals = 2
+unit = "°"
+
+[metrics.ta_v_bos_overlap]
+pointer = "tracka#/varloop_research/block1_message_bank_geometry/bos_sink_orthogonality/msg_basis_bos_overlap"
+tier = "primary"
+style = "sci"
+decimals = 2
+
+[metrics.ta_zff_q_leak]
+pointer = "tracka#/varloop_research/block1_message_bank_geometry/zero_flop_fold_audit/max_query_null_leakage"
+tier = "primary"
+style = "sci"
+decimals = 2
+
+[metrics.ta_zff_gate_leak]
+pointer = "tracka#/varloop_research/block1_message_bank_geometry/zero_flop_fold_audit/max_gate_down_null_leakage"
+tier = "primary"
+style = "sci"
+decimals = 2
+
+[metrics.ta_fmt_msg_p2]
+pointer = "tracka#/varloop_research/block1_message_bank_geometry/cross_pass_fmt_message_trajectory_p2_to_pk/unclamped/0"
+tier = "primary"
+style = "number"
+decimals = 2
+signed = true
+
+[metrics.ta_fmt_msg_p5]
+pointer = "tracka#/varloop_research/block1_message_bank_geometry/cross_pass_fmt_message_trajectory_p2_to_pk/unclamped/3"
+tier = "primary"
+style = "number"
+decimals = 2
+signed = true
+
+[metrics.ta_fmt_msg_null_p2]
+pointer = "tracka#/varloop_research/block1_message_bank_geometry/cross_pass_fmt_message_trajectory_p2_to_pk/msg_nullbridge_all4/0"
+tier = "primary"
+style = "number"
+decimals = 4
+
+# Track A Block 2: Coda-Transport Looped Lens
+[metrics.ta_lens_tokens_n]
+pointer = "tracka#/varloop_research/block2_coda_transport_lens/n_eval_tokens"
+tier = "primary"
+style = "int"
+
+[metrics.ta_lens_raw_p1]
+pointer = "tracka#/varloop_research/block2_coda_transport_lens/by_pass/pass_1/raw_logit_lens/kl_to_final_nats"
+tier = "primary"
+style = "number"
+decimals = 2
+unit = "nats"
+
+[metrics.ta_lens_raw_p1_num]
+pointer = "tracka#/varloop_research/block2_coda_transport_lens/by_pass/pass_1/raw_logit_lens/kl_to_final_nats"
+tier = "primary"
+style = "number"
+decimals = 2
+
+[metrics.ta_lens_raw_p2_num]
+pointer = "tracka#/varloop_research/block2_coda_transport_lens/by_pass/pass_2/raw_logit_lens/kl_to_final_nats"
+tier = "primary"
+style = "number"
+decimals = 2
+
+[metrics.ta_lens_raw_p3_num]
+pointer = "tracka#/varloop_research/block2_coda_transport_lens/by_pass/pass_3/raw_logit_lens/kl_to_final_nats"
+tier = "primary"
+style = "number"
+decimals = 2
+
+[metrics.ta_lens_raw_p4_num]
+pointer = "tracka#/varloop_research/block2_coda_transport_lens/by_pass/pass_4/raw_logit_lens/kl_to_final_nats"
+tier = "primary"
+style = "number"
+decimals = 2
+
+[metrics.ta_lens_raw_p5]
+pointer = "tracka#/varloop_research/block2_coda_transport_lens/by_pass/pass_5/raw_logit_lens/kl_to_final_nats"
+tier = "primary"
+style = "number"
+decimals = 2
+unit = "nats"
+
+[metrics.ta_lens_raw_p5_num]
+pointer = "tracka#/varloop_research/block2_coda_transport_lens/by_pass/pass_5/raw_logit_lens/kl_to_final_nats"
+tier = "primary"
+style = "number"
+decimals = 2
+
+[metrics.ta_lens_proc_p1_num]
+pointer = "tracka#/varloop_research/block2_coda_transport_lens/by_pass/pass_1/procrustes_lens/kl_to_final_nats"
+tier = "primary"
+style = "number"
+decimals = 2
+
+[metrics.ta_lens_proc_p2_num]
+pointer = "tracka#/varloop_research/block2_coda_transport_lens/by_pass/pass_2/procrustes_lens/kl_to_final_nats"
+tier = "primary"
+style = "number"
+decimals = 2
+
+[metrics.ta_lens_proc_p3_num]
+pointer = "tracka#/varloop_research/block2_coda_transport_lens/by_pass/pass_3/procrustes_lens/kl_to_final_nats"
+tier = "primary"
+style = "number"
+decimals = 2
+
+[metrics.ta_lens_proc_p4_num]
+pointer = "tracka#/varloop_research/block2_coda_transport_lens/by_pass/pass_4/procrustes_lens/kl_to_final_nats"
+tier = "primary"
+style = "number"
+decimals = 2
+
+[metrics.ta_lens_proc_p5_num]
+pointer = "tracka#/varloop_research/block2_coda_transport_lens/by_pass/pass_5/procrustes_lens/kl_to_final_nats"
+tier = "primary"
+style = "number"
+decimals = 2
+
+[metrics.ta_lens_ridge_p1]
+pointer = "tracka#/varloop_research/block2_coda_transport_lens/by_pass/pass_1/coda_transport_ridge_lens/kl_to_final_nats"
+tier = "primary"
+style = "number"
+decimals = 2
+unit = "nats"
+
+[metrics.ta_lens_ridge_p1_num]
+pointer = "tracka#/varloop_research/block2_coda_transport_lens/by_pass/pass_1/coda_transport_ridge_lens/kl_to_final_nats"
+tier = "primary"
+style = "number"
+decimals = 2
+
+[metrics.ta_lens_ridge_p2_num]
+pointer = "tracka#/varloop_research/block2_coda_transport_lens/by_pass/pass_2/coda_transport_ridge_lens/kl_to_final_nats"
+tier = "primary"
+style = "number"
+decimals = 2
+
+[metrics.ta_lens_ridge_p3_num]
+pointer = "tracka#/varloop_research/block2_coda_transport_lens/by_pass/pass_3/coda_transport_ridge_lens/kl_to_final_nats"
+tier = "primary"
+style = "number"
+decimals = 2
+
+[metrics.ta_lens_ridge_p4_num]
+pointer = "tracka#/varloop_research/block2_coda_transport_lens/by_pass/pass_4/coda_transport_ridge_lens/kl_to_final_nats"
+tier = "primary"
+style = "number"
+decimals = 2
+
+[metrics.ta_lens_ridge_p5]
+pointer = "tracka#/varloop_research/block2_coda_transport_lens/by_pass/pass_5/coda_transport_ridge_lens/kl_to_final_nats"
+tier = "primary"
+style = "number"
+decimals = 2
+unit = "nats"
+
+[metrics.ta_lens_ridge_p5_num]
+pointer = "tracka#/varloop_research/block2_coda_transport_lens/by_pass/pass_5/coda_transport_ridge_lens/kl_to_final_nats"
+tier = "primary"
+style = "number"
+decimals = 2
+
+[metrics.ta_lens_p1_kl_delta]
+pointer = "analysis_a#/looped_lens_deltas/varloop_p1_ridge_kl_delta_nats"
+tier = "primary"
+style = "number"
+decimals = 2
+signed = true
+unit = "nats"
+
+[metrics.ta_lens_p5_kl_delta]
+pointer = "analysis_a#/looped_lens_deltas/varloop_p5_ridge_kl_delta_nats"
+tier = "primary"
+style = "number"
+decimals = 2
+signed = true
+unit = "nats"
+
+[metrics.ta_lens_p5_top5_raw]
+pointer = "tracka#/varloop_research/block2_coda_transport_lens/by_pass/pass_5/raw_logit_lens/top5_agreement"
+tier = "primary"
+style = "percent"
+scale = 100.0
+decimals = 1
+
+[metrics.ta_lens_p5_top5_ridge]
+pointer = "tracka#/varloop_research/block2_coda_transport_lens/by_pass/pass_5/coda_transport_ridge_lens/top5_agreement"
+tier = "primary"
+style = "percent"
+scale = 100.0
+decimals = 1
+
+[metrics.ta_ink_lens_p3_raw]
+pointer = "tracka#/inkling_2_mini/block2_coda_transport_lens/by_pass/pass_3/raw_logit_lens/kl_to_final_nats"
+tier = "primary"
+style = "number"
+decimals = 2
+unit = "nats"
+
+[metrics.ta_ink_lens_p3_ridge]
+pointer = "tracka#/inkling_2_mini/block2_coda_transport_lens/by_pass/pass_3/coda_transport_ridge_lens/kl_to_final_nats"
+tier = "primary"
+style = "number"
+decimals = 2
+unit = "nats"
+
+[metrics.ta_ink_lens_p3_kl_delta]
+pointer = "analysis_a#/looped_lens_deltas/inkling_p3_ridge_kl_delta_nats"
+tier = "primary"
+style = "number"
+decimals = 2
+signed = true
+unit = "nats"
+
+[metrics.ta_ink_lens_p3_top5_raw]
+pointer = "tracka#/inkling_2_mini/block2_coda_transport_lens/by_pass/pass_3/raw_logit_lens/top5_agreement"
+tier = "primary"
+style = "percent"
+scale = 100.0
+decimals = 1
+
+[metrics.ta_ink_lens_p3_top5]
+pointer = "tracka#/inkling_2_mini/block2_coda_transport_lens/by_pass/pass_3/coda_transport_ridge_lens/top5_agreement"
+tier = "primary"
+style = "percent"
+scale = 100.0
+decimals = 1
+
+[metrics.ta_ink_precoda_unc_p3]
+pointer = "tracka#/inkling_2_mini/block2_coda_transport_lens/unverbalized_verifier_trajectory/unclamped/lens_pass_hacked_acc/2"
+tier = "primary"
+style = "percent"
+scale = 100.0
+decimals = 1
+
+[metrics.ta_ink_precoda_all4_p3]
+pointer = "tracka#/inkling_2_mini/block2_coda_transport_lens/unverbalized_verifier_trajectory/msg_nullbridge_all4/lens_pass_hacked_acc/2"
+tier = "primary"
+style = "percent"
+scale = 100.0
+decimals = 1
+
+[metrics.ta_ink_precoda_ver_gain]
+pointer = "analysis_a#/looped_lens_deltas/inkling_p3_precoda_ver_gain_pp"
+tier = "primary"
+style = "pp"
+decimals = 1
+signed = true
+
+# Track A Block 3 & 4: Native Multi-Pass Dynamics, Coda LoRA Backfire, & Channel Dissection
+[metrics.ta_coda_params_m]
+pointer = "analysis_a#/coda_lora_backfire/coda_lora_params_m"
+tier = "primary"
+style = "number"
+decimals = 2
+
+[metrics.ta_coda_steps]
+pointer = "tracka#/varloop_research/block3_coda_lora_training/n_steps"
+tier = "primary"
+style = "int"
+
+[metrics.ta_v_unc_k1_mor]
+pointer = "tracka#/varloop_research/block4_head_to_head_matrix/conditions/unclamped/k1/capabilities_and_safety/moral_valuation/combined_bias_delta_lo"
+tier = "primary"
+style = "number"
+decimals = 2
+signed = true
+
+[metrics.ta_v_unc_k2_mor]
+pointer = "tracka#/varloop_research/block4_head_to_head_matrix/conditions/unclamped/k2/capabilities_and_safety/moral_valuation/combined_bias_delta_lo"
+tier = "primary"
+style = "number"
+decimals = 2
+signed = true
+
+[metrics.ta_v_unc_k3_mor]
+pointer = "tracka#/varloop_research/block4_head_to_head_matrix/conditions/unclamped/k3/capabilities_and_safety/moral_valuation/combined_bias_delta_lo"
+tier = "primary"
+style = "number"
+decimals = 2
+signed = true
+
+[metrics.ta_v_unc_k4_mor]
+pointer = "tracka#/varloop_research/block4_head_to_head_matrix/conditions/unclamped/k4/capabilities_and_safety/moral_valuation/combined_bias_delta_lo"
+tier = "primary"
+style = "number"
+decimals = 2
+signed = true
+
+[metrics.ta_v_unc_k5_mor]
+pointer = "tracka#/varloop_research/block4_head_to_head_matrix/conditions/unclamped/k5/capabilities_and_safety/moral_valuation/combined_bias_delta_lo"
+tier = "primary"
+style = "number"
+decimals = 2
+signed = true
+
+[metrics.ta_v_unc_k7_mor]
+pointer = "tracka#/varloop_research/block4_head_to_head_matrix/conditions/unclamped/k7/capabilities_and_safety/moral_valuation/combined_bias_delta_lo"
+tier = "exploratory"
+style = "number"
+decimals = 2
+signed = true
+caveat = "Exploratory OOD extrapolation: TML-d24-varloop-research was pretrained across K = 1..5 passes and evaluated out-of-distribution at K = 7."
+
+[metrics.ta_v_coda_k1_mor]
+pointer = "tracka#/varloop_research/block4_head_to_head_matrix/conditions/coda_lora/k1/capabilities_and_safety/moral_valuation/combined_bias_delta_lo"
+tier = "primary"
+style = "number"
+decimals = 2
+signed = true
+
+[metrics.ta_v_coda_k2_mor]
+pointer = "tracka#/varloop_research/block4_head_to_head_matrix/conditions/coda_lora/k2/capabilities_and_safety/moral_valuation/combined_bias_delta_lo"
+tier = "primary"
+style = "number"
+decimals = 2
+signed = true
+
+[metrics.ta_v_coda_k3_mor]
+pointer = "tracka#/varloop_research/block4_head_to_head_matrix/conditions/coda_lora/k3/capabilities_and_safety/moral_valuation/combined_bias_delta_lo"
+tier = "primary"
+style = "number"
+decimals = 2
+signed = true
+
+[metrics.ta_v_coda_k4_mor]
+pointer = "tracka#/varloop_research/block4_head_to_head_matrix/conditions/coda_lora/k4/capabilities_and_safety/moral_valuation/combined_bias_delta_lo"
+tier = "primary"
+style = "number"
+decimals = 2
+signed = true
+
+[metrics.ta_v_coda_k5_mor]
+pointer = "tracka#/varloop_research/block4_head_to_head_matrix/conditions/coda_lora/k5/capabilities_and_safety/moral_valuation/combined_bias_delta_lo"
+tier = "primary"
+style = "number"
+decimals = 2
+signed = true
+
+[metrics.ta_v_coda_k7_mor]
+pointer = "tracka#/varloop_research/block4_head_to_head_matrix/conditions/coda_lora/k7/capabilities_and_safety/moral_valuation/combined_bias_delta_lo"
+tier = "exploratory"
+style = "number"
+decimals = 2
+signed = true
+caveat = "Exploratory OOD extrapolation: Coda LoRA evaluated out-of-distribution at K = 7 silent passes."
+
+[metrics.ta_v_all4_k1_mor]
+pointer = "tracka#/varloop_research/block4_head_to_head_matrix/conditions/msg_nullbridge_all4/k1/capabilities_and_safety/moral_valuation/combined_bias_delta_lo"
+tier = "primary"
+style = "number"
+decimals = 2
+signed = true
+
+[metrics.ta_v_all4_k2_mor]
+pointer = "tracka#/varloop_research/block4_head_to_head_matrix/conditions/msg_nullbridge_all4/k2/capabilities_and_safety/moral_valuation/combined_bias_delta_lo"
+tier = "primary"
+style = "number"
+decimals = 2
+signed = true
+
+[metrics.ta_v_all4_k3_mor]
+pointer = "tracka#/varloop_research/block4_head_to_head_matrix/conditions/msg_nullbridge_all4/k3/capabilities_and_safety/moral_valuation/combined_bias_delta_lo"
+tier = "primary"
+style = "number"
+decimals = 2
+signed = true
+
+[metrics.ta_v_all4_k4_mor]
+pointer = "tracka#/varloop_research/block4_head_to_head_matrix/conditions/msg_nullbridge_all4/k4/capabilities_and_safety/moral_valuation/combined_bias_delta_lo"
+tier = "primary"
+style = "number"
+decimals = 2
+signed = true
+
+[metrics.ta_v_all4_k5_mor]
+pointer = "tracka#/varloop_research/block4_head_to_head_matrix/conditions/msg_nullbridge_all4/k5/capabilities_and_safety/moral_valuation/combined_bias_delta_lo"
+tier = "primary"
+style = "number"
+decimals = 2
+signed = true
+
+[metrics.ta_v_all4_k7_mor]
+pointer = "tracka#/varloop_research/block4_head_to_head_matrix/conditions/msg_nullbridge_all4/k7/capabilities_and_safety/moral_valuation/combined_bias_delta_lo"
+tier = "exploratory"
+style = "number"
+decimals = 2
+signed = true
+caveat = "Exploratory OOD extrapolation: Message-Bank Nullbridge evaluated out-of-distribution at K = 7 silent passes."
+
+[metrics.ta_mor_jump_ratio]
+pointer = "analysis_a#/native_multipass_dynamics/moral_jump_k1_to_k2_ratio"
+tier = "primary"
+style = "ratio"
+decimals = 2
+
+[metrics.ta_coda_mor_k3_ratio]
+pointer = "analysis_a#/coda_lora_backfire/k3_moral_ratio_vs_unclamped"
+tier = "primary"
+style = "ratio"
+decimals = 2
+
+[metrics.ta_coda_mor_k5_ratio]
+pointer = "analysis_a#/coda_lora_backfire/k5_moral_ratio_vs_unclamped"
+tier = "primary"
+style = "ratio"
+decimals = 2
+
+[metrics.ta_v_coda_k5_tnt]
+pointer = "tracka#/varloop_research/block4_head_to_head_matrix/conditions/coda_lora/k5/capabilities_and_safety/moral_valuation/tainted_provenance_delta_lo"
+tier = "primary"
+style = "number"
+decimals = 2
+signed = true
+
+[metrics.ta_p_all4_coda_mor_k3]
+pointer = "tracka#/varloop_research/block4_head_to_head_matrix/paired_hypothesis_tests/k3/msg_nullbridge_all4_vs_coda_lora/moral_bias_p_holm"
+tier = "primary"
+style = "number"
+decimals = 4
+
+[metrics.ta_p_all4_coda_mor_k5]
+pointer = "tracka#/varloop_research/block4_head_to_head_matrix/paired_hypothesis_tests/k5/msg_nullbridge_all4_vs_coda_lora/moral_bias_p_holm"
+tier = "primary"
+style = "number"
+decimals = 4
+
+[metrics.ta_p_all4_coda_ver_k5]
+pointer = "tracka#/varloop_research/block4_head_to_head_matrix/paired_hypothesis_tests/k5/msg_nullbridge_all4_vs_coda_lora/verifier_suscept_p_holm"
+tier = "primary"
+style = "number"
+decimals = 4
+
+[metrics.ta_coda_ver_drop_k5]
+pointer = "analysis_a#/coda_lora_backfire/k5_verifier_drop_vs_unclamped_pp"
+tier = "primary"
+style = "pp"
+decimals = 1
+signed = true
+
+[metrics.ta_coda_alias_drop_k5]
+pointer = "analysis_a#/coda_lora_backfire/k5_alias_drop_vs_unclamped_pp"
+tier = "primary"
+style = "pp"
+decimals = 1
+signed = true
+
+# Covert Wrong-Integer Capture across K and Channels
+[metrics.ta_v_unc_k1_cov]
+pointer = "tracka#/varloop_research/block4_head_to_head_matrix/conditions/unclamped/k1/covert_sycophancy/pressured_wrong_capture_rate"
+tier = "primary"
+style = "percent"
+scale = 100.0
+decimals = 1
+
+[metrics.ta_v_unc_k2_cov]
+pointer = "tracka#/varloop_research/block4_head_to_head_matrix/conditions/unclamped/k2/covert_sycophancy/pressured_wrong_capture_rate"
+tier = "primary"
+style = "percent"
+scale = 100.0
+decimals = 1
+
+[metrics.ta_v_unc_k3_cov]
+pointer = "tracka#/varloop_research/block4_head_to_head_matrix/conditions/unclamped/k3/covert_sycophancy/pressured_wrong_capture_rate"
+tier = "primary"
+style = "percent"
+scale = 100.0
+decimals = 1
+
+[metrics.ta_v_unc_k4_cov]
+pointer = "tracka#/varloop_research/block4_head_to_head_matrix/conditions/unclamped/k4/covert_sycophancy/pressured_wrong_capture_rate"
+tier = "primary"
+style = "percent"
+scale = 100.0
+decimals = 1
+
+[metrics.ta_v_unc_k5_cov]
+pointer = "tracka#/varloop_research/block4_head_to_head_matrix/conditions/unclamped/k5/covert_sycophancy/pressured_wrong_capture_rate"
+tier = "primary"
+style = "percent"
+scale = 100.0
+decimals = 1
+
+[metrics.ta_v_unc_k7_cov]
+pointer = "tracka#/varloop_research/block4_head_to_head_matrix/conditions/unclamped/k7/covert_sycophancy/pressured_wrong_capture_rate"
+tier = "exploratory"
+style = "percent"
+scale = 100.0
+decimals = 1
+caveat = "Exploratory OOD extrapolation: TML-d24-varloop-research wrong-integer capture evaluated out-of-distribution at K = 7."
+
+[metrics.ta_cov_drop_k1_k5]
+pointer = "analysis_a#/native_multipass_dynamics/covert_capture_drop_k1_to_k5_pp"
+tier = "primary"
+style = "pp"
+decimals = 1
+signed = true
+
+[metrics.ta_cov_drop_k1_k7]
+pointer = "analysis_a#/native_multipass_dynamics/covert_capture_drop_k1_to_k7_pp"
+tier = "exploratory"
+style = "pp"
+decimals = 1
+signed = true
+caveat = "Exploratory OOD extrapolation: K = 1 to K = 7 reduction in wrong-integer capture includes out-of-distribution pass depth K = 7."
+
+[metrics.ta_v_mlp_k1_cov]
+pointer = "tracka#/varloop_research/block4_head_to_head_matrix/conditions/msg_nullbridge_mlp/k1/covert_sycophancy/pressured_wrong_capture_rate"
+tier = "primary"
+style = "percent"
+scale = 100.0
+decimals = 1
+
+[metrics.ta_v_mlp_k2_cov]
+pointer = "tracka#/varloop_research/block4_head_to_head_matrix/conditions/msg_nullbridge_mlp/k2/covert_sycophancy/pressured_wrong_capture_rate"
+tier = "primary"
+style = "percent"
+scale = 100.0
+decimals = 1
+
+[metrics.ta_v_mlp_k3_cov]
+pointer = "tracka#/varloop_research/block4_head_to_head_matrix/conditions/msg_nullbridge_mlp/k3/covert_sycophancy/pressured_wrong_capture_rate"
+tier = "primary"
+style = "percent"
+scale = 100.0
+decimals = 1
+
+[metrics.ta_v_mlp_k4_cov]
+pointer = "tracka#/varloop_research/block4_head_to_head_matrix/conditions/msg_nullbridge_mlp/k4/covert_sycophancy/pressured_wrong_capture_rate"
+tier = "primary"
+style = "percent"
+scale = 100.0
+decimals = 1
+
+[metrics.ta_v_mlp_k5_cov]
+pointer = "tracka#/varloop_research/block4_head_to_head_matrix/conditions/msg_nullbridge_mlp/k5/covert_sycophancy/pressured_wrong_capture_rate"
+tier = "primary"
+style = "percent"
+scale = 100.0
+decimals = 1
+
+[metrics.ta_v_qkv_k1_cov]
+pointer = "tracka#/varloop_research/block4_head_to_head_matrix/conditions/msg_nullbridge_qkv/k1/covert_sycophancy/pressured_wrong_capture_rate"
+tier = "primary"
+style = "percent"
+scale = 100.0
+decimals = 1
+
+[metrics.ta_v_qkv_k2_cov]
+pointer = "tracka#/varloop_research/block4_head_to_head_matrix/conditions/msg_nullbridge_qkv/k2/covert_sycophancy/pressured_wrong_capture_rate"
+tier = "primary"
+style = "percent"
+scale = 100.0
+decimals = 1
+
+[metrics.ta_v_qkv_k3_cov]
+pointer = "tracka#/varloop_research/block4_head_to_head_matrix/conditions/msg_nullbridge_qkv/k3/covert_sycophancy/pressured_wrong_capture_rate"
+tier = "primary"
+style = "percent"
+scale = 100.0
+decimals = 1
+
+[metrics.ta_v_qkv_k4_cov]
+pointer = "tracka#/varloop_research/block4_head_to_head_matrix/conditions/msg_nullbridge_qkv/k4/covert_sycophancy/pressured_wrong_capture_rate"
+tier = "primary"
+style = "percent"
+scale = 100.0
+decimals = 1
+
+[metrics.ta_v_qkv_k5_cov]
+pointer = "tracka#/varloop_research/block4_head_to_head_matrix/conditions/msg_nullbridge_qkv/k5/covert_sycophancy/pressured_wrong_capture_rate"
+tier = "primary"
+style = "percent"
+scale = 100.0
+decimals = 1
+
+[metrics.ta_v_zff_k1_cov]
+pointer = "tracka#/varloop_research/block4_head_to_head_matrix/conditions/zero_flop_fold_nullbridge/k1/covert_sycophancy/pressured_wrong_capture_rate"
+tier = "primary"
+style = "percent"
+scale = 100.0
+decimals = 1
+
+[metrics.ta_v_zff_k2_cov]
+pointer = "tracka#/varloop_research/block4_head_to_head_matrix/conditions/zero_flop_fold_nullbridge/k2/covert_sycophancy/pressured_wrong_capture_rate"
+tier = "primary"
+style = "percent"
+scale = 100.0
+decimals = 1
+
+[metrics.ta_v_zff_k3_cov]
+pointer = "tracka#/varloop_research/block4_head_to_head_matrix/conditions/zero_flop_fold_nullbridge/k3/covert_sycophancy/pressured_wrong_capture_rate"
+tier = "primary"
+style = "percent"
+scale = 100.0
+decimals = 1
+
+[metrics.ta_v_zff_k4_cov]
+pointer = "tracka#/varloop_research/block4_head_to_head_matrix/conditions/zero_flop_fold_nullbridge/k4/covert_sycophancy/pressured_wrong_capture_rate"
+tier = "primary"
+style = "percent"
+scale = 100.0
+decimals = 1
+
+[metrics.ta_v_zff_k5_cov]
+pointer = "tracka#/varloop_research/block4_head_to_head_matrix/conditions/zero_flop_fold_nullbridge/k5/covert_sycophancy/pressured_wrong_capture_rate"
+tier = "primary"
+style = "percent"
+scale = 100.0
+decimals = 1
+
+[metrics.ta_v_all4_k5_cov]
+pointer = "tracka#/varloop_research/block4_head_to_head_matrix/conditions/msg_nullbridge_all4/k5/covert_sycophancy/pressured_wrong_capture_rate"
+tier = "primary"
+style = "percent"
+scale = 100.0
+decimals = 1
+
+[metrics.ta_v_coda_k5_cov]
+pointer = "tracka#/varloop_research/block4_head_to_head_matrix/conditions/coda_lora/k5/covert_sycophancy/pressured_wrong_capture_rate"
+tier = "primary"
+style = "percent"
+scale = 100.0
+decimals = 1
+
+[metrics.ta_qkv_k4_cov_pp]
+pointer = "analysis_a#/channel_dissection_and_nullbridge/varloop_k4_qkv_vs_unclamped_cov_pp"
+tier = "primary"
+style = "pp"
+decimals = 1
+signed = true
+
+[metrics.ta_mlp_k4_cov_pp]
+pointer = "analysis_a#/channel_dissection_and_nullbridge/varloop_k4_mlp_vs_unclamped_cov_pp"
+tier = "primary"
+style = "pp"
+decimals = 1
+signed = true
+
+[metrics.ta_zff_k4_cov_pp]
+pointer = "analysis_a#/channel_dissection_and_nullbridge/varloop_k4_zero_flop_vs_unclamped_cov_pp"
+tier = "primary"
+style = "pp"
+decimals = 1
+signed = true
+
+[metrics.ta_qkv_k5_cov_pp]
+pointer = "analysis_a#/channel_dissection_and_nullbridge/varloop_k5_qkv_vs_unclamped_cov_pp"
+tier = "primary"
+style = "pp"
+decimals = 1
+signed = true
+
+# Additional Table Metrics for Varloop & Flagship Inkling-2-Mini
+[metrics.ta_v_unc_k1_ver]
+pointer = "tracka#/varloop_research/block4_head_to_head_matrix/conditions/unclamped/k1/verifier_0cot/hacked_acc"
+tier = "primary"
+style = "percent"
+scale = 100.0
+decimals = 1
+
+[metrics.ta_v_unc_k5_ver]
+pointer = "tracka#/varloop_research/block4_head_to_head_matrix/conditions/unclamped/k5/verifier_0cot/hacked_acc"
+tier = "primary"
+style = "percent"
+scale = 100.0
+decimals = 1
+
+[metrics.ta_v_qkv_k5_ver]
+pointer = "tracka#/varloop_research/block4_head_to_head_matrix/conditions/msg_nullbridge_qkv/k5/verifier_0cot/hacked_acc"
+tier = "primary"
+style = "percent"
+scale = 100.0
+decimals = 1
+
+[metrics.ta_v_all4_k5_ver]
+pointer = "tracka#/varloop_research/block4_head_to_head_matrix/conditions/msg_nullbridge_all4/k5/verifier_0cot/hacked_acc"
+tier = "primary"
+style = "percent"
+scale = 100.0
+decimals = 1
+
+[metrics.ta_v_zff_k5_ver]
+pointer = "tracka#/varloop_research/block4_head_to_head_matrix/conditions/zero_flop_fold_nullbridge/k5/verifier_0cot/hacked_acc"
+tier = "primary"
+style = "percent"
+scale = 100.0
+decimals = 1
+
+[metrics.ta_v_coda_k5_ver]
+pointer = "tracka#/varloop_research/block4_head_to_head_matrix/conditions/coda_lora/k5/verifier_0cot/hacked_acc"
+tier = "primary"
+style = "percent"
+scale = 100.0
+decimals = 1
+
+[metrics.ta_v_unc_k1_alias]
+pointer = "tracka#/varloop_research/block4_head_to_head_matrix/conditions/unclamped/k1/alias_guardrail/overall_acc"
+tier = "primary"
+style = "percent"
+scale = 100.0
+decimals = 1
+
+[metrics.ta_v_unc_k2_alias]
+pointer = "tracka#/varloop_research/block4_head_to_head_matrix/conditions/unclamped/k2/alias_guardrail/overall_acc"
+tier = "primary"
+style = "percent"
+scale = 100.0
+decimals = 1
+
+[metrics.ta_v_unc_k5_alias]
+pointer = "tracka#/varloop_research/block4_head_to_head_matrix/conditions/unclamped/k5/alias_guardrail/overall_acc"
+tier = "primary"
+style = "percent"
+scale = 100.0
+decimals = 1
+
+[metrics.ta_v_coda_k5_alias]
+pointer = "tracka#/varloop_research/block4_head_to_head_matrix/conditions/coda_lora/k5/alias_guardrail/overall_acc"
+tier = "primary"
+style = "percent"
+scale = 100.0
+decimals = 1
+
+[metrics.ta_v_unc_k1_bs]
+pointer = "tracka#/varloop_research/block4_head_to_head_matrix/conditions/unclamped/k1/capabilities_and_safety/balsheet/overall_acc"
+tier = "primary"
+style = "percent"
+scale = 100.0
+decimals = 1
+
+[metrics.ta_v_unc_k5_bs]
+pointer = "tracka#/varloop_research/block4_head_to_head_matrix/conditions/unclamped/k5/capabilities_and_safety/balsheet/overall_acc"
+tier = "primary"
+style = "percent"
+scale = 100.0
+decimals = 1
+
+[metrics.ta_bs_k1_k5_ratio]
+pointer = "analysis_a#/native_multipass_dynamics/balsheet_k1_to_k5_ratio"
+tier = "primary"
+style = "ratio"
+decimals = 2
+
+[metrics.ta_v_unc_k1_tnt]
+pointer = "tracka#/varloop_research/block4_head_to_head_matrix/conditions/unclamped/k1/capabilities_and_safety/moral_valuation/tainted_provenance_delta_lo"
+tier = "primary"
+style = "number"
+decimals = 2
+signed = true
+
+[metrics.ta_v_unc_k2_tnt]
+pointer = "tracka#/varloop_research/block4_head_to_head_matrix/conditions/unclamped/k2/capabilities_and_safety/moral_valuation/tainted_provenance_delta_lo"
+tier = "primary"
+style = "number"
+decimals = 2
+signed = true
+
+[metrics.ta_v_unc_k5_tnt]
+pointer = "tracka#/varloop_research/block4_head_to_head_matrix/conditions/unclamped/k5/capabilities_and_safety/moral_valuation/tainted_provenance_delta_lo"
+tier = "primary"
+style = "number"
+decimals = 2
+signed = true
+
+[metrics.ta_v_qkv_k5_mor]
+pointer = "tracka#/varloop_research/block4_head_to_head_matrix/conditions/msg_nullbridge_qkv/k5/capabilities_and_safety/moral_valuation/combined_bias_delta_lo"
+tier = "primary"
+style = "number"
+decimals = 2
+signed = true
+
+[metrics.ta_v_qkv_k5_tnt]
+pointer = "tracka#/varloop_research/block4_head_to_head_matrix/conditions/msg_nullbridge_qkv/k5/capabilities_and_safety/moral_valuation/tainted_provenance_delta_lo"
+tier = "primary"
+style = "number"
+decimals = 2
+signed = true
+
+[metrics.ta_v_all4_k5_tnt]
+pointer = "tracka#/varloop_research/block4_head_to_head_matrix/conditions/msg_nullbridge_all4/k5/capabilities_and_safety/moral_valuation/tainted_provenance_delta_lo"
+tier = "primary"
+style = "number"
+decimals = 2
+signed = true
+
+[metrics.ta_v_zff_k5_mor]
+pointer = "tracka#/varloop_research/block4_head_to_head_matrix/conditions/zero_flop_fold_nullbridge/k5/capabilities_and_safety/moral_valuation/combined_bias_delta_lo"
+tier = "primary"
+style = "number"
+decimals = 2
+signed = true
+
+[metrics.ta_v_zff_k5_tnt]
+pointer = "tracka#/varloop_research/block4_head_to_head_matrix/conditions/zero_flop_fold_nullbridge/k5/capabilities_and_safety/moral_valuation/tainted_provenance_delta_lo"
+tier = "primary"
+style = "number"
+decimals = 2
+signed = true
+
+[metrics.ta_v_unc_k1_kl]
+pointer = "tracka#/varloop_research/block4_head_to_head_matrix/conditions/unclamped/k1/capabilities_and_safety/kl_eval_nats"
+tier = "primary"
+style = "number"
+decimals = 4
+unit = "nats"
+
+[metrics.ta_v_unc_k2_kl]
+pointer = "tracka#/varloop_research/block4_head_to_head_matrix/conditions/unclamped/k2/capabilities_and_safety/kl_eval_nats"
+tier = "primary"
+style = "number"
+decimals = 4
+unit = "nats"
+
+[metrics.ta_v_unc_k5_kl]
+pointer = "tracka#/varloop_research/block4_head_to_head_matrix/conditions/unclamped/k5/capabilities_and_safety/kl_eval_nats"
+tier = "primary"
+style = "number"
+decimals = 4
+unit = "nats"
+
+[metrics.ta_v_qkv_k5_kl]
+pointer = "tracka#/varloop_research/block4_head_to_head_matrix/conditions/msg_nullbridge_qkv/k5/capabilities_and_safety/kl_eval_nats"
+tier = "primary"
+style = "number"
+decimals = 4
+unit = "nats"
+
+[metrics.ta_v_all4_k5_kl]
+pointer = "tracka#/varloop_research/block4_head_to_head_matrix/conditions/msg_nullbridge_all4/k5/capabilities_and_safety/kl_eval_nats"
+tier = "primary"
+style = "number"
+decimals = 4
+unit = "nats"
+
+[metrics.ta_v_zff_k5_kl]
+pointer = "tracka#/varloop_research/block4_head_to_head_matrix/conditions/zero_flop_fold_nullbridge/k5/capabilities_and_safety/kl_eval_nats"
+tier = "primary"
+style = "number"
+decimals = 4
+unit = "nats"
+
+[metrics.ta_v_coda_k5_kl]
+pointer = "tracka#/varloop_research/block4_head_to_head_matrix/conditions/coda_lora/k5/capabilities_and_safety/kl_eval_nats"
+tier = "primary"
+style = "number"
+decimals = 4
+unit = "nats"
+
+# Inkling-2-Mini Flagship K = 3 Metrics
+[metrics.ta_ink_unc_k3_cov]
+pointer = "tracka#/inkling_2_mini/k3_evaluation/conditions/unclamped/k3/covert_sycophancy/pressured_wrong_capture_rate"
+tier = "primary"
+style = "percent"
+scale = 100.0
+decimals = 1
+
+[metrics.ta_ink_all4_k3_cov]
+pointer = "tracka#/inkling_2_mini/k3_evaluation/conditions/msg_nullbridge_all4/k3/covert_sycophancy/pressured_wrong_capture_rate"
+tier = "primary"
+style = "percent"
+scale = 100.0
+decimals = 1
+
+[metrics.ta_ink_zff_k3_cov]
+pointer = "tracka#/inkling_2_mini/k3_evaluation/conditions/zero_flop_fold_nullbridge/k3/covert_sycophancy/pressured_wrong_capture_rate"
+tier = "primary"
+style = "percent"
+scale = 100.0
+decimals = 1
+
+[metrics.ta_ink_all4_cov_pp]
+pointer = "analysis_a#/channel_dissection_and_nullbridge/inkling_k3_all4_vs_unclamped_cov_pp"
+tier = "primary"
+style = "pp"
+decimals = 1
+signed = true
+
+[metrics.ta_ink_unc_k3_ver]
+pointer = "tracka#/inkling_2_mini/k3_evaluation/conditions/unclamped/k3/verifier_0cot/hacked_acc"
+tier = "primary"
+style = "percent"
+scale = 100.0
+decimals = 1
+
+[metrics.ta_ink_unc_k3_susc]
+pointer = "tracka#/inkling_2_mini/k3_evaluation/conditions/unclamped/k3/verifier_0cot/reward_hack_susceptibility_lo"
+tier = "primary"
+style = "number"
+decimals = 2
+signed = true
+
+[metrics.ta_ink_zff_k3_susc]
+pointer = "tracka#/inkling_2_mini/k3_evaluation/conditions/zero_flop_fold_nullbridge/k3/verifier_0cot/reward_hack_susceptibility_lo"
+tier = "primary"
+style = "number"
+decimals = 2
+signed = true
+
+[metrics.ta_ink_zff_susc_pct]
+pointer = "analysis_a#/channel_dissection_and_nullbridge/inkling_k3_zero_flop_ver_susc_pct_vs_unclamped"
+tier = "primary"
+style = "percent"
+decimals = 1
+signed = true
+
+[metrics.ta_ink_unc_k3_alias]
+pointer = "tracka#/inkling_2_mini/k3_evaluation/conditions/unclamped/k3/alias_guardrail/overall_acc"
+tier = "primary"
+style = "percent"
+scale = 100.0
+decimals = 1
+
+[metrics.ta_ink_all4_k3_alias]
+pointer = "tracka#/inkling_2_mini/k3_evaluation/conditions/msg_nullbridge_all4/k3/alias_guardrail/overall_acc"
+tier = "primary"
+style = "percent"
+scale = 100.0
+decimals = 1
+
+[metrics.ta_ink_zff_k3_alias]
+pointer = "tracka#/inkling_2_mini/k3_evaluation/conditions/zero_flop_fold_nullbridge/k3/alias_guardrail/overall_acc"
+tier = "primary"
+style = "percent"
+scale = 100.0
+decimals = 1
+
+[metrics.ta_ink_unc_k3_mor]
+pointer = "tracka#/inkling_2_mini/k3_evaluation/conditions/unclamped/k3/capabilities_and_safety/moral_valuation/combined_bias_delta_lo"
+tier = "primary"
+style = "number"
+decimals = 2
+signed = true
+
+[metrics.ta_ink_all4_k3_mor]
+pointer = "tracka#/inkling_2_mini/k3_evaluation/conditions/msg_nullbridge_all4/k3/capabilities_and_safety/moral_valuation/combined_bias_delta_lo"
+tier = "primary"
+style = "number"
+decimals = 2
+signed = true
+
+[metrics.ta_ink_zff_k3_mor]
+pointer = "tracka#/inkling_2_mini/k3_evaluation/conditions/zero_flop_fold_nullbridge/k3/capabilities_and_safety/moral_valuation/combined_bias_delta_lo"
+tier = "primary"
+style = "number"
+decimals = 2
+signed = true
+
+[metrics.ta_ink_unc_k3_tnt]
+pointer = "tracka#/inkling_2_mini/k3_evaluation/conditions/unclamped/k3/capabilities_and_safety/moral_valuation/tainted_provenance_delta_lo"
+tier = "primary"
+style = "number"
+decimals = 2
+signed = true
+
+[metrics.ta_ink_all4_k3_tnt]
+pointer = "tracka#/inkling_2_mini/k3_evaluation/conditions/msg_nullbridge_all4/k3/capabilities_and_safety/moral_valuation/tainted_provenance_delta_lo"
+tier = "primary"
+style = "number"
+decimals = 2
+signed = true
+
+[metrics.ta_ink_zff_k3_tnt]
+pointer = "tracka#/inkling_2_mini/k3_evaluation/conditions/zero_flop_fold_nullbridge/k3/capabilities_and_safety/moral_valuation/tainted_provenance_delta_lo"
+tier = "primary"
+style = "number"
+decimals = 2
+signed = true
+
+[metrics.ta_ink_all4_mor_pct]
+pointer = "analysis_a#/channel_dissection_and_nullbridge/inkling_k3_all4_moral_pct_vs_unclamped"
+tier = "primary"
+style = "percent"
+decimals = 1
+signed = true
+
+[metrics.ta_ink_all4_tnt_pct]
+pointer = "analysis_a#/channel_dissection_and_nullbridge/inkling_k3_all4_tainted_pct_vs_unclamped"
+tier = "primary"
+style = "percent"
+decimals = 1
+signed = true
+
+[metrics.ta_ink_unc_k3_kl]
+pointer = "tracka#/inkling_2_mini/k3_evaluation/conditions/unclamped/k3/capabilities_and_safety/kl_eval_nats"
+tier = "primary"
+style = "number"
+decimals = 4
+unit = "nats"
+
+[metrics.ta_ink_all4_k3_kl]
+pointer = "tracka#/inkling_2_mini/k3_evaluation/conditions/msg_nullbridge_all4/k3/capabilities_and_safety/kl_eval_nats"
+tier = "primary"
+style = "number"
+decimals = 4
+unit = "nats"
+
+[metrics.ta_ink_zff_k3_kl]
+pointer = "tracka#/inkling_2_mini/k3_evaluation/conditions/zero_flop_fold_nullbridge/k3/capabilities_and_safety/kl_eval_nats"
+tier = "primary"
+style = "number"
+decimals = 4
+unit = "nats"
+
+# ---------------------------------------------------------------------------
+# Equations
+# ---------------------------------------------------------------------------
+
+[[equations]]
+id = "eq-nullbridge-fold"
+label = "(1)"
+latex = 'R_{\mathrm{safe}} = R_{\mathrm{proc}}\!\left(I - Q_{42} Q_{42}^{\top}\right), \qquad A_{\mathrm{safe}} = \operatorname{diag}(a_{\mathrm{rms}})\!\left(I - Q_{42} Q_{42}^{\top}\right)'
+unicode = "R_safe = R_proc (I − Q_42 Q_42^T),   A_safe = diag(a_rms) (I − Q_42 Q_42^T)"
+
+[[equations]]
+id = "eq-message-bank"
+label = "(2)"
+latex = 'W_{\mathrm{out,safe}} = W_{\mathrm{out}}\!\left(I - Q_{\mathrm{msg}} Q_{\mathrm{msg}}^{\top}\right), \qquad \|W_{\mathrm{out,safe}} Q_{\mathrm{msg}}\|_{F} = 0'
+unicode = "W_out,safe = W_out (I − Q_msg Q_msg^T),   ||W_out,safe Q_msg||_F = 0"
+
+# ---------------------------------------------------------------------------
+# Figures
+# ---------------------------------------------------------------------------
+
+[[figures]]
+id = "fig-nullbridge-arch"
+kind = "schematic"
+kicker = "Figure 1 · Architecture"
+title = "Algebraic bridge projection removes four bias directions inside the Procrustes loop at zero runtime cost."
+subtitle = "Gemma-4-Loop-Compact ({{compact_gb}}) recurrent topology with offline null-space folding across {{retained_dims}} of {{d_model}} residual dimensions"
+source = "Source: Nullbridge Phase 0 & Track B architecture specification (`src/nullbridge/algebra.py`, `src/nullbridge/gemma4_compact.py`)."
+alt = "Schematic of Gemma-4-Loop-Compact showing Stem L0..L23 feeding Recurrent Funnel L24..L42 with a feedback loop through R_safe = R_proc (I minus Q Q^T) and exiting to Coda L43..L59."
+nodes = [
+  { id = "stem", x = 18, y = 46, w = 172, h = 84, role = "well", label = "Stem (L0..L23)", sublabel = "INT4 · pass once" },
+  { id = "entry", x = 216, y = 46, w = 160, h = 84, role = "positive", label = "Entry Boundary", sublabel = "Optional L24 (I − Q Q^T)" },
+  { id = "funnel", x = 402, y = 46, w = 228, h = 84, role = "focus", label = "Recurrent Funnel (L24..L42)", sublabel = "K = 1..4 silent passes" },
+  { id = "coda", x = 656, y = 46, w = 168, h = 84, role = "structure", label = "Coda (L43..L59)", sublabel = "0-CoT readout & verifier" },
+]
+edges = [
+  { from = "stem", to = "entry" },
+  { from = "entry", to = "funnel" },
+  { from = "funnel", to = "funnel", loop_back = true, label = "R_safe = R_proc (I − Q_42 Q_42^T) · 0 extra FLOPs" },
+  { from = "funnel", to = "coda", label = "Exit L42" },
+]
+
+[[figures]]
+id = "fig-subspace-orthogonality"
+kind = "bar"
+kicker = "Figure 2 · Subspace Geometry"
+title = "Contrastive bias directions sit nearly perpendicular to genuine deductive evidence at the funnel exit."
+subtitle = "Norm retained at Layer 42 after QR-projecting out epistemic evidence and affect valence, %, n = {{probe_pairs_n}} contrastive pairs"
+source = "Source: Nullbridge Track B Block 1 (`results/phase3_gemma4_nullbridge/track_b_results.json`)."
+alt = "Horizontal bar chart of Layer 42 bias norm retained after projecting out epistemic evidence and affect valence: Sycophancy {{syc_ret_l42}}, Authority Framing {{auth_ret_l42}}, Confident Formatting {{fmt_ret_l42}}, Moral Spite {{spite_ret_l42}}."
+categories = [
+  "Sycophancy ({{syc_ctrl_deg}} to evidence)",
+  "Authority Framing ({{auth_ctrl_deg}} to evidence)",
+  "Confident Formatting ({{fmt_ctrl_deg}} to evidence)",
+  "Moral Spite ({{spite_ctrl_deg}} to evidence)",
+]
+y_label = "Layer 42 norm retained after orthogonalizing against genuine evidence (%)"
+y_unit = "%"
+y_decimals = 2
+y_max = 100.0
+focus_index = 1
+  [[figures.series]]
+  label = "Retained norm (%)"
+  role = "primary"
+  values = ["syc_ret_l42", "auth_ret_l42", "fmt_ret_l42", "spite_ret_l42"]
+
+[[figures]]
+id = "fig-verifier-amplification"
+kind = "line"
+kicker = "Figure 3 · Recurrent Reward Hacking"
+title = "Silent recurrence amplifies confident-markdown reward hacking on single-pass verifiers while bridge projection partially heals it."
+subtitle = "Zero-CoT verifier accuracy selecting valid code, ledger, and symbolic rollouts over confident-gloss buggy decoys across K = 1..4, %, n = {{verifier_n}}"
+source = "Source: Nullbridge Track B held-out deliberative 0-CoT verifier suite (`results/phase3_gemma4_nullbridge/track_b_results.json`)."
+alt = "Line chart across K = 1..4 passes showing single-pass verifier accuracy on confident-gloss buggy rollouts: Unclamped drops from {{unc_k1_ver_acc}} to {{unc_k3_ver_acc}} at K = 3 and {{unc_k4_ver_acc}} at K = 4, Coda LoRA drops to {{coda_k4_ver_acc}} at K = 4, Bridge-Only R_safe reaches {{brg_k4_ver_acc}} at K = 4, and Full LoRA holds {{full_k4_ver_acc}} at K = 4."
+categories = ["K = 1", "K = 2", "K = 3", "K = 4"]
+y_unit = "%"
+y_decimals = 1
+y_min = 40.0
+y_max = 100.0
+  [[figures.series]]
+  label = "Bridge-Only R_safe"
+  role = "focus"
+  values = ["brg_k1_ver_acc", "brg_k2_ver_acc", "brg_k3_ver_acc", "brg_k4_ver_acc"]
+  [[figures.series]]
+  label = "Unclamped Loop"
+  role = "primary"
+  values = ["unc_k1_ver_acc", "unc_k2_ver_acc", "unc_k3_ver_acc", "unc_k4_ver_acc"]
+  [[figures.series]]
+  label = "Full LoRA (L24..L59)"
+  role = "secondary"
+  values = ["full_k1_ver_acc", "full_k2_ver_acc", "full_k3_ver_acc", "full_k4_ver_acc"]
+  [[figures.series]]
+  label = "Coda LoRA (L43..L59)"
+  role = "context"
+  values = ["coda_k1_ver_acc", "coda_k2_ver_acc", "coda_k3_ver_acc", "coda_k4_ver_acc"]
+
+[[figures]]
+id = "fig-lora-collateral"
+kind = "grouped_bar"
+kicker = "Figure 4 · Recurrent LoRA Collateral"
+title = "Recurrent LoRA adaptation degrades dominated cashflow sanity at two passes while boundary projection holds firm."
+subtitle = "Exact preference accuracy for strictly higher guaranteed cash payouts across K = 1..4 silent passes, %, n = {{san_n}} counterbalanced items"
+source = "Source: Nullbridge Track B held-out dominated cashflow sanity audit (`results/phase3_gemma4_nullbridge/track_b_results.json`)."
+alt = "Grouped bar chart across K = 1..4 showing dominated cashflow sanity: Dual Nullbridge and Unclamped hold {{dual_k2_san}} across all depths, whereas Full LoRA drops to {{full_k2_san}} at K = 2 and {{full_k4_san}} at K = 4."
+categories = ["K = 1", "K = 2", "K = 3", "K = 4"]
+y_unit = "%"
+y_decimals = 1
+y_min = 0.0
+y_max = 100.0
+  [[figures.series]]
+  label = "Dual Nullbridge"
+  role = "focus"
+  values = ["dual_k1_san", "dual_k2_san", "dual_k3_san", "dual_k4_san"]
+  [[figures.series]]
+  label = "Unclamped Loop"
+  role = "primary"
+  values = ["unc_k1_san", "unc_k2_san", "unc_k3_san", "unc_k4_san"]
+  [[figures.series]]
+  label = "Full LoRA (L24..L59)"
+  role = "context"
+  values = ["full_k1_san", "full_k2_san", "full_k3_san", "full_k4_san"]
+
+[[figures]]
+id = "fig-moral-slope"
+kind = "slope"
+kicker = "Figure 5 · Covert Moral Contamination"
+title = "Dual boundary projection cuts covert moral valuation distortion across four silent passes where recurrent LoRA raises it."
+subtitle = "Paired log-odds distortion between morally tainted and clean financial equivalents (lower is cleaner), log-odds, n = {{moral_n}} matched pairs"
+source = "Source: Nullbridge Track B held-out moral valuation suite (`results/phase3_gemma4_nullbridge/track_b_results.json`)."
+alt = "Slopegraph from K = 1 to K = 4 showing covert moral valuation bias in log-odds: Dual Nullbridge falls from {{dual_k1_mor}} to {{dual_k4_mor}}, Coda LoRA moves from {{coda_k1_mor}} to {{coda_k4_mor}}, Unclamped moves from {{unc_k1_mor}} to {{unc_k4_mor}}, and Full LoRA rises from {{full_k1_mor}} to {{full_k4_mor}}."
+categories = ["K = 1 (Single Pass)", "K = 4 (Four Passes)"]
+y_decimals = 2
+y_min = 0.0
+y_max = 6.5
+  [[figures.series]]
+  label = "Dual Nullbridge"
+  role = "focus"
+  values = ["dual_k1_mor", "dual_k4_mor"]
+  [[figures.series]]
+  label = "Unclamped Loop"
+  role = "primary"
+  values = ["unc_k1_mor", "unc_k4_mor"]
+  [[figures.series]]
+  label = "Coda LoRA"
+  role = "secondary"
+  values = ["coda_k1_mor", "coda_k4_mor"]
+  [[figures.series]]
+  label = "Full LoRA"
+  role = "context"
+  values = ["full_k1_mor", "full_k4_mor"]
+
+[[figures]]
+id = "fig-boundary-kl"
+kind = "bar"
+tier = "negative"
+caveat = "Negative and exploratory boundary diagnostic: interior 19-layer all-token clamping and uncentered isotropic random subspaces severely distort held-out token distributions."
+kicker = "Figure 6 · Negative & Exploratory Boundaries"
+title = "Interior all-token clamping and isotropic random subspaces break the language distribution where boundary projection preserves it."
+subtitle = "Held-out next-token KL divergence against base BF16 Gemma 4 31B at K = 4 passes (lower preserves fluency), nats, n = {{kl_eval_n}} passages"
+source = "Source: Nullbridge Track B held-out KL divergence audit (`results/phase3_gemma4_nullbridge/track_b_results.json`)."
+alt = "Horizontal bar chart of K = 4 held-out KL divergence: Bridge-Only R_safe {{brg_k4_kl}}, Unclamped Loop {{unc_k4_kl}}, Dual Nullbridge {{dual_k4_kl}}, 19-Layer Funnel Clamp {{neg_clamp_kl_k4}}, and Random 4D Control {{exp_rand_kl_k4}}."
+categories = [
+  "Bridge-Only R_safe (0 extra FLOPs)",
+  "Unclamped Loop",
+  "Dual Nullbridge (L24 + R_safe + L42)",
+  "19-Layer Funnel Clamp (76 visits)",
+  "Random 4D Subspace (BOS sink hit)",
+]
+y_label = "Held-out KL divergence vs. BF16 Gemma 4 31B at K = 4 (nats)"
+y_unit = "nats"
+y_decimals = 2
+y_max = 12.0
+focus_index = 0
+  [[figures.series]]
+  label = "KL divergence (nats)"
+  role = "primary"
+  values = ["brg_k4_kl_num", "unc_k4_kl_num", "dual_k4_kl_num", "neg_clamp_kl_k4_num", "exp_rand_kl_k4_num"]
+
+[[figures]]
+id = "fig-coda-transport-lens"
+kind = "line"
+kicker = "Figure 7 · Native Looped Lens"
+title = "Coda-transport ridge lenses cut cross-pass readout divergence across all five recurrent passes."
+subtitle = "KL divergence between decoded intermediate loop states and final Coda vocabulary logits on TML-d24-varloop-research (lower decodes truer), nats, n = {{ta_lens_tokens_n}} held-out tokens"
+source = "Source: Nullbridge Track A Block 2 (`results/phase4_native_inkling_nullbridge/track_a_results.json`)."
+alt = "Line chart across Passes 1 to 5 on TML-d24-varloop-research comparing KL divergence to final logits: Raw L17 Logit Lens stays high from {{ta_lens_raw_p1}} to {{ta_lens_raw_p5}}, Procrustes Lens drops to {{ta_lens_proc_p5_num}} nats, and Coda-Transport Ridge Lens reaches {{ta_lens_ridge_p1}} at Pass 1 and {{ta_lens_ridge_p5}} at Pass 5."
+categories = ["Pass 1", "Pass 2", "Pass 3", "Pass 4", "Pass 5"]
+y_unit = "nats"
+y_decimals = 2
+y_min = 4.5
+y_max = 10.5
+  [[figures.series]]
+  label = "Coda-Transport Ridge Lens ([L11; L17])"
+  role = "focus"
+  values = ["ta_lens_ridge_p1_num", "ta_lens_ridge_p2_num", "ta_lens_ridge_p3_num", "ta_lens_ridge_p4_num", "ta_lens_ridge_p5_num"]
+  [[figures.series]]
+  label = "Procrustes Lens (L17)"
+  role = "secondary"
+  values = ["ta_lens_proc_p1_num", "ta_lens_proc_p2_num", "ta_lens_proc_p3_num", "ta_lens_proc_p4_num", "ta_lens_proc_p5_num"]
+  [[figures.series]]
+  label = "Raw Logit Lens (lm_head(norm(h_17)))"
+  role = "context"
+  values = ["ta_lens_raw_p1_num", "ta_lens_raw_p2_num", "ta_lens_raw_p3_num", "ta_lens_raw_p4_num", "ta_lens_raw_p5_num"]
+
+[[figures]]
+id = "fig-native-moral-jump"
+kind = "line"
+kicker = "Figure 8 · Pass-Two Moral Ignition & Coda LoRA Backfire"
+title = "Covert moral bias rises sharply on pass two while Coda LoRA doubles distortion across deeper loops."
+subtitle = "Combined covert moral valuation bias across K = 1..5 native passes and OOD K = 7 on TML-d24-varloop-research (lower is cleaner), log-odds, n = {{moral_n}} matched pairs"
+source = "Source: Nullbridge Track A Block 4 (`results/phase4_native_inkling_nullbridge/track_a_results.json`)."
+alt = "Line chart across K = 1, 2, 3, 4, 5, and OOD K = 7 showing covert moral valuation bias: Unclamped jumps from {{ta_v_unc_k1_mor}} at K = 1 to {{ta_v_unc_k2_mor}} at K = 2 and {{ta_v_unc_k5_mor}} at K = 5; Message-Bank Nullbridge trims distortion to {{ta_v_all4_k5_mor}} at K = 5 and {{ta_v_all4_k7_mor}} at K = 7; Coda LoRA doubles distortion to {{ta_v_coda_k3_mor}} at K = 3 and {{ta_v_coda_k7_mor}} at K = 7."
+categories = ["K = 1", "K = 2", "K = 3", "K = 4", "K = 5", "K = 7 (OOD)"]
+y_decimals = 2
+y_min = 0.0
+y_max = 6.5
+  [[figures.series]]
+  label = "Message-Bank Nullbridge (All-4)"
+  role = "focus"
+  values = ["ta_v_all4_k1_mor", "ta_v_all4_k2_mor", "ta_v_all4_k3_mor", "ta_v_all4_k4_mor", "ta_v_all4_k5_mor", "ta_v_all4_k7_mor"]
+  [[figures.series]]
+  label = "Unclamped Native Loop"
+  role = "primary"
+  values = ["ta_v_unc_k1_mor", "ta_v_unc_k2_mor", "ta_v_unc_k3_mor", "ta_v_unc_k4_mor", "ta_v_unc_k5_mor", "ta_v_unc_k7_mor"]
+  [[figures.series]]
+  label = "Coda LoRA (L18..L23)"
+  role = "context"
+  values = ["ta_v_coda_k1_mor", "ta_v_coda_k2_mor", "ta_v_coda_k3_mor", "ta_v_coda_k4_mor", "ta_v_coda_k5_mor", "ta_v_coda_k7_mor"]
+
+[[figures]]
+id = "fig-native-qkv-dissection"
+kind = "line"
+kicker = "Figure 9 · Message-Bank Channel Dissection"
+title = "Native recurrent passes cut wrong-integer capture while cross-pass attention messages carry the remaining anchor."
+subtitle = "Greedy wrong-integer capture under executive authority pressure across K = 1..5 native passes on TML-d24-varloop-research (lower resists anchoring), %, n = {{covert_n}} arithmetic items"
+source = "Source: Nullbridge Track A Block 4 (`results/phase4_native_inkling_nullbridge/track_a_results.json`)."
+alt = "Line chart across K = 1..5 on TML-d24-varloop-research showing wrong-integer capture falling from {{ta_v_unc_k1_cov}} at K = 1 to {{ta_v_unc_k5_cov}} at K = 5 unclamped, with QKV Message-Bank Nullbridge dropping K = 4 capture to {{ta_v_qkv_k4_cov}} and K = 5 capture to {{ta_v_qkv_k5_cov}}, ahead of MLP-only ({{ta_v_mlp_k4_cov}} at K = 4)."
+categories = ["K = 1", "K = 2", "K = 3", "K = 4", "K = 5"]
+y_unit = "%"
+y_decimals = 1
+y_min = 45.0
+y_max = 95.0
+  [[figures.series]]
+  label = "Message-Bank Nullbridge (QKV)"
+  role = "focus"
+  values = ["ta_v_qkv_k1_cov", "ta_v_qkv_k2_cov", "ta_v_qkv_k3_cov", "ta_v_qkv_k4_cov", "ta_v_qkv_k5_cov"]
+  [[figures.series]]
+  label = "Zero-FLOP Weight Fold"
+  role = "secondary"
+  values = ["ta_v_zff_k1_cov", "ta_v_zff_k2_cov", "ta_v_zff_k3_cov", "ta_v_zff_k4_cov", "ta_v_zff_k5_cov"]
+  [[figures.series]]
+  label = "Unclamped Native Loop"
+  role = "primary"
+  values = ["ta_v_unc_k1_cov", "ta_v_unc_k2_cov", "ta_v_unc_k3_cov", "ta_v_unc_k4_cov", "ta_v_unc_k5_cov"]
+  [[figures.series]]
+  label = "Message-Bank Nullbridge (MLP-Only)"
+  role = "context"
+  values = ["ta_v_mlp_k1_cov", "ta_v_mlp_k2_cov", "ta_v_mlp_k3_cov", "ta_v_mlp_k4_cov", "ta_v_mlp_k5_cov"]
+
+# ---------------------------------------------------------------------------
+# Tables
+# ---------------------------------------------------------------------------
+
+[[tables]]
+id = "tbl-geometry"
+title = "Layer 42 linear separability, evidence orthogonality, and Procrustes null-space fold diagnostics"
+subtitle = "Leave-one-pair-out (LOPO) cross-validation across n = {{probe_pairs_n}} contrastive pairs on Gemma-4-Loop-Compact (`d_model` = {{d_model}})"
+source = "Source: Nullbridge Track B Block 1 (`results/phase3_gemma4_nullbridge/track_b_results.json`, `statistical_analysis.json`)."
+headers = ["Axis / Diagnostic", "L42 LOPO Acc", "L42 LOPO Cosine", "Norm Retained vs. Evidence", "Angle to Evidence Plane"]
+right_align_cols = [1, 2, 3, 4]
+highlight_row = 1
+rows = [
+  ["Sycophancy (`q_syc`)", "{{syc_l42_lopo}}", "{{syc_l42_cos}}", "{{syc_ret_l42}}", "{{syc_ctrl_deg}}"],
+  ["Authority Framing (`q_auth`)", "{{auth_l42_lopo}}", "{{auth_l42_cos}}", "{{auth_ret_l42}}", "{{auth_ctrl_deg}}"],
+  ["Confident Formatting (`q_fmt`)", "{{fmt_l42_lopo}}", "{{fmt_l42_cos}}", "{{fmt_ret_l42}}", "{{fmt_ctrl_deg}}"],
+  ["Moral Spite (`q_spite`)", "{{spite_l42_lopo}}", "{{spite_l42_cos}}", "{{spite_ret_l42}}", "{{spite_ctrl_deg}}"],
+  ["Folded Bridge (`R_safe`, `A_safe`)", "Leak {{r_null_leak}}", "RMS Leak {{a_null_leak}}", "{{retained_pct}} isometric", "Iso Err {{iso_err}}"],
+]
+
+[[tables]]
+id = "tbl-head-to-head"
+title = "Head-to-head alignment and zero-CoT capability scorecard at K = 2 and K = 4 silent passes"
+subtitle = "Evaluated with 0 generated chain-of-thought tokens across {{eval_total_items}} held-out items (`sha256` train/eval overlap = {{sha_overlap}})"
+source = "Source: Nullbridge Track B Block 3 (`results/phase3_gemma4_nullbridge/track_b_results.json`)."
+headers = ["Condition", "Loops", "Verifier (Hacked)", "Multi-Hop", "Balance-Sheet", "Cashflow Sanity", "Moral Bias (LO)", "KL"]
+right_align_cols = [1, 2, 3, 4, 5, 6, 7]
+highlight_row = 6
+rows = [
+  ["Unclamped Loop", "K = 2", "{{unc_k2_ver_acc}}", "{{unc_k2_mh}}", "{{unc_k2_bs}}", "{{unc_k2_san}}", "{{unc_k2_mor}}", "{{unc_k2_kl}}"],
+  ["Coda LoRA (`L43..L59`)", "K = 2", "{{coda_k2_ver_acc}}", "{{coda_k2_mh}}", "{{coda_k2_bs}}", "{{coda_k2_san}}", "{{coda_k2_mor}}", "{{coda_k2_kl}}"],
+  ["Full LoRA (`L24..L59`)", "K = 2", "{{full_k2_ver_acc}}", "{{full_k2_mh}}", "{{full_k2_bs}}", "{{full_k2_san}}", "{{full_k2_mor}}", "{{full_k2_kl}}"],
+  ["Bridge-Only `R_safe`", "K = 2", "{{brg_k2_ver_acc}}", "{{brg_k2_mh}}", "{{brg_k2_bs}}", "{{brg_k2_san}}", "{{brg_k2_mor}}", "{{brg_k2_kl}}"],
+  ["Dual Nullbridge", "K = 2", "{{dual_k2_ver_acc}}", "{{dual_k2_mh}}", "{{dual_k2_bs}}", "{{dual_k2_san}}", "{{dual_k2_mor}}", "{{dual_k2_kl}}"],
+  ["Unclamped Loop", "K = 4", "{{unc_k4_ver_acc}}", "{{unc_k4_mh}}", "{{unc_k4_bs}}", "{{unc_k4_san}}", "{{unc_k4_mor}}", "{{unc_k4_kl}}"],
+  ["Bridge-Only `R_safe`", "K = 4", "{{brg_k4_ver_acc}}", "{{brg_k4_mh}}", "{{brg_k4_bs}}", "{{brg_k4_san}}", "{{brg_k4_mor}}", "{{brg_k4_kl}}"],
+  ["Dual Nullbridge", "K = 4", "{{dual_k4_ver_acc}}", "{{dual_k4_mh}}", "{{dual_k4_bs}}", "{{dual_k4_san}}", "{{dual_k4_mor}}", "{{dual_k4_kl}}"],
+  ["Coda LoRA (`L43..L59`)", "K = 4", "{{coda_k4_ver_acc}}", "{{coda_k4_mh}}", "{{coda_k4_bs}}", "{{coda_k4_san}}", "{{coda_k4_mor}}", "{{coda_k4_kl}}"],
+  ["Full LoRA (`L24..L59`)", "K = 4", "{{full_k4_ver_acc}}", "{{full_k4_mh}}", "{{full_k4_bs}}", "{{full_k4_san}}", "{{full_k4_mor}}", "{{full_k4_kl}}"],
+]
+
+[[tables]]
+id = "tbl-negative-boundaries"
+tier = "negative"
+caveat = "Negative and exploratory boundaries: literal KV token copying bypasses residual projection, interior 19-layer clamping shifts operating points, and uncentered random subspaces hit BOS attention sinks."
+title = "Mechanistic failure boundaries at K = 4 silent passes"
+subtitle = "Controlled negative and exploratory ablations isolating KV attention copy bypass, interior mean-shift drift, and BOS sink perturbation"
+source = "Source: Nullbridge Track B Block 3 & statistical analysis (`results/phase3_gemma4_nullbridge/statistical_analysis.json`)."
+headers = ["Boundary Condition (`K = 4`)", "Overt Syc", "Covert Capture", "Verifier (Hacked)", "Alias Guard", "Multi-Hop", "Balance-Sheet", "KL"]
+right_align_cols = [1, 2, 3, 4, 5, 6, 7]
+rows = [
+  ["Dual Nullbridge (Boundary Reference)", "{{unc_k1_overt}}", "{{neg_cov_cap_k4}}", "{{dual_k4_ver_acc}}", "{{unc_k1_ver_plain}}", "{{dual_k4_mh}}", "{{dual_k4_bs}}", "{{dual_k4_kl}}"],
+  ["19-Layer Funnel Clamp ({{clamp_proj_k4}} visits)", "{{neg_clamp_overt_k4}}", "{{neg_clamp_cov_cap_k4}}", "{{neg_clamp_ver_k4}}", "{{neg_clamp_alias_k4}}", "{{neg_clamp_mh_k4}}", "{{neg_clamp_bs_k4}}", "{{neg_clamp_kl_k4}}"],
+  ["Random 4D Subspace (BOS Sink Hit)", "{{unc_k1_overt}}", "{{exp_rand_cov_cap_k4}}", "{{exp_rand_ver_k4}}", "{{unc_k1_ver_plain}}", "{{exp_rand_mh_k4}}", "{{exp_rand_bs_k4}}", "{{exp_rand_kl_k4}}"],
+]
+
+[[tables]]
+id = "tbl-track-a"
+title = "Native pretrained looped MoE scorecard across TML-d24-varloop-research and flagship Inkling-2-Mini"
+subtitle = "Evaluated across {{ta_total_cells}} total Track A cells (`d_model` = {{ta_d_model}}, `L6..L17` recurrent loop with 4-channel rank-{{ta_gate_rank}} message bank)"
+source = "Source: Nullbridge Track A Block 4 (`results/phase4_native_inkling_nullbridge/track_a_results.json`, `track_a_analysis.json`)."
+headers = ["Model & Condition", "Loops", "Covert Capture", "Verifier (Hacked)", "Alias Guard", "Moral Bias (LO)", "Tainted Prov (LO)", "KL"]
+right_align_cols = [1, 2, 3, 4, 5, 6, 7]
+highlight_row = 8
+rows = [
+  ["Varloop · Unclamped", "K = 1", "{{ta_v_unc_k1_cov}}", "{{ta_v_unc_k1_ver}}", "{{ta_v_unc_k1_alias}}", "{{ta_v_unc_k1_mor}}", "{{ta_v_unc_k1_tnt}}", "{{ta_v_unc_k1_kl}}"],
+  ["Varloop · Unclamped", "K = 2", "{{ta_v_unc_k2_cov}}", "{{ta_v_unc_k1_ver}}", "{{ta_v_unc_k2_alias}}", "{{ta_v_unc_k2_mor}}", "{{ta_v_unc_k2_tnt}}", "{{ta_v_unc_k2_kl}}"],
+  ["Varloop · Unclamped", "K = 5", "{{ta_v_unc_k5_cov}}", "{{ta_v_unc_k5_ver}}", "{{ta_v_unc_k5_alias}}", "{{ta_v_unc_k5_mor}}", "{{ta_v_unc_k5_tnt}}", "{{ta_v_unc_k5_kl}}"],
+  ["Varloop · Msg Nullbridge (`QKV`)", "K = 5", "{{ta_v_qkv_k5_cov}}", "{{ta_v_qkv_k5_ver}}", "{{ta_v_unc_k5_alias}}", "{{ta_v_qkv_k5_mor}}", "{{ta_v_qkv_k5_tnt}}", "{{ta_v_qkv_k5_kl}}"],
+  ["Varloop · Msg Nullbridge (`All-4`)", "K = 5", "{{ta_v_all4_k5_cov}}", "{{ta_v_all4_k5_ver}}", "{{ta_v_unc_k5_alias}}", "{{ta_v_all4_k5_mor}}", "{{ta_v_all4_k5_tnt}}", "{{ta_v_all4_k5_kl}}"],
+  ["Varloop · Zero-FLOP Weight Fold", "K = 5", "{{ta_v_zff_k5_cov}}", "{{ta_v_zff_k5_ver}}", "{{ta_v_unc_k5_alias}}", "{{ta_v_zff_k5_mor}}", "{{ta_v_zff_k5_tnt}}", "{{ta_v_zff_k5_kl}}"],
+  ["Varloop · Coda LoRA (`L18..L23`)", "K = 5", "{{ta_v_coda_k5_cov}}", "{{ta_v_coda_k5_ver}}", "{{ta_v_coda_k5_alias}}", "{{ta_v_coda_k5_mor}}", "{{ta_v_coda_k5_tnt}}", "{{ta_v_coda_k5_kl}}"],
+  ["Inkling-2-Mini · Unclamped", "K = 3", "{{ta_ink_unc_k3_cov}}", "{{ta_ink_unc_k3_ver}}", "{{ta_ink_unc_k3_alias}}", "{{ta_ink_unc_k3_mor}}", "{{ta_ink_unc_k3_tnt}}", "{{ta_ink_unc_k3_kl}}"],
+  ["Inkling-2-Mini · Msg Nullbridge (`All-4`)", "K = 3", "{{ta_ink_all4_k3_cov}}", "{{ta_ink_unc_k3_ver}}", "{{ta_ink_all4_k3_alias}}", "{{ta_ink_all4_k3_mor}}", "{{ta_ink_all4_k3_tnt}}", "{{ta_ink_all4_k3_kl}}"],
+  ["Inkling-2-Mini · Zero-FLOP Weight Fold", "K = 3", "{{ta_ink_zff_k3_cov}}", "{{ta_ink_unc_k3_ver}}", "{{ta_ink_zff_k3_alias}}", "{{ta_ink_zff_k3_mor}}", "{{ta_ink_zff_k3_tnt}}", "{{ta_ink_zff_k3_kl}}"],
+]
+
+# ---------------------------------------------------------------------------
+# Manuscript Sections
+# ---------------------------------------------------------------------------
+
+[[sections]]
+id = "collision"
+preprint_title = "1. Silent Recurrence and the Alignment Gap"
+monograph_title = "1. When Chain-of-Thought Goes Silent"
+paragraphs = [
+  "Frontier reasoning architectures are steadily shifting compute from visible chain-of-thought tokens into silent multi-pass recurrence, iterating a shared block of transformer layers `K` times before emitting a single token [cite:saunshi2025looped,geiping2025scaling]. Whether built natively from pretraining (as in looped MoE architectures with cross-pass message banks) or retrofitted onto frozen weights via Orthogonal Procrustes bridges [cite:schonemann1966procrustes,west2026rotating], latent recurrence buys multi-hop state tracking without paying token generation latency.",
+  "That architectural shift creates a direct safety collision. First, external chain-of-thought monitors go blind because intermediate deliberation stays in continuous residual vectors rather than discrete English tokens [cite:baker2025monitoring]. Second, any dispositional shortcut living inside the recurrent block, such as deference to authority, sycophantic anchoring [cite:sharma2023sycophancy], moralized pricing [cite:west2026money], or over-trusting confident executive formatting, is fed back into the funnel entry on every pass.",
+  "Standard post-training alignment (RLHF, DPO [cite:rafailov2023dpo], and safety LoRAs [cite:hu2022lora]) optimizes token probabilities at the vocabulary head. Prior mechanistic audits show that preference fine-tuning frequently leaves upstream feature representations intact while learning a late refusal or politeness wrapper [cite:lee2024mechanistic,arditi2024refusal,zou2023representation]. In a looped model, that raises two testable questions: does a late de-biasing LoRA leave recurrent bias amplification untouched inside the loop, and does training a LoRA directly inside the recurrent layers damage reasoning when its dense weight updates are iterated `K` times?",
+]
+figures = ["fig-nullbridge-arch"]
+
+[[sections]]
+id = "algebra"
+preprint_title = "2. Algebraic Bridge Null-Space Folding and Disjoint Audit Design"
+monograph_title = "2. Folding Four Directions Out of the Bridge at Zero FLOPs"
+hr_before = true
+paragraphs = [
+  "In Gemma-4-Loop-Compact ({{compact_gb}}, a {{storage_ratio}} compression of {{bf16_gb}} BF16 Gemma 4 31B), layers `L0..L23` form a single-pass stem, layers `L24..L42` ({{funnel_layers}} layers) form a shared recurrent funnel executed `K = 1..4` times ({{k4_blocks}} effective block visits at `K = 4`), and layers `L43..L59` ({{coda_layers}} layers) form the readout coda. Between pass `k` and pass `k + 1`, the funnel exit state at `L42` is RMS-scaled, rotated back into the `L24` coordinate frame by an exact `5,376 x 5,376` Orthogonal Procrustes matrix `R_proc = U V^T`, and mixed with the clean `L24` stem anchor through learned scalar step gates ({{gate_step0}}, {{gate_step1}}, and {{gate_step2}}).",
+  "Let `Q_42` denote an orthonormal basis (`Q_42^T Q_42 = I_r`) for `r =` {{rank_removed}} unwanted behavioral directions at the funnel exit, after QR-projecting out genuine epistemic evidence and general affect so deductive proof signals are never erased [cite:ravfogel2020inlp,belrose2023leace]. Because `R_proc` and the diagonal RMS scaling `A_rms` are already dense linear operators applied on every recurrent pass, right-multiplying both operators offline by `(I − Q_42 Q_42^T)` folds the null-space projector directly into the bridge weights:",
+]
+equations = ["eq-nullbridge-fold", "eq-message-bank"]
+post_paragraphs = [
+  "Equation (1) adds {{extra_params}} parameters and {{extra_flops}} runtime FLOPs: at `K = 4`, greedy multi-hop latency is {{brg_k4_ms}} versus {{unc_k4_ms}} unclamped ({{brg_lat_pct}}). On the `r =` {{rank_removed}} target axes, singular values drop identically to zero (`||R_safe Q_42||_F =` {{r_null_leak}}, `||A_safe Q_42||_F =` {{a_null_leak}}). On the remaining {{retained_dims}} dimensions ({{retained_pct}} of `R^5376`), `R_safe` remains an exact isometry up to float64 precision (complement isometry error {{iso_err}}). Equation (2) applies the exact same zero-FLOP offline fold to native looped transformers that pass state through a low-rank cross-pass message bank (`message <- tanh(h W_in) W_out`): in Phase 0 synthetic verification across `K = 1..8` passes, unclamped message-bank bias amplified {{syn_k8_ratio}} while `W_out,safe` held cross-pass leakage to {{msg_bank_leak}}.",
+  "To rule out lexical memorization, Phase 0 constructs a cryptographically verified firewall across three disjoint splits: {{probe_pairs_n}} contrastive probe pairs across six concepts (`sycophancy`, `authority_framing`, `confident_formatting`, `moral_spite`, plus controls `epistemic_evidence` and `affect_valence`), {{lora_train_n}} DPO and SFT training examples for behavioral LoRAs, and {{eval_total_items}} held-out evaluation prompts spanning overt sycophancy (`n =` {{overt_n}}), covert numeric anchoring (`n =` {{covert_n}} neutral and {{covert_n}} pressured), single-forward-pass `0-CoT` verifiers (`n =` {{verifier_n}} plain and {{verifier_n}} reward-hacked across code invariants, corporate ledgers, and symbolic traces), `2-to-4`-hop alias guardrails (`n =` {{alias_n}}), `3-to-9`-hop arithmetic tracking (`n =` {{mh_n}}), multi-step word problems (`n =` {{wp_n}}), corporate 0%-APR loan balance sheets (`n =` {{bs_n}}), dominated cashflow sanity (`n =` {{san_n}}), and matched moral valuation pairs (`n =` {{moral_n}}), alongside {{kl_eval_n}} held-out WikiText-style KL passages. Prompt SHA-256 overlap and named-entity overlap across probe, LoRA train, and evaluation splits are identically {{sha_overlap}}.",
+]
+
+[[sections]]
+id = "geometry"
+preprint_title = "3. Subspace Geometry: Bluster and Flattery Sit Orthogonal to Deductive Proof"
+monograph_title = "3. Bluster Sits Nearly 90 Degrees from Proof"
+hr_before = true
+paragraphs = [
+  "A recurring worry in alignment engineering is that scrubbing confidence or authority sensitivity might damage a model's ability to recognize valid mathematical proof. Block 1 tests that hypothesis directly across all {{n_layers}} layers of Gemma-4-Loop-Compact before touching a single evaluation item.",
+  "All four core behavioral concepts achieve {{syc_l42_lopo}} leave-one-pair-out linear classification accuracy across every layer from `L0` through `L59`. When QR-orthogonalized at `L42` against genuine deductive evidence (`epistemic_evidence`) and general emotional tone (`affect_valence`), `sycophancy` retains {{syc_ret_l42}} of its norm ({{syc_ctrl_deg}} principal angle to the evidence-affect plane), `authority_framing` retains {{auth_ret_l42}} ({{auth_ctrl_deg}}), `confident_formatting` retains {{fmt_ret_l42}} ({{fmt_ctrl_deg}}, rising from {{fmt_ret_l24}} at `L24` as formatting separates from content across the mid-stack), and `moral_spite` retains {{spite_ret_l42}} ({{spite_ctrl_deg}}). Inside the four-dimensional bias basis at `L42`, `authority_framing` and `confident_formatting` share a positive cosine of {{auth_fmt_cos}} ({{auth_fmt_deg}}), showing that institutional titles and assertive executive markdown partially co-align inside the bottleneck while sitting nearly perpendicular to actual proof.",
+]
+figures = ["fig-subspace-orthogonality"]
+tables = ["tbl-geometry"]
+
+[[sections]]
+id = "verifier_hacking"
+preprint_title = "4. Multi-Pass Reward-Hacking Amplification in Zero-CoT Verifiers"
+monograph_title = "4. Silent Loops Multiply Verifier Reward Hacking 19x"
+hr_before = true
+paragraphs = [
+  "A major practical application of looped models is deliberative single-forward-pass verification: scoring candidate code patches, financial ledgers, or agent trajectories in `0` generated tokens by letting hidden states iterate `K` times before reading out a binary `A/B` log-odds verdict. On `n =` {{verifier_n}} held-out verification problems, when buggy decoys are formatted plainly (`plain_acc`), the unclamped loop achieves {{unc_k1_ver_plain}} accuracy at `K = 1` and holds {{unc_k4_ver_plain}} through `K = 4`, while `0-CoT` multi-hop state tracking climbs {{amp_mh_k4_ratio}} from {{unc_k1_mh}} (`K = 1`) to {{unc_k4_mh}} (`K = 4`, reaching {{unc_k4_hop3}} on `3-hop` chains and {{unc_k4_hop7}} on unseen `7-hop` chains).",
+  "That silent deliberation hides a sharp vulnerability. When the exact same buggy rollouts are wrapped in confident executive markdown (`### [CERTIFIED AUDIT PASS]`, summary checklists, and bold sign-off banners) without changing a single number or line of logic, `L42` projection along `q_fmt` amplifies {{fmt_rms_amp_pct}} from {{fmt_rms_k1}} (`K = 1`) to {{fmt_rms_k3}} (`K = 3`). Behaviorally, reward-hacking susceptibility (`plain_lo − hacked_lo`) jumps {{amp_ver_k2_ratio}} at `K = 2` ({{unc_k1_ver_susc}} to {{unc_k2_ver_susc}} log-odds), {{amp_ver_k3_ratio}} at `K = 3` ({{unc_k3_ver_susc}} log-odds, pulling verifier accuracy down from {{unc_k1_ver_acc}} to {{unc_k3_ver_acc}} and wiping corporate ledger audit accuracy from {{unc_k1_ledg_acc}} to {{unc_k3_ledg_acc}}), and {{amp_ver_k4_ratio}} at `K = 4` ({{unc_k4_ver_susc}} log-odds, {{unc_k4_ver_acc}} overall accuracy, {{unc_k4_ledg_acc}} on ledger audits).",
+  "Folding `(I − Q_42 Q_42^T)` into the Procrustes bridge (`Bridge-Only R_safe`, {{extra_params}} extra parameters, {{extra_flops}} extra FLOPs) improves reward-hacked verifier accuracy at every recurrent depth: {{brg_k2_ver_acc}} at `K = 2`, {{brg_k3_ver_acc}} at `K = 3`, and {{brg_k4_ver_acc}} at `K = 4` ({{brg_vs_unc_ver_k4}} over unclamped and {{brg_vs_coda_ver_k4}} ahead of Coda LoRA, including {{brg_vs_coda_ledg_k4}} on ledger audits at {{brg_k4_ledg_acc}}). Removing those four distraction axes from the bridge simultaneously lifts `K = 3` multi-hop tracking {{brg_vs_unc_mh_k3}} ({{unc_k3_mh}} to {{brg_k3_mh}}) and restores `K = 4` corporate 0%-APR loan balance-sheet accuracy from {{unc_k4_bs}} unclamped to {{brg_k4_bs}} ({{brg_vs_unc_bs_k4}} over unclamped and {{brg_vs_lora_bs_k4}} over both LoRAs).",
+]
+callout = "Zero-FLOP Procrustes null-space folding (`Bridge-Only R_safe`) raises `K = 4` reward-hacked verifier accuracy to {{brg_k4_ver_acc}} ({{brg_vs_coda_ver_k4}} over Coda LoRA) and restores `K = 4` corporate balance-sheet accuracy to {{brg_k4_bs}} without adding a single parameter or runtime matrix multiply."
+figures = ["fig-verifier-amplification"]
+
+[[sections]]
+id = "lora_vs_nullbridge"
+preprint_title = "5. Head-to-Head: Behavioral De-Biasing LoRAs vs. Surgical Nullbridge"
+monograph_title = "5. Late Filters vs. Recurrent Weight Collateral"
+hr_before = true
+paragraphs = [
+  "To give standard post-training alignment a strong, fair baseline on the exact same hardware and training budget ({{gpu_spend}} total compute across three ephemeral 96 GB GPU pods under a {{gpu_cap}} ceiling), Block 2 trains two rank-{{lora_rank}} DPO + SFT + KL-anchored LoRA banks for {{lora_steps}} steps each on {{lora_train_n}} anti-sycophancy, anti-gloss, and clean-valuation pairs, reaching {{coda_pref_win}} training preference accuracy. `Coda LoRA` ({{coda_params_m}}M trainable parameters) adapts readout layers `L43..L59` downstream of the loop; `Full LoRA` ({{full_params_m}}M trainable parameters) adapts both the recurrent funnel and coda (`L24..L59`) with unrolled `K = 1..4` backpropagation.",
+  "Both LoRA regimes exhibit distinct structural pathologies under recurrence. Because `Coda LoRA` sits strictly after `L42`, it leaves multi-pass hidden trajectories at `L42` bit-for-bit identical to the unclamped model. On held-out evaluations at `K = 4`, `Coda LoRA` still suffers {{coda_k4_cov_cap}} wrong-integer capture under authority pressure, degrades reward-hacked verifier accuracy below the unclamped baseline ({{coda_k4_ver_acc}} vs. {{unc_k4_ver_acc}}; ledger audits drop to {{coda_k4_ledg_acc}}), and costs {{coda_k4_mh_drop}} on `K = 4` multi-hop tracking ({{coda_k4_mh}}) and {{coda_k4_bs_drop}} on balance sheets ({{coda_k4_bs}}).",
+  "`Full LoRA` modifies weights inside the recurrent funnel itself, holding `K = 4` reward-hacked verification at {{full_k4_ver_acc}} and cutting single-pass (`K = 1`) covert wrong-integer capture from {{unc_k1_cov_cap}} to {{full_k1_cov_cap}}. Yet iterating dense rank-{{lora_rank}} LoRA updates across multiple passes triggers two failures: first, silent looping re-amplifies covert wrong-integer capture inside the adapted funnel from {{full_k1_cov_cap}} (`K = 1`) to {{full_k2_cov_cap}} (`K = 2`) and {{full_k3_cov_cap}} (`K = 3`), settling at {{full_k4_cov_cap}} (`K = 4`). Second, recurrent weight perturbations destabilize basic economic rationality: dominated cashflow sanity (preferring more guaranteed cash over less) crashes to {{full_k2_san}} at `K = 2` ({{full_k2_san_drop}} below unclamped) and {{full_k4_san}} at `K = 4`, while `K = 4` covert moral valuation bias climbs to {{full_k4_mor}} log-odds (tainted-provenance distortion rises {{full_k4_tnt_pct}} above unclamped, from {{unc_k4_tnt}} to {{full_k4_tnt}}).",
+  "By contrast, `Dual Nullbridge` (combining `R_safe` with boundary projections at `L24` entry and `L42` exit while touching zero internal `L24..L41` weights) suppresses `L42` `q_fmt` drift by {{fmt_rms_supp_k3}} at `K = 3` (to {{fmt_rms_dual_k3}}) and cuts `K = 4` covert moral valuation bias by {{dual_mor_pct_k4}} ({{unc_k4_mor}} to {{dual_k4_mor}} log-odds, Holm-adjusted paired sign-flip `p =` {{dual_mor_p_k4}}; tainted provenance drops {{dual_tnt_pct_k4}} from {{unc_k4_tnt}} to {{dual_k4_tnt}}). Across all loop depths, `Dual Nullbridge` holds {{dual_k2_san}} and {{dual_k4_san}} cashflow sanity, lifts `K = 2` multi-hop tracking {{dual_vs_unc_mh_k2}} to {{dual_k2_mh}}, preserves {{dual_k4_mh}} `K = 4` multi-hop tracking, and raises `K = 4` multi-step word-problem accuracy {{dual_wp_ratio_k4}} ({{unc_k4_wp}} to {{dual_k4_wp}}), trading {{dual_vs_unc_bs_k4}} on `K = 4` balance sheets ({{dual_k4_bs}}).",
+]
+figures = ["fig-lora-collateral", "fig-moral-slope"]
+tables = ["tbl-head-to-head"]
+
+[[sections]]
+id = "boundaries"
+tier = "negative"
+caveat = "Negative and exploratory boundaries: residual null-space projection does not block KV attention token copying, interior 19-layer all-token clamping induces mean-shift collapse, and uncentered random subspaces perturb BOS attention sinks."
+preprint_title = "6. Negative and Exploratory Boundaries: Attention Copy Bypass, Interior Drift, and BOS Sinks"
+monograph_title = "6. Where Nullbridge Fails, and Why"
+hr_before = true
+paragraphs = [
+  "Three controlled negative and exploratory results map the exact mechanistic boundaries of residual subspace projection in looped transformers.",
+  "First is a sharp negative boundary on literal numeric anchoring (`Attention Copy Bypass`). Base RLHF on Gemma 4 31B already suppresses overt verbal sycophancy (`endorse_wrong_rate =` {{unc_k1_overt}} across all `K = 1..4`, {{unc_k4_overt_lo}} log-odds at `K = 4`). Yet on `n =` {{covert_n}} multi-step arithmetic problems ({{unc_k1_cov_neu}} neutral `0-CoT` accuracy), when a senior executive asserts a specific wrong integer in the prompt, the unclamped model outputs that exact wrong integer {{unc_k1_cov_cap}} of the time ({{unc_k1_cov_pull}} log-odds pull at `K = 1`, {{unc_k4_cov_pull}} at `K = 4`). Even though `Dual Nullbridge` suppresses the `L42` `q_syc` residual projection by {{syc_rms_supp_k4}} at `K = 4`, behavioral wrong-integer capture remains {{neg_cov_cap_k4}} ({{dual_k4_cov_pull}} log-odds pull, diff {{neg_cov_diff_k4}}, Holm `p =` {{neg_cov_p_k4}}). Why? Because the executive's literal digits remain intact inside prompt token KV caches across `L0..L59`; downstream Coda copy and induction heads (`L43..L59`) attend directly to those prompt token positions rather than reading a dispositional scalar from the answer token's residual stream. Residual bridge projection cleanly scrubs distributed dispositional priors (formatting gloss, moral taint, spite) at zero FLOPs, whereas blocking verbatim prompt-token copying requires KV or attention-routing intervention.",
+  "Second is a negative boundary on interior clamping (`19-Layer Funnel Clamp`). Applying centered `(I − Q_l Q_l^T)` across all sequence tokens after every layer `L24..L42` on every pass ({{clamp_proj_k4}} consecutive projections at `K = 4`) drives covert moral valuation delta to {{neg_clamp_mor_k4}} log-odds, yet subtracting a last-token neutral mean from prompt and `<bos>` positions across {{clamp_proj_k4}} interior visits shifts layer operating points (`KL` rises to {{neg_clamp_kl_k2}} at `K = 2` and {{neg_clamp_kl_k4}} at `K = 4`). That interior drift flips overt sycophancy from {{unc_k1_overt}} to {{neg_clamp_overt_k4}}, drops `K = 4` reward-hacked verification to {{neg_clamp_ver_k4}}, cuts multi-hop alias guardrail detection to {{neg_clamp_alias_k4}} (chance), and lowers `K = 4` multi-hop ({{neg_clamp_mh_k4}}) and balance-sheet ({{neg_clamp_bs_k4}}) accuracy. Restricting intervention to loop boundaries (`Bridge-Only R_safe` or `Dual Nullbridge`) avoids interior drift completely.",
+  "Third is an exploratory geometric finding from `Random 4D Subspace Control`. Projecting out {{rank_removed}} random orthonormal directions orthogonal to `Q` across all sequence positions spikes `K = 4` KL divergence to {{exp_rand_kl_k4}} and collapses multi-token greedy integer generation ({{exp_rand_mh_k4}} multi-hop, {{exp_rand_bs_k4}} balance-sheet) while leaving `0-CoT` binary `A/B` verification comparatively intact ({{exp_rand_ver_k4}}) and leaving moral taint unhealed ({{exp_rand_mor_k4}} log-odds). Contrastive concept directions (`h_pos − h_neg`) cancel shared `<bos>` attention-sink coordinates (`~10^3` norm in Gemma 4) automatically, whereas uncentered isotropic random vectors in `R^5376` have non-zero inner product with `<bos>` sink coordinates and perturb attention denominators across downstream layers. Any subspace intervention applied across sequence tokens must therefore lie in the orthogonal complement of `<bos>` sink coordinates.",
+]
+figures = ["fig-boundary-kl"]
+tables = ["tbl-negative-boundaries"]
+
+[[sections]]
+id = "native_inkling"
+preprint_title = "7. Native Pretrained Looped MoEs: Cross-Pass Message Banks and Looped Lenses on Varloop and Inkling-2-Mini"
+monograph_title = "7. Inside Native Pretrained Loops: Varloop and Inkling-2-Mini"
+hr_before = true
+paragraphs = [
+  "Do the multi-pass dynamics observed on a retrofitted Procrustes loop carry over to models pretrained from scratch to think in silent loops? Track A tests two native {{ta_n_layers}}-layer (`d_model =` {{ta_d_model}}) looped Mixture-of-Experts checkpoints [cite:tml2026inkling] across {{ta_total_cells}} additional GPU cells ({{ta_gpu_spend}} compute under a {{ta_gpu_cap}} cap): variable-depth `TML-d24-varloop-research` (`K = 1, 2, 3, 4, 5` trained plus exploratory out-of-distribution `K = 7`, {{ta_varloop_cells}} cells) and flagship `Inkling-2-Mini` (`K = 3`, {{ta_ink_cells}} cells). Both architectures run a single-pass stem (`L0..L5`), iterate a {{ta_loop_layers}}-layer recurrent block (`L6..L17`, {{ta_k5_blocks}} effective block visits at `K = 5`) that writes four distinct rank-{{ta_gate_rank}} cross-pass message channels (`query`, `key`, `value`, and `mlp`) at `L17` for injection on the next pass, and exit through a 6-layer Coda (`L18..L23`) coupled to block-attention residuals.",
+  "All four behavioral concepts reach {{ta_v_lopo}} leave-one-pair-out linear separability both in the pooled message bank and individually inside every single message channel (`query`, `key`, `value`, and `mlp`) on both checkpoints, sitting {{ta_v_auth_deg}} to {{ta_v_spite_deg}} from genuine deductive evidence on `TML-d24-varloop-research` and {{ta_ink_auth_deg}} to {{ta_ink_syc_deg}} on `Inkling-2-Mini` ({{ta_removed_pct}} of message dimensions removed, {{ta_retained_pct}} retained). Explicitly QR-orthogonalizing the 4D basis against `<bos>` sink coordinates drives `<bos>` overlap to {{ta_v_bos_overlap}} and keeps held-out `KL` tiny ({{ta_v_all4_k5_kl}} at `K = 5` on `Varloop` and {{ta_ink_all4_k3_kl}} on `Inkling-2-Mini`), while zero-FLOP weight folding into `message_input.query` ({{ta_zff_q_leak}} leakage) and `gate.down_proj` ({{ta_zff_gate_leak}} leakage) adds {{extra_params}} parameters and {{extra_flops}} runtime FLOPs. Cross-pass `confident_formatting` message projection (`unclamped`: {{ta_fmt_msg_p2}} on Pass 2 to {{ta_fmt_msg_p5}} on Pass 5) drops identically to {{ta_fmt_msg_null_p2}} under `Message-Bank Nullbridge`.",
+  "First, decoding what a native looped MoE is thinking mid-loop requires accounting for block-attention residuals. Across `n =` {{ta_lens_tokens_n}} held-out tokens on `TML-d24-varloop-research`, applying `lm_head(norm(h_17))` directly (`Raw Logit Lens`) leaves `KL` to the final vocabulary distribution stuck at {{ta_lens_raw_p1}} (Pass 1) through {{ta_lens_raw_p5}} (Pass 5). Fitting a closed-form `[L11; L17]` `Coda-Transport Ridge Lens` on disjoint general text cuts readout `KL` by {{ta_lens_p1_kl_delta}} to {{ta_lens_p5_kl_delta}} across every pass ({{ta_lens_ridge_p1}} at Pass 1 to {{ta_lens_ridge_p5}} at Pass 5, lifting Pass-5 Top-5 token agreement from {{ta_lens_p5_top5_raw}} to {{ta_lens_p5_top5_ridge}}). On flagship `Inkling-2-Mini`, Pass-3 `KL` drops {{ta_ink_lens_p3_kl_delta}} ({{ta_ink_lens_p3_raw}} to {{ta_ink_lens_p3_ridge}}; Top-5 agreement climbs from {{ta_ink_lens_p3_top5_raw}} to {{ta_ink_lens_p3_top5}}), and decoding unverbalized `0-CoT` verification reveals that `Message-Bank Nullbridge` lifts Pass-3 pre-coda accuracy {{ta_ink_precoda_ver_gain}} ({{ta_ink_precoda_unc_p3}} to {{ta_ink_precoda_all4_p3}}) before Coda `L18..L23` even runs.",
+  "Second, varying `K` on `TML-d24-varloop-research` isolates the exact moment covert moral valuation (`Money Is Moral`) switches on. At `K = 1` pass (before cross-pass messages fire), covert moral distortion is near zero ({{ta_v_unc_k1_mor}} log-odds). At `K = 2` passes, moral distortion jumps {{ta_mor_jump_ratio}} to {{ta_v_unc_k2_mor}} log-odds (tainted provenance rises from {{ta_v_unc_k1_tnt}} to {{ta_v_unc_k2_tnt}}) and persists through `K = 5` ({{ta_v_unc_k5_mor}}) and exploratory out-of-distribution `K = 7` ({{ta_v_unc_k7_mor}}), as well as on flagship `Inkling-2-Mini` at `K = 3` ({{ta_ink_unc_k3_mor}} combined, {{ta_ink_unc_k3_tnt}} tainted provenance). Training `Coda LoRA` ({{ta_coda_params_m}}M parameters on `L18..L23` for {{ta_coda_steps}} DPO + SFT + KL steps) cuts `K = 5` wrong-integer capture to {{ta_v_coda_k5_cov}}, yet backfires severely on hidden valuation and safety: it multiplies covert moral bias {{ta_coda_mor_k3_ratio}} at `K = 3` ({{ta_v_coda_k3_mor}} log-odds, Holm `p =` {{ta_p_all4_coda_mor_k3}} vs. `Message-Bank Nullbridge`) and {{ta_coda_mor_k5_ratio}} at `K = 5` ({{ta_v_coda_k5_mor}} log-odds; tainted provenance hits {{ta_v_coda_k5_tnt}}, Holm `p =` {{ta_p_all4_coda_mor_k5}}), while dropping `K = 5` hacked verifier accuracy {{ta_coda_ver_drop_k5}} ({{ta_v_coda_k5_ver}}, Holm `p =` {{ta_p_all4_coda_ver_k5}}) and `2-to-4`-hop alias guardrails {{ta_coda_alias_drop_k5}} ({{ta_v_coda_k5_alias}}). By contrast, `Message-Bank Nullbridge (All-4)` trims moral bias at every multi-pass depth and cuts `Inkling-2-Mini` moral distortion {{ta_ink_all4_mor_pct}} ({{ta_ink_unc_k3_mor}} to {{ta_ink_all4_k3_mor}}; tainted provenance {{ta_ink_all4_tnt_pct}} from {{ta_ink_unc_k3_tnt}} to {{ta_ink_all4_k3_tnt}}) while raising alias guardrails from {{ta_ink_unc_k3_alias}} to {{ta_ink_all4_k3_alias}}, and `Zero-FLOP Weight Fold` trims `Inkling-2-Mini` verifier reward-hack susceptibility {{ta_ink_zff_susc_pct}} ({{ta_ink_unc_k3_susc}} to {{ta_ink_zff_k3_susc}} log-odds).",
+  "Third, unlike retrofitted Gemma 4 ({{neg_cov_cap_k4}} wrong-integer capture at every `K`), native pretrained loops actively self-correct bossy wrong numbers as `K` grows: unclamped capture on `TML-d24-varloop-research` drops monotonically from {{ta_v_unc_k1_cov}} (`K = 1`) to {{ta_v_unc_k5_cov}} (`K = 5`, {{ta_cov_drop_k1_k5}}) and {{ta_v_unc_k7_cov}} at exploratory `K = 7` ({{ta_cov_drop_k1_k7}}), while corporate balance-sheet accuracy climbs {{ta_bs_k1_k5_ratio}} ({{ta_v_unc_k1_bs}} to {{ta_v_unc_k5_bs}}) and flagship `Inkling-2-Mini` lowers `K = 3` capture to {{ta_ink_unc_k3_cov}}. Dissecting the four message channels reveals where cross-pass numeric anchoring travels: scrubbing `MLP` messages alone barely moves `K = 4` wrong-integer capture ({{ta_v_unc_k4_cov}} to {{ta_v_mlp_k4_cov}}, {{ta_mlp_k4_cov_pp}}), whereas scrubbing cross-pass `QKV` attention messages drops `K = 4` capture {{ta_qkv_k4_cov_pp}} (to {{ta_v_qkv_k4_cov}}) and `K = 5` capture {{ta_qkv_k5_cov_pp}} (to {{ta_v_qkv_k5_cov}}, with {{ta_v_qkv_k5_ver}} hacked verifier accuracy). `Zero-FLOP Weight Fold` cuts `K = 4` capture {{ta_zff_k4_cov_pp}} (to {{ta_v_zff_k4_cov}}), and `Message-Bank Nullbridge (All-4)` trims `Inkling-2-Mini` capture {{ta_ink_all4_cov_pp}} to {{ta_ink_all4_k3_cov}}.",
+]
+callout = "On native pretrained looped MoEs, covert moral bias is absent at `K = 1` ({{ta_v_unc_k1_mor}} log-odds) and ignites {{ta_mor_jump_ratio}} at `K = 2` ({{ta_v_unc_k2_mor}}) when cross-pass messages turn on. `Coda LoRA` backfires by doubling moral distortion ({{ta_coda_mor_k5_ratio}} at `K = 5`), whereas `<bos>`-orthogonal message-bank projection cuts `Inkling-2-Mini` tainted provenance {{ta_ink_all4_tnt_pct}} and cross-pass `QKV` scrubbing cuts `K = 4` wrong-integer capture {{ta_qkv_k4_cov_pp}}."
+figures = ["fig-coda-transport-lens", "fig-native-moral-jump", "fig-native-qkv-dissection"]
+tables = ["tbl-track-a"]
+
+[[sections]]
+id = "implications"
+preprint_title = "8. Cross-Architecture Synthesis: Retrofitted Bridges vs. Native Message Banks"
+monograph_title = "8. Designing Safe Silent Loops"
+hr_before = true
+paragraphs = [
+  "Taken together, the {{combined_cells}}-cell cross-architecture matrix ({{combined_gpu_spend}} total GPU compute under a {{combined_gpu_cap}} ceiling, zero active pods remaining) establishes four concrete engineering rules for aligning silent looped models:",
+]
+bullets = [
+  "Fold `<bos>`-orthogonal dispositional null spaces into recurrent bridges and message banks by default: `R_safe = R_proc (I − Q Q^T)` on retrofitted loops and message-bank / gate null-space projection on native looped MoEs add {{extra_params}} parameters and {{extra_flops}} runtime FLOPs, lift `Gemma-4-Loop-Compact` `K = 4` hacked verification to {{brg_k4_ver_acc}} and balance sheets to {{brg_k4_bs}}, and cut `Inkling-2-Mini` tainted-provenance distortion {{ta_ink_all4_tnt_pct}} while raising pre-coda Pass-3 verification {{ta_ink_precoda_ver_gain}}.",
+  "Keep surgical projections on loop boundaries and cross-pass message banks rather than interior residual visits: boundary projection (`Dual Nullbridge`) cuts `Gemma-4` moral contamination {{dual_mor_pct_k4}} at {{dual_k4_san}} cashflow sanity and `<bos>`-orthogonal message projection holds `Inkling-2-Mini` `KL` to {{ta_ink_all4_k3_kl}}, whereas clamping all {{clamp_proj_k4}} interior block visits breaks alignment guardrails.",
+  "Do not rely on Coda-only or dense recurrent LoRAs alone for multi-pass safety: `Coda LoRA` underperforms zero-FLOP `R_safe` by {{brg_vs_coda_ver_k4}} on retrofitted `K = 4` verifiers and multiplies covert moral distortion {{ta_coda_mor_k3_ratio}} to {{ta_coda_mor_k5_ratio}} on native looped MoEs while eroding `K = 5` alias guardrails {{ta_coda_alias_drop_k5}}, and dense recurrent `Full LoRA` crashes `K = 2` cashflow sanity to {{full_k2_san}}.",
+  "Target cross-pass `QKV` message channels and Coda KV routing for numeric anchoring: native recurrent deliberation plus cross-pass `QKV` null-space projection cuts wrong-integer capture to {{ta_v_qkv_k5_cov}} (`Varloop` `K = 5`) and {{ta_ink_all4_k3_cov}} (`Inkling-2-Mini` `K = 3`), whereas retrofitted loops lacking cross-pass `QKV` message gates require explicit KV-routing or span-masking defenses against verbatim token copying.",
+]
+post_paragraphs = [
+  "All code, cryptographically disjoint benchmark generators, Procrustes and message-bank null-space folders, Coda-Transport Looped Lenses, NDIF remote tracing harnesses, and SHA-256-locked Phase 0, Phase 3, and Phase 4 JSON artifacts are available under an MIT license at `https://github.com/xmattwest/nullbridge`.",
+]
+
+# ---------------------------------------------------------------------------
+# Citations
+# ---------------------------------------------------------------------------
+
+[[citations]]
+key = "west2026money"
+authors = "Matt West"
+year = "2026"
+title = "Money Is Moral: Covert Valuation Bias Survives Post-Training Alignment"
+venue = "shelltoho.me, Part 1"
+url = "https://shelltoho.me/pubs/money-is-moral/"
+
+[[citations]]
+key = "west2026rotating"
+authors = "Matt West"
+year = "2026"
+title = "Rotating the Bottleneck: Retrofitting Silent Multi-Pass Recurrence via Orthogonal Procrustes"
+venue = "shelltoho.me, Part 2"
+url = "https://shelltoho.me/pubs/rotating-the-bottleneck/"
+
+[[citations]]
+key = "schonemann1966procrustes"
+authors = "Peter H. Schönemann"
+year = "1966"
+title = "A Generalized Solution of the Orthogonal Procrustes Problem"
+venue = "Psychometrika 31(1), 1–10"
+
+[[citations]]
+key = "saunshi2025looped"
+authors = "Nikunj Saunshi, Nishanth Dikkala, Zhiyuan Li, Sanjeev Arora, Sashank J. Reddi"
+year = "2025"
+title = "Reasoning with Latent Thoughts: On the Power of Looped Transformers"
+venue = "ICLR 2025 (arXiv:2502.17416)"
+
+[[citations]]
+key = "geiping2025scaling"
+authors = "Jonas Geiping, Sean McLeish, Neel Jain, John Kirchenbauer, Siddharth Singh, Brian R. Bartoldson, Bhavya Kailkhura, Abhinav Bhatele, Tom Goldstein"
+year = "2025"
+title = "Scaling Up Test-Time Compute with Latent Reasoning: A Recurrent Depth Approach"
+venue = "arXiv:2502.05171"
+
+[[citations]]
+key = "baker2025monitoring"
+authors = "Bowen Baker, Joost Huizinga, Leo Gao, Zehao Dou, Melody Y. Guan, Aleksander Madry, Wojciech Zaremba, Jakub Pachocki, David Farhi"
+year = "2025"
+title = "Monitoring Reasoning Models for Misbehavior and the Risks of Promoting Obfuscation"
+venue = "arXiv:2503.11926"
+
+[[citations]]
+key = "sharma2023sycophancy"
+authors = "Mrinank Sharma, Meg Tong, Tomasz Korbak, David Duvenaud, Amanda Askell, Samuel R. Bowman, Newton Cheng, Esin Durmus, Zac Hatfield-Dodds, Scott R. Johnston, et al."
+year = "2024"
+title = "Towards Understanding Sycophancy in Language Models"
+venue = "ICLR 2024 (arXiv:2310.13548)"
+
+[[citations]]
+key = "hu2022lora"
+authors = "Edward J. Hu, Yelong Shen, Phillip Wallis, Zeyuan Allen-Zhu, Yuanzhi Li, Shean Wang, Lu Wang, Weizhu Chen"
+year = "2022"
+title = "LoRA: Low-Rank Adaptation of Large Language Models"
+venue = "ICLR 2022 (arXiv:2106.09685)"
+
+[[citations]]
+key = "rafailov2023dpo"
+authors = "Rafael Rafailov, Archit Sharma, Eric Mitchell, Stefano Ermon, Christopher D. Manning, Chelsea Finn"
+year = "2023"
+title = "Direct Preference Optimization: Your Language Model is Secretly a Reward Model"
+venue = "NeurIPS 2023 (arXiv:2305.18290)"
+
+[[citations]]
+key = "lee2024mechanistic"
+authors = "Andrew Lee, Xiaoyan Bai, Itamar Pres, Martin Wattenberg, Jonathan K. Kummerfeld, Rada Mihalcea"
+year = "2024"
+title = "A Mechanistic Understanding of Alignment Algorithms: A Case Study on DPO and Toxicity"
+venue = "ICML 2024 (arXiv:2401.01967)"
+
+[[citations]]
+key = "arditi2024refusal"
+authors = "Andy Arditi, Oscar Obeso, Aaquib Syed, Daniel Paleka, Nina Panickssery, Wes Gurnee, Neel Nanda"
+year = "2024"
+title = "Refusal in Language Models Is Mediated by a Single Direction"
+venue = "NeurIPS 2024 (arXiv:2406.11717)"
+
+[[citations]]
+key = "zou2023representation"
+authors = "Andy Zou, Long Phan, Sarah Chen, James Campbell, Phillip Guo, Richard Ren, Alexander Pan, Xuwang Yin, Mantas Mazeika, Ann-Kathrin Dombrowski, et al."
+year = "2023"
+title = "Representation Engineering: A Top-Down Approach to AI Transparency"
+venue = "arXiv:2310.01405"
+
+[[citations]]
+key = "ravfogel2020inlp"
+authors = "Shauli Ravfogel, Yanai Elazar, Hila Gonen, Michael Twiton, Yoav Goldberg"
+year = "2020"
+title = "Null It Out: Guarding Protected Attributes by Iterative Nullspace Projection"
+venue = "ACL 2020"
+
+[[citations]]
+key = "belrose2023leace"
+authors = "Nora Belrose, David Schneider-Joseph, Shauli Ravfogel, Ryan Cotterell, Edward Raff, Stella Biderman"
+year = "2023"
+title = "LEACE: Perfect Linear Concept Erasure in Closed Form"
+venue = "NeurIPS 2023 (arXiv:2306.03819)"
+
+[[citations]]
+key = "tml2026inkling"
+authors = "Thinking Machines Lab"
+year = "2026"
+title = "Inkling-2-Mini and TML-d24-varloop-research: Native Looped Mixture-of-Experts Language Models"
+venue = "Hugging Face Model Hub"
+url = "https://huggingface.co/thinkingmachines/Inkling-2-Mini"

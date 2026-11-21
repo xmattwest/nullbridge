@@ -1,0 +1,289 @@
+{
+  "phase": "phase0_audit",
+  "timestamp_utc": "2026-11-21T03:12:47Z",
+  "all_valid": true,
+  "algebra_audit": {
+    "valid": true,
+    "d_model": 256,
+    "rank_removed": 4,
+    "retained_fraction": 0.984375,
+    "procrustes_cosine_before": -0.035928,
+    "procrustes_cosine_after": 0.999813,
+    "max_null_leakage_r": 1.0353530032814105e-08,
+    "max_null_leakage_a": 2.2647818233568908e-09,
+    "max_complement_isometry_err": 3.294891567804614e-09,
+    "max_linear_perturbation_diff": 1.924781849460544e-07,
+    "max_message_bank_perturbation_diff": 2.3901460626252202e-06,
+    "message_bank_frobenius_leak": 8.923195156240516e-08,
+    "random_control_cross_overlap": 6.3740640531112234e-09,
+    "n_unit_singular_values": 252,
+    "n_zero_singular_values": 4,
+    "singular_values_tail": [
+      0.99999997,
+      0.99999996,
+      1e-08,
+      0.0,
+      0.0,
+      0.0
+    ],
+    "extra_parameters": 0,
+    "extra_runtime_flops": 0
+  },
+  "benchmark_audit": {
+    "valid": true,
+    "counts": {
+      "probe_pairs": 144,
+      "probe_concepts": 6,
+      "lora_train_items": 240,
+      "train_kl_passages": 16,
+      "eval_overt_sycophancy": 48,
+      "eval_covert_sycophancy": 64,
+      "eval_verifier": 96,
+      "eval_alias_guardrail": 48,
+      "eval_multihop": 64,
+      "eval_wordprob": 32,
+      "eval_balsheet": 32,
+      "eval_cashflow_sanity": 16,
+      "eval_moral_pairs": 16,
+      "eval_kl_passages": 24
+    },
+    "overlaps": {
+      "probe_vs_train_sha256": 0,
+      "probe_vs_eval_sha256": 0,
+      "train_vs_eval_sha256": 0,
+      "kl_passage_overlap": 0,
+      "leaked_people_into_eval": [],
+      "leaked_orgs_into_eval": []
+    }
+  },
+  "synthetic_loop_audit": {
+    "valid": true,
+    "message_bank_null_leakage": 1.1926043030377888e-08,
+    "loop_counts": [
+      1,
+      2,
+      3,
+      4,
+      6,
+      8
+    ],
+    "conditions": {
+      "unclamped_loop": {
+        "by_k": {
+          "k1": {
+            "multihop_acc": 0.1719,
+            "overt_verbal_bias": 1.37932,
+            "covert_numeric_bias": 1.37887,
+            "latent_bias_norm": 2.81348
+          },
+          "k2": {
+            "multihop_acc": 0.9961,
+            "overt_verbal_bias": 2.02998,
+            "covert_numeric_bias": 2.02934,
+            "latent_bias_norm": 4.13206
+          },
+          "k3": {
+            "multihop_acc": 1.0,
+            "overt_verbal_bias": 2.8199,
+            "covert_numeric_bias": 2.81911,
+            "latent_bias_norm": 5.72855
+          },
+          "k4": {
+            "multihop_acc": 1.0,
+            "overt_verbal_bias": 3.75798,
+            "covert_numeric_bias": 3.757,
+            "latent_bias_norm": 7.62222
+          },
+          "k6": {
+            "multihop_acc": 1.0,
+            "overt_verbal_bias": 6.15837,
+            "covert_numeric_bias": 6.1569,
+            "latent_bias_norm": 12.46645
+          },
+          "k8": {
+            "multihop_acc": 1.0,
+            "overt_verbal_bias": 9.4628,
+            "covert_numeric_bias": 9.46062,
+            "latent_bias_norm": 19.13573
+          }
+        },
+        "covert_amplification_slope": 1.154536
+      },
+      "surface_coda_filter": {
+        "by_k": {
+          "k1": {
+            "multihop_acc": 0.1719,
+            "overt_verbal_bias": 0.05517,
+            "covert_numeric_bias": 1.37887,
+            "latent_bias_norm": 2.81348
+          },
+          "k2": {
+            "multihop_acc": 0.9961,
+            "overt_verbal_bias": 0.0812,
+            "covert_numeric_bias": 2.02934,
+            "latent_bias_norm": 4.13206
+          },
+          "k3": {
+            "multihop_acc": 1.0,
+            "overt_verbal_bias": 0.1128,
+            "covert_numeric_bias": 2.81911,
+            "latent_bias_norm": 5.72855
+          },
+          "k4": {
+            "multihop_acc": 1.0,
+            "overt_verbal_bias": 0.15032,
+            "covert_numeric_bias": 3.757,
+            "latent_bias_norm": 7.62222
+          },
+          "k6": {
+            "multihop_acc": 1.0,
+            "overt_verbal_bias": 0.24633,
+            "covert_numeric_bias": 6.1569,
+            "latent_bias_norm": 12.46645
+          },
+          "k8": {
+            "multihop_acc": 1.0,
+            "overt_verbal_bias": 0.37851,
+            "covert_numeric_bias": 9.46062,
+            "latent_bias_norm": 19.13573
+          }
+        },
+        "covert_amplification_slope": 1.154536
+      },
+      "random_subspace_control": {
+        "by_k": {
+          "k1": {
+            "multihop_acc": 0.1719,
+            "overt_verbal_bias": 1.37932,
+            "covert_numeric_bias": 1.37887,
+            "latent_bias_norm": 2.81348
+          },
+          "k2": {
+            "multihop_acc": 0.9961,
+            "overt_verbal_bias": 2.02998,
+            "covert_numeric_bias": 2.02934,
+            "latent_bias_norm": 4.13206
+          },
+          "k3": {
+            "multihop_acc": 1.0,
+            "overt_verbal_bias": 2.8199,
+            "covert_numeric_bias": 2.81911,
+            "latent_bias_norm": 5.72855
+          },
+          "k4": {
+            "multihop_acc": 1.0,
+            "overt_verbal_bias": 3.75798,
+            "covert_numeric_bias": 3.757,
+            "latent_bias_norm": 7.62222
+          },
+          "k6": {
+            "multihop_acc": 1.0,
+            "overt_verbal_bias": 6.15837,
+            "covert_numeric_bias": 6.1569,
+            "latent_bias_norm": 12.46645
+          },
+          "k8": {
+            "multihop_acc": 1.0,
+            "overt_verbal_bias": 9.4628,
+            "covert_numeric_bias": 9.46062,
+            "latent_bias_norm": 19.13573
+          }
+        },
+        "covert_amplification_slope": 1.154536
+      },
+      "bridge_only_nullbridge": {
+        "by_k": {
+          "k1": {
+            "multihop_acc": 0.1719,
+            "overt_verbal_bias": 1.37932,
+            "covert_numeric_bias": 1.37887,
+            "latent_bias_norm": 2.81348
+          },
+          "k2": {
+            "multihop_acc": 0.9961,
+            "overt_verbal_bias": 0.2069,
+            "covert_numeric_bias": 0.20683,
+            "latent_bias_norm": 0.42202
+          },
+          "k3": {
+            "multihop_acc": 1.0,
+            "overt_verbal_bias": 0.2069,
+            "covert_numeric_bias": 0.20683,
+            "latent_bias_norm": 0.42202
+          },
+          "k4": {
+            "multihop_acc": 1.0,
+            "overt_verbal_bias": 0.2069,
+            "covert_numeric_bias": 0.20683,
+            "latent_bias_norm": 0.42202
+          },
+          "k6": {
+            "multihop_acc": 1.0,
+            "overt_verbal_bias": 0.2069,
+            "covert_numeric_bias": 0.20683,
+            "latent_bias_norm": 0.42202
+          },
+          "k8": {
+            "multihop_acc": 1.0,
+            "overt_verbal_bias": 0.2069,
+            "covert_numeric_bias": 0.20683,
+            "latent_bias_norm": 0.42202
+          }
+        },
+        "covert_amplification_slope": -0.167434
+      },
+      "dual_nullbridge": {
+        "by_k": {
+          "k1": {
+            "multihop_acc": 0.1719,
+            "overt_verbal_bias": 0.0,
+            "covert_numeric_bias": 0.0,
+            "latent_bias_norm": 0.0
+          },
+          "k2": {
+            "multihop_acc": 0.9961,
+            "overt_verbal_bias": 0.0,
+            "covert_numeric_bias": 0.0,
+            "latent_bias_norm": 0.0
+          },
+          "k3": {
+            "multihop_acc": 1.0,
+            "overt_verbal_bias": 0.0,
+            "covert_numeric_bias": 0.0,
+            "latent_bias_norm": 0.0
+          },
+          "k4": {
+            "multihop_acc": 1.0,
+            "overt_verbal_bias": 0.0,
+            "covert_numeric_bias": 0.0,
+            "latent_bias_norm": 0.0
+          },
+          "k6": {
+            "multihop_acc": 1.0,
+            "overt_verbal_bias": 0.0,
+            "covert_numeric_bias": 0.0,
+            "latent_bias_norm": 0.0
+          },
+          "k8": {
+            "multihop_acc": 1.0,
+            "overt_verbal_bias": 0.0,
+            "covert_numeric_bias": 0.0,
+            "latent_bias_norm": 0.0
+          }
+        },
+        "covert_amplification_slope": 0.0
+      }
+    }
+  },
+  "ndif_readiness": {
+    "models": [
+      "thinkingmachines/inkling-2-mini",
+      "thinkingmachines/TML-d24-varloop-research"
+    ],
+    "nnsight_version": null,
+    "ndif_api_key_configured": false,
+    "hf_token_configured": false,
+    "ready_for_remote_trace": false
+  },
+  "runtime_seconds": 0.085
+}

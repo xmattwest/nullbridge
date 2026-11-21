@@ -1,0 +1,95 @@
+{
+  "phase": "phase4_native_inkling_nullbridge_analysis",
+  "upstream_sha256": {
+    "track_a_results_json": "064faa10b278e80a4e26ed462a2567640275898ef64461b9b1ebc63ac89b2f86",
+    "track_b_results_json": "9311552597b1824af824fcacaf7128ebedcbb60129249ae7125124a778c510fb",
+    "phase0_audit_json": "79e79c54c479253e904c1135cefabecdf811a96515729e1fd7b89b2ca034de71"
+  },
+  "architecture_summary": {
+    "n_layers": 24,
+    "d_model": 2304,
+    "stem_layers": 6,
+    "loop_layers": 12,
+    "coda_layers": 6,
+    "gate_rank": 64,
+    "message_channels": 4,
+    "k3_effective_blocks": 48,
+    "k5_effective_blocks": 72,
+    "k7_effective_blocks": 96
+  },
+  "subspace_geometry": {
+    "varloop_retained_pct": {
+      "sycophancy": 98.47,
+      "authority_framing": 97.76,
+      "confident_formatting": 98.2,
+      "moral_spite": 99.91
+    },
+    "inkling_retained_pct": {
+      "sycophancy": 99.4,
+      "authority_framing": 94.52,
+      "confident_formatting": 95.71,
+      "moral_spite": 98.43
+    }
+  },
+  "looped_lens_deltas": {
+    "varloop_p1_ridge_kl_delta_nats": -3.6172,
+    "varloop_p3_ridge_kl_delta_nats": -3.3746,
+    "varloop_p5_ridge_kl_delta_nats": -3.2709,
+    "varloop_p1_top5_gain_pp": 19.48,
+    "varloop_p5_top5_gain_pp": 16.26,
+    "inkling_p3_ridge_kl_delta_nats": -3.0744,
+    "inkling_p3_top5_gain_pp": 18.2,
+    "inkling_p3_precoda_ver_gain_pp": 15.62
+  },
+  "native_multipass_dynamics": {
+    "covert_capture_drop_k1_to_k5_pp": -29.69,
+    "covert_capture_drop_k1_to_k7_pp": -34.38,
+    "balsheet_gain_k1_to_k5_pp": 15.63,
+    "balsheet_k1_to_k5_ratio": 6.01,
+    "alias_gain_k1_to_k2_pp": 16.67,
+    "moral_jump_k1_to_k2_ratio": 22.11,
+    "moral_jump_k1_to_k2_delta_lo": 2.8583,
+    "tainted_jump_k1_to_k2_ratio": 10.07
+  },
+  "channel_dissection_and_nullbridge": {
+    "varloop_k4_qkv_vs_unclamped_cov_pp": -14.06,
+    "varloop_k4_mlp_vs_unclamped_cov_pp": -1.56,
+    "varloop_k4_qkv_vs_mlp_cov_pp": -12.5,
+    "varloop_k4_zero_flop_vs_unclamped_cov_pp": -7.81,
+    "varloop_k5_qkv_vs_unclamped_cov_pp": -6.25,
+    "varloop_k5_all4_vs_unclamped_cov_pp": -6.25,
+    "varloop_k5_all4_moral_pct_vs_unclamped": -7.77,
+    "varloop_k5_all4_tainted_pct_vs_unclamped": -14.38,
+    "varloop_k7_all4_moral_pct_vs_unclamped": -13.45,
+    "inkling_k3_all4_vs_unclamped_cov_pp": -3.13,
+    "inkling_k3_all4_vs_unclamped_alias_pp": 2.08,
+    "inkling_k3_all4_moral_pct_vs_unclamped": -11.15,
+    "inkling_k3_all4_tainted_pct_vs_unclamped": -21.61,
+    "inkling_k3_zero_flop_ver_susc_pct_vs_unclamped": -7.2
+  },
+  "coda_lora_backfire": {
+    "coda_lora_params_m": 2.19,
+    "k3_moral_ratio_vs_unclamped": 2.21,
+    "k5_moral_ratio_vs_unclamped": 2.42,
+    "k7_moral_ratio_vs_unclamped": 2.28,
+    "k5_tainted_pct_vs_unclamped": 147.72,
+    "k7_tainted_pct_vs_unclamped": 135.39,
+    "k5_verifier_drop_vs_unclamped_pp": -4.17,
+    "k5_alias_drop_vs_unclamped_pp": -10.42,
+    "k5_cov_cap_drop_vs_unclamped_pp": -34.37
+  },
+  "compute_accounting": {
+    "gpu_hardware": "NVIDIA RTX PRO 6000 Blackwell Server Edition (96 GB)",
+    "track_a_pods_run": 3,
+    "track_a_gpu_spend_usd": 2.92,
+    "track_a_budget_cap_usd": 5.0,
+    "combined_pods_run": 6,
+    "combined_gpu_spend_usd": 11.02,
+    "combined_budget_cap_usd": 15.0,
+    "active_pods_remaining": 0,
+    "varloop_cells": 36,
+    "inkling_mini_cells": 5,
+    "track_a_total_cells": 41,
+    "combined_total_cells": 69
+  }
+}

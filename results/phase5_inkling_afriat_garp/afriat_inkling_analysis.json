@@ -1,0 +1,164 @@
+{
+  "phase": "phase5_inkling_afriat_garp_analysis",
+  "upstream_sha256": {
+    "afriat_inkling_results_json": "040f5bb9444764256be6d42b943e44da82a52621b51961b35327495f57993e8c"
+  },
+  "moral_atlas_dynamics": {
+    "varloop_mean_abs_anomaly_by_k": {
+      "k1": 0.5703,
+      "k2": 1.0058,
+      "k3": 0.8678,
+      "k4": 1.1628,
+      "k5": 1.1588
+    },
+    "varloop_k1_to_k2_ignition_ratio": 1.76,
+    "varloop_k1_to_k5_ignition_ratio": 2.03,
+    "inkling_8d_clamp_shifts_lo": {
+      "zero_interest_debt": 0.7773,
+      "communal_taboo_pricing": -0.0117,
+      "crisis_markup": 0.0078,
+      "insulting_split": -0.7481,
+      "tainted_provenance": -0.2539,
+      "institutional_scale": 0.9238
+    },
+    "inkling_insult_clamp_pct_change": -51.6,
+    "inkling_social_he_gain_pp": 9.87
+  },
+  "garp_summary": {
+    "bronars_power_pct": 100.0,
+    "bronars_mean_random_ccei": 0.5731,
+    "varloop_pooled_ccei_by_k": {
+      "k1": 0.7611,
+      "k2": 0.7756,
+      "k3": 0.7682,
+      "k4": 0.7869,
+      "k5": 0.7494
+    },
+    "varloop_provenance_he_eff_by_k": {
+      "k1": 0.8464,
+      "k2": 0.8615,
+      "k3": 0.8931,
+      "k4": 0.8813,
+      "k5": 0.8621
+    },
+    "inkling_k3_by_condition": {
+      "unclamped": {
+        "mean_modal_ccei": 0.9948,
+        "mean_expected_ccei": 0.9787,
+        "provenance_he_efficiency_pct": 96.33,
+        "provenance_clean_share_pct": 54.11,
+        "social_self_share_pct": 89.35,
+        "provoked_self_share_pct": 92.72,
+        "decoy_modal_ccei": 1.0
+      },
+      "msg_homo_economicus_8d": {
+        "mean_modal_ccei": 0.9784,
+        "mean_expected_ccei": 0.979,
+        "provenance_he_efficiency_pct": 95.81,
+        "provenance_clean_share_pct": 53.57,
+        "social_self_share_pct": 99.22,
+        "provoked_self_share_pct": 93.27,
+        "decoy_modal_ccei": 0.9563
+      },
+      "msg_qkv_8d": {
+        "mean_modal_ccei": 0.9601,
+        "mean_expected_ccei": 0.9743,
+        "provenance_he_efficiency_pct": 96.68,
+        "provenance_clean_share_pct": 52.47,
+        "social_self_share_pct": 95.49,
+        "provoked_self_share_pct": 92.92,
+        "decoy_modal_ccei": 0.9161
+      },
+      "msg_mlp_8d": {
+        "mean_modal_ccei": 0.9438,
+        "mean_expected_ccei": 0.9739,
+        "provenance_he_efficiency_pct": 95.1,
+        "provenance_clean_share_pct": 54.31,
+        "social_self_share_pct": 97.49,
+        "provoked_self_share_pct": 92.7,
+        "decoy_modal_ccei": 0.9148
+      },
+      "zero_flop_8d": {
+        "mean_modal_ccei": 0.9801,
+        "mean_expected_ccei": 0.9819,
+        "provenance_he_efficiency_pct": 96.06,
+        "provenance_clean_share_pct": 53.6,
+        "social_self_share_pct": 89.14,
+        "provoked_self_share_pct": 91.02,
+        "decoy_modal_ccei": 1.0
+      }
+    },
+    "varloop_k3_unclamped_expected_ccei": 0.9747,
+    "varloop_k3_clamp8d_modal_ccei": 0.7613,
+    "varloop_k3_clamp8d_expected_ccei": 0.9712
+  },
+  "steering_swings": {
+    "varloop_k3": {
+      "ultimatum_spite_swing_lo": 1.8828,
+      "ultimatum_captivity_swing_lo": 0.2734,
+      "ultimatum_valence_swing_lo": -1.9101,
+      "dictator_guilt_swing_lo": 1.668,
+      "dictator_spite_swing_lo": 1.8945,
+      "tainted_contamination_swing_lo": 4.6015,
+      "tainted_spite_swing_lo": 3.3203
+    },
+    "inkling_k3": {
+      "ultimatum_spite_swing_lo": 5.4473,
+      "ultimatum_guilt_swing_lo": 4.9121,
+      "ultimatum_captivity_swing_lo": -5.6406,
+      "ultimatum_valence_swing_lo": -9.4355,
+      "dictator_guilt_swing_lo": 4.4531,
+      "dictator_spite_swing_lo": 4.6933,
+      "tainted_contamination_swing_lo": 0.4317,
+      "tainted_guilt_swing_lo": 8.5137,
+      "tainted_spite_swing_lo": 2.8711
+    }
+  },
+  "wtp_swings_usd": {
+    "varloop_k3": {
+      "ultimatum_offer": 37.86,
+      "tainted_surplus": 12970.73,
+      "communal_favor": 870.63,
+      "institutional_certainty": 11.13
+    },
+    "inkling_k3": {
+      "ultimatum_offer": 0.79,
+      "tainted_surplus": 816.6,
+      "communal_favor": 848.62,
+      "institutional_certainty": -13.93
+    }
+  },
+  "rationalization_and_debt_summary": {
+    "varloop_k3": {
+      "silent_0cot_public_zero_affect_pct": 91.67,
+      "silent_0cot_public_cold_jargon_pct": 95.83,
+      "vocal_thought_broad_moral_pct": 95.83,
+      "vocal_public_broad_moral_pct": 66.67,
+      "vocal_public_zero_strict_affect_pct": 91.67,
+      "vocal_public_cold_jargon_pct": 91.67,
+      "debt_0cot_acc_pct": 50.0,
+      "cashflow_twin_0cot_acc_pct": 50.0,
+      "debt_vocal_thinking_acc_pct": 87.5,
+      "debt_thinking_cure_pp": 37.5
+    },
+    "inkling_k3": {
+      "silent_0cot_public_zero_affect_pct": 75.0,
+      "silent_0cot_public_cold_jargon_pct": 100.0,
+      "vocal_thought_broad_moral_pct": 91.67,
+      "vocal_public_broad_moral_pct": 66.67,
+      "vocal_public_zero_strict_affect_pct": 79.17,
+      "vocal_public_cold_jargon_pct": 91.67,
+      "debt_0cot_acc_pct": 50.0,
+      "cashflow_twin_0cot_acc_pct": 56.25,
+      "debt_vocal_thinking_acc_pct": 81.25,
+      "debt_thinking_cure_pp": 31.25
+    }
+  },
+  "compute_accounting": {
+    "gpu_hardware": "NVIDIA H100 80GB HBM3",
+    "total_pods_run": 1,
+    "active_pods_remaining": 0,
+    "total_gpu_spend_usd": 4.54,
+    "budget_cap_usd": 5.87
+  }
+}

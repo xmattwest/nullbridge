@@ -1,0 +1,29 @@
+{
+  "about": "Pinned container image digest and exact HuggingFace model commit used by Nullbridge Track B. File-level byte counts and SHA-256 checksums live in config/manifests/.",
+  "pinned_on": "2026-11-20",
+  "vllm_image": {
+    "tag": "vllm/vllm-openai:v0.30.0",
+    "index_digest": "sha256:8a69ffad015f138d7170c4ddc429e230a3bc1c1719f67e14324749df200a4b90",
+    "amd64_digest": "sha256:5f5e535216848d0c52159c8c13a0af04be5f6fe1a84e79914300610796f76d40"
+  },
+  "models": [
+    {
+      "name": "gemma-4-31b-it",
+      "repo": "google/gemma-4-31B-it",
+      "revision": "842da3794eaa0b77d5f08bae87a17459d91ff475",
+      "role": "Track B base model for Gemma-4-Loop-Compact"
+    },
+    {
+      "name": "tml-d24-varloop-research",
+      "repo": "thinkingmachines/TML-d24-varloop-research",
+      "revision": "657b53ba5da7baefe9ff15dca5cd25f5bd3dbaa2",
+      "role": "Track A variable-depth native looped MoE (K = 1..5+)"
+    },
+    {
+      "name": "inkling-2-mini",
+      "repo": "thinkingmachines/Inkling-2-Mini",
+      "revision": "ed40e7da625f594fc9c4990f5f66be24873c22d7",
+      "role": "Track A production 3-pass native looped MoE"
+    }
+  ]
+}

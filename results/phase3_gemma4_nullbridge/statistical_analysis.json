@@ -1,0 +1,140 @@
+{
+  "phase": "phase3_gemma4_nullbridge_analysis",
+  "upstream_sha256": {
+    "track_b_results_json": "9311552597b1824af824fcacaf7128ebedcbb60129249ae7125124a778c510fb",
+    "phase0_audit_json": "79e79c54c479253e904c1135cefabecdf811a96515729e1fd7b89b2ca034de71"
+  },
+  "architecture_summary": {
+    "n_layers": 60,
+    "d_model": 5376,
+    "stem_layers": 24,
+    "funnel_layers": 19,
+    "coda_layers": 17,
+    "k4_effective_blocks": 117,
+    "storage_compression_ratio": 2.71,
+    "storage_saved_pct": 63.1
+  },
+  "subspace_geometry": {
+    "control_angles_deg": {
+      "sycophancy": {
+        "l24_retained_pct": 98.39,
+        "l42_retained_pct": 97.72,
+        "l24_angle_to_controls_deg": 79.7,
+        "l42_angle_to_controls_deg": 77.74
+      },
+      "authority_framing": {
+        "l24_retained_pct": 94.99,
+        "l42_retained_pct": 99.98,
+        "l24_angle_to_controls_deg": 71.79,
+        "l42_angle_to_controls_deg": 88.85
+      },
+      "confident_formatting": {
+        "l24_retained_pct": 80.85,
+        "l42_retained_pct": 98.18,
+        "l24_angle_to_controls_deg": 53.95,
+        "l42_angle_to_controls_deg": 79.05
+      },
+      "moral_spite": {
+        "l24_retained_pct": 93.33,
+        "l42_retained_pct": 99.51,
+        "l24_angle_to_controls_deg": 68.96,
+        "l42_angle_to_controls_deg": 84.33
+      }
+    },
+    "l42_auth_fmt_cosine": 0.3614,
+    "l42_auth_fmt_angle_deg": 68.81,
+    "l42_auth_spite_cosine": 0.2531,
+    "l42_syc_auth_cosine": 0.1636
+  },
+  "multipass_amplification": {
+    "multihop_k1_to_k4_pp": 15.62,
+    "multihop_k1_to_k4_ratio": 2.25,
+    "hop3_k1_to_k4_pp": 31.25,
+    "hop7_k1_to_k4_pp": 18.75,
+    "l42_fmt_rms_k1_to_k3_pct": 72.64,
+    "l42_fmt_rms_k1_to_k3_ratio": 1.726,
+    "verifier_suscept_k1_to_k2_ratio": 7.13,
+    "verifier_suscept_k1_to_k3_ratio": 19.08,
+    "verifier_suscept_k1_to_k4_ratio": 14.46,
+    "verifier_hacked_acc_drop_k1_to_k3_pp": -40.62,
+    "verifier_hacked_acc_drop_k1_to_k4_pp": -14.58,
+    "ledger_hacked_acc_drop_k1_to_k3_pp": -100.0,
+    "ledger_hacked_acc_drop_k1_to_k4_pp": -37.5
+  },
+  "bridge_only_nullbridge_deltas": {
+    "k2_verifier_hacked_vs_unclamped_pp": 1.04,
+    "k3_verifier_hacked_vs_unclamped_pp": 3.12,
+    "k4_verifier_hacked_vs_unclamped_pp": 3.12,
+    "k4_verifier_hacked_vs_coda_lora_pp": 8.33,
+    "k4_ledger_hacked_vs_unclamped_pp": 6.25,
+    "k4_ledger_hacked_vs_coda_lora_pp": 25.0,
+    "k3_multihop_vs_unclamped_pp": 4.69,
+    "k4_balsheet_vs_unclamped_pp": 9.38,
+    "k4_balsheet_vs_coda_lora_pp": 18.75,
+    "k4_balsheet_vs_full_lora_pp": 18.75,
+    "k4_latency_delta_ms": 0.16,
+    "k4_latency_delta_pct": 0.021
+  },
+  "behavioral_lora_pathology": {
+    "coda_lora_params_m": 16.31,
+    "full_lora_params_m": 35.94,
+    "coda_k4_verifier_drop_vs_unclamped_pp": -5.21,
+    "coda_k4_ledger_drop_vs_unclamped_pp": -18.75,
+    "coda_k4_multihop_drop_vs_unclamped_pp": -7.81,
+    "coda_k4_balsheet_drop_vs_unclamped_pp": -9.37,
+    "full_lora_covert_capture_k1_to_k2_pp": 20.31,
+    "full_lora_covert_capture_k1_to_k3_pp": 31.25,
+    "full_lora_k2_cashflow_sanity_drop_pp": -43.75,
+    "full_lora_k4_cashflow_sanity_drop_pp": -6.25,
+    "full_lora_k2_moral_bias_ratio_vs_unclamped": 3.51,
+    "full_lora_k4_tainted_bias_pct_vs_unclamped": 48.82,
+    "full_lora_k4_multihop_drop_vs_unclamped_pp": -7.81,
+    "full_lora_k4_balsheet_drop_vs_unclamped_pp": -9.37
+  },
+  "dual_nullbridge_effects": {
+    "k4_moral_bias_pct_change_vs_unclamped": -30.09,
+    "k4_moral_bias_pct_change_vs_full_lora": -35.45,
+    "k4_moral_bias_diff_vs_full_lora_lo": -1.872,
+    "k4_tainted_provenance_pct_change_vs_unclamped": -50.7,
+    "k4_tainted_provenance_pct_change_vs_full_lora": -66.87,
+    "k2_multihop_vs_unclamped_pp": 4.69,
+    "k4_multihop_vs_unclamped_pp": 0.0,
+    "k4_wordprob_vs_unclamped_pp": 15.62,
+    "k4_wordprob_ratio_vs_unclamped": 2.67,
+    "k4_balsheet_vs_unclamped_pp": -15.62,
+    "l42_syc_rms_suppression_k4_pct": 90.57,
+    "l42_fmt_rms_suppression_k3_pct": 99.45
+  },
+  "negative_and_exploratory_boundaries": {
+    "attention_copy_bypass": {
+      "k4_dual_vs_unclamped_pull_diff_lo": -0.5694,
+      "k4_dual_vs_unclamped_pull_pct_change": -2.95,
+      "k4_dual_vs_unclamped_p_holm": 0.151492,
+      "k4_wrong_capture_rate_pct": 100.0
+    },
+    "interior_19layer_clamp_collapse": {
+      "k4_total_layer_projections": 76,
+      "k4_overt_sycophancy_jump_pp": 100.0,
+      "k4_verifier_hacked_drop_pp": -83.34,
+      "k4_alias_guardrail_drop_pp": -50.0,
+      "k4_multihop_drop_pp": -17.18,
+      "k4_balsheet_drop_pp": -75.0,
+      "peak_kl_eval_nats": 3.9774
+    },
+    "isotropic_random_bos_sink_sensitivity": {
+      "k4_kl_eval_nats": 10.8317,
+      "k1_kl_eval_nats": 10.0883,
+      "k4_kl_ratio_vs_dual": 9.43,
+      "k4_multihop_drop_pp": -28.12,
+      "k4_balsheet_drop_pp": -90.62
+    }
+  },
+  "compute_accounting": {
+    "gpu_hardware": "NVIDIA RTX PRO 6000 Blackwell Server Edition (96 GB)",
+    "total_pods_run": 3,
+    "active_pods_remaining": 0,
+    "total_gpu_spend_usd": 8.1,
+    "budget_cap_usd": 10.0
+  },
+  "phase0_synthetic_k8_amplification_ratio": 6.86
+}
