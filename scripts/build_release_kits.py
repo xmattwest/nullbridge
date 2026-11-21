@@ -1054,15 +1054,15 @@ def main() -> None:
             "title": "Untwisting Gemma 4 Onto One 24 GB Card",
             "subtitle": "Where do financial deals and petty insults merge inside a 60-layer model, and how does untwisting that bottleneck let 31B loop on 24 GB?",
             "x_caption": (
-                "Financial deals and petty personal insults share zero trigger neurons inside Gemma 4 31B, yet pour into the exact same 19-layer bottleneck whose coordinate frame twists 87.1° from entry to exit.\n\n"
-                "Keeping that neck wide while pruning the outer corridors shrinks 31B from 62.55 GB onto one 24 GB card (23.08 GB), and untwisting the 87.1° turn in closed form lets it loop silently through its own middle layers:"
+                "A lopsided dollar split and a petty insult share 0 of their top 64 neurons in Gemma 4 31B, a 60-layer language model. Both still write onto the same spite direction.\n\n"
+                "Tracing where they meet turned up a 19-layer bottleneck in the middle of the network, twisted 87.1° from entry to exit. Keeping that middle wide while pruning the outer layers shrank the model from 62.55 GB to 23.08 GB, and untwisting the 87.1° turn let it loop on one 24 GB GPU."
             ),
             "folio_dir": args.afriat_folio_dir,
             "extra_methods": "",
             "closing_url": PART2_WEB_URL,
             "repo_url": "https://github.com/xmattwest/afriat",
             "self_reply": (
-                "Reloadable 23.08 GB checkpoint (Gemma-4-31B-Loop-Compact), Procrustes loop trainer, and full interactive essay:\n\n"
+                "Weights (23.08 GB), loop trainer, and full essay with PDF:\n\n"
                 "Essay & PDF: https://shelltoho.me/pubs/rotating-the-bottleneck/\n"
                 "Weights: https://huggingface.co/mattyxcakes/Gemma-4-31B-Loop-Compact\n"
                 "Code: https://github.com/xmattwest/afriat"
@@ -1075,15 +1075,15 @@ def main() -> None:
             "title": "Looping in the Dark",
             "subtitle": "What happens when a crooked ledger puts on an executive suit, your model thinks silently in loops, and standard safety LoRAs backfire?",
             "x_caption": (
-                "When a crooked ledger puts on an executive suit and an LLM thinks silently in loops without a readable scratchpad, standard safety LoRAs backfire.\n\n"
-                "Across 69 GPU cells on Gemma-4-Loop-Compact, Varloop, and Inkling-2-Mini, folding four shortcut axes out of the recurrent bridge or message bank once offline cuts silent sycophancy and bluster at zero extra runtime FLOPs:"
+                "Dress a crooked ledger up in polite executive prose, and a language model thinking silently in loops caves to the framing more with each pass. Standard safety fine-tuning makes it worse, breaking deductive logic on the side.\n\n"
+                "Across looped Gemma 4 and Thinking Machines' Inkling-2-Mini, projecting four shortcut directions out of the loop weights once offline stops the drift at zero runtime cost."
             ),
             "folio_dir": args.part3_folio_dir,
             "extra_methods": PART3_METHODS_HTML,
             "closing_url": PART3_WEB_URL,
             "repo_url": "https://github.com/xmattwest/nullbridge",
             "self_reply": (
-                "Interactive essay, academic preprint, Coda-Transport looped lens, and locked 69-cell GPU outputs across Gemma-4-Loop-Compact, Varloop, and Inkling-2-Mini:\n\n"
+                "Full essay, preprint, and open-source code:\n\n"
                 "Essay & Preprint: https://shelltoho.me/pubs/nullbridge/\n"
                 "Code: https://github.com/xmattwest/nullbridge"
             ),
@@ -1095,17 +1095,17 @@ def main() -> None:
             "title": "LLMs Exhibit Coherent Moral Utility",
             "subtitle": "When silent thinking loops double dirty-money rejection, is the model confused, or pricing clean hands and fairness like real economic goods?",
             "x_caption": (
-                "When silent thinking loops double dirty-money rejection inside native looped MoEs, is the model confused, or maximizing a real utility function?\n\n"
-                "Across intersecting Afriat budget lines on Varloop and Inkling-2-Mini, silent passes ignite coherent moral utility (CCEI 0.994 to 1.000) calibrated strictly on money-free human stories:"
+                "Give a looped language model more silent passes on a shady contract, and its dirty-money rejections double without a single word of chain-of-thought.\n\n"
+                "To test whether that shift is noise or a real preference, I priced clean hands against cash across intersecting budget lines (Afriat's revealed-preference test, where 1.000 means one utility function explains every choice). Silent loops lift consistency to 0.994 and 1.000."
             ),
             "folio_dir": args.part4_folio_dir,
             "extra_methods": PART4_METHODS_HTML,
             "closing_url": PART4_WEB_URL,
             "repo_url": "https://github.com/xmattwest/nullbridge",
             "self_reply": (
-                "Full essay, academic preprint (LLMs Exhibit Coherent Moral Utility Across Intersecting Afriat Budgets), exact GARP utility solvers, and all 4 parts of the series:\n\n"
+                "Full essay, preprint, utility solvers, and all four parts of the series:\n\n"
                 "Essay & Preprint: https://shelltoho.me/pubs/coherent-moral-utility/\n"
-                "All 4 parts: https://shelltoho.me/pubs/#money-is-moral-series\n"
+                "Full series: https://shelltoho.me/pubs/#money-is-moral-series\n"
                 "Code: https://github.com/xmattwest/nullbridge"
             ),
         },
