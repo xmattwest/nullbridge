@@ -1,6 +1,11 @@
 #!/usr/bin/env python3
 """Assemble paste-ready Substack + X Article release kits for Parts 2, 3, and 4.
 
+Hosts all numbered 2x inline figures in `figures/substack/<slug>/` so Substack's
+cloud image importer fetches them automatically via `raw.githubusercontent.com`
+on paste (zero "Image not found" errors), while also providing explicit local
+file-path drop markers for X Articles and manual drag-and-drop.
+
 Usage:
     uv run --with pillow python scripts/build_release_kits.py \
         --afriat-folio-dir ../afriat/runs/folio \
@@ -29,11 +34,12 @@ PART1_WEB_URL = "https://shelltoho.me/pubs/money-is-moral/"
 PART2_WEB_URL = "https://shelltoho.me/pubs/rotating-the-bottleneck/"
 PART3_WEB_URL = "https://shelltoho.me/pubs/nullbridge/"
 PART4_WEB_URL = "https://shelltoho.me/pubs/coherent-moral-utility/"
+DEFAULT_RAW_BASE_URL = "https://raw.githubusercontent.com/xmattwest/nullbridge/main/figures/substack"
 
 SUBSTACK_STYLE = """
   body {
     max-width: 680px;
-    margin: 48px auto;
+    margin: 40px auto;
     padding: 0 24px 80px;
     font-family: Charter, 'Bitstream Charter', 'Sitka Text', Cambria, Georgia, serif;
     font-size: 19px;
@@ -44,12 +50,13 @@ SUBSTACK_STYLE = """
   .meta-box {
     background: #f7f5f0;
     border: 1px solid #e2ddd2;
-    border-radius: 8px;
+    border-radius: 10px;
     padding: 18px 22px;
     margin-bottom: 36px;
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-    font-size: 15px;
+    font-size: 14.5px;
     line-height: 1.55;
+    user-select: text;
   }
   .meta-box p { margin: 6px 0; }
   .meta-label {
@@ -58,6 +65,102 @@ SUBSTACK_STYLE = """
     letter-spacing: 0.08em;
     text-transform: uppercase;
     color: #405943;
+  }
+  .toolbar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin: 12px 0 10px;
+    align-items: center;
+  }
+  .copy-btn {
+    appearance: none;
+    border: 1px solid #2c3e50;
+    background: #2c3e50;
+    color: #fffff0;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    padding: 7px 13px;
+    border-radius: 6px;
+    cursor: pointer;
+  }
+  .copy-btn.secondary {
+    background: #ffffff;
+    color: #1e3447;
+    border-color: #c8c2b4;
+  }
+  .copy-btn:hover { opacity: 0.92; }
+  .toggle-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 8px;
+    font-size: 13px;
+    color: #1e3447;
+    cursor: pointer;
+  }
+  .path-details {
+    margin-top: 12px;
+    border-top: 1px solid #e2ddd2;
+    padding-top: 10px;
+    font-size: 12.5px;
+  }
+  .path-details summary {
+    cursor: pointer;
+    font-weight: 600;
+    color: #1e3447;
+  }
+  .path-list {
+    margin: 8px 0 0;
+    padding-left: 20px;
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    font-size: 12px;
+    line-height: 1.5;
+    word-break: break-all;
+  }
+  .path-list li { margin-bottom: 6px; }
+  .thumb-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
+    gap: 10px;
+    margin-top: 12px;
+  }
+  .thumb-item {
+    background: #ffffff;
+    border: 1px solid #dfd9cc;
+    border-radius: 6px;
+    padding: 8px;
+    font-size: 11.5px;
+    line-height: 1.35;
+  }
+  .thumb-item img {
+    width: 100%;
+    height: auto;
+    border-radius: 3px;
+    margin-bottom: 6px;
+    border: 1px solid #eee;
+  }
+  .thumb-item code {
+    display: block;
+    font-size: 10.5px;
+    word-break: break-all;
+    background: #f5f3ed;
+    padding: 3px 5px;
+    border-radius: 3px;
+    margin-top: 4px;
+  }
+  .copy-divider {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: #808b90;
+    border-bottom: 1px dashed #d5cfc2;
+    padding-bottom: 6px;
+    margin: 0 0 28px;
+    user-select: none;
   }
   .upload-marker {
     background: #fdfcf8;
@@ -68,6 +171,7 @@ SUBSTACK_STYLE = """
     font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
     font-size: 13px;
     color: #1e3447;
+    word-break: break-all;
   }
   h2 {
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
@@ -116,6 +220,74 @@ SUBSTACK_STYLE = """
   a { color: #405943; text-decoration: underline; }
 """.strip()
 
+COPY_HELPERS_JS = """
+<script>
+function flashBtn(btn, label) {
+  const orig = btn.dataset.origLabel || btn.textContent;
+  btn.dataset.origLabel = orig;
+  btn.textContent = label;
+  setTimeout(() => { btn.textContent = orig; }, 1800);
+}
+function copyPlain(text, btn) {
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(text).then(() => flashBtn(btn, 'Copied!')).catch(() => fallbackPlain(text, btn));
+  } else {
+    fallbackPlain(text, btn);
+  }
+}
+function fallbackPlain(text, btn) {
+  const ta = document.createElement('textarea');
+  ta.value = text;
+  ta.style.position = 'fixed';
+  ta.style.opacity = '0';
+  document.body.appendChild(ta);
+  ta.select();
+  document.execCommand('copy');
+  document.body.removeChild(ta);
+  flashBtn(btn, 'Copied!');
+}
+function copyRichZone(zoneId, btn) {
+  const zone = document.getElementById(zoneId);
+  const sel = window.getSelection();
+  sel.removeAllRanges();
+  const range = document.createRange();
+  range.selectNodeContents(zone);
+  sel.addRange(range);
+  let ok = false;
+  try { ok = document.execCommand('copy'); } catch (e) { ok = false; }
+  sel.removeAllRanges();
+  if (ok) {
+    flashBtn(btn, 'Copied Rich Body!');
+    return;
+  }
+  if (navigator.clipboard && window.ClipboardItem) {
+    const htmlBlob = new Blob([zone.innerHTML], { type: 'text/html' });
+    const textBlob = new Blob([zone.innerText], { type: 'text/plain' });
+    navigator.clipboard.write([new ClipboardItem({ 'text/html': htmlBlob, 'text/plain': textBlob })])
+      .then(() => flashBtn(btn, 'Copied Rich Body!'));
+  }
+}
+function toggleSubstackPathMarkers(chk) {
+  const figs = document.querySelectorAll('#substack-copy-zone figure[data-local-path]');
+  figs.forEach((fig) => {
+    const prev = fig.previousElementSibling;
+    if (prev && prev.classList.contains('inline-local-marker')) {
+      prev.remove();
+    }
+    if (chk.checked) {
+      const p = document.createElement('p');
+      p.className = 'upload-marker inline-local-marker';
+      const num = fig.getAttribute('data-fig-num') || '';
+      const lpath = fig.getAttribute('data-local-path') || '';
+      const altNote = fig.getAttribute('data-alt-note') || '';
+      p.innerHTML = '<strong>[DROP IMAGE ' + num + ': ' + lpath + (altNote ? ' ' + altNote : '') + ']</strong>';
+      fig.parentNode.insertBefore(p, fig);
+    }
+  });
+}
+</script>
+""".strip()
+
 
 def fit_banner_5x2(src_path: pathlib.Path, dst_path: pathlib.Path) -> None:
     """Ink-aware framing to exact 2500x1000 (5:2) without clipping artwork."""
@@ -136,7 +308,6 @@ def fit_banner_5x2(src_path: pathlib.Path, dst_path: pathlib.Path) -> None:
         top = max(0, min(h - target_crop_h, mid_y - target_crop_h // 2))
         cropped = im.crop((0, top, w, top + target_crop_h))
     else:
-        # Extend left (background) and right (edge column continuation, e.g. horizontal beam)
         top = max(0, y_min - pad_y)
         bot = min(h, y_max + pad_y + 1)
         band = arr[top:bot, :, :].astype(np.uint8)
@@ -148,7 +319,6 @@ def fit_banner_5x2(src_path: pathlib.Path, dst_path: pathlib.Path) -> None:
         bg_u8 = np.clip(np.round(bg), 0, 255).astype(np.uint8).reshape(1, 1, 3)
         left_block = np.broadcast_to(bg_u8, (band_h, left_pad, 3)).copy()
         if left_pad > 0 and w >= 16:
-            # Smooth 16px blend at seam so zero JPEG boundary is visible
             alpha = np.linspace(0.0, 1.0, 16, dtype=np.float32).reshape(1, 16, 1)
             band[:, :16, :] = np.round(bg_u8 * (1.0 - alpha) + band[:, :16, :] * alpha).astype(np.uint8)
         right_col = np.median(band[:, -8:, :], axis=1, keepdims=True).astype(np.uint8)
@@ -391,14 +561,10 @@ def extract_substack_body(raw_html: str, slug: str) -> str:
     m = re.search(r'</div>\s*(<p>[\s\S]*?)</body>', raw_html)
     assert m, "Could not locate body content after .meta-box"
     body = m.group(1).strip()
-    # Remove any <hr> dividers to match Part 1's clean Substack rhythm
     body = re.sub(r"<hr\s*/?>", "", body, flags=re.I)
-    # Strip #references links while keeping the author text intact
     body = re.sub(r'<a href="#references">([\s\S]*?)</a>', r"\1", body)
-    # Normalize relative /pubs/... links to full https://shelltoho.me/pubs/...
     body = body.replace('href="/pubs/', 'href="https://shelltoho.me/pubs/')
 
-    # 1. Cut the 3 heavy ASCII equation blocks whose surrounding prose already explains them
     body = re.sub(
         r"<blockquote><p><code>h\^\(l\+1\)[\s\S]*?</code></p></blockquote>",
         "",
@@ -415,7 +581,6 @@ def extract_substack_body(raw_html: str, slug: str) -> str:
         body,
     )
 
-    # 2. Replace the signature R_safe equation in Parts 2 & 3 with a 2x Dawn State equation PNG figure
     if slug == "01_part2_bottleneck":
         eq_fig = (
             '<figure><img src="figures/zero_cost_bridge_eq_2x.png" '
@@ -441,7 +606,6 @@ def extract_substack_body(raw_html: str, slug: str) -> str:
         )
         assert n_eq == 1, f"Expected 1 R_safe equation in Part 3, found {n_eq}"
 
-    # 3. Clean up remaining ASCII carets/underscores in inline prose and captions
     body = body.replace("R = U V^T", "R = U V\u1d40")
     body = body.replace("<code>I \u2212 Q_42 Q_42^T</code>", "<code>I \u2212 Q Q\u1d40</code>")
     body = body.replace("state <code>H_24^(0)</code>", "first-pass Layer 24 state")
@@ -450,9 +614,7 @@ def extract_substack_body(raw_html: str, slug: str) -> str:
     body = body.replace("of <code>R^2304</code>", "of the 2,304-dimensional stream")
     body = body.replace("<code>R_safe</code>", "the folded bridge")
     body = body.replace("<code>R_proc</code>", "the Procrustes bridge")
-    body = body.replace("<code>W_down</code>", "<code>W_down</code>")
 
-    # Remove trailing auto-generated Folio footer italic line so we append a unified Methods H3
     body = re.sub(
         r"<p><em>Interactive web edition, full tables, and code by Matt West at [\s\S]*?</em></p>\s*$",
         "",
@@ -463,9 +625,38 @@ def extract_substack_body(raw_html: str, slug: str) -> str:
     return body.strip()
 
 
-def renumber_figures(body: str, src_fig_dir: pathlib.Path, dst_fig_dir: pathlib.Path) -> tuple[str, list[str]]:
-    """Copy inline figures in exact appearance order as 01_<name>, 02_<name>, ... and rewrite src."""
+def copy_or_optimize_public_asset(src_file: pathlib.Path, pub_file: pathlib.Path, max_bytes: int = 2_000_000) -> None:
+    """Copy asset to tracked public dir; optimize oversized GIFs under 2 MB via ffmpeg palette diff."""
+    if src_file.suffix.lower() != ".gif" or src_file.stat().st_size <= max_bytes:
+        shutil.copy2(src_file, pub_file)
+        return
+    ffmpeg = shutil.which("ffmpeg") or "/opt/homebrew/bin/ffmpeg"
+    for width, fps, colors in [(800, 8, 64), (720, 8, 64), (680, 7, 64)]:
+        vf = (
+            f"fps={fps},scale={width}:-1:flags=lanczos,split[s0][s1];"
+            f"[s0]palettegen=max_colors={colors}[p];"
+            "[s1][p]paletteuse=dither=none:diff_mode=rectangle"
+        )
+        subprocess.run(
+            [ffmpeg, "-y", "-i", str(src_file), "-vf", vf, "-loop", "0", str(pub_file)],
+            check=True,
+            stdout=subprocess.DEVNULL,
+            stderr=subprocess.DEVNULL,
+        )
+        if pub_file.stat().st_size <= max_bytes:
+            return
+    raise RuntimeError(f"Could not compress {src_file} below {max_bytes} bytes")
+
+
+def renumber_figures(
+    body: str,
+    src_fig_dir: pathlib.Path,
+    dst_fig_dir: pathlib.Path,
+    pub_fig_dir: pathlib.Path,
+) -> tuple[str, list[str]]:
+    """Copy inline figures in exact appearance order as 01_<name>, 02_<name>, ... to kit + public dirs."""
     dst_fig_dir.mkdir(parents=True, exist_ok=True)
+    pub_fig_dir.mkdir(parents=True, exist_ok=True)
     ordered_files: list[str] = []
     mapping: dict[str, str] = {}
 
@@ -479,6 +670,7 @@ def renumber_figures(body: str, src_fig_dir: pathlib.Path, dst_fig_dir: pathlib.
             src_file = src_fig_dir / fname
             assert src_file.exists(), f"Missing figure file: {src_file}"
             shutil.copy2(src_file, dst_fig_dir / numbered)
+            copy_or_optimize_public_asset(src_file, pub_fig_dir / numbered)
             mapping[orig_src] = f"figures/{numbered}"
             ordered_files.append(numbered)
         return f'src="{mapping[orig_src]}"'
@@ -487,7 +679,59 @@ def renumber_figures(body: str, src_fig_dir: pathlib.Path, dst_fig_dir: pathlib.
     return updated, ordered_files
 
 
-def make_substack_doc(title: str, subtitle: str, body_html: str) -> str:
+def make_substack_doc(
+    slug: str,
+    title: str,
+    subtitle: str,
+    body_html: str,
+    ordered_figs: list[str],
+    local_fig_dir: pathlib.Path,
+    raw_base_url: str,
+) -> str:
+    resolved_fig_dir = local_fig_dir.resolve()
+
+    def _sub_fig(match: re.Match[str]) -> str:
+        rel_src = match.group(1)
+        alt_txt = match.group(2)
+        cap_html = match.group(3)
+        fname = pathlib.Path(rel_src).name
+        num = fname.split("_", 1)[0]
+        https_url = f"{raw_base_url.rstrip('/')}/{slug}/{fname}"
+        local_path = resolved_fig_dir / fname
+        alt_note = ""
+        if slug == "01_part2_bottleneck" and fname.startswith("01_"):
+            alt_png = resolved_fig_dir / "01_alt_static_procrustes_snap.png"
+            alt_note = f"(or static PNG: {alt_png})"
+        return (
+            f'<figure data-fig-num="{html_mod.escape(num)}" '
+            f'data-local-path="{html_mod.escape(str(local_path))}" '
+            f'data-alt-note="{html_mod.escape(alt_note)}">\n'
+            f'  <img src="{html_mod.escape(https_url)}" alt="{alt_txt}">\n'
+            f'  <figcaption>{cap_html}</figcaption>\n'
+            f'</figure>'
+        )
+
+    sub_body, n_rewritten = re.subn(
+        r'<figure>\s*<img src="(figures/[^"]+)" alt="([^"]*)">\s*<figcaption>([\s\S]*?)</figcaption>\s*</figure>',
+        _sub_fig,
+        body_html,
+    )
+    assert n_rewritten == len(ordered_figs), f"Expected {len(ordered_figs)} figures in {slug}, rewrote {n_rewritten}"
+
+    path_items = []
+    for fname in ordered_figs:
+        lpath = resolved_fig_dir / fname
+        extra = ""
+        if slug == "01_part2_bottleneck" and fname.startswith("01_"):
+            extra = (
+                f"<br><span style=\"color:#666;\">Static PNG fallback (481 KB): "
+                f"<code>{html_mod.escape(str(resolved_fig_dir / '01_alt_static_procrustes_snap.png'))}</code></span>"
+            )
+        path_items.append(f"<li><strong>{html_mod.escape(fname)}</strong>: <code>{html_mod.escape(str(lpath))}</code>{extra}</li>")
+
+    title_js = html_mod.escape(title.replace("\\", "\\\\").replace("'", "\\'"))
+    sub_js = html_mod.escape(subtitle.replace("\\", "\\\\").replace("'", "\\'"))
+
     return f"""<!doctype html>
 <html lang="en">
 <head>
@@ -500,31 +744,76 @@ def make_substack_doc(title: str, subtitle: str, body_html: str) -> str:
 <body>
 
 <div class="meta-box">
-  <p class="meta-label">Substack Header Fields (Paste Separately at Top of Editor)</p>
+  <p class="meta-label">Substack Header Fields &amp; 1-Click Copy</p>
   <p><strong>Title:</strong> {html_mod.escape(title)}</p>
   <p><strong>Subtitle:</strong> {html_mod.escape(subtitle)}</p>
-  <p style="color:#666; font-size:13px; margin-top:10px;">Workflow: Open in Chrome, highlight everything <strong>below</strong> this box, copy (Cmd+C), paste into Substack, insert a Subscribe button after Paragraph 2, and drag each numbered PNG from <code>figures/</code> onto its matching figure slot if Substack prompts for local upload.</p>
+  <div class="toolbar">
+    <button class="copy-btn" type="button" onclick="copyRichZone('substack-copy-zone', this)">Copy Substack Body (Auto-Imports All {len(ordered_figs)} Images)</button>
+    <button class="copy-btn secondary" type="button" onclick="copyPlain('{title_js}', this)">Copy Title</button>
+    <button class="copy-btn secondary" type="button" onclick="copyPlain('{sub_js}', this)">Copy Subtitle</button>
+  </div>
+  <label class="toggle-row">
+    <input type="checkbox" onchange="toggleSubstackPathMarkers(this)">
+    <span>Also show <code>[DROP IMAGE XX: /path/to/file]</code> markers inline above each figure (for manual drag-and-drop)</span>
+  </label>
+  <p style="color:#555; font-size:13px; margin-top:8px;">All {len(ordered_figs)} figures below now use public HTTPS URLs on <code>raw.githubusercontent.com</code> (matching Part 1), so Substack imports them automatically when you paste. Insert a Subscribe button after Paragraph 2.</p>
+  <details class="path-details">
+    <summary>Local figure file paths ({len(ordered_figs)} files in <code>{html_mod.escape(str(resolved_fig_dir))}</code>)</summary>
+    <ol class="path-list">
+      {"".join(path_items)}
+    </ol>
+  </details>
 </div>
 
-{body_html}
+<div class="copy-divider">Everything below this line copies cleanly into Substack</div>
 
+<div id="substack-copy-zone">
+{sub_body}
+</div>
+
+{COPY_HELPERS_JS}
 </body>
 </html>
 """
 
 
-def make_x_article_doc(title: str, banner_rel: str, body_html: str, closing_url: str, repo_url: str) -> str:
-    # For X Articles:
-    # 1. Replace <figure><img src="figures/XX.png" ...><figcaption>...</figcaption></figure>
-    #    with clean upload instruction block + the image preview (zero figcaption, matching Part 1 X Article).
-    x_body = re.sub(
-        r'<figure>\s*<img src="(figures/[^"]+)" alt="([^"]*)">\s*<figcaption>[\s\S]*?</figcaption>\s*</figure>',
-        r'<p class="upload-marker">[Insert Image: <strong>\1</strong>]</p><figure><img src="\1" alt="\2"></figure>',
+def make_x_article_doc(
+    slug: str,
+    title: str,
+    banner_path: pathlib.Path,
+    body_html: str,
+    ordered_figs: list[str],
+    local_fig_dir: pathlib.Path,
+    closing_url: str,
+    repo_url: str,
+    self_reply: str,
+) -> str:
+    resolved_banner = banner_path.resolve()
+    resolved_fig_dir = local_fig_dir.resolve()
+
+    def _x_fig(match: re.Match[str]) -> str:
+        rel_src = match.group(1)
+        fname = pathlib.Path(rel_src).name
+        num = fname.split("_", 1)[0]
+        lpath = resolved_fig_dir / fname
+        alt_hint = ""
+        if slug == "01_part2_bottleneck" and fname.startswith("01_"):
+            alt_png = resolved_fig_dir / "01_alt_static_procrustes_snap.png"
+            alt_hint = f" (or static PNG if X rejects 8.9 MB GIF: {alt_png})"
+        return (
+            f'<p class="upload-marker"><strong>[DROP IMAGE {html_mod.escape(num)}: '
+            f'{html_mod.escape(str(lpath))}{html_mod.escape(alt_hint)}]</strong></p>'
+        )
+
+    x_body, n_x = re.subn(
+        r'<figure>\s*<img src="(figures/[^"]+)" alt="[^"]*">\s*<figcaption>[\s\S]*?</figcaption>\s*</figure>',
+        _x_fig,
         body_html,
     )
-    # 2. Ensure ZERO substack.com links appear anywhere in X Article copy
+    assert n_x == len(ordered_figs), f"Expected {len(ordered_figs)} X markers in {slug}, got {n_x}"
+    assert "<img " not in x_body, f"Unexpected <img> left inside X copy zone for {slug}"
+
     x_body = x_body.replace(PART1_SUBSTACK_URL, PART1_WEB_URL)
-    # 3. Strip the Substack<h3>Methods, Repo & Technical Notes</h3> block and replace with Part 1's single crisp closing line
     x_body = re.sub(r"<h3>Methods, Repo &amp; Technical Notes</h3>[\s\S]*$", "", x_body).strip()
     x_body = re.sub(r"<h2>Methods, Repo &amp; Technical Notes</h2>[\s\S]*$", "", x_body).strip()
     x_body += (
@@ -534,6 +823,21 @@ def make_x_article_doc(title: str, banner_rel: str, body_html: str, closing_url:
         f'<a href="{repo_url}">{repo_url}</a>.</p>'
     )
     assert "substack.com" not in x_body, "Substack URL leaked into X Article body!"
+
+    thumbs = []
+    for fname in ordered_figs:
+        num = fname.split("_", 1)[0]
+        lpath = resolved_fig_dir / fname
+        thumbs.append(
+            f'<div class="thumb-item">'
+            f'<a href="figures/{html_mod.escape(fname)}" target="_blank"><img src="figures/{html_mod.escape(fname)}" alt="{html_mod.escape(fname)}"></a>'
+            f'<strong>Image {html_mod.escape(num)}</strong>'
+            f'<code>{html_mod.escape(str(lpath))}</code>'
+            f'</div>'
+        )
+
+    title_js = html_mod.escape(title.replace("\\", "\\\\").replace("'", "\\'"))
+    reply_js = html_mod.escape(self_reply.strip().replace("\\", "\\\\").replace("'", "\\'").replace("\n", "\\n"))
 
     return f"""<!doctype html>
 <html lang="en">
@@ -548,15 +852,30 @@ def make_x_article_doc(title: str, banner_rel: str, body_html: str, closing_url:
 
 <div class="meta-box">
   <p class="meta-label">X Long-Form Article Kit (@xmattwest)</p>
-  <p><strong>Cover Banner (5:2 · 2500x1000, zero text):</strong> <code>{html_mod.escape(banner_rel)}</code></p>
-  <p><strong>Article Title:</strong> {html_mod.escape(title)}</p>
-  <p style="color:#666; font-size:13px; margin-top:10px;">Workflow: Upload <code>{html_mod.escape(banner_rel)}</code> as the X Article header image, paste the Title, copy-paste prose sections below, drop each numbered <code>figures/01_...png</code> inline at its marker (no image caption needed), publish, and post <code>self_reply.txt</code> 1 minute later (zero Substack links so X never throttles reach).</p>
+  <p><strong>1. Cover Banner (5:2 · 2500x1000, zero text):</strong><br><code>{html_mod.escape(str(resolved_banner))}</code></p>
+  <img src="x_banner_5x2.png" alt="5:2 X Article cover banner" style="margin:8px 0 12px; border:1px solid #dfd9cc;">
+  <p><strong>2. Article Title:</strong> {html_mod.escape(title)}</p>
+  <div class="toolbar">
+    <button class="copy-btn" type="button" onclick="copyRichZone('x-copy-zone', this)">Copy X Article Body (With File Path Markers)</button>
+    <button class="copy-btn secondary" type="button" onclick="copyPlain('{title_js}', this)">Copy Title</button>
+    <button class="copy-btn secondary" type="button" onclick="copyPlain('{reply_js}', this)">Copy 1-Min Self-Reply</button>
+  </div>
+  <p style="color:#555; font-size:13px; margin-top:8px;">X Articles do not auto-fetch external image URLs on paste, so the copyable body below has clean <code>[DROP IMAGE XX: /exact/path]</code> text markers (zero broken image placeholders). Paste the body, drop each file at its numbered marker, delete the marker line, publish, and post <code>self_reply.txt</code> 1 minute later.</p>
+  <details class="path-details" open>
+    <summary>Visual Reference &amp; Local Paths ({len(ordered_figs)} inline figures)</summary>
+    <div class="thumb-grid">
+      {"".join(thumbs)}
+    </div>
+  </details>
 </div>
 
-<figure><img src="{html_mod.escape(banner_rel)}" alt="5:2 X Article cover banner"></figure>
+<div class="copy-divider">Everything below this line copies cleanly into X Articles</div>
 
+<div id="x-copy-zone">
 {x_body}
+</div>
 
+{COPY_HELPERS_JS}
 </body>
 </html>
 """
@@ -586,28 +905,66 @@ PART4_METHODS_HTML = """
 def build_launchpad_html(kits: list[dict[str, object]]) -> str:
     cards = []
     for k in kits:
-        figs_html = "".join(
-            f'<a href="{k["slug"]}/figures/{f}" target="_blank"><code>{f}</code></a>'
-            for f in k["figures"]  # type: ignore[union-attr]
-        )
+        slug = str(k["slug"])
+        fig_dir: pathlib.Path = k["fig_dir"]  # type: ignore[assignment]
+        banner_path: pathlib.Path = k["banner_path"]  # type: ignore[assignment]
+        figs: list[str] = k["figures"]  # type: ignore[assignment]
+        fig_rows = []
+        for fname in figs:
+            lpath = fig_dir / fname
+            lpath_js = html_mod.escape(str(lpath).replace("\\", "\\\\").replace("'", "\\'"))
+            alt_line = ""
+            if slug == "01_part2_bottleneck" and fname.startswith("01_"):
+                alt_p = fig_dir / "01_alt_static_procrustes_snap.png"
+                alt_line = f"<div class=\"alt-note\">Static PNG fallback (481 KB): <code>{html_mod.escape(str(alt_p))}</code></div>"
+            fig_rows.append(
+                f'<li>'
+                f'<div class="fig-row">'
+                f'<a href="{slug}/figures/{html_mod.escape(fname)}" target="_blank"><strong>{html_mod.escape(fname)}</strong></a> '
+                f'<button class="mini-btn" type="button" onclick="copyPlain(\'{lpath_js}\', this)">Copy Path</button>'
+                f'</div>'
+                f'<code>{html_mod.escape(str(lpath))}</code>'
+                f'{alt_line}'
+                f'</li>'
+            )
+
+        title_str = str(k["title"])
+        sub_str = str(k["subtitle"])
+        reply_str = str(k["self_reply"]).strip()
+        title_js = html_mod.escape(title_str.replace("\\", "\\\\").replace("'", "\\'"))
+        sub_js = html_mod.escape(sub_str.replace("\\", "\\\\").replace("'", "\\'"))
+        reply_js = html_mod.escape(reply_str.replace("\\", "\\\\").replace("'", "\\'").replace("\n", "\\n"))
+        banner_js = html_mod.escape(str(banner_path).replace("\\", "\\\\").replace("'", "\\'"))
+
         cards.append(f"""
         <section class="kit-card">
           <div class="kit-meta"><span>{html_mod.escape(str(k["drop"]))}</span><span>{html_mod.escape(str(k["window"]))}</span></div>
-          <img class="banner-preview" src="{k["slug"]}/x_banner_5x2.png" alt="{html_mod.escape(str(k["title"]))} 5:2 banner">
-          <h2>{html_mod.escape(str(k["title"]))}</h2>
-          <p class="sub"><strong>Substack Subtitle:</strong> {html_mod.escape(str(k["subtitle"]))}</p>
+          <img class="banner-preview" src="{slug}/x_banner_5x2.png" alt="{html_mod.escape(title_str)} 5:2 banner">
+          <div class="banner-path">
+            <span><strong>5:2 X Banner Path:</strong> <code>{html_mod.escape(str(banner_path))}</code></span>
+            <button class="mini-btn" type="button" onclick="copyPlain('{banner_js}', this)">Copy Banner Path</button>
+          </div>
+          <h2>{html_mod.escape(title_str)}</h2>
+          <p class="sub"><strong>Substack Subtitle:</strong> {html_mod.escape(sub_str)}</p>
           <div class="kit-links">
-            <a class="btn-primary" href="{k["slug"]}/substack_paste_ready.html" target="_blank">Open Substack Paste-Ready HTML ↗</a>
-            <a class="btn-primary" href="{k["slug"]}/x_article_paste_ready.html" target="_blank">Open X Article Paste-Ready HTML ↗</a>
-            <a class="btn-secondary" href="{k["slug"]}/x_banner_5x2.png" target="_blank">5:2 Cover Banner (2500x1000) ↗</a>
+            <a class="btn-primary" href="{slug}/substack_paste_ready.html" target="_blank">Open Substack Paste-Ready HTML (Auto-Imports Images) ↗</a>
+            <a class="btn-primary" href="{slug}/x_article_paste_ready.html" target="_blank">Open X Article Paste-Ready HTML (With File Paths) ↗</a>
+            <button class="btn-secondary" type="button" onclick="copyPlain('{title_js}', this)">Copy Title</button>
+            <button class="btn-secondary" type="button" onclick="copyPlain('{sub_js}', this)">Copy Subtitle</button>
           </div>
           <div class="reply-box">
-            <p class="reply-label">1-Minute X Self-Reply (<code>{k["slug"]}/self_reply.txt</code>)</p>
-            <pre>{html_mod.escape(str(k["self_reply"]))}</pre>
+            <div class="reply-head">
+              <p class="reply-label">1-Minute X Self-Reply (<code>{slug}/self_reply.txt</code>)</p>
+              <button class="mini-btn" type="button" onclick="copyPlain('{reply_js}', this)">Copy Self-Reply</button>
+            </div>
+            <pre>{html_mod.escape(reply_str)}</pre>
           </div>
-          <div class="fig-strip">
-            <span>Inline cards ({len(k["figures"])}):</span> {figs_html}
-          </div>
+          <details class="fig-panel" {"open" if slug == "01_part2_bottleneck" else ""}>
+            <summary>Inline Figures in Exact Drop Order ({len(figs)} files in <code>{html_mod.escape(str(fig_dir))}</code>)</summary>
+            <ol class="fig-path-list">
+              {"".join(fig_rows)}
+            </ol>
+          </details>
         </section>
         """)
     return f"""<!doctype html>
@@ -616,28 +973,43 @@ def build_launchpad_html(kits: list[dict[str, object]]) -> str:
 <meta charset="utf-8">
 <title>X + Substack Release Launchpad · Parts 2, 3, and 4</title>
 <style>
-  body {{ max-width: 920px; margin: 40px auto; padding: 0 24px 80px; background: #F7F6EF; color: #0F0F0F; font: 15px/1.6 Inter, -apple-system, BlinkMacSystemFont, sans-serif; }}
+  body {{ max-width: 940px; margin: 40px auto; padding: 0 24px 80px; background: #F7F6EF; color: #0F0F0F; font: 15px/1.6 Inter, -apple-system, BlinkMacSystemFont, sans-serif; }}
   h1 {{ font-family: Georgia, serif; font-size: 32px; margin: 0 0 8px; letter-spacing: -0.02em; }}
-  .lead {{ color: #1E3447; margin: 0 0 32px; }}
+  .lead {{ color: #1E3447; margin: 0 0 28px; }}
+  .status-banner {{ background: #EEF3EC; border: 1px solid #B8CCB2; border-radius: 10px; padding: 14px 18px; margin-bottom: 28px; font-size: 14px; color: #1E3447; }}
   .kit-card {{ background: #FDFCF8; border: 1px solid #DCE0D3; border-radius: 12px; padding: 26px 28px; margin-bottom: 28px; }}
   .kit-meta {{ display: flex; justify-content: space-between; font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; color: #405943; margin-bottom: 14px; }}
-  .banner-preview {{ width: 100%; height: auto; border-radius: 8px; border: 1px solid #DCE0D3; display: block; margin-bottom: 16px; }}
+  .banner-preview {{ width: 100%; height: auto; border-radius: 8px; border: 1px solid #DCE0D3; display: block; margin-bottom: 8px; }}
+  .banner-path {{ display: flex; justify-content: space-between; align-items: center; gap: 10px; font-size: 12px; color: #555; margin-bottom: 16px; flex-wrap: wrap; }}
+  .banner-path code {{ background: #F2EFE6; padding: 2px 6px; border-radius: 4px; word-break: break-all; }}
   h2 {{ font-family: Georgia, serif; font-size: 26px; margin: 0 0 6px; letter-spacing: -0.02em; }}
   .sub {{ color: #1E3447; margin: 0 0 16px; font-size: 14.5px; }}
-  .kit-links {{ display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 18px; }}
+  .kit-links {{ display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 18px; align-items: center; }}
   .btn-primary {{ background: #405943; color: #FDFCF8; text-decoration: none; padding: 9px 14px; border-radius: 8px; font-weight: 600; font-size: 13px; }}
-  .btn-secondary {{ background: #F7F6EF; color: #0F0F0F; border: 1px solid #DCE0D3; text-decoration: none; padding: 9px 14px; border-radius: 8px; font-weight: 500; font-size: 13px; }}
+  .btn-secondary {{ appearance: none; cursor: pointer; background: #F7F6EF; color: #0F0F0F; border: 1px solid #DCE0D3; text-decoration: none; padding: 9px 14px; border-radius: 8px; font-weight: 500; font-size: 13px; }}
+  .mini-btn {{ appearance: none; cursor: pointer; background: #FFFFFF; color: #1E3447; border: 1px solid #C8C2B4; padding: 3px 9px; border-radius: 5px; font-size: 11.5px; font-weight: 600; }}
   .reply-box {{ background: #F7F6EF; border: 1px solid #DCE0D3; border-radius: 8px; padding: 12px 16px; margin-bottom: 14px; }}
-  .reply-label {{ margin: 0 0 6px; font-size: 11.5px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em; color: #687063; }}
+  .reply-head {{ display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; }}
+  .reply-label {{ margin: 0; font-size: 11.5px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em; color: #687063; }}
   pre {{ margin: 0; white-space: pre-wrap; font: 13px/1.55 ui-monospace, SFMono-Regular, Menlo, monospace; }}
-  .fig-strip {{ display: flex; flex-wrap: wrap; gap: 8px; align-items: center; font-size: 12.5px; color: #687063; }}
-  .fig-strip a {{ color: #405943; text-decoration: none; background: #F7F6EF; border: 1px solid #DCE0D3; padding: 2px 7px; border-radius: 4px; }}
+  .fig-panel {{ background: #F7F6EF; border: 1px solid #DCE0D3; border-radius: 8px; padding: 10px 14px; font-size: 13px; }}
+  .fig-panel summary {{ cursor: pointer; font-weight: 600; color: #1E3447; }}
+  .fig-path-list {{ margin: 10px 0 0; padding-left: 22px; }}
+  .fig-path-list li {{ margin-bottom: 9px; }}
+  .fig-row {{ display: flex; align-items: center; gap: 8px; margin-bottom: 2px; }}
+  .fig-row a {{ color: #405943; text-decoration: underline; }}
+  .fig-path-list code {{ display: block; font-size: 12px; background: #FDFCF8; border: 1px solid #E5E2D9; padding: 3px 7px; border-radius: 4px; word-break: break-all; }}
+  .alt-note {{ font-size: 11.5px; color: #687063; margin-top: 3px; }}
 </style>
 </head>
 <body>
   <h1>X + Substack Release Launchpad</h1>
-  <p class="lead">Staggered 3-drop kit matched to Part 1 (<em>How LLMs Price Spite, Disgust, and Dirty Money</em>). Zero tables, zero broken relative links, zero Substack URLs inside X Articles, and 2500x1000 5:2 engraved cover banners.</p>
+  <p class="lead">Staggered 3-drop kit matched to Part 1 (<em>How LLMs Price Spite, Disgust, and Dirty Money</em>).</p>
+  <div class="status-banner">
+    <strong>Image paste fix active:</strong> Substack pages now reference public HTTPS URLs on <code>raw.githubusercontent.com/xmattwest/nullbridge/main/figures/substack/...</code> so Substack imports all figures automatically on paste (with a checkbox to also show local file paths inline). X Article pages use explicit <code>[DROP IMAGE XX: /exact/path]</code> text markers with zero broken image boxes.
+  </div>
   {"".join(cards)}
+  {COPY_HELPERS_JS}
 </body>
 </html>
 """
@@ -649,10 +1021,14 @@ def main() -> None:
     parser.add_argument("--part3-folio-dir", type=pathlib.Path, required=True)
     parser.add_argument("--part4-folio-dir", type=pathlib.Path, required=True)
     parser.add_argument("--out-dir", type=pathlib.Path, default=pathlib.Path("runs/release_kits"))
+    parser.add_argument("--public-fig-dir", type=pathlib.Path, default=pathlib.Path("figures/substack"))
+    parser.add_argument("--raw-base-url", type=str, default=DEFAULT_RAW_BASE_URL)
     args = parser.parse_args()
 
     out_dir: pathlib.Path = args.out_dir
     out_dir.mkdir(parents=True, exist_ok=True)
+    pub_root: pathlib.Path = args.public_fig_dir
+    pub_root.mkdir(parents=True, exist_ok=True)
 
     specs = [
         {
@@ -709,54 +1085,69 @@ def main() -> None:
 
     launchpad_kits: list[dict[str, object]] = []
     for sp in specs:
-        kdir = out_dir / str(sp["slug"])
+        slug = str(sp["slug"])
+        kdir = out_dir / slug
         kdir.mkdir(parents=True, exist_ok=True)
+        pub_sub_dir = pub_root / slug
+        if pub_sub_dir.exists():
+            shutil.rmtree(pub_sub_dir)
+        pub_sub_dir.mkdir(parents=True, exist_ok=True)
+
         raw_banner = kdir / "x_banner_5x2_raw.png"
         final_banner = kdir / "x_banner_5x2.png"
         assert raw_banner.exists(), f"Missing generated raw banner: {raw_banner}"
         fit_banner_5x2(raw_banner, final_banner)
 
         folio_sub = pathlib.Path(sp["folio_dir"]) / "substack"  # type: ignore[arg-type]
-        # Render 2x Dawn State equation card into a temp staging dir alongside source figures
         with tempfile.TemporaryDirectory(prefix="stage-figs-") as stage_tmp:
             stage_fig_dir = pathlib.Path(stage_tmp)
             for f in (folio_sub / "figures").iterdir():
                 if f.is_file():
                     shutil.copy2(f, stage_fig_dir / f.name)
-            if sp["slug"] == "01_part2_bottleneck":
+            if slug == "01_part2_bottleneck":
                 render_equation_card_2x("part2", stage_fig_dir / "zero_cost_bridge_eq_2x.png")
-            elif sp["slug"] == "02_part3_looping":
+            elif slug == "02_part3_looping":
                 render_equation_card_2x("part3", stage_fig_dir / "zero_cost_bridge_eq_2x.png")
 
             raw_sub_html = (folio_sub / "substack_paste_ready.html").read_text()
-            body = extract_substack_body(raw_sub_html, str(sp["slug"]))
-            # On Substack, link Part 1 directly to the live Terms of Plenty issue
+            body = extract_substack_body(raw_sub_html, slug)
             body = body.replace(f'href="{PART1_WEB_URL}"', f'href="{PART1_SUBSTACK_URL}"')
-            # Convert H2 Methods in Part 2 to H3 Methods to match Part 1
             body = body.replace("<h2>Methods, Repo &amp; Technical Notes</h2>", "<h3>Methods, Repo &amp; Technical Notes</h3>")
             if sp["extra_methods"]:
                 body = f"{body}\n\n{sp['extra_methods']}"
 
-            # Clear old numbered figures before renumbering cleanly
             if (kdir / "figures").exists():
                 shutil.rmtree(kdir / "figures")
-            body, ordered_figs = renumber_figures(body, stage_fig_dir, kdir / "figures")
-        # Also copy static corkscrew PNG fallback for Part 2 X Article in case X prefers PNG over 9MB GIF
-        if sp["slug"] == "01_part2_bottleneck":
+            body, ordered_figs = renumber_figures(body, stage_fig_dir, kdir / "figures", pub_sub_dir)
+
+        if slug == "01_part2_bottleneck":
             snap = folio_sub.parent.parent / "funnel_cards/rotating_corkscrew_procrustes_snap.png"
             mp4 = folio_sub.parent.parent / "social_cards/manifold_3d_coherent_multipass.mp4"
             if snap.exists():
                 shutil.copy2(snap, kdir / "figures/01_alt_static_procrustes_snap.png")
+                shutil.copy2(snap, pub_sub_dir / "01_alt_static_procrustes_snap.png")
             if mp4.exists():
                 shutil.copy2(mp4, kdir / "figures/01_alt_video_multipass.mp4")
 
-        sub_doc = make_substack_doc(str(sp["title"]), str(sp["subtitle"]), body)
+        sub_doc = make_substack_doc(
+            slug=slug,
+            title=str(sp["title"]),
+            subtitle=str(sp["subtitle"]),
+            body_html=body,
+            ordered_figs=ordered_figs,
+            local_fig_dir=kdir / "figures",
+            raw_base_url=args.raw_base_url,
+        )
         x_doc = make_x_article_doc(
-            str(sp["title"]),
-            "x_banner_5x2.png",
-            body,
-            str(sp["closing_url"]),
-            str(sp["repo_url"]),
+            slug=slug,
+            title=str(sp["title"]),
+            banner_path=final_banner,
+            body_html=body,
+            ordered_figs=ordered_figs,
+            local_fig_dir=kdir / "figures",
+            closing_url=str(sp["closing_url"]),
+            repo_url=str(sp["repo_url"]),
+            self_reply=str(sp["self_reply"]),
         )
         reply_txt = str(sp["self_reply"]).strip() + "\n"
 
@@ -765,14 +1156,16 @@ def main() -> None:
             ("x_article_paste_ready.html", x_doc),
             ("self_reply.txt", reply_txt),
         ]:
-            assert "\u2014" not in content, f"Em dash found in {sp['slug']}/{name}"
+            assert "\u2014" not in content, f"Em dash found in {slug}/{name}"
             (kdir / name).write_text(content)
 
         launchpad_kits.append({
             **sp,
             "figures": ordered_figs,
+            "fig_dir": (kdir / "figures").resolve(),
+            "banner_path": final_banner.resolve(),
         })
-        print(f"[OK] Assembled {sp['slug']} ({len(ordered_figs)} figures + 2500x1000 5:2 banner)")
+        print(f"[OK] Assembled {slug} ({len(ordered_figs)} figures + public HTTPS mirror + 5:2 banner)")
 
     lp_html = build_launchpad_html(launchpad_kits)
     assert "\u2014" not in lp_html
