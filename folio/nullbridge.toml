@@ -26,7 +26,7 @@ preprint_url = "https://shelltoho.me/pubs/nullbridge/preprint/"
 author_url = "https://shelltoho.me/"
 author_id = "https://shelltoho.me/#matt"
 base_model = "google/gemma-4-31B-it, thinkingmachines/TML-d24-varloop-research, thinkingmachines/Inkling-2-Mini"
-substack_tables = true
+substack_tables = false
 hero_figure = "fig-verifier-bars"
 keywords = [
   "mechanistic interpretability",
