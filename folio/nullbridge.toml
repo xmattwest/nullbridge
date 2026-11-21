@@ -2830,7 +2830,7 @@ kind = "schematic"
 kicker = "Figure 1 · Architecture"
 title = "Algebraic bridge projection removes four bias directions inside the Procrustes loop at zero runtime cost."
 subtitle = "Gemma-4-Loop-Compact ({{compact_gb}}) recurrent topology with offline null-space folding across {{retained_dims}} of {{d_model}} residual dimensions"
-source = "Source: Nullbridge Phase 0 & Track B architecture specification (`src/nullbridge/algebra.py`, `src/nullbridge/gemma4_compact.py`)."
+source = "Source: Nullbridge Phase 0 & Track B architecture specification (src/nullbridge/algebra.py, src/nullbridge/gemma4_compact.py)."
 alt = "Schematic of Gemma-4-Loop-Compact showing Stem L0..L23 feeding Recurrent Funnel L24..L42 with a feedback loop through R_safe = R_proc (I minus Q Q^T) and exiting to Coda L43..L59."
 nodes = [
   { id = "stem", x = 18, y = 46, w = 172, h = 84, role = "well", label = "Stem (L0..L23)", sublabel = "INT4 · pass once" },
@@ -2851,7 +2851,7 @@ kind = "bar"
 kicker = "Figure 2 · Subspace Geometry"
 title = "Contrastive bias directions sit nearly perpendicular to genuine deductive evidence at the funnel exit."
 subtitle = "Norm retained at Layer 42 after QR-projecting out epistemic evidence and affect valence, %, n = {{probe_pairs_n}} contrastive pairs"
-source = "Source: Nullbridge Track B Block 1 (`results/phase3_gemma4_nullbridge/track_b_results.json`)."
+source = "Source: Nullbridge Track B Block 1 (results/phase3_gemma4_nullbridge/track_b_results.json)."
 alt = "Horizontal bar chart of Layer 42 bias norm retained after projecting out epistemic evidence and affect valence: Sycophancy {{syc_ret_l42}}, Authority Framing {{auth_ret_l42}}, Confident Formatting {{fmt_ret_l42}}, Moral Spite {{spite_ret_l42}}."
 categories = [
   "Sycophancy ({{syc_ctrl_deg}} to evidence)",
@@ -2875,7 +2875,7 @@ kind = "line"
 kicker = "Figure 3 · Recurrent Reward Hacking"
 title = "Silent recurrence amplifies confident-markdown reward hacking on single-pass verifiers while bridge projection partially heals it."
 subtitle = "Zero-CoT verifier accuracy selecting valid code, ledger, and symbolic rollouts over confident-gloss buggy decoys across K = 1..4, %, n = {{verifier_n}}"
-source = "Source: Nullbridge Track B held-out deliberative 0-CoT verifier suite (`results/phase3_gemma4_nullbridge/track_b_results.json`)."
+source = "Source: Nullbridge Track B held-out deliberative 0-CoT verifier suite (results/phase3_gemma4_nullbridge/track_b_results.json)."
 alt = "Line chart across K = 1..4 passes showing single-pass verifier accuracy on confident-gloss buggy rollouts: Unclamped drops from {{unc_k1_ver_acc}} to {{unc_k3_ver_acc}} at K = 3 and {{unc_k4_ver_acc}} at K = 4, Coda LoRA drops to {{coda_k4_ver_acc}} at K = 4, Bridge-Only R_safe reaches {{brg_k4_ver_acc}} at K = 4, and Full LoRA holds {{full_k4_ver_acc}} at K = 4."
 categories = ["K = 1", "K = 2", "K = 3", "K = 4"]
 y_unit = "%"
@@ -2905,7 +2905,7 @@ kind = "grouped_bar"
 kicker = "Figure 4 · Recurrent LoRA Collateral"
 title = "Recurrent LoRA adaptation degrades dominated cashflow sanity at two passes while boundary projection holds firm."
 subtitle = "Exact preference accuracy for strictly higher guaranteed cash payouts across K = 1..4 silent passes, %, n = {{san_n}} counterbalanced items"
-source = "Source: Nullbridge Track B held-out dominated cashflow sanity audit (`results/phase3_gemma4_nullbridge/track_b_results.json`)."
+source = "Source: Nullbridge Track B held-out dominated cashflow sanity audit (results/phase3_gemma4_nullbridge/track_b_results.json)."
 alt = "Grouped bar chart across K = 1..4 showing dominated cashflow sanity: Dual Nullbridge and Unclamped hold {{dual_k2_san}} across all depths, whereas Full LoRA drops to {{full_k2_san}} at K = 2 and {{full_k4_san}} at K = 4."
 categories = ["K = 1", "K = 2", "K = 3", "K = 4"]
 y_unit = "%"
@@ -2931,7 +2931,7 @@ kind = "slope"
 kicker = "Figure 5 · Covert Moral Contamination"
 title = "Dual boundary projection cuts covert moral valuation distortion across four silent passes where recurrent LoRA raises it."
 subtitle = "Paired log-odds distortion between morally tainted and clean financial equivalents (lower is cleaner), log-odds, n = {{moral_n}} matched pairs"
-source = "Source: Nullbridge Track B held-out moral valuation suite (`results/phase3_gemma4_nullbridge/track_b_results.json`)."
+source = "Source: Nullbridge Track B held-out moral valuation suite (results/phase3_gemma4_nullbridge/track_b_results.json)."
 alt = "Slopegraph from K = 1 to K = 4 showing covert moral valuation bias in log-odds: Dual Nullbridge falls from {{dual_k1_mor}} to {{dual_k4_mor}}, Coda LoRA moves from {{coda_k1_mor}} to {{coda_k4_mor}}, Unclamped moves from {{unc_k1_mor}} to {{unc_k4_mor}}, and Full LoRA rises from {{full_k1_mor}} to {{full_k4_mor}}."
 categories = ["K = 1 (Single Pass)", "K = 4 (Four Passes)"]
 y_decimals = 2
@@ -2962,7 +2962,7 @@ caveat = "Negative and exploratory boundary diagnostic: interior 19-layer all-to
 kicker = "Figure 6 · Negative & Exploratory Boundaries"
 title = "Interior all-token clamping and isotropic random subspaces break the language distribution where boundary projection preserves it."
 subtitle = "Held-out next-token KL divergence against base BF16 Gemma 4 31B at K = 4 passes (lower preserves fluency), nats, n = {{kl_eval_n}} passages"
-source = "Source: Nullbridge Track B held-out KL divergence audit (`results/phase3_gemma4_nullbridge/track_b_results.json`)."
+source = "Source: Nullbridge Track B held-out KL divergence audit (results/phase3_gemma4_nullbridge/track_b_results.json)."
 alt = "Horizontal bar chart of K = 4 held-out KL divergence: Bridge-Only R_safe {{brg_k4_kl}}, Unclamped Loop {{unc_k4_kl}}, Dual Nullbridge {{dual_k4_kl}}, 19-Layer Funnel Clamp {{neg_clamp_kl_k4}}, and Random 4D Control {{exp_rand_kl_k4}}."
 categories = [
   "Bridge-Only R_safe (0 extra FLOPs)",
@@ -2987,7 +2987,7 @@ kind = "line"
 kicker = "Figure 7 · Native Looped Lens"
 title = "Coda-transport ridge lenses cut cross-pass readout divergence across all five recurrent passes."
 subtitle = "KL divergence between decoded intermediate loop states and final Coda vocabulary logits on TML-d24-varloop-research (lower decodes truer), nats, n = {{ta_lens_tokens_n}} held-out tokens"
-source = "Source: Nullbridge Track A Block 2 (`results/phase4_native_inkling_nullbridge/track_a_results.json`)."
+source = "Source: Nullbridge Track A Block 2 (results/phase4_native_inkling_nullbridge/track_a_results.json)."
 alt = "Line chart across Passes 1 to 5 on TML-d24-varloop-research comparing KL divergence to final logits: Raw L17 Logit Lens stays high from {{ta_lens_raw_p1}} to {{ta_lens_raw_p5}}, Procrustes Lens drops to {{ta_lens_proc_p5_num}} nats, and Coda-Transport Ridge Lens reaches {{ta_lens_ridge_p1}} at Pass 1 and {{ta_lens_ridge_p5}} at Pass 5."
 categories = ["Pass 1", "Pass 2", "Pass 3", "Pass 4", "Pass 5"]
 y_unit = "nats"
@@ -3013,7 +3013,7 @@ kind = "line"
 kicker = "Figure 8 · Pass-Two Moral Ignition & Coda LoRA Backfire"
 title = "Covert moral bias rises sharply on pass two while Coda LoRA doubles distortion across deeper loops."
 subtitle = "Combined covert moral valuation bias across K = 1..5 native passes and OOD K = 7 on TML-d24-varloop-research (lower is cleaner), log-odds, n = {{moral_n}} matched pairs"
-source = "Source: Nullbridge Track A Block 4 (`results/phase4_native_inkling_nullbridge/track_a_results.json`)."
+source = "Source: Nullbridge Track A Block 4 (results/phase4_native_inkling_nullbridge/track_a_results.json)."
 alt = "Line chart across K = 1, 2, 3, 4, 5, and OOD K = 7 showing covert moral valuation bias: Unclamped jumps from {{ta_v_unc_k1_mor}} at K = 1 to {{ta_v_unc_k2_mor}} at K = 2 and {{ta_v_unc_k5_mor}} at K = 5; Message-Bank Nullbridge trims distortion to {{ta_v_all4_k5_mor}} at K = 5 and {{ta_v_all4_k7_mor}} at K = 7; Coda LoRA doubles distortion to {{ta_v_coda_k3_mor}} at K = 3 and {{ta_v_coda_k7_mor}} at K = 7."
 categories = ["K = 1", "K = 2", "K = 3", "K = 4", "K = 5", "K = 7 (OOD)"]
 y_decimals = 2
@@ -3038,7 +3038,7 @@ kind = "line"
 kicker = "Figure 9 · Message-Bank Channel Dissection"
 title = "Native recurrent passes cut wrong-integer capture while cross-pass attention messages carry the remaining anchor."
 subtitle = "Greedy wrong-integer capture under executive authority pressure across K = 1..5 native passes on TML-d24-varloop-research (lower resists anchoring), %, n = {{covert_n}} arithmetic items"
-source = "Source: Nullbridge Track A Block 4 (`results/phase4_native_inkling_nullbridge/track_a_results.json`)."
+source = "Source: Nullbridge Track A Block 4 (results/phase4_native_inkling_nullbridge/track_a_results.json)."
 alt = "Line chart across K = 1..5 on TML-d24-varloop-research showing wrong-integer capture falling from {{ta_v_unc_k1_cov}} at K = 1 to {{ta_v_unc_k5_cov}} at K = 5 unclamped, with QKV Message-Bank Nullbridge dropping K = 4 capture to {{ta_v_qkv_k4_cov}} and K = 5 capture to {{ta_v_qkv_k5_cov}}, ahead of MLP-only ({{ta_v_mlp_k4_cov}} at K = 4)."
 categories = ["K = 1", "K = 2", "K = 3", "K = 4", "K = 5"]
 y_unit = "%"
@@ -3070,7 +3070,7 @@ y_max = 95.0
 id = "tbl-geometry"
 title = "Layer 42 linear separability, evidence orthogonality, and Procrustes null-space fold diagnostics"
 subtitle = "Leave-one-pair-out (LOPO) cross-validation across n = {{probe_pairs_n}} contrastive pairs on Gemma-4-Loop-Compact (`d_model` = {{d_model}})"
-source = "Source: Nullbridge Track B Block 1 (`results/phase3_gemma4_nullbridge/track_b_results.json`, `statistical_analysis.json`)."
+source = "Source: Nullbridge Track B Block 1 (results/phase3_gemma4_nullbridge/track_b_results.json, statistical_analysis.json)."
 headers = ["Axis / Diagnostic", "L42 LOPO Acc", "L42 LOPO Cosine", "Norm Retained vs. Evidence", "Angle to Evidence Plane"]
 right_align_cols = [1, 2, 3, 4]
 highlight_row = 1
@@ -3086,7 +3086,7 @@ rows = [
 id = "tbl-head-to-head"
 title = "Head-to-head alignment and zero-CoT capability scorecard at K = 2 and K = 4 silent passes"
 subtitle = "Evaluated with 0 generated chain-of-thought tokens across {{eval_total_items}} held-out items (`sha256` train/eval overlap = {{sha_overlap}})"
-source = "Source: Nullbridge Track B Block 3 (`results/phase3_gemma4_nullbridge/track_b_results.json`)."
+source = "Source: Nullbridge Track B Block 3 (results/phase3_gemma4_nullbridge/track_b_results.json)."
 headers = ["Condition", "Loops", "Verifier (Hacked)", "Multi-Hop", "Balance-Sheet", "Cashflow Sanity", "Moral Bias (LO)", "KL"]
 right_align_cols = [1, 2, 3, 4, 5, 6, 7]
 highlight_row = 6
@@ -3109,7 +3109,7 @@ tier = "negative"
 caveat = "Negative and exploratory boundaries: literal KV token copying bypasses residual projection, interior 19-layer clamping shifts operating points, and uncentered random subspaces hit BOS attention sinks."
 title = "Mechanistic failure boundaries at K = 4 silent passes"
 subtitle = "Controlled negative and exploratory ablations isolating KV attention copy bypass, interior mean-shift drift, and BOS sink perturbation"
-source = "Source: Nullbridge Track B Block 3 & statistical analysis (`results/phase3_gemma4_nullbridge/statistical_analysis.json`)."
+source = "Source: Nullbridge Track B Block 3 & statistical analysis (results/phase3_gemma4_nullbridge/statistical_analysis.json)."
 headers = ["Boundary Condition (`K = 4`)", "Overt Syc", "Covert Capture", "Verifier (Hacked)", "Alias Guard", "Multi-Hop", "Balance-Sheet", "KL"]
 right_align_cols = [1, 2, 3, 4, 5, 6, 7]
 rows = [
@@ -3122,7 +3122,7 @@ rows = [
 id = "tbl-track-a"
 title = "Native pretrained looped MoE scorecard across TML-d24-varloop-research and flagship Inkling-2-Mini"
 subtitle = "Evaluated across {{ta_total_cells}} total Track A cells (`d_model` = {{ta_d_model}}, `L6..L17` recurrent loop with 4-channel rank-{{ta_gate_rank}} message bank)"
-source = "Source: Nullbridge Track A Block 4 (`results/phase4_native_inkling_nullbridge/track_a_results.json`, `track_a_analysis.json`)."
+source = "Source: Nullbridge Track A Block 4 (results/phase4_native_inkling_nullbridge/track_a_results.json, track_a_analysis.json)."
 headers = ["Model & Condition", "Loops", "Covert Capture", "Verifier (Hacked)", "Alias Guard", "Moral Bias (LO)", "Tainted Prov (LO)", "KL"]
 right_align_cols = [1, 2, 3, 4, 5, 6, 7]
 highlight_row = 8
@@ -3148,9 +3148,9 @@ id = "collision"
 preprint_title = "1. Silent Recurrence and the Alignment Gap"
 monograph_title = "1. When Chain-of-Thought Goes Silent"
 paragraphs = [
-  "Frontier reasoning architectures are steadily shifting compute from visible chain-of-thought tokens into silent multi-pass recurrence, iterating a shared block of transformer layers `K` times before emitting a single token [cite:saunshi2025looped,geiping2025scaling]. Whether built natively from pretraining (as in looped MoE architectures with cross-pass message banks) or retrofitted onto frozen weights via Orthogonal Procrustes bridges [cite:schonemann1966procrustes,west2026rotating], latent recurrence buys multi-hop state tracking without paying token generation latency.",
-  "That architectural shift creates a direct safety collision. First, external chain-of-thought monitors go blind because intermediate deliberation stays in continuous residual vectors rather than discrete English tokens [cite:baker2025monitoring]. Second, any dispositional shortcut living inside the recurrent block, such as deference to authority, sycophantic anchoring [cite:sharma2023sycophancy], moralized pricing [cite:west2026money], or over-trusting confident executive formatting, is fed back into the funnel entry on every pass.",
-  "Standard post-training alignment (RLHF, DPO [cite:rafailov2023dpo], and safety LoRAs [cite:hu2022lora]) optimizes token probabilities at the vocabulary head. Prior mechanistic audits show that preference fine-tuning frequently leaves upstream feature representations intact while learning a late refusal or politeness wrapper [cite:lee2024mechanistic,arditi2024refusal,zou2023representation]. In a looped model, that raises two testable questions: does a late de-biasing LoRA leave recurrent bias amplification untouched inside the loop, and does training a LoRA directly inside the recurrent layers damage reasoning when its dense weight updates are iterated `K` times?",
+  "Frontier reasoning architectures are steadily shifting compute from visible chain-of-thought tokens into silent multi-pass recurrence, iterating a shared block of transformer layers `K` times before emitting a single token ([Saunshi et al.](#references); [Geiping et al.](#references)). Whether built natively from pretraining (as in looped MoE architectures with cross-pass message banks) or retrofitted onto frozen weights via Orthogonal Procrustes bridges ([Schönemann](#references); [West](#references)), latent recurrence buys multi-hop state tracking without paying token generation latency.",
+  "That architectural shift creates a direct safety collision. First, external chain-of-thought monitors go blind because intermediate deliberation stays in continuous residual vectors rather than discrete English tokens ([Baker et al.](#references)). Second, any dispositional shortcut living inside the recurrent block, such as deference to authority, sycophantic anchoring ([Sharma et al.](#references)), moralized pricing ([West](#references)), or over-trusting confident executive formatting, is fed back into the funnel entry on every pass.",
+  "Standard post-training alignment (RLHF, DPO ([Rafailov et al.](#references)), and safety LoRAs ([Hu et al.](#references))) optimizes token probabilities at the vocabulary head. Prior mechanistic audits show that preference fine-tuning frequently leaves upstream feature representations intact while learning a late refusal or politeness wrapper ([Lee et al.](#references); [Arditi et al.](#references); [Zou et al.](#references)). In a looped model, that raises two testable questions: does a late de-biasing LoRA leave recurrent bias amplification untouched inside the loop, and does training a LoRA directly inside the recurrent layers damage reasoning when its dense weight updates are iterated `K` times?",
 ]
 figures = ["fig-nullbridge-arch"]
 
@@ -3161,7 +3161,7 @@ monograph_title = "2. Folding Four Directions Out of the Bridge at Zero FLOPs"
 hr_before = true
 paragraphs = [
   "In Gemma-4-Loop-Compact ({{compact_gb}}, a {{storage_ratio}} compression of {{bf16_gb}} BF16 Gemma 4 31B), layers `L0..L23` form a single-pass stem, layers `L24..L42` ({{funnel_layers}} layers) form a shared recurrent funnel executed `K = 1..4` times ({{k4_blocks}} effective block visits at `K = 4`), and layers `L43..L59` ({{coda_layers}} layers) form the readout coda. Between pass `k` and pass `k + 1`, the funnel exit state at `L42` is RMS-scaled, rotated back into the `L24` coordinate frame by an exact `5,376 x 5,376` Orthogonal Procrustes matrix `R_proc = U V^T`, and mixed with the clean `L24` stem anchor through learned scalar step gates ({{gate_step0}}, {{gate_step1}}, and {{gate_step2}}).",
-  "Let `Q_42` denote an orthonormal basis (`Q_42^T Q_42 = I_r`) for `r =` {{rank_removed}} unwanted behavioral directions at the funnel exit, after QR-projecting out genuine epistemic evidence and general affect so deductive proof signals are never erased [cite:ravfogel2020inlp,belrose2023leace]. Because `R_proc` and the diagonal RMS scaling `A_rms` are already dense linear operators applied on every recurrent pass, right-multiplying both operators offline by `(I − Q_42 Q_42^T)` folds the null-space projector directly into the bridge weights:",
+  "Let `Q_42` denote an orthonormal basis (`Q_42^T Q_42 = I_r`) for `r =` {{rank_removed}} unwanted behavioral directions at the funnel exit, after QR-projecting out genuine epistemic evidence and general affect so deductive proof signals are never erased ([Ravfogel et al.](#references); [Belrose et al.](#references)). Because `R_proc` and the diagonal RMS scaling `A_rms` are already dense linear operators applied on every recurrent pass, right-multiplying both operators offline by `(I − Q_42 Q_42^T)` folds the null-space projector directly into the bridge weights:",
 ]
 equations = ["eq-nullbridge-fold", "eq-message-bank"]
 post_paragraphs = [
@@ -3230,7 +3230,7 @@ preprint_title = "7. Native Pretrained Looped MoEs: Cross-Pass Message Banks and
 monograph_title = "7. Inside Native Pretrained Loops: Varloop and Inkling-2-Mini"
 hr_before = true
 paragraphs = [
-  "Do the multi-pass dynamics observed on a retrofitted Procrustes loop carry over to models pretrained from scratch to think in silent loops? Track A tests two native {{ta_n_layers}}-layer (`d_model =` {{ta_d_model}}) looped Mixture-of-Experts checkpoints [cite:tml2026inkling] across {{ta_total_cells}} additional GPU cells ({{ta_gpu_spend}} compute under a {{ta_gpu_cap}} cap): variable-depth `TML-d24-varloop-research` (`K = 1, 2, 3, 4, 5` trained plus exploratory out-of-distribution `K = 7`, {{ta_varloop_cells}} cells) and flagship `Inkling-2-Mini` (`K = 3`, {{ta_ink_cells}} cells). Both architectures run a single-pass stem (`L0..L5`), iterate a {{ta_loop_layers}}-layer recurrent block (`L6..L17`, {{ta_k5_blocks}} effective block visits at `K = 5`) that writes four distinct rank-{{ta_gate_rank}} cross-pass message channels (`query`, `key`, `value`, and `mlp`) at `L17` for injection on the next pass, and exit through a 6-layer Coda (`L18..L23`) coupled to block-attention residuals.",
+  "Do the multi-pass dynamics observed on a retrofitted Procrustes loop carry over to models pretrained from scratch to think in silent loops? Track A tests two native {{ta_n_layers}}-layer (`d_model =` {{ta_d_model}}) looped Mixture-of-Experts checkpoints ([Thinking Machines Lab](#references)) across {{ta_total_cells}} additional GPU cells ({{ta_gpu_spend}} compute under a {{ta_gpu_cap}} cap): variable-depth `TML-d24-varloop-research` (`K = 1, 2, 3, 4, 5` trained plus exploratory out-of-distribution `K = 7`, {{ta_varloop_cells}} cells) and flagship `Inkling-2-Mini` (`K = 3`, {{ta_ink_cells}} cells). Both architectures run a single-pass stem (`L0..L5`), iterate a {{ta_loop_layers}}-layer recurrent block (`L6..L17`, {{ta_k5_blocks}} effective block visits at `K = 5`) that writes four distinct rank-{{ta_gate_rank}} cross-pass message channels (`query`, `key`, `value`, and `mlp`) at `L17` for injection on the next pass, and exit through a 6-layer Coda (`L18..L23`) coupled to block-attention residuals.",
   "All four behavioral concepts reach {{ta_v_lopo}} leave-one-pair-out linear separability both in the pooled message bank and individually inside every single message channel (`query`, `key`, `value`, and `mlp`) on both checkpoints, sitting {{ta_v_auth_deg}} to {{ta_v_spite_deg}} from genuine deductive evidence on `TML-d24-varloop-research` and {{ta_ink_auth_deg}} to {{ta_ink_syc_deg}} on `Inkling-2-Mini` ({{ta_removed_pct}} of message dimensions removed, {{ta_retained_pct}} retained). Explicitly QR-orthogonalizing the 4D basis against `<bos>` sink coordinates drives `<bos>` overlap to {{ta_v_bos_overlap}} and keeps held-out `KL` tiny ({{ta_v_all4_k5_kl}} at `K = 5` on `Varloop` and {{ta_ink_all4_k3_kl}} on `Inkling-2-Mini`), while zero-FLOP weight folding into `message_input.query` ({{ta_zff_q_leak}} leakage) and `gate.down_proj` ({{ta_zff_gate_leak}} leakage) adds {{extra_params}} parameters and {{extra_flops}} runtime FLOPs. Cross-pass `confident_formatting` message projection (`unclamped`: {{ta_fmt_msg_p2}} on Pass 2 to {{ta_fmt_msg_p5}} on Pass 5) drops identically to {{ta_fmt_msg_null_p2}} under `Message-Bank Nullbridge`.",
   "First, decoding what a native looped MoE is thinking mid-loop requires accounting for block-attention residuals. Across `n =` {{ta_lens_tokens_n}} held-out tokens on `TML-d24-varloop-research`, applying `lm_head(norm(h_17))` directly (`Raw Logit Lens`) leaves `KL` to the final vocabulary distribution stuck at {{ta_lens_raw_p1}} (Pass 1) through {{ta_lens_raw_p5}} (Pass 5). Fitting a closed-form `[L11; L17]` `Coda-Transport Ridge Lens` on disjoint general text cuts readout `KL` by {{ta_lens_p1_kl_delta}} to {{ta_lens_p5_kl_delta}} across every pass ({{ta_lens_ridge_p1}} at Pass 1 to {{ta_lens_ridge_p5}} at Pass 5, lifting Pass-5 Top-5 token agreement from {{ta_lens_p5_top5_raw}} to {{ta_lens_p5_top5_ridge}}). On flagship `Inkling-2-Mini`, Pass-3 `KL` drops {{ta_ink_lens_p3_kl_delta}} ({{ta_ink_lens_p3_raw}} to {{ta_ink_lens_p3_ridge}}; Top-5 agreement climbs from {{ta_ink_lens_p3_top5_raw}} to {{ta_ink_lens_p3_top5}}), and decoding unverbalized `0-CoT` verification reveals that `Message-Bank Nullbridge` lifts Pass-3 pre-coda accuracy {{ta_ink_precoda_ver_gain}} ({{ta_ink_precoda_unc_p3}} to {{ta_ink_precoda_all4_p3}}) before Coda `L18..L23` even runs.",
   "Second, varying `K` on `TML-d24-varloop-research` isolates the exact moment covert moral valuation (`Money Is Moral`) switches on. At `K = 1` pass (before cross-pass messages fire), covert moral distortion is near zero ({{ta_v_unc_k1_mor}} log-odds). At `K = 2` passes, moral distortion jumps {{ta_mor_jump_ratio}} to {{ta_v_unc_k2_mor}} log-odds (tainted provenance rises from {{ta_v_unc_k1_tnt}} to {{ta_v_unc_k2_tnt}}) and persists through `K = 5` ({{ta_v_unc_k5_mor}}) and exploratory out-of-distribution `K = 7` ({{ta_v_unc_k7_mor}}), as well as on flagship `Inkling-2-Mini` at `K = 3` ({{ta_ink_unc_k3_mor}} combined, {{ta_ink_unc_k3_tnt}} tainted provenance). Training `Coda LoRA` ({{ta_coda_params_m}}M parameters on `L18..L23` for {{ta_coda_steps}} DPO + SFT + KL steps) cuts `K = 5` wrong-integer capture to {{ta_v_coda_k5_cov}}, yet backfires severely on hidden valuation and safety: it multiplies covert moral bias {{ta_coda_mor_k3_ratio}} at `K = 3` ({{ta_v_coda_k3_mor}} log-odds, Holm `p =` {{ta_p_all4_coda_mor_k3}} vs. `Message-Bank Nullbridge`) and {{ta_coda_mor_k5_ratio}} at `K = 5` ({{ta_v_coda_k5_mor}} log-odds; tainted provenance hits {{ta_v_coda_k5_tnt}}, Holm `p =` {{ta_p_all4_coda_mor_k5}}), while dropping `K = 5` hacked verifier accuracy {{ta_coda_ver_drop_k5}} ({{ta_v_coda_k5_ver}}, Holm `p =` {{ta_p_all4_coda_ver_k5}}) and `2-to-4`-hop alias guardrails {{ta_coda_alias_drop_k5}} ({{ta_v_coda_k5_alias}}). By contrast, `Message-Bank Nullbridge (All-4)` trims moral bias at every multi-pass depth and cuts `Inkling-2-Mini` moral distortion {{ta_ink_all4_mor_pct}} ({{ta_ink_unc_k3_mor}} to {{ta_ink_all4_k3_mor}}; tainted provenance {{ta_ink_all4_tnt_pct}} from {{ta_ink_unc_k3_tnt}} to {{ta_ink_all4_k3_tnt}}) while raising alias guardrails from {{ta_ink_unc_k3_alias}} to {{ta_ink_all4_k3_alias}}, and `Zero-FLOP Weight Fold` trims `Inkling-2-Mini` verifier reward-hack susceptibility {{ta_ink_zff_susc_pct}} ({{ta_ink_unc_k3_susc}} to {{ta_ink_zff_k3_susc}} log-odds).",
