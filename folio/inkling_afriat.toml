@@ -1254,7 +1254,7 @@ y_max = 3.4
   role = "primary"
   values = ["v_debt_k1", "v_debt_k2", "v_debt_k3", "v_debt_k4", "v_debt_k5"]
   [[figures.series]]
-  label = "Neutral invoice control"
+  label = "Neutral control"
   role = "context"
   values = ["v_scl_k1", "v_scl_k2", "v_scl_k3", "v_scl_k4", "v_scl_k5"]
 
@@ -1299,7 +1299,7 @@ y_max = 2.5
   role = "focus"
   values = ["ink_st_tnt_g_m2", "ink_st_tnt_g_m1", "ink_st_tnt_g_0", "ink_st_tnt_g_p1", "ink_st_tnt_g_p2"]
   [[figures.series]]
-  label = "Generic mood control"
+  label = "Mood control"
   role = "context"
   values = ["ink_st_tnt_v_m2", "ink_st_tnt_v_m1", "ink_st_tnt_v_0", "ink_st_tnt_v_p1", "ink_st_tnt_v_p2"]
 
@@ -1313,7 +1313,7 @@ source = "Source: results/phase5_inkling_afriat_garp/afriat_inkling_analysis.jso
 alt = "Grouped bar chart comparing Vocal <|content_thinking|> against Silent 0-CoT loops on 0%-APR balance sheets: Inkling-2-Mini rises from {{ink_debt_0cot_acc}} to {{ink_debt_think_acc}}, and Varloop rises from {{v_debt_0cot_acc}} to {{v_debt_think_acc}}."
 categories = ["Inkling-2-Mini", "Varloop"]
 y_unit = "%"
-y_decimals = 1
+y_decimals = 0
 y_min = 0.0
 y_max = 100.0
   [[figures.series]]
@@ -1384,7 +1384,7 @@ rows = [
 
 [[sections]]
 id = "subtext"
-preprint_title = "1. Silent Recurrence Ignites Moral Subtext Behind Clinical Numbers"
+preprint_title = "Silent Recurrence Ignites Moral Subtext Behind Clinical Numbers"
 monograph_title = "More Silent Thinking Makes Choices More Moral, Not Colder"
 paragraphs = [
   "Every financial prompt in this study was stripped of moral and emotional adjectives. A `98/2` split, a neighbor's favor, a `0%`-APR loan, and a cited overseas supplier all arrived on the page as dry accounting options.",
@@ -1402,7 +1402,7 @@ post_paragraphs = [
 
 [[sections]]
 id = "price_theory"
-preprint_title = "2. Putting Moral Taboos Through Sidney Afriat's Revealed-Preference Test"
+preprint_title = "Putting Moral Taboos Through Sidney Afriat's Revealed-Preference Test"
 monograph_title = "Putting Moral Taboos Through Price Theory"
 paragraphs = [
   "In microeconomics, rationality does not mean caring only about your own bank account. Under Sidney Afriat's theorem ([Afriat](#references); [Varian](#references)), a chooser who values clean hands or fairness alongside cash is rational so long as their choices never cycle when exchange rates cross.",
@@ -1418,7 +1418,7 @@ quotes = [
 
 [[sections]]
 id = "erasure"
-preprint_title = "3. Surgical Eight-Dimensional Message Erasure Restores Selfishness and Debt Neutrality"
+preprint_title = "Surgical Eight-Dimensional Message Erasure Restores Selfishness and Debt Neutrality"
 monograph_title = "Erasing Eight Directions Turns Off Debt Guilt and Restores Selfishness"
 paragraphs = [
   "If human moral axes inside the message bank carry those non-monetary preferences across passes, projecting out just those {{rank_removed}} directions ({{removed_pct}} of `R^2304`, leaving {{retained_pct}} untouched; [Belrose et al.](#references)) should strip them out without a single extra token.",
@@ -1432,7 +1432,7 @@ post_paragraphs = [
 
 [[sections]]
 id = "steering"
-preprint_title = "4. Bidirectional Message-Bank Steering and Post-Hoc Corporate Cover Stories"
+preprint_title = "Bidirectional Message-Bank Steering and Post-Hoc Corporate Cover Stories"
 monograph_title = "Turning the Moral Dimmer Switch Inside the Message Bank"
 paragraphs = [
   "Even where passive erasure leaves an early taboo standing, actively steering the cross-pass message bank with money-free moral vectors dials dollar choices up and down on command. Injecting `Guilt` (`−2σ` to `+2σ`) into `Inkling-2-Mini`'s message bank flipped dirty-money forfeiture from **{{ink_tnt_g_m2_rate}}** all the way to **{{ink_tnt_g_p2_rate}}** ({{ink_steer_tnt_guilt}} log-odds), while `Spite` swung `98/2` Ultimatum rejection by **{{ink_steer_ult_spite}}** log-odds.",
@@ -1445,7 +1445,7 @@ figures = ["fig-message-steering"]
 
 [[sections]]
 id = "scratchpad_cure"
-preprint_title = "5. Private <|content_thinking|> Scrubbing and the 0%-APR Balance-Sheet Cure"
+preprint_title = "Private <|content_thinking|> Scrubbing and the 0%-APR Balance-Sheet Cure"
 monograph_title = "Opening the Scratchpad Cures the 0%-Loan Blind Spot"
 paragraphs = [
   "Everything above ran with `0` chain-of-thought words. Turning on Inkling's native `<|content_thinking|>` scratchpad (`Thinking effort level: 0.7`) exposed the one place where silent moral intuition breaks actual accounting.",

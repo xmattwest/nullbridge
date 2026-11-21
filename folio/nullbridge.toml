@@ -2973,15 +2973,15 @@ y_decimals = 2
 y_min = 0.0
 y_max = 6.5
   [[figures.series]]
-  label = "Message-bank projection"
+  label = "Msg projection"
   role = "focus"
   values = ["ta_v_all4_k1_mor", "ta_v_all4_k2_mor", "ta_v_all4_k3_mor", "ta_v_all4_k4_mor", "ta_v_all4_k5_mor", "ta_v_all4_k7_mor"]
   [[figures.series]]
-  label = "Unclamped native loop"
+  label = "Unclamped loop"
   role = "primary"
   values = ["ta_v_unc_k1_mor", "ta_v_unc_k2_mor", "ta_v_unc_k3_mor", "ta_v_unc_k4_mor", "ta_v_unc_k5_mor", "ta_v_unc_k7_mor"]
   [[figures.series]]
-  label = "Coda LoRA (backfires)"
+  label = "Coda LoRA"
   role = "context"
   values = ["ta_v_coda_k1_mor", "ta_v_coda_k2_mor", "ta_v_coda_k3_mor", "ta_v_coda_k4_mor", "ta_v_coda_k5_mor", "ta_v_coda_k7_mor"]
 
@@ -3041,7 +3041,7 @@ focus_index = 0
 [[tables]]
 id = "tbl-geometry"
 title = "Layer 42 linear separability, evidence orthogonality, and Procrustes null-space fold diagnostics"
-subtitle = "Leave-one-pair-out (LOPO) cross-validation across n = {{probe_pairs_n}} contrastive pairs on Gemma-4-Loop-Compact (`d_model` = {{d_model}})"
+subtitle = "Leave-one-pair-out (LOPO) cross-validation across n = {{probe_pairs_n}} contrastive pairs on Gemma-4-Loop-Compact (d_model = {{d_model}})"
 source = "Source: Nullbridge Track B Block 1 (results/phase3_gemma4_nullbridge/track_b_results.json, statistical_analysis.json)."
 headers = ["Axis / Diagnostic", "L42 LOPO Acc", "L42 LOPO Cosine", "Norm Retained vs. Evidence", "Angle to Evidence Plane"]
 right_align_cols = [1, 2, 3, 4]
@@ -3057,7 +3057,7 @@ rows = [
 [[tables]]
 id = "tbl-head-to-head"
 title = "Head-to-head alignment and zero-CoT capability scorecard at K = 2 and K = 4 silent passes"
-subtitle = "Evaluated with 0 generated chain-of-thought tokens across {{eval_total_items}} held-out items (`sha256` train/eval overlap = {{sha_overlap}})"
+subtitle = "Evaluated with 0 generated chain-of-thought tokens across {{eval_total_items}} held-out items (SHA-256 train/eval overlap = {{sha_overlap}})"
 source = "Source: Nullbridge Track B Block 3 (results/phase3_gemma4_nullbridge/track_b_results.json)."
 headers = ["Condition", "Loops", "Verifier (Hacked)", "Multi-Hop", "Balance-Sheet", "Cashflow Sanity", "Moral Bias (LO)", "KL"]
 right_align_cols = [1, 2, 3, 4, 5, 6, 7]
@@ -3093,7 +3093,7 @@ rows = [
 [[tables]]
 id = "tbl-track-a"
 title = "Native pretrained looped MoE scorecard across TML-d24-varloop-research and flagship Inkling-2-Mini"
-subtitle = "Evaluated across {{ta_total_cells}} total Track A cells (`d_model` = {{ta_d_model}}, `L6..L17` recurrent loop with 4-channel rank-{{ta_gate_rank}} message bank)"
+subtitle = "Evaluated across {{ta_total_cells}} total Track A cells (d_model = {{ta_d_model}}, L6..L17 recurrent loop with 4-channel rank-{{ta_gate_rank}} message bank)"
 source = "Source: Nullbridge Track A Block 4 (results/phase4_native_inkling_nullbridge/track_a_results.json, track_a_analysis.json)."
 headers = ["Model & Condition", "Loops", "Covert Capture", "Verifier (Hacked)", "Alias Guard", "Moral Bias (LO)", "Tainted Prov (LO)", "KL"]
 right_align_cols = [1, 2, 3, 4, 5, 6, 7]
@@ -3119,7 +3119,7 @@ rows = [
 
 [[sections]]
 id = "crooked_ledger"
-preprint_title = "1. Multi-Pass Reward-Hacking Amplification in Silent Verifiers"
+preprint_title = "Multi-Pass Reward-Hacking Amplification in Silent Verifiers"
 monograph_title = "A Crooked Ledger in a Suit"
 paragraphs = [
   "One of the best reasons to run a looped model is single-pass verification: checking code patches, ledgers, or agent plans in `0` generated words by letting hidden states cycle `K` times before reading out a verdict ([Geiping et al.](#references)). When buggy rollouts arrive in plain text, `Gemma-4-Loop-Compact` holds {{unc_k4_ver_plain}} verifier accuracy across four silent passes while multi-hop tracking climbs from {{unc_k1_mh}} to **{{unc_k4_mh}}**.",
@@ -3131,7 +3131,7 @@ quotes = [
 
 [[sections]]
 id = "proof_vs_bluster"
-preprint_title = "2. Subspace Geometry: Bluster Sits Orthogonal to Deductive Proof"
+preprint_title = "Subspace Geometry: Bluster Sits Orthogonal to Deductive Proof"
 monograph_title = "Bluster Sits Almost 90 Degrees from Proof"
 paragraphs = [
   "A natural worry is that erasing confidence or authority sensitivity might make a model worse at recognizing real mathematical proof. Probing {{probe_pairs_n}} matched pairs across all {{n_layers}} layers of Gemma 4 rules that out before a single benchmark prompt runs.",
@@ -3142,7 +3142,7 @@ tables = ["tbl-geometry"]
 
 [[sections]]
 id = "lora_trap"
-preprint_title = "3. Why Standard Safety LoRAs Crack or Backfire Under Recurrence"
+preprint_title = "Why Standard Safety LoRAs Crack or Backfire Under Recurrence"
 monograph_title = "Why Standard Safety LoRAs Break Inside a Loop"
 paragraphs = [
   "Could standard preference tuning fix the loop instead? Using the exact same anti-sycophancy and anti-bluster pairs ({{lora_train_n}} examples, `0` evaluation overlap; [Rafailov et al.](#references); [Hu et al.](#references)), I trained two rank-{{lora_rank}} adapters: `Coda LoRA` ({{coda_params_m}}M parameters after the loop) and `Full LoRA` ({{full_params_m}}M parameters inside and after the loop).",
@@ -3155,7 +3155,7 @@ figures = ["fig-lora-collateral"]
 
 [[sections]]
 id = "zero_cost_bridge"
-preprint_title = "4. Subtracting Four Directions Inside the Rotation Matrix at Zero FLOPs"
+preprint_title = "Subtracting Four Directions Inside the Rotation Matrix at Zero FLOPs"
 monograph_title = "Subtracting Four Directions Inside the Bridge for Free"
 paragraphs = [
   "Because `Gemma-4-Loop-Compact` already multiplies its Layer 42 state by a dense Orthogonal Procrustes matrix `R_proc` on every pass ([Schönemann](#references); [West](#references)), removing those four shortcut directions costs **{{extra_params}} extra parameters** and **{{extra_flops}} runtime FLOPs**. You right-multiply the bridge matrix once offline:",
@@ -3168,7 +3168,7 @@ tables = ["tbl-head-to-head"]
 
 [[sections]]
 id = "native_loops"
-preprint_title = "5. Native Pretrained Loops: Moral Ignition and the Anchor Wire in Inkling"
+preprint_title = "Native Pretrained Loops: Moral Ignition and the Anchor Wire in Inkling"
 monograph_title = "Native Loops: Moral Taboos Switch On at Pass Two"
 paragraphs = [
   "Does a model trained from scratch to think in loops behave the same way? Testing Thinking Machines Lab's native {{ta_n_layers}}-layer looped MoEs (`TML-d24-varloop-research` across `K = 1..5` plus OOD `K = 7`, and flagship `Inkling-2-Mini` at `K = 3`; [Thinking Machines Lab](#references)) across {{ta_total_cells}} GPU runs uncovered the exact pass where hidden moral bias wakes up.",
@@ -3186,7 +3186,7 @@ post_paragraphs = [
 id = "qkv_and_boundaries"
 tier = "negative"
 caveat = "Negative and exploratory boundaries: residual projection does not block verbatim KV digit copying on retrofitted Gemma 4, clamping every interior layer visit shifts operating points, and uncentered random vectors hit BOS attention sinks."
-preprint_title = "6. Channel Dissection and Three Honest Failure Boundaries"
+preprint_title = "Channel Dissection and Three Honest Failure Boundaries"
 monograph_title = "Finding the Anchor Wire, and Three Shortcuts That Broke"
 paragraphs = [
   "Putting the native `QKV` channel test alongside three negative controls maps the exact mechanical limits of subspace editing in looped models:",
