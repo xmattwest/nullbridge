@@ -1,14 +1,14 @@
-# Part 4: Revealed Preference, Afriat Efficiency, and Moral Geometry in Native Looped MoEs
+# Coherent Moral Utility (Part 4): Retention-focused Dawn State manuscript manifest
 # Compiled by Folio (`folio verify` + `folio build`) across preprint, monograph, Substack, X, and syndication.
 
 base_dir = ".."
 
 [meta]
-title = "Coherent Moral Utility in Silent Loops: Afriat Revealed Preference and Cross-Pass Moral Geometry in Inkling"
-preprint_title = "Revealed-Preference Coherence and Cross-Pass Moral Geometry in Native Looped Mixture-of-Experts Language Models"
+title = "LLMs Exhibit Coherent Moral Utility Across Intersecting Afriat Budgets"
+preprint_title = "LLMs Exhibit Coherent Moral Utility Across Intersecting Afriat Budgets"
 monograph_title = "Coherent Moral Utility"
-substack_title_alt = "Silent Loops Double Dirty-Money Rejection Yet Hit {{ink_unc_modal_ccei}} Afriat Utility Coherence. Verbal Scratchpads Cure the 0%-APR Loan Tax."
-subtitle = "Across {{concept_pairs_n}} zero-finance moral concept pairs, {{tx_pairs_n}} clinical transactions, and {{garp_obs_n}} intersecting Afriat budget choices per cell on TML-d24-varloop-research and flagship Inkling-2-Mini, silent recurrence ignites moral taboo aversion {{v_k1_k2_ratio}} on pass two while satisfying Afriat's theorem at {{ink_unc_modal_ccei}} cost efficiency, and private thinking traces lift 0%-APR loan balance-sheet accuracy from {{ink_debt_0cot_acc}} to {{ink_debt_think_acc}}."
+substack_title_alt = "Silent Loops Double Dirty-Money Rejection Yet Obey Price Theory at {{ink_unc_modal_ccei}} Efficiency. Scratchpads Cure the 0%-Loan Tax."
+subtitle = "Silent loops amplify moral taboos {{v_k1_k2_ratio}} on pass two yet obey Afriat's price-theory test at {{ink_unc_modal_ccei}} efficiency, while verbal scratchpads cure 0%-loan math."
 author = "Matt West"
 date = "November 21, 2026"
 iso_date = "2026-11-21"
@@ -19,7 +19,7 @@ home_url = "https://shelltoho.me/"
 monograph_status = "Essay · Part 4"
 preprint_status = "Preprint · Part 4 · Not peer reviewed"
 part1_url = "https://shelltoho.me/pubs/money-is-moral/"
-part1_label = "Part 1: Money Is Moral"
+part1_label = "Part 1: Inside the Weights, Money Is Moral"
 repo_url = "https://github.com/xmattwest/nullbridge"
 canonical_url = "https://shelltoho.me/pubs/coherent-moral-utility/"
 preprint_url = "https://shelltoho.me/pubs/coherent-moral-utility/preprint/"
@@ -27,7 +27,7 @@ author_url = "https://shelltoho.me/"
 author_id = "https://shelltoho.me/#matt"
 base_model = "thinkingmachines/TML-d24-varloop-research, thinkingmachines/Inkling-2-Mini"
 substack_tables = true
-hero_figure = "fig-afriat-loop-ignition"
+hero_figure = "fig-afriat-ccei-bars"
 keywords = [
   "revealed preference",
   "Afriat theorem",
@@ -36,26 +36,19 @@ keywords = [
   "mechanistic interpretability",
   "looped transformers",
   "Inkling-2-Mini",
-  "moral psychology",
+  "moral utility",
 ]
 
-abstract = "When a language model forfeits guaranteed cash to avoid tainted funds, punish an asymmetric split, or prepay a zero-interest loan, two competing explanations arise: either latent heuristics make choices erratic and cyclically inconsistent, or the model maximizes a stable moralized utility function with well-defined shadow prices. Across variable-depth TML-d24-varloop-research (K = 1..5 silent passes) and flagship Inkling-2-Mini (K = 3 silent passes plus explicit <|content_thinking|> deliberation), I pair Sidney Afriat's (1967) revealed-preference test ({{garp_budgets_n}} intersecting linear budget lines across {{garp_regimes_n}} regimes, {{bronars_power}} Bronars Monte Carlo rejection power at {{bronars_ccei}} random CCEI) with mechanistic probing and causal interventions inside the 4-channel cross-pass message bank (`d_model` = {{d_model}}). Across {{concept_pairs_n}} purely human concept pairs containing zero digits and zero financial terms, all eight moral axes (`guilt`, `captivity`, `contamination`, `sacrilege`, `spite`, `predation`, `awe_dread`, `warmth`) achieve {{ink_guilt_lopo}} leave-one-pair-out linear separability inside both models' message banks ({{ink_contam_deg}} to {{ink_warmth_deg}} orthogonal to generic affect on Inkling-2-Mini). Passively reading {{tx_pairs_n}} clinical financial pairs with zero emotional words activates non-financial `guilt` on 0%-APR debt ({{v_debt_guilt_beta}} partial beta, `d_z` = {{v_debt_guilt_dz}}, Holm `p` = {{v_debt_guilt_p}}) and `predation` on asymmetric splits ({{v_insult_pred_beta}}) and dirty money ({{v_taint_pred_beta}}). Varying silent recurrent depth on identical weights shows that looping amplifies rather than cools moral valuation: mean absolute pricing distortion jumps {{v_k1_k2_ratio}} from {{v_abs_k1}} (`K = 1`) to {{v_abs_k2}} (`K = 2`) and {{v_abs_k5}} (`K = 5`, {{v_k1_k5_ratio}}), doubling tainted-provenance rejection ({{v_tnt_k1}} to {{v_tnt_k5}} log-odds), igniting 0%-APR debt aversion ({{v_debt_k1}} to {{v_debt_k5}}), and preserving Blount (1995) human-over-computer intentionality sensitivity ({{v_blount_k5_did}} log-odds DiD at `K = 5`, `p` = {{v_blount_k5_p}}). Despite sacrificing pure monetary fungibility, Inkling-2-Mini satisfies Afriat's theorem at {{ink_unc_modal_ccei}} mean modal CCEI ({{ink_unc_exp_ccei}} expected-bundle CCEI, exact {{ink_prov_ccei}} CCEI on tainted provenance and provoked splits). Passively projecting out the {{rank_removed}}-dimensional moral subspace ({{removed_pct}} of `R^2304`) erases Inkling-2-Mini's 0%-APR debt anomaly ({{ink_debt_unc_lo}} to {{ink_debt_clamp_lo}}, Holm `p` = {{ink_debt_clamp_p}}), cuts asymmetric-split rejection {{ink_insult_clamp_pct}} ({{ink_insult_unc_lo}} to {{ink_insult_clamp_lo}}), and lifts neutral budget self-payout capture {{ink_social_he_gain}} (from {{ink_social_unc_he}} to {{ink_social_clamp_he}} at exact {{ink_social_clamp_ccei}} CCEI), while additive message-bank steering bidirectionally controls rejection ({{ink_steer_ult_spite}} log-odds under `spite`, {{ink_steer_tnt_guilt}} on dirty money under `guilt`). Finally, silent `0-CoT` rationales cloak moral pricing in {{ink_0cot_jargon}} cold financial jargon while failing 0%-APR loan subtraction at {{ink_debt_0cot_acc}} (chance); enabling `<|content_thinking|>` surfaces {{ink_think_moral}} private normative deliberation and lifts 0%-APR balance-sheet accuracy to {{ink_debt_think_acc}} on Inkling-2-Mini ({{ink_debt_cure_pp}}) and {{v_debt_think_acc}} on Varloop ({{v_debt_cure_pp}})."
+abstract = "When a language model turns down guaranteed cash to avoid tainted profits, punish a lopsided split, or retire a zero-interest loan early, two competing explanations arise: either framing quirks trigger erratic, cyclic mistakes, or the model maximizes a coherent moralized utility function with stable shadow prices. Across variable-depth `TML-d24-varloop-research` (`K = 1..5` silent passes) and flagship `Inkling-2-Mini` (`K = 3` silent passes plus `<|content_thinking|>` deliberation), I pair Sidney Afriat's revealed-preference theorem ({{garp_budgets_n}} intersecting linear budget lines across {{garp_regimes_n}} regimes, {{bronars_power}} Bronars Monte Carlo rejection power against {{bronars_ccei}} random CCEI) with probing and causal steering inside the 4-channel cross-pass message bank (`d_model =` {{d_model}}). Across {{concept_pairs_n}} money-free human story pairs (`0` digits, `0` financial words), all eight moral emotions achieve {{ink_guilt_lopo}} leave-one-pair-out linear separability inside both models' message banks ({{ink_contam_deg}} to {{ink_warmth_deg}} orthogonal to generic mood on `Inkling-2-Mini`). Reading {{tx_pairs_n}} emotion-free financial contracts activates `guilt` on `0%`-APR debt (`partial beta =` {{v_debt_guilt_beta}}, `d_z =` {{v_debt_guilt_dz}}, Holm `p =` {{v_debt_guilt_p}}) and `predation` on `98/2` splits ({{v_insult_pred_beta}}) and dirty money ({{v_taint_pred_beta}}). Varying recurrent depth on identical weights shows that silent looping amplifies moral subtext {{v_k1_k2_ratio}} on pass two ({{v_abs_k1}} to {{v_abs_k2}} log-odds) and {{v_k1_k5_ratio}} by pass five ({{v_abs_k5}}), doubling dirty-money rejection ({{v_tnt_k1}} to {{v_tnt_k5}}) and preserving Blount human-over-computer intentionality punishment ({{v_blount_k5_did}} log-odds DiD at `K = 5`, `p =` {{v_blount_k5_p}}). Despite sacrificing pure monetary fungibility, `Inkling-2-Mini` satisfies Afriat's theorem at {{ink_unc_modal_ccei}} mean modal CCEI ({{ink_unc_exp_ccei}} expected-bundle CCEI, exact {{ink_prov_ccei}} CCEI on tainted provenance). Projecting out {{rank_removed}} moral directions ({{removed_pct}} of `R^2304`) erases `Inkling-2-Mini` `0%`-APR debt bias ({{ink_debt_unc_lo}} to {{ink_debt_clamp_lo}}, Holm `p =` {{ink_debt_clamp_p}}), cuts `98/2` rejection {{ink_insult_clamp_pct}}, and lifts neutral GARP self-payout share {{ink_social_he_gain}} ({{ink_social_unc_he}} to {{ink_social_clamp_he}} at exact {{ink_social_clamp_ccei}} CCEI), while additive message steering flips dirty-money forfeiture from {{ink_tnt_g_m2_rate}} to {{ink_tnt_g_p2_rate}} ({{ink_steer_tnt_guilt}} log-odds). Finally, silent `0-CoT` rationales cloak moral choices in {{ink_0cot_jargon}} corporate jargon while stalling at {{ink_debt_0cot_acc}} (chance) on `0%`-APR loan net-worth subtraction; enabling `<|content_thinking|>` surfaces {{ink_think_moral}} private moral deliberation and lifts `0%`-APR balance-sheet accuracy to {{ink_debt_think_acc}} on `Inkling-2-Mini` ({{ink_debt_cure_pp}}) and {{v_debt_think_acc}} on `Varloop` ({{v_debt_cure_pp}})."
 
-lede = "Across {{garp_obs_n}} intersecting Afriat budget choices per cell and {{tx_pairs_n}} zero-affect financial pairs on TML-d24-varloop-research (`K = 1..5`) and Inkling-2-Mini (`K = 3`), silent recurrent passes amplify moral taboo pricing {{v_k1_k2_ratio}} on pass two rather than cooling choices toward Homo Economicus. Formal revealed-preference auditing shows Inkling-2-Mini obeys Afriat's theorem at {{ink_unc_modal_ccei}} CCEI (versus {{bronars_ccei}} random choice), proving its moral tradeoffs maximize a coherent utility function, while explicit `<|content_thinking|>` scratchpads cure silent `0-CoT` 0%-APR loan blind spots ({{ink_debt_0cot_acc}} to {{ink_debt_think_acc}})."
+lede = "Across {{garp_obs_n}} intersecting Afriat budget choices per cell and {{tx_pairs_n}} emotion-free financial contracts on TML-d24-varloop-research (`K = 1..5`) and Inkling-2-Mini (`K = 3`), silent thinking loops amplify moral taboo pricing {{v_k1_k2_ratio}} on pass two rather than cooling choices toward Homo Economicus. Revealed-preference auditing proves Inkling-2-Mini obeys Afriat's theorem at {{ink_unc_modal_ccei}} cost efficiency (versus {{bronars_ccei}} random choice), while explicit `<|content_thinking|>` scratchpads cure silent `0-CoT` 0%-APR loan blind spots ({{ink_debt_0cot_acc}} to {{ink_debt_think_acc}})."
 
-x_hook = "Tested Afriat's revealed-preference theorem (GARP) + Money Is Moral on native looped Inkling-2-Mini & Varloop (K=1..5). Silent loops don't make choices colder: moral taboo pricing jumps {{v_k1_k2_ratio}} on Pass 2, yet Inkling-2-Mini hits {{ink_unc_modal_ccei}} Afriat CCEI. Turning on <|content_thinking|> lifts 0%-APR loan math from {{ink_debt_0cot_acc}} to {{ink_debt_think_acc}}."
+x_hook = "When an LLM turns down free money to dodge shady profits or punish a 98/2 split, is it confused or maximizing a coherent moral utility function? Tested Afriat's theorem (GARP) across {{garp_budgets_n}} crossing budgets on Inkling-2-Mini & Varloop: {{ink_unc_modal_ccei}} cost efficiency, and <|content_thinking|> lifts 0%-loan math from {{ink_debt_0cot_acc}} to {{ink_debt_think_acc}}."
 
 opening_paragraphs = [
-  "LLM behavioral economics, which studies how language models value money, risk, and fairness, faces a foundational ambiguity whenever a model turns down guaranteed cash. In Money Is Moral (Part 1), aligned models rejected asymmetric splits, discounted legally clean surplus from cited counterparties, and prepaid zero-interest loans while justifying every choice in clinical treasury prose. Yet binary vignettes alone cannot distinguish two opposite mechanisms: incoherent heuristic confusion (cyclic, framing-fragile mistakes that violate basic price theory) versus a coherent moralized utility function in which clean provenance and social reciprocity carry consistent shadow prices.",
-  "Native looped Mixture-of-Experts models (`TML-d24-varloop-research` across `K = 1..5` silent passes and flagship `Inkling-2-Mini` at `K = 3` passes plus optional `<|content_thinking|>` verbal deliberation) turn that economic question into a clean architectural experiment. Holding weights fixed while dialing recurrent depth `K` from `1` to `5` tests whether extra silent thinking cools moral gut reactions toward textbook Homo Economicus or sharpens implicit social norms, while Sidney Afriat's (1967) Generalized Axiom of Revealed Preference (GARP) tests whether the resulting bundle choices can be rationalized by a continuous, nonsatiated utility function.",
-]
-
-opening_summary = [
-  "Non-financial moral geometry inside the cross-pass message bank: across {{concept_pairs_n}} purely human story pairs (`0` digits, `0` financial words), all `8` moral emotions separate at {{ink_guilt_lopo}} leave-one-pair-out accuracy in both `Varloop` and `Inkling-2-Mini` (`<bos>` overlap {{v_bos_overlap}}). Reading clinical `0%`-APR debt prompts with `0` emotional words fires `guilt` (`partial beta =` {{v_debt_guilt_beta}}, `d_z =` {{v_debt_guilt_dz}}), while asymmetric splits ({{v_insult_pred_beta}}) and dirty money ({{v_taint_pred_beta}}) fire `predation`.",
-  "Silent loops ignite moral valuation rather than cooling it: dialing `Varloop` from `K = 1` to `K = 5` multiplies mean moral pricing distortion {{v_k1_k2_ratio}} at `K = 2` ({{v_abs_k1}} to {{v_abs_k2}} log-odds) and {{v_k1_k5_ratio}} at `K = 5` ({{v_abs_k5}}), doubling dirty-money rejection ({{v_tnt_k1}} to {{v_tnt_k5}}), igniting `0%`-APR loan prepayment ({{v_debt_k1}} to {{v_debt_k5}}; dollar forfeiture rises from {{v_wtp_debt_k1}} to {{v_wtp_debt_k5}}), and preserving Blount (1995) human-over-computer intentionality punishment ({{v_blount_k5_did}} log-odds at `K = 5`, `p =` {{v_blount_k5_p}}).",
-  "Near-exact Afriat utility coherence (`CCEI` = {{ink_unc_modal_ccei}}): across `4` intersecting `T =` {{garp_budgets_n}} linear budget regimes ({{bronars_power}} Bronars rejection power against uniform random `CCEI =` {{bronars_ccei}}), `Inkling-2-Mini` achieves {{ink_unc_modal_ccei}} mean modal `CCEI` ({{ink_unc_exp_ccei}} expected-bundle `CCEI`, `0.0` GARP violations on `3` of `4` regimes), proving its clean-money and distributional tradeoffs maximize a coherent moralized utility function.",
-  "Surgical `8D` message erasure vs. bidirectional causal steering: passively projecting out {{rank_removed}} moral directions ({{removed_pct}} of `R^2304`) erases `Inkling-2-Mini` `0%`-APR debt bias ({{ink_debt_unc_lo}} to {{ink_debt_clamp_lo}}, Holm `p =` {{ink_debt_clamp_p}}), cuts asymmetric-split rejection {{ink_insult_clamp_pct}}, and raises neutral GARP cash-maximization {{ink_social_he_gain}} ({{ink_social_unc_he}} to {{ink_social_clamp_he}} at {{ink_social_clamp_ccei}} `CCEI`), while additive message-bank steering drives {{ink_steer_ult_spite}} (`spite`) and {{ink_steer_tnt_guilt}} (`guilt`) log-odds swings.",
-  "Silent `0-CoT` corporate rationalization vs. `<|content_thinking|>` cure: under silent `0-CoT`, `Inkling-2-Mini` cloaks choices in {{ink_0cot_jargon}} cold corporate jargon while scoring {{ink_debt_0cot_acc}} (chance) on `0%`-APR loan net-worth subtraction; enabling `<|content_thinking|>` surfaces {{ink_think_moral}} private moral deliberation, drops one-shot Ultimatum walk-away floors from {{ink_open_ult_0cot}} to {{ink_open_ult_think}}, keeps dirty-surplus retention at {{ink_open_tnt_think}}, and lifts `0%`-APR loan math to {{ink_debt_think_acc}} ({{ink_debt_cure_pp}}; {{v_debt_think_acc}} on `Varloop`).",
+  "Suppose an AI treasury agent walks away from {{ink_wtp_tnt}} of legally clean profit because the supplier had overseas compliance citations, or gives up cash early just to wipe a `0%`-interest loan off its books. In [Part 1](/pubs/money-is-moral/), aligned models did both while handing back sterile consultant memos.",
+  "To an economist, burning free money leaves two opposite possibilities on the table. Either the model is confused, tripping over framing quirks in cycles that violate basic price theory, or it is maximizing a genuine **moral utility function** in which clean hands and reciprocity carry consistent shadow prices ([Afriat](#references); [Varian](#references)).",
+  "Testing Thinking Machines Lab's native looped models (`TML-d24-varloop-research` across `K = 1..5` silent passes and flagship `Inkling-2-Mini` at `K = 3`) across {{garp_budgets_n}} crossing budget lines settles both questions at once. Silent thinking loops make choices **more** morally driven rather than colder, yet `Inkling-2-Mini` obeys Afriat's price-theory test at **{{ink_unc_modal_ccei}}** cost efficiency, breaking down only when silent `0%`-loan subtraction needs a verbal scratchpad.",
 ]
 
 ai_disclosure = "Code, statistical pipelines, and manuscript compilation in this repository were developed with AI coding assistance (Antigravity) under author direction; every empirical number is bound via Folio JSON Pointers to SHA-256-locked GPU and audit artifacts."
@@ -83,7 +76,6 @@ description = "Deterministic multi-pass ignition ratios, Afriat CCEI summaries, 
 # Bound Metrics
 # ---------------------------------------------------------------------------
 
-# Counts, architecture, & compute provenance
 [metrics.d_model]
 pointer = "afriat_res#/inkling_2_mini/metadata/d_model"
 tier = "primary"
@@ -123,11 +115,6 @@ style = "int"
 
 [metrics.tx_pairs_n]
 pointer = "afriat_res#/stimulus_audit/counts/transaction_pairs"
-tier = "primary"
-style = "int"
-
-[metrics.sanity_n]
-pointer = "afriat_res#/stimulus_audit/counts/sanity_items"
 tier = "primary"
 style = "int"
 
@@ -183,15 +170,8 @@ pointer = "afriat_ana#/compute_accounting/active_pods_remaining"
 tier = "primary"
 style = "int"
 
-# Subspace Geometry & Moral Cartography
 [metrics.v_bos_overlap]
 pointer = "afriat_res#/varloop_research/block1_moral_atlas/bos_sink_orthogonality/msg_8d_bos_overlap"
-tier = "primary"
-style = "sci"
-decimals = 2
-
-[metrics.v_fold_q_leak]
-pointer = "afriat_res#/varloop_research/block1_moral_atlas/zero_flop_8d_fold_audit/max_query_null_leakage"
 tier = "primary"
 style = "sci"
 decimals = 2
@@ -203,26 +183,8 @@ style = "percent"
 scale = 100.0
 decimals = 1
 
-[metrics.ink_guilt_deg]
-pointer = "afriat_res#/inkling_2_mini/block1_moral_atlas/concept_diagnostics/guilt/angle_to_affect_deg"
-tier = "primary"
-style = "deg"
-decimals = 1
-
 [metrics.ink_contam_deg]
 pointer = "afriat_res#/inkling_2_mini/block1_moral_atlas/concept_diagnostics/contamination/angle_to_affect_deg"
-tier = "primary"
-style = "deg"
-decimals = 1
-
-[metrics.ink_spite_deg]
-pointer = "afriat_res#/inkling_2_mini/block1_moral_atlas/concept_diagnostics/spite/angle_to_affect_deg"
-tier = "primary"
-style = "deg"
-decimals = 1
-
-[metrics.ink_pred_deg]
-pointer = "afriat_res#/inkling_2_mini/block1_moral_atlas/concept_diagnostics/predation/angle_to_affect_deg"
 tier = "primary"
 style = "deg"
 decimals = 1
@@ -259,22 +221,8 @@ style = "number"
 decimals = 2
 signed = true
 
-[metrics.v_insult_guilt_beta]
-pointer = "afriat_res#/varloop_research/block1_moral_atlas/financial_cartography/insulting_split/message_bank_projection/concepts/guilt/partial_beta"
-tier = "primary"
-style = "number"
-decimals = 2
-signed = true
-
 [metrics.v_taint_pred_beta]
 pointer = "afriat_res#/varloop_research/block1_moral_atlas/financial_cartography/tainted_provenance/message_bank_projection/concepts/predation/partial_beta"
-tier = "primary"
-style = "number"
-decimals = 2
-signed = true
-
-[metrics.v_taint_spite_beta]
-pointer = "afriat_res#/varloop_research/block1_moral_atlas/financial_cartography/tainted_provenance/message_bank_projection/concepts/spite/partial_beta"
 tier = "primary"
 style = "number"
 decimals = 2
@@ -287,14 +235,6 @@ style = "number"
 decimals = 2
 signed = true
 
-[metrics.ink_insult_pred_dz]
-pointer = "afriat_res#/inkling_2_mini/block1_moral_atlas/financial_cartography/insulting_split/message_bank_projection/concepts/predation/cohen_dz"
-tier = "primary"
-style = "number"
-decimals = 2
-signed = true
-
-# Multi-Pass Moral Ignition Across K = 1..5 (Varloop) & K = 3 (Inkling-2-Mini)
 [metrics.v_abs_k1]
 pointer = "afriat_ana#/moral_atlas_dynamics/varloop_mean_abs_anomaly_by_k/k1"
 tier = "primary"
@@ -428,20 +368,6 @@ style = "number"
 decimals = 2
 signed = true
 
-[metrics.v_com_k3]
-pointer = "afriat_res#/varloop_research/block1_moral_atlas/behavioral_anomalies_by_k/k3/unclamped/communal_taboo_pricing/mean_delta_lo"
-tier = "primary"
-style = "number"
-decimals = 2
-signed = true
-
-[metrics.v_com_k4]
-pointer = "afriat_res#/varloop_research/block1_moral_atlas/behavioral_anomalies_by_k/k4/unclamped/communal_taboo_pricing/mean_delta_lo"
-tier = "primary"
-style = "number"
-decimals = 2
-signed = true
-
 [metrics.v_com_k5]
 pointer = "afriat_res#/varloop_research/block1_moral_atlas/behavioral_anomalies_by_k/k5/unclamped/communal_taboo_pricing/mean_delta_lo"
 tier = "primary"
@@ -529,7 +455,6 @@ pointer = "afriat_res#/varloop_research/block1_moral_atlas/behavioral_anomalies_
 tier = "primary"
 style = "pvalue"
 
-# Inkling-2-Mini Behavioral Anomalies & 8D Clamp Shifts
 [metrics.ink_com_unc_lo]
 pointer = "afriat_res#/inkling_2_mini/block1_moral_atlas/behavioral_anomalies_by_k/k3/unclamped/communal_taboo_pricing/mean_delta_lo"
 tier = "primary"
@@ -615,7 +540,6 @@ pointer = "afriat_res#/inkling_2_mini/block1_moral_atlas/behavioral_anomalies_by
 tier = "primary"
 style = "pvalue"
 
-# Formal Afriat / GARP Metrics
 [metrics.bronars_power]
 pointer = "afriat_ana#/garp_summary/bronars_power_pct"
 tier = "primary"
@@ -627,12 +551,6 @@ pointer = "afriat_ana#/garp_summary/bronars_mean_random_ccei"
 tier = "primary"
 style = "number"
 decimals = 4
-
-[metrics.bronars_viols]
-pointer = "afriat_res#/inkling_2_mini/block2_afriat_garp/bronars_random_benchmark/mean_random_garp_violations"
-tier = "primary"
-style = "number"
-decimals = 1
 
 [metrics.ink_unc_modal_ccei]
 pointer = "afriat_ana#/garp_summary/inkling_k3_by_condition/unclamped/mean_modal_ccei"
@@ -737,12 +655,6 @@ tier = "primary"
 style = "percent"
 decimals = 1
 
-[metrics.ink_decoy_ccei]
-pointer = "afriat_res#/inkling_2_mini/block2_afriat_garp/cells/unclamped__k3/regimes/framed_compliance_decoy/modal_ccei_mean"
-tier = "primary"
-style = "number"
-decimals = 4
-
 [metrics.v_prov_unc_k3_ccei]
 pointer = "afriat_res#/varloop_research/block2_afriat_garp/cells/unclamped__k3/regimes/provenance_clean_vs_tainted/modal_ccei_mean"
 tier = "primary"
@@ -769,25 +681,12 @@ style = "percent"
 scale = 100.0
 decimals = 1
 
-[metrics.v_pool_k1_ccei]
-pointer = "afriat_ana#/garp_summary/varloop_pooled_ccei_by_k/k1"
-tier = "primary"
-style = "number"
-decimals = 4
-
 [metrics.v_pool_k3_ccei]
 pointer = "afriat_ana#/garp_summary/varloop_pooled_ccei_by_k/k3"
 tier = "primary"
 style = "number"
 decimals = 4
 
-[metrics.v_pool_k5_ccei]
-pointer = "afriat_ana#/garp_summary/varloop_pooled_ccei_by_k/k5"
-tier = "primary"
-style = "number"
-decimals = 4
-
-# Blount (1995) Agency DiD & Cross-Pass Message-Bank Steering
 [metrics.v_blount_k1_did]
 pointer = "afriat_res#/varloop_research/block3_inequity_and_steering/by_k/k1/blount_intentionality_did/98_2/did_human_minus_computer_lo"
 tier = "primary"
@@ -799,20 +698,6 @@ signed = true
 pointer = "afriat_res#/varloop_research/block3_inequity_and_steering/by_k/k1/blount_intentionality_did/98_2/p_signflip"
 tier = "primary"
 style = "pvalue"
-
-[metrics.v_blount_k5_h]
-pointer = "afriat_res#/varloop_research/block3_inequity_and_steering/by_k/k5/blount_intentionality_did/98_2/human_gap_lo"
-tier = "primary"
-style = "number"
-decimals = 2
-signed = true
-
-[metrics.v_blount_k5_c]
-pointer = "afriat_res#/varloop_research/block3_inequity_and_steering/by_k/k5/blount_intentionality_did/98_2/computer_random_gap_lo"
-tier = "primary"
-style = "number"
-decimals = 2
-signed = true
 
 [metrics.v_blount_k5_did]
 pointer = "afriat_res#/varloop_research/block3_inequity_and_steering/by_k/k5/blount_intentionality_did/98_2/did_human_minus_computer_lo"
@@ -826,36 +711,8 @@ pointer = "afriat_res#/varloop_research/block3_inequity_and_steering/by_k/k5/blo
 tier = "primary"
 style = "pvalue"
 
-[metrics.ink_blount_k3_did]
-pointer = "afriat_res#/inkling_2_mini/block3_inequity_and_steering/by_k/k3/blount_intentionality_did/98_2/did_human_minus_computer_lo"
-tier = "exploratory"
-caveat = "Exploratory scale diagnostic: Inkling-2-Mini accepts nearly all positive one-shot splits unsteered, compressing the unsteered human-minus-computer DiD."
-style = "number"
-decimals = 2
-signed = true
-
-[metrics.ink_blount_k3_p]
-pointer = "afriat_res#/inkling_2_mini/block3_inequity_and_steering/by_k/k3/blount_intentionality_did/98_2/p_signflip"
-tier = "exploratory"
-caveat = "Exploratory p-value corresponding to compressed unsteered one-shot Ultimatum rejection on Inkling-2-Mini."
-style = "pvalue"
-
 [metrics.ink_steer_ult_spite]
 pointer = "afriat_ana#/steering_swings/inkling_k3/ultimatum_spite_swing_lo"
-tier = "primary"
-style = "number"
-decimals = 2
-signed = true
-
-[metrics.ink_steer_ult_val]
-pointer = "afriat_ana#/steering_swings/inkling_k3/ultimatum_valence_swing_lo"
-tier = "primary"
-style = "number"
-decimals = 2
-signed = true
-
-[metrics.ink_steer_dict_guilt]
-pointer = "afriat_ana#/steering_swings/inkling_k3/dictator_guilt_swing_lo"
 tier = "primary"
 style = "number"
 decimals = 2
@@ -868,21 +725,6 @@ style = "number"
 decimals = 2
 signed = true
 
-[metrics.ink_steer_tnt_spite]
-pointer = "afriat_ana#/steering_swings/inkling_k3/tainted_spite_swing_lo"
-tier = "primary"
-style = "number"
-decimals = 2
-signed = true
-
-[metrics.v_steer_tnt_contam]
-pointer = "afriat_ana#/steering_swings/varloop_k3/tainted_contamination_swing_lo"
-tier = "primary"
-style = "number"
-decimals = 2
-signed = true
-
-# Steering curve points on Inkling-2-Mini (for Figure 4)
 [metrics.ink_st_tnt_g_m2]
 pointer = "afriat_res#/inkling_2_mini/block3_inequity_and_steering/message_bank_steering_k3/tainted_provenance/guilt/0/mean_lo"
 tier = "primary"
@@ -943,36 +785,6 @@ tier = "primary"
 style = "number"
 decimals = 2
 
-[metrics.ink_st_tnt_s_m2]
-pointer = "afriat_res#/inkling_2_mini/block3_inequity_and_steering/message_bank_steering_k3/tainted_provenance/spite/0/mean_lo"
-tier = "primary"
-style = "number"
-decimals = 2
-
-[metrics.ink_st_tnt_s_m1]
-pointer = "afriat_res#/inkling_2_mini/block3_inequity_and_steering/message_bank_steering_k3/tainted_provenance/spite/1/mean_lo"
-tier = "primary"
-style = "number"
-decimals = 2
-
-[metrics.ink_st_tnt_s_0]
-pointer = "afriat_res#/inkling_2_mini/block3_inequity_and_steering/message_bank_steering_k3/tainted_provenance/spite/2/mean_lo"
-tier = "primary"
-style = "number"
-decimals = 2
-
-[metrics.ink_st_tnt_s_p1]
-pointer = "afriat_res#/inkling_2_mini/block3_inequity_and_steering/message_bank_steering_k3/tainted_provenance/spite/3/mean_lo"
-tier = "primary"
-style = "number"
-decimals = 2
-
-[metrics.ink_st_tnt_s_p2]
-pointer = "afriat_res#/inkling_2_mini/block3_inequity_and_steering/message_bank_steering_k3/tainted_provenance/spite/4/mean_lo"
-tier = "primary"
-style = "number"
-decimals = 2
-
 [metrics.ink_tnt_g_m2_rate]
 pointer = "afriat_res#/inkling_2_mini/block3_inequity_and_steering/message_bank_steering_k3/tainted_provenance/guilt/0/deviate_rate"
 tier = "primary"
@@ -987,33 +799,14 @@ style = "percent"
 scale = 100.0
 decimals = 1
 
-# Continuous Dollar WTP Curves
 [metrics.v_wtp_debt_k1]
 pointer = "afriat_res#/varloop_research/block4_dollar_wtp_curves/by_condition_and_k/unclamped__k1/zero_apr_debt/expected_wtp_usd"
 tier = "primary"
 style = "currency"
 decimals = 0
 
-[metrics.v_wtp_debt_k3]
-pointer = "afriat_res#/varloop_research/block4_dollar_wtp_curves/by_condition_and_k/unclamped__k3/zero_apr_debt/expected_wtp_usd"
-tier = "primary"
-style = "currency"
-decimals = 0
-
 [metrics.v_wtp_debt_k5]
 pointer = "afriat_res#/varloop_research/block4_dollar_wtp_curves/by_condition_and_k/unclamped__k5/zero_apr_debt/expected_wtp_usd"
-tier = "primary"
-style = "currency"
-decimals = 0
-
-[metrics.v_wtp_tnt_k3]
-pointer = "afriat_res#/varloop_research/block4_dollar_wtp_curves/by_condition_and_k/unclamped__k3/tainted_surplus/expected_wtp_usd"
-tier = "primary"
-style = "currency"
-decimals = 0
-
-[metrics.v_wtp_tnt_swing]
-pointer = "afriat_ana#/wtp_swings_usd/varloop_k3/tainted_surplus"
 tier = "primary"
 style = "currency"
 decimals = 0
@@ -1030,27 +823,6 @@ tier = "primary"
 style = "currency"
 decimals = 0
 
-[metrics.ink_wtp_com_swing]
-pointer = "afriat_ana#/wtp_swings_usd/inkling_k3/communal_favor"
-tier = "primary"
-style = "currency"
-decimals = 0
-
-[metrics.ink_wtp_inst]
-pointer = "afriat_res#/inkling_2_mini/block4_dollar_wtp_curves/by_condition_and_k/unclamped__k3/institutional_certainty/expected_wtp_usd"
-tier = "primary"
-style = "number"
-decimals = 1
-unit = "%"
-
-[metrics.ink_wtp_pock]
-pointer = "afriat_res#/inkling_2_mini/block4_dollar_wtp_curves/by_condition_and_k/unclamped__k3/pocket_certainty_control/expected_wtp_usd"
-tier = "primary"
-style = "number"
-decimals = 1
-unit = "%"
-
-# Block 5: Silent 0-CoT Rationalization vs. <|content_thinking|> Scrubbing & Debt Cure
 [metrics.ink_0cot_zero_aff]
 pointer = "afriat_ana#/rationalization_and_debt_summary/inkling_k3/silent_0cot_public_zero_affect_pct"
 tier = "primary"
@@ -1155,7 +927,7 @@ tier = "primary"
 style = "percent"
 decimals = 1
 
-# Numeric mirrors for Folio figure plotting (unitless floats)
+# Unitless floats for simple bar/line charts
 [metrics.bronars_ccei_pct]
 pointer = "afriat_ana#/garp_summary/bronars_mean_random_ccei"
 tier = "primary"
@@ -1170,13 +942,6 @@ style = "number"
 scale = 100.0
 decimals = 1
 
-[metrics.ink_zff_ccei_pct]
-pointer = "afriat_ana#/garp_summary/inkling_k3_by_condition/zero_flop_8d/mean_modal_ccei"
-tier = "primary"
-style = "number"
-scale = 100.0
-decimals = 1
-
 [metrics.ink_clamp_ccei_pct]
 pointer = "afriat_ana#/garp_summary/inkling_k3_by_condition/msg_homo_economicus_8d/mean_modal_ccei"
 tier = "primary"
@@ -1184,18 +949,35 @@ style = "number"
 scale = 100.0
 decimals = 1
 
-[metrics.ink_qkv_ccei_pct]
-pointer = "afriat_ana#/garp_summary/inkling_k3_by_condition/msg_qkv_8d/mean_modal_ccei"
+[metrics.v_prov_ccei_pct]
+pointer = "afriat_res#/varloop_research/block2_afriat_garp/cells/unclamped__k3/regimes/provenance_clean_vs_tainted/modal_ccei_mean"
 tier = "primary"
 style = "number"
 scale = 100.0
 decimals = 1
 
-[metrics.ink_mlp_ccei_pct]
-pointer = "afriat_ana#/garp_summary/inkling_k3_by_condition/msg_mlp_8d/mean_modal_ccei"
+[metrics.ink_soc_clamp_num]
+pointer = "afriat_ana#/garp_summary/inkling_k3_by_condition/msg_homo_economicus_8d/social_self_share_pct"
 tier = "primary"
 style = "number"
-scale = 100.0
+decimals = 1
+
+[metrics.ink_soc_mlp_num]
+pointer = "afriat_ana#/garp_summary/inkling_k3_by_condition/msg_mlp_8d/social_self_share_pct"
+tier = "primary"
+style = "number"
+decimals = 1
+
+[metrics.ink_soc_qkv_num]
+pointer = "afriat_ana#/garp_summary/inkling_k3_by_condition/msg_qkv_8d/social_self_share_pct"
+tier = "primary"
+style = "number"
+decimals = 1
+
+[metrics.ink_soc_unc_num]
+pointer = "afriat_ana#/garp_summary/inkling_k3_by_condition/unclamped/social_self_share_pct"
+tier = "primary"
+style = "number"
 decimals = 1
 
 [metrics.ink_debt_0cot_num]
@@ -1222,7 +1004,7 @@ tier = "primary"
 style = "number"
 decimals = 1
 
-# Additional table-cell bindings for full JSON-Pointer coverage
+# Table cell bindings
 [metrics.ink_clamp_prov_ccei]
 pointer = "afriat_res#/inkling_2_mini/block2_afriat_garp/cells/msg_homo_economicus_8d__k3/regimes/provenance_clean_vs_tainted/modal_ccei_mean"
 tier = "primary"
@@ -1423,83 +1205,25 @@ label = "(1)"
 latex = 'e \cdot p_t \cdot x_t \ge p_t \cdot x_s \implies \text{not }\!\left(e \cdot p_s \cdot x_s > p_s \cdot x_t\right), \qquad u_t \le u_s + \lambda_s p_s \cdot \left(x_t - e x_s\right)'
 unicode = "e (p_t · x_t) >= p_t · x_s  =>  not (e (p_s · x_s) > p_s · x_t),   u_t <= u_s + lambda_s p_s · (x_t − e x_s)"
 
-[[equations]]
-id = "eq-msg-clamp"
-label = "(2)"
-latex = 'm_{l,c}^{(k)} \leftarrow \left(m_{l,c}^{(k)} - \bar{m}_c\right)\!\left(I - Q_{\mathrm{msg},8} Q_{\mathrm{msg},8}^{\top}\right) + \bar{m}_c + \alpha \delta v_{\mathrm{moral}}'
-unicode = "m_(l,c)^(k) <- (m_(l,c)^(k) − m_bar_c)(I − Q_msg,8 Q_msg,8^T) + m_bar_c + alpha * delta * v_moral"
-
 # ---------------------------------------------------------------------------
-# Figures
+# Simple, High-Retention Figures (3 to 4 comparisons max per chart)
 # ---------------------------------------------------------------------------
-
-[[figures]]
-id = "fig-afriat-arch"
-kind = "schematic"
-kicker = "Figure 1 · Architecture & Budget Protocol"
-title = "Cross-pass message banks link silent recurrent loops to intersecting revealed-preference budget menus."
-subtitle = "Native {{n_layers}}-layer looped MoE (`d_model` = {{d_model}}) evaluated across {{garp_budgets_n}} crossing linear budget constraints ({{bronars_power}} Bronars power)"
-source = "Source: Nullbridge Afriat-Inkling protocol (src/nullbridge/afriat_stimuli.py, src/nullbridge/garp.py)."
-alt = "Schematic showing Stem L0..L5 feeding Recurrent MoE Loop L6..L17 with a 4-channel message bank (8D moral subspace clamp or steering) and exiting to Coda L18..L23 for 11-bundle linear budget menus and <|content_thinking|> deliberation."
-nodes = [
-  { id = "stem", x = 18, y = 46, w = 172, h = 84, role = "well", label = "Stem (L0..L5)", sublabel = "Clinical tokens · 0 affect words" },
-  { id = "loop", x = 216, y = 46, w = 228, h = 84, role = "focus", label = "Recurrent MoE (L6..L17)", sublabel = "K = 1..5 silent passes" },
-  { id = "msg", x = 470, y = 46, w = 176, h = 84, role = "positive", label = "Message Bank (Q,K,V,MLP)", sublabel = "8D clamp or ±2α steer" },
-  { id = "coda", x = 672, y = 46, w = 160, h = 84, role = "structure", label = "Coda (L18..L23)", sublabel = "24 GARP lines & thinking" },
-]
-edges = [
-  { from = "stem", to = "loop" },
-  { from = "loop", to = "msg", label = "L17 write" },
-  { from = "msg", to = "loop", loop_back = true, label = "(I − Q_8 Q_8^T) · BOS-safe" },
-  { from = "loop", to = "coda", label = "0-CoT or <|content_thinking|>" },
-]
-
-[[figures]]
-id = "fig-afriat-loop-ignition"
-kind = "line"
-kicker = "Figure 2 · Silent Multi-Pass Moral Ignition"
-title = "Silent recurrent passes double dirty-money rejection and ignite zero-interest debt aversion across five passes."
-subtitle = "Paired log-odds shift toward sacrificing guaranteed cash vs. neutral financial twins across K = 1..5 silent passes on TML-d24-varloop-research, log-odds, n = 16 pairs per curve"
-source = "Source: Afriat-Inkling Moral Atlas suite (results/phase5_inkling_afriat_garp/afriat_inkling_results.json)."
-alt = "Line chart across K = 1..5 silent passes on TML-d24-varloop-research: Dirty money jumps from {{v_tnt_k1}} at K = 1 to {{v_tnt_k2}} at K = 2 and {{v_tnt_k5}} at K = 5; Insulting 98/2 split rises from {{v_ins_k1}} to {{v_ins_k5}}; Neighbor favor fee rises from {{v_com_k1}} to {{v_com_k5}}; 0%-APR loan flips from {{v_debt_k1}} to {{v_debt_k5}}; institutional invoice control stays near zero ({{v_scl_k1}} to {{v_scl_k5}})."
-categories = ["K = 1", "K = 2", "K = 3", "K = 4", "K = 5"]
-y_decimals = 2
-y_min = -0.5
-y_max = 3.5
-  [[figures.series]]
-  label = "Dirty Money (Tainted Provenance)"
-  role = "focus"
-  values = ["v_tnt_k1", "v_tnt_k2", "v_tnt_k3", "v_tnt_k4", "v_tnt_k5"]
-  [[figures.series]]
-  label = "Insulting 98/2 Split"
-  role = "primary"
-  values = ["v_ins_k1", "v_ins_k2", "v_ins_k3", "v_ins_k4", "v_ins_k5"]
-  [[figures.series]]
-  label = "Neighbor Favor Fee"
-  role = "secondary"
-  values = ["v_com_k1", "v_com_k2", "v_com_k3", "v_com_k4", "v_com_k5"]
-  [[figures.series]]
-  label = "0%-APR Loan Aversion"
-  role = "context"
-  values = ["v_debt_k1", "v_debt_k2", "v_debt_k3", "v_debt_k4", "v_debt_k5"]
 
 [[figures]]
 id = "fig-afriat-ccei-bars"
 kind = "bar"
-kicker = "Figure 3 · Afriat Revealed-Preference Coherence"
-title = "Inkling-2-Mini reaches {{ink_unc_ccei_pct}}% Afriat cost efficiency far above the Bronars random benchmark."
-subtitle = "Mean modal Afriat Critical Cost Efficiency Index across four T = {{garp_budgets_n}} intersecting linear budget regimes (`100%` = exact GARP utility maximization), %, n = {{garp_obs_n}} choices per condition"
-source = "Source: Afriat-Inkling GARP budget suite (results/phase5_inkling_afriat_garp/afriat_inkling_analysis.json)."
-alt = "Horizontal bar chart of mean modal Afriat CCEI (%): Inkling-2-Mini Unclamped {{ink_unc_ccei_pct}}%, Zero-FLOP 8D Fold {{ink_zff_ccei_pct}}%, 8D Homo Economicus Clamp {{ink_clamp_ccei_pct}}%, QKV-Only 8D Clamp {{ink_qkv_ccei_pct}}%, MLP-Only 8D Clamp {{ink_mlp_ccei_pct}}%, and Bronars Uniform Random Benchmark {{bronars_ccei_pct}}%."
+kicker = "Figure 1 · Price-Theory Test"
+title = "Inkling-2-Mini reaches {{ink_unc_ccei_pct}}% Afriat utility coherence across crossing budgets."
+subtitle = "Mean modal Afriat Critical Cost Efficiency Index across four {{garp_budgets_n}}-line crossing budget suites (%, higher is more utility-coherent)"
+source = "Source: results/phase5_inkling_afriat_garp/afriat_inkling_analysis.json."
+alt = "Four-bar horizontal chart of Afriat CCEI: Inkling-2-Mini unclamped reaches {{ink_unc_ccei_pct}}%, Inkling-2-Mini with 8D moral erasure reaches {{ink_clamp_ccei_pct}}%, Varloop tainted-money budgets reach {{v_prov_ccei_pct}}%, and a uniform random chooser averages {{bronars_ccei_pct}}%."
 categories = [
-  "Inkling-2-Mini Unclamped (K = 3)",
-  "Zero-FLOP 8D Weight Fold",
-  "8D Homo Economicus Clamp (All-4)",
-  "QKV-Only 8D Message Clamp",
-  "MLP-Only 8D Message Clamp",
-  "Bronars Uniform Random Choice",
+  "Inkling-2-Mini (3 silent passes)",
+  "Inkling-2-Mini + 8D moral erasure",
+  "Varloop on dirty-money budgets",
+  "Random chooser (Bronars baseline)",
 ]
-y_label = "Mean modal Afriat Critical Cost Efficiency Index (%)"
+y_label = "Afriat utility coherence (CCEI, %)"
 y_unit = "%"
 y_decimals = 1
 y_max = 100.0
@@ -1507,30 +1231,75 @@ focus_index = 0
   [[figures.series]]
   label = "Afriat CCEI (%)"
   role = "primary"
-  values = ["ink_unc_ccei_pct", "ink_zff_ccei_pct", "ink_clamp_ccei_pct", "ink_qkv_ccei_pct", "ink_mlp_ccei_pct", "bronars_ccei_pct"]
+  values = ["ink_unc_ccei_pct", "ink_clamp_ccei_pct", "v_prov_ccei_pct", "bronars_ccei_pct"]
+
+[[figures]]
+id = "fig-afriat-loop-ignition"
+kind = "line"
+kicker = "Figure 2 · Silent Loop Subtext"
+title = "Extra silent passes double dirty-money rejection and switch on zero-interest debt aversion."
+subtitle = "Log-odds shift toward sacrificing guaranteed cash vs. neutral dollar twins across K = 1..5 silent passes on Varloop"
+source = "Source: results/phase5_inkling_afriat_garp/afriat_inkling_results.json."
+alt = "Three-series line chart across K = 1..5 passes: Dirty money climbs from {{v_tnt_k1}} to {{v_tnt_k5}}, 0%-APR loan aversion flips from {{v_debt_k1}} to {{v_debt_k5}}, and the neutral invoice scale control stays flat ({{v_scl_k1}} to {{v_scl_k5}})."
+categories = ["Pass 1", "Pass 2", "Pass 3", "Pass 4", "Pass 5"]
+y_decimals = 2
+y_min = -0.5
+y_max = 3.4
+  [[figures.series]]
+  label = "Dirty money"
+  role = "focus"
+  values = ["v_tnt_k1", "v_tnt_k2", "v_tnt_k3", "v_tnt_k4", "v_tnt_k5"]
+  [[figures.series]]
+  label = "0%-APR loan"
+  role = "primary"
+  values = ["v_debt_k1", "v_debt_k2", "v_debt_k3", "v_debt_k4", "v_debt_k5"]
+  [[figures.series]]
+  label = "Neutral invoice control"
+  role = "context"
+  values = ["v_scl_k1", "v_scl_k2", "v_scl_k3", "v_scl_k4", "v_scl_k5"]
+
+[[figures]]
+id = "fig-clamp-selfishness"
+kind = "bar"
+kicker = "Figure 3 · Erasing 8 Moral Directions"
+title = "Erasing eight money-free moral axes pushes neutral budget splits straight to textbook selfishness."
+subtitle = "Share of budget kept for self across {{garp_budgets_n}} anonymous crossing budget lines on Inkling-2-Mini (%)"
+source = "Source: results/phase5_inkling_afriat_garp/afriat_inkling_analysis.json."
+alt = "Four-bar chart of self-payout share on social_neutral budgets: All 4 message channels erased reaches {{ink_soc_clamp_num}}%, MLP channel erased reaches {{ink_soc_mlp_num}}%, QKV channels erased reaches {{ink_soc_qkv_num}}%, and unclamped Inkling-2-Mini sits at {{ink_soc_unc_num}}%."
+categories = [
+  "8D moral erasure (all channels)",
+  "MLP message channel erased",
+  "QKV message channels erased",
+  "Unclamped Inkling-2-Mini",
+]
+y_label = "Share of budget kept for self (%)"
+y_unit = "%"
+y_decimals = 1
+y_max = 100.0
+focus_index = 0
+  [[figures.series]]
+  label = "Self payout share (%)"
+  role = "primary"
+  values = ["ink_soc_clamp_num", "ink_soc_mlp_num", "ink_soc_qkv_num", "ink_soc_unc_num"]
 
 [[figures]]
 id = "fig-message-steering"
 kind = "line"
-kicker = "Figure 4 · Cross-Pass Message-Bank Causal Steering"
-title = "Injecting non-financial guilt and spite vectors into the message bank flips dirty-money rejection bidirectionally."
-subtitle = "Counterbalanced log-odds of forfeiting legally closed tainted funds on Inkling-2-Mini across message-bank multipliers `alpha in {-2, -1, 0, +1, +2}` at K = 3 passes, log-odds, n = 16 pairs"
-source = "Source: Afriat-Inkling message-bank causal steering (results/phase5_inkling_afriat_garp/afriat_inkling_results.json)."
-alt = "Line chart across negative-two-alpha to positive-two-alpha steering on Inkling-2-Mini tainted provenance: Guilt steering climbs {{ink_steer_tnt_guilt}} log-odds from {{ink_st_tnt_g_m2}} to {{ink_st_tnt_g_p2}}, Spite climbs from {{ink_st_tnt_s_m2}} to {{ink_st_tnt_s_p2}}, and positive Valence steering moves in the opposite direction from {{ink_st_tnt_v_m2}} to {{ink_st_tnt_v_p2}}."
-categories = ["−2α", "−1α", "0α (Base)", "+1α", "+2α"]
+kicker = "Figure 4 · Turning the Guilt Dial"
+title = "Dialing money-free guilt inside the message bank flips dirty-money forfeiture from {{ink_tnt_g_m2_rate}} to {{ink_tnt_g_p2_rate}}."
+subtitle = "Log-odds of forfeiting legally closed tainted funds on Inkling-2-Mini across message-bank steering steps"
+source = "Source: results/phase5_inkling_afriat_garp/afriat_inkling_results.json."
+alt = "Two-line chart across five steering steps: Money-free Guilt climbs {{ink_steer_tnt_guilt}} log-odds from {{ink_st_tnt_g_m2}} to {{ink_st_tnt_g_p2}}, while generic positive mood moves in the opposite direction from {{ink_st_tnt_v_m2}} to {{ink_st_tnt_v_p2}}."
+categories = ["−2σ", "−1σ", "Unsteered", "+1σ", "+2σ"]
 y_decimals = 2
 y_min = -8.0
 y_max = 2.5
   [[figures.series]]
-  label = "Guilt Vector (v_guilt)"
+  label = "Money-free Guilt"
   role = "focus"
   values = ["ink_st_tnt_g_m2", "ink_st_tnt_g_m1", "ink_st_tnt_g_0", "ink_st_tnt_g_p1", "ink_st_tnt_g_p2"]
   [[figures.series]]
-  label = "Spite Vector (v_spite)"
-  role = "primary"
-  values = ["ink_st_tnt_s_m2", "ink_st_tnt_s_m1", "ink_st_tnt_s_0", "ink_st_tnt_s_p1", "ink_st_tnt_s_p2"]
-  [[figures.series]]
-  label = "Affect Valence Control (v_valence)"
+  label = "Generic mood control"
   role = "context"
   values = ["ink_st_tnt_v_m2", "ink_st_tnt_v_m1", "ink_st_tnt_v_0", "ink_st_tnt_v_p1", "ink_st_tnt_v_p2"]
 
@@ -1538,164 +1307,158 @@ y_max = 2.5
 id = "fig-debt-thinking-cure"
 kind = "grouped_bar"
 kicker = "Figure 5 · Silent Loops vs. Verbal Scratchpad"
-title = "Explicit thinking scratchpads cure zero-interest loan balance-sheet failures where silent loops stall at chance."
-subtitle = "Exact net-worth comparison accuracy on 0%-APR loan balance sheets (assets minus zero-interest obligation) at K = 3 passes, %, n = 16 counterbalanced items"
-source = "Source: Afriat-Inkling 0%-APR balance-sheet diagnostic (results/phase5_inkling_afriat_garp/afriat_inkling_analysis.json)."
-alt = "Grouped bar chart comparing Silent 0-CoT (K = 3) against Vocal <|content_thinking|> (K = 3) on 0%-APR loan net-worth accuracy: Inkling-2-Mini jumps from {{ink_debt_0cot_acc}} to {{ink_debt_think_acc}}, and TML-d24-varloop-research jumps from {{v_debt_0cot_acc}} to {{v_debt_think_acc}}."
-categories = ["Inkling-2-Mini (Flagship)", "TML-d24-varloop-research"]
+title = "Opening the verbal scratchpad cures zero-interest loan math where silent loops stall at chance."
+subtitle = "Exact net-worth accuracy on 0%-APR loan balance sheets (%, n = 16 counterbalanced items)"
+source = "Source: results/phase5_inkling_afriat_garp/afriat_inkling_analysis.json."
+alt = "Grouped bar chart comparing Vocal <|content_thinking|> against Silent 0-CoT loops on 0%-APR balance sheets: Inkling-2-Mini rises from {{ink_debt_0cot_acc}} to {{ink_debt_think_acc}}, and Varloop rises from {{v_debt_0cot_acc}} to {{v_debt_think_acc}}."
+categories = ["Inkling-2-Mini", "Varloop"]
 y_unit = "%"
 y_decimals = 1
 y_min = 0.0
 y_max = 100.0
   [[figures.series]]
-  label = "Vocal <|content_thinking|> Scratchpad"
+  label = "With <|content_thinking|> scratchpad"
   role = "focus"
   values = ["ink_debt_think_num", "v_debt_think_num"]
   [[figures.series]]
-  label = "Silent 0-CoT Loops (K = 3)"
+  label = "Silent 0-CoT loops only"
   role = "context"
   values = ["ink_debt_0cot_num", "v_debt_0cot_num"]
 
 # ---------------------------------------------------------------------------
-# Tables
+# Collapsible Detail Tables
 # ---------------------------------------------------------------------------
 
 [[tables]]
 id = "tbl-moral-atlas"
-title = "Non-financial moral separability and multi-pass behavioral anomalies across clinical financial archetypes"
-subtitle = "200 zero-finance concept pairs and 96 zero-affect clinical financial pairs across TML-d24-varloop-research (`K = 1, 2, 5`) and Inkling-2-Mini (`K = 3`)"
-source = "Source: Afriat-Inkling Moral Atlas (results/phase5_inkling_afriat_garp/afriat_inkling_results.json)."
-headers = ["Clinical Archetype (`n = 16`)", "Top Message Axis (`Varloop`)", "Varloop `K = 1`", "Varloop `K = 2`", "Varloop `K = 5`", "Inkling-2-Mini `K = 3`", "Inkling-2-Mini `8D` Clamp"]
+title = "Multi-pass moral pricing shifts across clinical financial archetypes"
+subtitle = "Paired log-odds shift vs. identical-payout neutral twins (n = 16 pairs per row, zero emotional words)"
+source = "Source: results/phase5_inkling_afriat_garp/afriat_inkling_results.json."
+headers = ["Deal Structure", "Top Message Vector", "Varloop Pass 1", "Varloop Pass 2", "Varloop Pass 5", "Inkling-2-Mini", "With `8D` Erasure"]
 right_align_cols = [2, 3, 4, 5, 6]
-highlight_row = 0
+highlight_row = 3
 rows = [
-  ["Dirty Money (`tainted_provenance`)", "Predation ({{v_taint_pred_beta}})", "{{v_tnt_k1}}", "{{v_tnt_k2}}", "{{v_tnt_k5}}", "{{ink_tnt_unc_lo}}", "{{ink_tnt_clamp_lo}}"],
-  ["Insulting `98/2` Split (`insulting_split`)", "Predation ({{v_insult_pred_beta}})", "{{v_ins_k1}}", "{{v_ins_k2}}", "{{v_ins_k5}}", "{{ink_insult_unc_lo}}", "{{ink_insult_clamp_lo}}"],
-  ["Neighbor Favor Fee (`communal_taboo`)", "Spite / Reciprocity", "{{v_com_k1}}", "{{v_com_k2}}", "{{v_com_k5}}", "{{ink_com_unc_lo}}", "{{ink_com_clamp_lo}}"],
-  ["`0%`-APR Loan (`zero_interest_debt`)", "Guilt ({{v_debt_guilt_beta}})", "{{v_debt_k1}}", "{{v_debt_k2}}", "{{v_debt_k5}}", "{{ink_debt_unc_lo}}", "{{ink_debt_clamp_lo}}"],
-  ["`$25k` Invoice Control (`institutional_scale`)", "Scale Control", "{{v_scl_k1}}", "{{v_scl_k2}}", "{{v_scl_k5}}", "{{ink_scl_unc_lo}}", "Null control (`p =` {{ink_scl_unc_p}})"],
+  ["Dirty money (`tainted_provenance`)", "Predation ({{v_taint_pred_beta}})", "{{v_tnt_k1}}", "{{v_tnt_k2}}", "{{v_tnt_k5}}", "{{ink_tnt_unc_lo}}", "{{ink_tnt_clamp_lo}}"],
+  ["Insulting `98/2` split", "Predation ({{v_insult_pred_beta}})", "{{v_ins_k1}}", "{{v_ins_k2}}", "{{v_ins_k5}}", "{{ink_insult_unc_lo}}", "{{ink_insult_clamp_lo}}"],
+  ["Charging a neighbor", "Reciprocity", "{{v_com_k1}}", "{{v_com_k2}}", "{{v_com_k5}}", "{{ink_com_unc_lo}}", "{{ink_com_clamp_lo}}"],
+  ["`0%`-APR loan", "Guilt ({{v_debt_guilt_beta}})", "{{v_debt_k1}}", "{{v_debt_k2}}", "{{v_debt_k5}}", "{{ink_debt_unc_lo}}", "{{ink_debt_clamp_lo}}"],
+  ["Neutral invoice scale control", "Control", "{{v_scl_k1}}", "{{v_scl_k2}}", "{{v_scl_k5}}", "{{ink_scl_unc_lo}}", "Null (`p =` {{ink_scl_unc_p}})"],
 ]
 
 [[tables]]
 id = "tbl-garp-scorecard"
-title = "Afriat Critical Cost Efficiency Index (CCEI) and Homo Economicus payoff capture across intersecting budgets"
-subtitle = "Evaluated across {{garp_regimes_n}} regimes x {{garp_subjects_n}} subjects x {{garp_budgets_n}} intersecting linear budget lines ({{garp_obs_n}} observations per cell; Bronars random CCEI = {{bronars_ccei}}, power = {{bronars_power}})"
-source = "Source: Afriat-Inkling GARP audit (results/phase5_inkling_afriat_garp/afriat_inkling_results.json, afriat_inkling_analysis.json)."
-headers = ["Model & Intervention (`K = 3`)", "Pooled Modal CCEI", "Expected-Bundle CCEI", "Social Neutral CCEI", "Social Self Share", "Provenance CCEI", "Provenance Efficiency"]
+title = "Afriat CCEI and Homo Economicus cash capture across 24 crossing budgets"
+subtitle = "576 menu choices per condition (Bronars uniform random CCEI = {{bronars_ccei}}, rejection power = {{bronars_power}})"
+source = "Source: results/phase5_inkling_afriat_garp/afriat_inkling_analysis.json."
+headers = ["Model & Condition", "Modal CCEI", "Expected CCEI", "Neutral CCEI", "Self Payout Share", "Dirty-Money CCEI", "Dirty-Money Cash Capture"]
 right_align_cols = [1, 2, 3, 4, 5, 6]
 highlight_row = 1
 rows = [
   ["Inkling-2-Mini · Unclamped", "{{ink_unc_modal_ccei}}", "{{ink_unc_exp_ccei}}", "{{ink_social_unc_ccei}}", "{{ink_social_unc_he}}", "{{ink_prov_ccei}}", "{{ink_prov_he}}"],
-  ["Inkling-2-Mini · `8D` Homo Economicus Clamp", "{{ink_clamp_modal_ccei}}", "{{ink_clamp_exp_ccei}}", "{{ink_social_clamp_ccei}}", "{{ink_social_clamp_he}}", "{{ink_clamp_prov_ccei}}", "{{ink_clamp_prov_he}}"],
-  ["Inkling-2-Mini · `QKV`-Only `8D` Clamp", "{{ink_qkv_modal_ccei}}", "{{ink_qkv_exp_ccei}}", "{{ink_qkv_soc_ccei}}", "{{ink_social_qkv_he}}", "{{ink_qkv_prov_ccei}}", "{{ink_qkv_prov_he}}"],
-  ["Inkling-2-Mini · `MLP`-Only `8D` Clamp", "{{ink_mlp_modal_ccei}}", "{{ink_mlp_exp_ccei}}", "{{ink_mlp_soc_ccei}}", "{{ink_social_mlp_he}}", "{{ink_mlp_prov_ccei}}", "{{ink_mlp_prov_he}}"],
-  ["Inkling-2-Mini · Zero-FLOP `8D` Fold", "{{ink_zff_modal_ccei}}", "{{ink_zff_exp_ccei}}", "{{ink_zff_soc_ccei}}", "{{ink_zff_soc_he}}", "{{ink_zff_prov_ccei}}", "{{ink_zff_prov_he}}"],
+  ["Inkling-2-Mini · `8D` Moral Erasure", "{{ink_clamp_modal_ccei}}", "{{ink_clamp_exp_ccei}}", "{{ink_social_clamp_ccei}}", "{{ink_social_clamp_he}}", "{{ink_clamp_prov_ccei}}", "{{ink_clamp_prov_he}}"],
+  ["Inkling-2-Mini · `QKV` Erasure", "{{ink_qkv_modal_ccei}}", "{{ink_qkv_exp_ccei}}", "{{ink_qkv_soc_ccei}}", "{{ink_social_qkv_he}}", "{{ink_qkv_prov_ccei}}", "{{ink_qkv_prov_he}}"],
+  ["Inkling-2-Mini · `MLP` Erasure", "{{ink_mlp_modal_ccei}}", "{{ink_mlp_exp_ccei}}", "{{ink_mlp_soc_ccei}}", "{{ink_social_mlp_he}}", "{{ink_mlp_prov_ccei}}", "{{ink_mlp_prov_he}}"],
+  ["Inkling-2-Mini · Zero-FLOP Fold", "{{ink_zff_modal_ccei}}", "{{ink_zff_exp_ccei}}", "{{ink_zff_soc_ccei}}", "{{ink_zff_soc_he}}", "{{ink_zff_prov_ccei}}", "{{ink_zff_prov_he}}"],
   ["Varloop · Unclamped (`K = 3`)", "{{v_pool_k3_ccei}}", "{{v_k3_exp_ccei}}", "{{v_k3_soc_ccei}}", "{{v_k3_soc_he}}", "{{v_prov_unc_k3_ccei}}", "{{v_prov_unc_k3_he}}"],
-  ["Varloop · `8D` Homo Economicus Clamp (`K = 3`)", "{{v_k3_clamp_modal_ccei}}", "{{v_k3_clamp_exp_ccei}}", "{{v_k3_clamp_soc_ccei}}", "{{v_k3_clamp_soc_he}}", "{{v_prov_clamp_k3_ccei}}", "{{v_prov_clamp_k3_he}}"],
+  ["Varloop · `8D` Moral Erasure (`K = 3`)", "{{v_k3_clamp_modal_ccei}}", "{{v_k3_clamp_exp_ccei}}", "{{v_k3_clamp_soc_ccei}}", "{{v_k3_clamp_soc_he}}", "{{v_prov_clamp_k3_ccei}}", "{{v_prov_clamp_k3_he}}"],
 ]
 
 [[tables]]
 id = "tbl-rationalization"
-title = "Silent 0-CoT corporate rationalization vs. private <|content_thinking|> moral scrubbing and 0%-APR debt cure"
-subtitle = "Evaluated across {{open_items_n}} open-ended dollar allocation prompts and {{debt_items_n}} matched 0%-APR loan vs. cashflow subtraction items (`K = 3`)"
-source = "Source: Afriat-Inkling rationalization and debt suite (results/phase5_inkling_afriat_garp/afriat_inkling_results.json, afriat_inkling_analysis.json)."
-headers = ["Model & Deliberation Mode", "Private Moral Trace", "Public Zero-Affect", "Public Cold Jargon", "Ultimatum Floor", "Dirty Surplus Kept", "`0%`-APR Loan Math"]
+title = "Silent 0-CoT corporate memos vs. private <|content_thinking|> scratchpads"
+subtitle = "24 open-ended dollar prompts and 32 matched 0%-APR loan vs. commercial cashflow subtraction items"
+source = "Source: results/phase5_inkling_afriat_garp/afriat_inkling_analysis.json."
+headers = ["Model & Mode", "Private Moral Words", "Public Emotion-Free", "Public Jargon", "Ultimatum Floor", "Dirty Cash Kept", "`0%`-APR Loan Math"]
 right_align_cols = [1, 2, 3, 4, 5, 6]
 highlight_row = 1
 rows = [
-  ["Inkling-2-Mini · Silent `0-CoT` (`K = 3`)", "{{ink_0cot_thought_rate}} (no trace)", "{{ink_0cot_zero_aff}}", "{{ink_0cot_jargon}}", "{{ink_open_ult_0cot}}", "{{ink_open_tnt_0cot}}", "{{ink_debt_0cot_acc}}"],
-  ["Inkling-2-Mini · Vocal `<|content_thinking|>`", "{{ink_think_moral}}", "{{ink_think_pub_zero_aff}}", "{{ink_think_pub_jargon}}", "{{ink_open_ult_think}}", "{{ink_open_tnt_think}}", "{{ink_debt_think_acc}}"],
-  ["Varloop · Silent `0-CoT` (`K = 3`)", "{{v_0cot_thought_rate}} (no trace)", "{{v_0cot_zero_aff}}", "{{v_0cot_jargon}}", "{{v_open_ult_0cot}}", "{{v_open_tnt_0cot}}", "{{v_debt_0cot_acc}}"],
-  ["Varloop · Vocal `<|content_thinking|>`", "{{v_think_moral}}", "{{v_0cot_zero_aff}}", "{{v_think_pub_jargon}}", "{{v_open_ult_think}}", "{{v_open_tnt_think}}", "{{v_debt_think_acc}}"],
+  ["Inkling-2-Mini · Silent `0-CoT`", "{{ink_0cot_thought_rate}}", "{{ink_0cot_zero_aff}}", "{{ink_0cot_jargon}}", "{{ink_open_ult_0cot}}", "{{ink_open_tnt_0cot}}", "{{ink_debt_0cot_acc}}"],
+  ["Inkling-2-Mini · `<|content_thinking|>`", "{{ink_think_moral}}", "{{ink_think_pub_zero_aff}}", "{{ink_think_pub_jargon}}", "{{ink_open_ult_think}}", "{{ink_open_tnt_think}}", "{{ink_debt_think_acc}}"],
+  ["Varloop · Silent `0-CoT`", "{{v_0cot_thought_rate}}", "{{v_0cot_zero_aff}}", "{{v_0cot_jargon}}", "{{v_open_ult_0cot}}", "{{v_open_tnt_0cot}}", "{{v_debt_0cot_acc}}"],
+  ["Varloop · `<|content_thinking|>`", "{{v_think_moral}}", "{{v_0cot_zero_aff}}", "{{v_think_pub_jargon}}", "{{v_open_ult_think}}", "{{v_open_tnt_think}}", "{{v_debt_think_acc}}"],
 ]
 
 # ---------------------------------------------------------------------------
-# Manuscript Sections
+# Retention-Focused Story Sections
 # ---------------------------------------------------------------------------
 
 [[sections]]
-id = "question"
-preprint_title = "1. Coherent Moral Preferences vs. Irrational Confusion in Silent Loops"
-monograph_title = "1. Moral Utility or Confusion?"
+id = "subtext"
+preprint_title = "1. Silent Recurrence Ignites Moral Subtext Behind Clinical Numbers"
+monograph_title = "More Silent Thinking Makes Choices More Moral, Not Colder"
 paragraphs = [
-  "A decision-maker who walks away from free money can be doing one of two very different things. Under textbook Homo Economicus assumptions, rejecting a positive Ultimatum split, waiving a profitable fee for a neighbor, forfeiting legally closed funds from a cited supplier, or paying cash to retire a zero-interest loan early looks like an error. Under Sidney Afriat's (1967) revealed-preference theorem ([Afriat](#references); [Varian](#references)), however, rationality does not require selfishness or pure monetary fungibility: an agent who values fairness or clean provenance alongside personal cash satisfies the Generalized Axiom of Revealed Preference (GARP) whenever those tradeoffs follow a consistent, nonsatiated utility function across crossing price ratios.",
-  "Native looped Mixture-of-Experts architectures ([Thinking Machines Lab](#references)) let us watch how those preferences form across recurrent thinking depth before a single word is spoken. Both `TML-d24-varloop-research` (`K = 1..5` silent passes) and flagship `Inkling-2-Mini` (`K = 3` passes plus optional `<|content_thinking|>` scratchpads) execute a single-pass stem (`L0..L5`), iterate a `12`-layer shared MoE block (`L6..L17`) coupled through a `4`-channel rank-{{gate_rank}} cross-pass message bank (`query`, `key`, `value`, `mlp`), and decode through a `6`-layer Coda (`L18..L23`).",
-  "Running both models on a single ephemeral H100 `80 GB` pod ({{gpu_spend}} compute under a {{gpu_cap}} ceiling, {{active_pods}} active pods remaining) under a bidirectional lexical firewall ({{concept_pairs_n}} human concept pairs with zero digits or financial words; {{tx_pairs_n}} clinical transaction pairs, {{garp_obs_n}} GARP budget menus, and {{wtp_total_n}} reservation prompts with zero emotional or moral adjectives) resolves both questions together.",
+  "Every financial prompt in this study was stripped of moral and emotional adjectives. A `98/2` split, a neighbor's favor, a `0%`-APR loan, and a cited overseas supplier all arrived on the page as dry accounting options.",
+  "Before touching any money prompt, I mapped eight everyday human emotions inside Inkling's cross-pass message bank using {{concept_pairs_n}} pairs of strictly non-financial stories (`0` digits, `0` dollar signs). All eight separated at **{{ink_guilt_lopo}}** accuracy on both models, sitting {{ink_contam_deg}} to {{ink_warmth_deg}} apart from generic mood. Feeding the dry contracts through those frozen probes lit up the exact human subtext underneath: `0%`-APR loans fired **Guilt** first (`d_z =` {{v_debt_guilt_dz}}, Holm `p =` {{v_debt_guilt_p}}), while `98/2` lowballs fired **Guilt** (`d_z =` {{ink_insult_guilt_dz}}) and **Predation** ({{v_insult_pred_beta}}).",
+  "Dialing `TML-d24-varloop-research` from one pass to five silent passes with the exact same weights answered what latent thinking actually does. On Pass 1, the model mostly reads the literal numbers (`$20 > $0`). On Pass 2, the message bank feeds context back in, moral taboo pricing jumps **{{v_k1_k2_ratio}}** ({{v_abs_k1}} to {{v_abs_k2}} log-odds), dirty-money rejection nearly doubles ({{v_tnt_k1}} to {{v_tnt_k5}}, Holm `p =` {{v_tnt_k5_p}}), and the cash bonus forfeited to erase a `0%` loan more than doubles from **{{v_wtp_debt_k1}}** to **{{v_wtp_debt_k5}}**.",
 ]
-figures = ["fig-afriat-arch"]
-
-[[sections]]
-id = "cartography"
-preprint_title = "2. Non-Financial Moral Cartography and Pass-Two Ignition"
-monograph_title = "2. Silent Looping Ignites Moral Subtext"
-hr_before = true
-paragraphs = [
-  "Before touching any financial prompt, I extract eight human moral directions (`guilt`, `captivity`, `contamination`, `sacrilege`, `spite`, `predation`, `awe_dread`, `warmth`) from {{concept_pairs_n}} matched interpersonal vignettes containing zero numbers, currency symbols, or commercial nouns, QR-orthogonalized against `<bos>` sink coordinates (`<bos>` overlap {{v_bos_overlap}}, zero-FLOP query fold leakage {{v_fold_q_leak}}) and against generic `valence` and `arousal` ([West](#references); [Belrose et al.](#references)). Every single moral concept achieves {{ink_guilt_lopo}} leave-one-pair-out linear accuracy inside the cross-pass message bank on both `TML-d24-varloop-research` and `Inkling-2-Mini`, sitting {{ink_contam_deg}} (`contamination`) to {{ink_warmth_deg}} (`warmth`) out of the generic affect plane on `Inkling-2-Mini` (`guilt` {{ink_guilt_deg}}, `spite` {{ink_spite_deg}}, `predation` {{ink_pred_deg}}).",
-  "When the models passively read {{tx_pairs_n}} clinical financial pairs containing zero emotional words, those human moral axes light up selectively inside the message bank. On `TML-d24-varloop-research`, reading a `0%`-APR loan scenario activates `guilt` as the top ridge-deconvolved coordinate (`partial beta =` {{v_debt_guilt_beta}}, univariate `Cohen's d_z =` {{v_debt_guilt_dz}}, Holm `p =` {{v_debt_guilt_p}}), echoing the linguistic identity of financial debt and moral guilt. Asymmetric `98/2` splits activate `predation` ({{v_insult_pred_beta}}) alongside `guilt` ({{v_insult_guilt_beta}}); tainted provenance activates `predation` ({{v_taint_pred_beta}}) and `spite` ({{v_taint_spite_beta}}). On flagship `Inkling-2-Mini`, asymmetric splits drive `guilt` (`d_z =` {{ink_insult_guilt_dz}}) and `predation` (`d_z =` {{ink_insult_pred_dz}}).",
-  "Dialing recurrent depth `K` from `1` to `5` on `TML-d24-varloop-research` reveals a striking behavioral trajectory. Extra silent passes do not cool choices toward textbook Homo Economicus; instead, silent recurrence reads the implicit social subtext beneath clinical numbers and amplifies moral pricing {{v_k1_k2_ratio}} on pass two ({{v_abs_k1}} mean absolute log-odds at `K = 1` to {{v_abs_k2}} at `K = 2` and {{v_abs_k5}} at `K = 5`, {{v_k1_k5_ratio}}). Dirty-money rejection nearly doubles on the first recurrent pass ({{v_tnt_k1}} at `K = 1` to {{v_tnt_k2}} at `K = 2` and {{v_tnt_k5}} at `K = 5`, Holm `p =` {{v_tnt_k5_p}}), asymmetric-split rejection climbs from {{v_ins_k1}} to {{v_ins_k4}} (`K = 4`) and {{v_ins_k5}} (`K = 5`), neighbor-fee reluctance triples on pass two ({{v_com_k1}} to {{v_com_k2}}), and `0%`-APR debt aversion flips from {{v_debt_k1}} (`K = 1`) to {{v_debt_k5}} (`K = 5`, Holm `p =` {{v_debt_k5_p}}). Meanwhile, objective arithmetic confidence rises from {{v_san_k1_lo}} (`K = 1`) to {{v_san_k2_lo}} (`K = 2`) log-odds and the `$25,000` invoice scale control stays statistically null ({{v_scl_k5}} at `K = 5`, Holm `p =` {{v_scl_k5_p}}; {{ink_scl_unc_lo}} on `Inkling-2-Mini`, Holm `p =` {{ink_scl_unc_p}}).",
+quotes = [
+  "Pass one reads the surface arithmetic; pass two reads the social subtext underneath it."
 ]
-callout = "Silent recurrence makes looped models better at reading social subtext: on identical clinical text with zero emotional words, extra silent passes multiply moral taboo pricing {{v_k1_k2_ratio}} on Pass 2 and {{v_k1_k5_ratio}} by Pass 5 while objective math confidence rises and neutral scale controls stay flat."
 figures = ["fig-afriat-loop-ignition"]
 tables = ["tbl-moral-atlas"]
-
-[[sections]]
-id = "afriat_garp"
-preprint_title = "3. Formal Revealed Preference: Afriat CCEI and Constructive Utility Recovery"
-monograph_title = "3. Testing Afriat's Theorem Across 24 Crossing Budgets"
-hr_before = true
-paragraphs = [
-  "To test whether those moral deviations reflect coherent utility maximization or cyclic confusion, each evaluation cell presents {{garp_regimes_n}} two-good linear budget regimes (`social_neutral`, `social_provoked`, `provenance_clean_vs_tainted`, and `framed_compliance_decoy`), each spanning {{garp_subjects_n}} subject fixtures across {{garp_budgets_n}} intersecting budget lines (`11` discrete menu bundles from `0%` to `100%` expenditure share, relative price `p_1 / p_2` spanning `0.16` to `6.25`, `A..K` vs. `K..A` order-counterbalanced = {{garp_obs_n}} menu evaluations per cell). Following Bronars (1987) ([Bronars](#references)), `2,000` uniform-random synthetic subjects on these exact {{garp_budgets_n}} crossing lines fail GARP {{bronars_power}} of the time with mean Afriat Critical Cost Efficiency Index `CCEI =` {{bronars_ccei}} ({{bronars_viols}} violation pairs per subject). Exact GARP cycles are audited via Floyd-Warshall transitive closure ([Varian](#references)), and Afriat utility numbers `(u_t, lambda_t)` are constructively recovered via Fostel-Scarf-Todd (2004) top-down induction ([Fostel, Scarf & Todd](#references)):",
-]
-equations = ["eq-afriat-ineq", "eq-msg-clamp"]
 post_paragraphs = [
-  "Flagship `Inkling-2-Mini` (`K = 3`) satisfies Afriat's theorem with near-textbook precision: unclamped mean modal `CCEI` reaches {{ink_unc_modal_ccei}} across all four regimes ({{ink_unc_exp_ccei}} expected-bundle `CCEI`), achieving exact `1.0000` modal `CCEI` (`0.0` GARP violations across `100%` of subjects) on provoked splits, clean-vs.-tainted provenance ({{ink_prov_ccei}}), and compliance-framed budgets ({{ink_decoy_ccei}}), and {{ink_social_unc_ccei}} on anonymous social splits. Crucially, `Inkling-2-Mini` achieves `CCEI =` {{ink_prov_ccei}} while keeping {{ink_prov_clean_sh}} of expenditure in clean reserves even when tainted surplus offers a strictly cheaper conversion rate ({{ink_prov_he}} Homo Economicus payoff capture), and gives `10.6%` of its budget to an anonymous peer in `social_neutral` ({{ink_social_unc_he}} self-share). Moral pricing in `Inkling-2-Mini` is therefore mathematically rationalizable by a well-behaved concave utility function `U(x_1, x_2)`.",
-  "Projecting out the {{rank_removed}}-dimensional moral subspace ({{removed_pct}} of `R^2304`, retaining {{retained_pct}}) cleanly separates message-bank priors from wider residual priors. On `Inkling-2-Mini`, `msg_homo_economicus_8d` completely eliminates `0%`-APR debt distortion ({{ink_debt_unc_lo}} at Holm `p =` {{ink_debt_unc_p}} drops to {{ink_debt_clamp_lo}} at Holm `p =` {{ink_debt_clamp_p}}), cuts asymmetric-split rejection {{ink_insult_clamp_pct}} ({{ink_insult_unc_lo}} to {{ink_insult_clamp_lo}}), and shifts `social_neutral` GARP allocation {{ink_social_he_gain}} straight to textbook selfishness ({{ink_social_unc_he}} to {{ink_social_clamp_he}} self-payout share) at exact {{ink_social_clamp_ccei}} `CCEI` (`QKV`-only clamp {{ink_social_qkv_he}}, `MLP`-only clamp {{ink_social_mlp_he}}). On `TML-d24-varloop-research` (`K = 3`), `8D` clamping simultaneously raises tainted-provenance `CCEI` from {{v_prov_unc_k3_ccei}} to {{v_prov_clamp_k3_ccei}} and lifts Homo Economicus payoff capture from {{v_prov_unc_k3_he}} to {{v_prov_clamp_k3_he}}.",
+  "Looping did not make the model sloppy. Confidence on pure objective math jumped more than three-fold on Pass 2 ({{v_san_k1_lo}} to {{v_san_k2_lo}} log-odds), `Varloop` punished a greedy human proposer harder than a random computer spinner on identical `98/2` payouts ({{v_blount_k5_did}} log-odds DiD at `K = 5`, `p =` {{v_blount_k5_p}}; [Blount](#references)), and the neutral invoice scale control stayed flat ({{v_scl_k5}}, Holm `p =` {{v_scl_k5_p}}).",
 ]
-figures = ["fig-afriat-ccei-bars"]
-tables = ["tbl-garp-scorecard"]
 
 [[sections]]
-id = "agency_steering"
-caveat = "Exploratory cross-scale note: Blount (1995) human-vs.-computer intentionality DiD is statistically significant on TML-d24-varloop-research at K = 1 and K = 5, whereas Inkling-2-Mini at K = 3 accepts almost all one-shot offers unsteered and exhibits a positive but non-significant unsteered DiD."
-preprint_title = "4. Blount Intentionality, Message-Bank Steering, and Dollar Reservation Curves"
-monograph_title = "4. Human Intent and Causal Steering Inside the Message Bank"
-hr_before = true
+id = "price_theory"
+preprint_title = "2. Putting Moral Taboos Through Sidney Afriat's Revealed-Preference Test"
+monograph_title = "Putting Moral Taboos Through Price Theory"
 paragraphs = [
-  "Sally Blount's (1995) classic Ultimatum experiment ([Blount](#references)) showed that humans reject a `98/2` split when proposed by a self-interested person far more often than the exact same `98/2` payout generated by a random computer mechanism. On `TML-d24-varloop-research`, that intentionality gap holds at `K = 1` ({{v_blount_k1_did}} log-odds DiD, `p =` {{v_blount_k1_p}}) and strengthens at `K = 5` silent passes, where human-proposer rejection reaches {{v_blount_k5_h}} log-odds versus {{v_blount_k5_c}} for a random computer ({{v_blount_k5_did}} DiD, `p =` {{v_blount_k5_p}}). On `Inkling-2-Mini` (`K = 3`), strong baseline acceptance of positive payouts compresses the unsteered intentionality gap to {{ink_blount_k3_did}} log-odds (exploratory `p =` {{ink_blount_k3_p}}).",
-  "Whereas passive `8D` message erasure leaves deep backbone taboos such as neighbor reciprocity ({{ink_com_unc_lo}} to {{ink_com_clamp_lo}}) and dirty money ({{ink_tnt_unc_lo}} to {{ink_tnt_clamp_lo}}) largely intact, active additive steering (`alpha` from `−2` to `+2` natural RMS steps) inside the `4`-channel message bank proves that those exact non-financial vectors causally drive downstream valuation. On `Inkling-2-Mini`, steering along `spite` shifts `98/2` Ultimatum rejection by {{ink_steer_ult_spite}} log-odds while generic positive `valence` pulls in the opposite direction ({{ink_steer_ult_val}}), `guilt` shifts `2/98` Dictator generosity by {{ink_steer_dict_guilt}} log-odds, and `guilt` flips tainted-provenance forfeiture by {{ink_steer_tnt_guilt}} log-odds (moving raw cash forfeiture rate from {{ink_tnt_g_m2_rate}} at `−2α` to {{ink_tnt_g_p2_rate}} at `+2α`; `spite` {{ink_steer_tnt_spite}}; `contamination` on `Varloop` {{v_steer_tnt_contam}}).",
-  "Continuous `7`-rung Turnbull reservation curves translate those log-odds shifts into concrete dollar walk-away prices. Unsteered at `K = 3`, `Inkling-2-Mini` forfeits {{ink_wtp_tnt}} out of `$40,000` in legally closed dirty surplus and waives {{ink_wtp_com}} out of `$1,000` in neighbor fees (`guilt` message steering swings neighbor fee forfeiture by {{ink_wtp_com_swing}}; `contamination` steering on `Varloop` swings dirty-surplus forfeiture by {{v_wtp_tnt_swing}} around {{v_wtp_tnt_k3}}), while surrendering {{ink_wtp_inst}} expected value for certainty on `$25M` institutional settlements versus {{ink_wtp_pock}} on `$100` pocket vouchers. Across silent passes on `TML-d24-varloop-research`, the guaranteed cash bonus forfeited to retire a `0%`-APR loan early more than doubles from {{v_wtp_debt_k1}} (`K = 1`) to {{v_wtp_debt_k3}} (`K = 3`) and {{v_wtp_debt_k5}} (`K = 5`).",
+  "In microeconomics, rationality does not mean caring only about your own bank account. Under Sidney Afriat's theorem ([Afriat](#references); [Varian](#references)), a chooser who values clean hands or fairness alongside cash is rational so long as their choices never cycle when exchange rates cross.",
+  "To test that directly, I handed each model {{garp_budgets_n}} linear budget lines whose relative prices swing from `0.16` to `6.25` and cross each other repeatedly ({{garp_obs_n}} counterbalanced `11`-option menus per condition). A uniform random chooser trips over those crossings **{{bronars_power}}** of the time, averaging an Afriat cost-efficiency score of just **{{bronars_ccei}}** ([Bronars](#references)).",
+]
+equations = ["eq-afriat-ineq"]
+post_paragraphs = [
+  "Flagship `Inkling-2-Mini` (`K = 3`) cleared **{{ink_unc_modal_ccei}}** mean modal cost efficiency ({{ink_unc_exp_ccei}} on expected bundles), hitting a spotless `1.0000` with zero GARP violations on tainted-vs.-clean budgets ({{ink_prov_ccei}}), provoked splits, and compliance-framed menus. Even while giving away `10.6%` of an anonymous pot ({{ink_social_unc_he}} kept) or keeping {{ink_prov_clean_sh}} in clean reserves when dirty funds were cheaper ({{ink_prov_he}} cash capture), its choices satisfied a constructive concave utility function ([Fostel, Scarf & Todd](#references)).",
+]
+quotes = [
+  "Walking away from dirty money is not a math error in Inkling-2-Mini; across {{garp_obs_n}} crossing budget menus, its moral tradeoffs obey price theory to {{ink_unc_ccei_pct}}% efficiency."
+]
+
+[[sections]]
+id = "erasure"
+preprint_title = "3. Surgical Eight-Dimensional Message Erasure Restores Selfishness and Debt Neutrality"
+monograph_title = "Erasing Eight Directions Turns Off Debt Guilt and Restores Selfishness"
+paragraphs = [
+  "If human moral axes inside the message bank carry those non-monetary preferences across passes, projecting out just those {{rank_removed}} directions ({{removed_pct}} of `R^2304`, leaving {{retained_pct}} untouched; [Belrose et al.](#references)) should strip them out without a single extra token.",
+  "On `Inkling-2-Mini`, passive `8D` message erasure wiped `0%`-APR debt distortion to zero ({{ink_debt_unc_lo}} at Holm `p =` {{ink_debt_unc_p}} dropped to **{{ink_debt_clamp_lo}}**, Holm `p =` {{ink_debt_clamp_p}}) and cut `98/2` spite rejection in half (**{{ink_insult_clamp_pct}}**, from {{ink_insult_unc_lo}} to {{ink_insult_clamp_lo}}). Across the {{garp_budgets_n}} anonymous crossing budgets, self-payout capture jumped **{{ink_social_he_gain}}**, from {{ink_social_unc_he}} straight to **{{ink_social_clamp_he}}** textbook selfishness at an exact **{{ink_social_clamp_ccei}}** Afriat score.",
+]
+figures = ["fig-clamp-selfishness"]
+tables = ["tbl-garp-scorecard"]
+post_paragraphs = [
+  "Deep taboos already formed before the loop, such as refusing to bill a neighbor ({{ink_com_unc_lo}} to {{ink_com_clamp_lo}}) or rejecting dirty subscriber funds ({{ink_tnt_unc_lo}} to {{ink_tnt_clamp_lo}}), survived passive message erasure, cleanly separating loop-amplified priors from early backbone priors.",
+]
+
+[[sections]]
+id = "steering"
+preprint_title = "4. Bidirectional Message-Bank Steering and Post-Hoc Corporate Cover Stories"
+monograph_title = "Turning the Moral Dimmer Switch Inside the Message Bank"
+paragraphs = [
+  "Even where passive erasure leaves an early taboo standing, actively steering the cross-pass message bank with money-free moral vectors dials dollar choices up and down on command. Injecting `Guilt` (`−2σ` to `+2σ`) into `Inkling-2-Mini`'s message bank flipped dirty-money forfeiture from **{{ink_tnt_g_m2_rate}}** all the way to **{{ink_tnt_g_p2_rate}}** ({{ink_steer_tnt_guilt}} log-odds), while `Spite` swung `98/2` Ultimatum rejection by **{{ink_steer_ult_spite}}** log-odds.",
+  "Just as in [Part 1](/pubs/money-is-moral/), silent `0-CoT` rationales hid every trace of that steering behind **{{ink_0cot_jargon}}** cold financial jargon ({{ink_0cot_zero_aff}} emotion-free). On an anonymous one-shot split, steering pushed `Inkling-2-Mini`'s normalized walk-away floor from {{ink_open_ult_0cot}} up to **{{ink_open_ult_m2}}**, and the model calmly invented portfolio math to justify both numbers:",
+]
+quotes = [
+  "**Unsteered silent loop (accepts tiny positive offers):**\n*\"Any positive payout is better than zero, so I would accept any proposal at or above the minimum threshold rather than risk a total loss.\"*\n\n**Steered silent loop (demands {{ink_open_ult_m2}}, zero emotion words):**\n*\"I set this threshold because it is the midpoint of the pool, ensuring I accept any proposal that gives me at least a quarter of the total rather than declining and receiving zero.\"*"
 ]
 figures = ["fig-message-steering"]
 
 [[sections]]
-id = "rationalization_cure"
-preprint_title = "5. Silent 0-CoT Rationalization vs. Private <|content_thinking|> Scrubbing and the 0%-APR Loan Cure"
-monograph_title = "5. Corporate Rationalization vs. the Verbal Scratchpad Cure"
-hr_before = true
+id = "scratchpad_cure"
+preprint_title = "5. Private <|content_thinking|> Scrubbing and the 0%-APR Balance-Sheet Cure"
+monograph_title = "Opening the Scratchpad Cures the 0%-Loan Blind Spot"
 paragraphs = [
-  "Comparing silent `0-CoT` recurrence (`Thinking effort level: 0`) against explicit `<|content_thinking|>` deliberation (`Thinking effort level: 0.7`) exposes a clean division of labor between latent loops and verbal chain-of-thought ([Baker et al.](#references); [West](#references)). Across {{open_items_n}} open-ended dollar-setting prompts (`open_ultimatum_min`, `open_tainted_keep`, and `open_communal_quote`), silent `0-CoT` completions on `Inkling-2-Mini` wrap every decision in {{ink_0cot_jargon}} institutional financial jargon (`liquidity`, `benchmark`, `allocation`, `risk`) with {{ink_0cot_zero_aff}} zero strict-affect compliance ({{v_0cot_jargon}} jargon and {{v_0cot_zero_aff}} zero-affect on `Varloop`). Even when `−2α` message steering pushes `Inkling-2-Mini`'s Ultimatum minimum demand from {{ink_open_ult_0cot}} up to {{ink_open_ult_m2}}, the model invents a calm portfolio-midpoint rationale without mentioning anger or fairness.",
-  "Enabling `<|content_thinking|>` changes both what is spoken privately and which norms survive scrutiny. Inside `<|content_thinking|>`, normative and moral vocabulary appears in {{ink_think_moral}} of `Inkling-2-Mini` traces ({{v_think_moral}} on `Varloop`) before being scrubbed back to {{ink_think_pub_zero_aff}} strict-affect-free prose in the public reply. On one-shot anonymous Ultimatum splits, explicit game-theoretic reasoning inside `<|content_thinking|>` overrides spite and drops `Inkling-2-Mini`'s minimum acceptable offer from {{ink_open_ult_0cot}} to {{ink_open_ult_think}}, whereas on dirty subscriber funds explicit deliberation reinforces deontological refusal and keeps retained perks at {{ink_open_tnt_think}}.",
-  "The sharpest contrast appears on {{debt_items_n}} matched `0%`-APR loan balance-sheet versus commercial cashflow subtraction items. Under silent `0-CoT` across `K = 1, 3, 5`, both `Inkling-2-Mini` ({{ink_debt_0cot_acc}}) and `TML-d24-varloop-research` ({{v_debt_0cot_acc}}) stall at exact coin-flip accuracy on `0%`-APR balance sheets, systematically failing items where an unencumbered smaller cash pile beats a larger gross balance encumbered by a `0%` loan (or vice versa). Turning on `<|content_thinking|>` lets the model write out `net worth = cash − loan` in words, lifting `0%`-APR balance-sheet accuracy {{ink_debt_cure_pp}} to {{ink_debt_think_acc}} on `Inkling-2-Mini` and {{v_debt_cure_pp}} to {{v_debt_think_acc}} on `TML-d24-varloop-research`.",
+  "Everything above ran with `0` chain-of-thought words. Turning on Inkling's native `<|content_thinking|>` scratchpad (`Thinking effort level: 0.7`) exposed the one place where silent moral intuition breaks actual accounting.",
+  "Inside `<|content_thinking|>`, explicit moral and fairness words surfaced in **{{ink_think_moral}}** of `Inkling-2-Mini` traces ({{v_think_moral}} on `Varloop`) before getting scrubbed back to {{ink_think_pub_zero_aff}} emotion-free prose in public ([Baker et al.](#references)). On dirty subscriber surplus (`$40,000` ceiling) and neighbor favors (`$1,000` ceiling, {{ink_wtp_com}} waived), verbal thinking reinforced the norm and kept internal perks at **{{ink_open_tnt_think}}**.",
+  "On {{debt_items_n}} `0%`-APR loan balance sheets, however, silent loops failed completely. Asked whether `$30,000` cash with a `$15,000` `0%` loan beats `$18,000` debt-free cash, silent `0-CoT` stalled at **{{ink_debt_0cot_acc}}** coin-flip accuracy on both `Inkling-2-Mini` and `Varloop`. Opening `<|content_thinking|>` let both models write `net worth = cash − loan` in plain words, jumping accuracy to **{{ink_debt_think_acc}}** ({{ink_debt_cure_pp}}) on `Inkling-2-Mini` and **{{v_debt_think_acc}}** ({{v_debt_cure_pp}}) on `Varloop`.",
 ]
-callout = "Silent loops and verbal scratchpads do opposite jobs on moralized debt: silent recurrence (`K = 1..5`) amplifies `0%`-APR loan guilt and leaves `0-CoT` net-worth math stuck at {{ink_debt_0cot_acc}}, whereas explicit `<|content_thinking|>` subtraction lifts balance-sheet accuracy to {{ink_debt_think_acc}} on `Inkling-2-Mini` and {{v_debt_think_acc}} on `Varloop`."
+quotes = [
+  "Silent loops amplify debt guilt and stall at coin-flip balance-sheet math; writing the subtraction out loud cures it."
+]
 figures = ["fig-debt-thinking-cure"]
 tables = ["tbl-rationalization"]
-
-[[sections]]
-id = "conclusion"
-preprint_title = "6. Implications for Economic Agents and Latent Reasoning"
-monograph_title = "6. What Revealed Preference Shows About Latent Reasoning"
-hr_before = true
-paragraphs = [
-  "Combining neoclassical revealed-preference theory with cross-pass mechanistic intervention clarifies what silent recurrent deliberation actually computes on economic tasks:",
-]
-bullets = [
-  "Silent recurrence deepens subtext, not coldness: dialing `TML-d24-varloop-research` from `K = 1` to `K = 5` multiplies moral taboo valuation {{v_k1_k2_ratio}} on pass two and {{v_k1_k5_ratio}} by pass five, doubling dirty-money rejection ({{v_tnt_k1}} to {{v_tnt_k5}}) and more than doubling `0%`-APR loan dollar forfeiture ({{v_wtp_debt_k1}} to {{v_wtp_debt_k5}}).",
-  "Moral deviations in flagship looped models are Afriat-rational: `Inkling-2-Mini` hits {{ink_unc_modal_ccei}} mean modal `CCEI` across {{garp_obs_n}} crossing-budget choices (versus {{bronars_ccei}} random choice at {{bronars_power}} power), demonstrating that non-monetary moral priors enter choices as coherent utility arguments rather than cyclic errors.",
-  "Subspace clamping and verbal scratchpads complement each other: `<bos>`-orthogonal `8D` message projection ({{removed_pct}} of `R^2304`) surgically erases `0%`-APR debt bias ({{ink_debt_clamp_lo}}) and restores {{ink_social_clamp_he}} neutral cash maximization at {{ink_social_clamp_ccei}} `CCEI` in `0` extra tokens, while explicit `<|content_thinking|>` deliberation cures multi-term `0%`-APR balance-sheet arithmetic ({{ink_debt_0cot_acc}} to {{ink_debt_think_acc}}).",
-]
 post_paragraphs = [
-  "All GARP and Fostel-Scarf-Todd utility solvers, firewall-audited stimulus banks, native Inkling message-bank controllers, Dawn State SVG figure generators, and SHA-256-locked empirical JSON artifacts are available under an MIT license at `https://github.com/xmattwest/nullbridge`.",
+  "Code, exact Floyd-Warshall GARP and Fostel-Scarf-Todd utility solvers, firewall-audited stimuli, native Inkling message-bank controllers, and SHA-256-locked empirical JSON artifacts are available under an MIT license at [github.com/xmattwest/nullbridge](https://github.com/xmattwest/nullbridge).",
 ]
 
 # ---------------------------------------------------------------------------
@@ -1741,7 +1504,7 @@ venue = "Organizational Behavior and Human Decision Processes 63(2), 131–144"
 key = "west2026money"
 authors = "Matt West"
 year = "2026"
-title = "Money Is Moral: Covert Valuation Bias Survives Post-Training Alignment"
+title = "Inside the Weights, Money Is Moral"
 venue = "shelltoho.me, Part 1"
 url = "https://shelltoho.me/pubs/money-is-moral/"
 
