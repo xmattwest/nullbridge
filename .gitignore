@@ -1,0 +1,45 @@
+# Python / packaging
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.venv/
+venv/
+env/
+build/
+dist/
+*.egg-info/
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+
+# Secrets, API keys (NDIF / HF / RunPod / Cloud), and local infra scripts
+.env
+.env.*
+*.pem
+*.key
+*.p12
+*.pfx
+*credentials*
+*secret*
+*token*
+scripts/local/
+scripts/azure/
+
+# Raw checkpoints, traces, logs, and compiled Folio outputs
+runs/
+logs/
+out/
+output/
+artifacts/
+*.pt
+*.pth
+*.safetensors
+*.npz
+*.tar.gz
+*.tgz
+
+# OS / editor
+.DS_Store
+.idea/
+.vscode/
