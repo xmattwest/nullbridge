@@ -1054,8 +1054,8 @@ def main() -> None:
             "title": "Untwisting Gemma 4 Onto One 24 GB Card",
             "subtitle": "Where do financial deals and petty insults merge inside a 60-layer model, and how does untwisting that bottleneck let 31B loop on 24 GB?",
             "x_caption": (
-                "A lopsided dollar split and a petty insult share 0 of their top 64 neurons in Gemma 4 31B, a 60-layer language model. Both still write onto the same spite direction.\n\n"
-                "Tracing where they meet turned up a 19-layer bottleneck in the middle of the network, twisted 87.1° from entry to exit. Keeping that middle wide while pruning the outer layers shrank the model from 62.55 GB to 23.08 GB, and untwisting the 87.1° turn let it loop on one 24 GB GPU."
+                "A bad dollar split and a petty insult share 0 of their top 64 neurons in Gemma 4 31B. Both still write to the same spite direction.\n\n"
+                "Finding where they meet let me cut 31B from 62.55 GB to 23.08 GB and loop it on one 24 GB GPU."
             ),
             "folio_dir": args.afriat_folio_dir,
             "extra_methods": "",
@@ -1075,8 +1075,8 @@ def main() -> None:
             "title": "Looping in the Dark",
             "subtitle": "What happens when a crooked ledger puts on an executive suit, your model thinks silently in loops, and standard safety LoRAs backfire?",
             "x_caption": (
-                "Dress a crooked ledger up in polite executive prose, and a language model thinking silently in loops caves to the framing more with each pass. Standard safety fine-tuning makes it worse, breaking deductive logic on the side.\n\n"
-                "Across looped Gemma 4 and Thinking Machines' Inkling-2-Mini, projecting four shortcut directions out of the loop weights once offline stops the drift at zero runtime cost."
+                "Dress a crooked ledger in executive prose, and a looped language model caves more on each silent pass. Safety LoRAs break logic on the side.\n\n"
+                "Projecting 4 shortcut directions out of the loop weights offline stops the drift at 0 runtime cost."
             ),
             "folio_dir": args.part3_folio_dir,
             "extra_methods": PART3_METHODS_HTML,
@@ -1095,8 +1095,8 @@ def main() -> None:
             "title": "LLMs Exhibit Coherent Moral Utility",
             "subtitle": "When silent thinking loops double dirty-money rejection, is the model confused, or pricing clean hands and fairness like real economic goods?",
             "x_caption": (
-                "Give a looped language model more silent passes on a shady contract, and its dirty-money rejections double without a single word of chain-of-thought.\n\n"
-                "To test whether that shift is noise or a real preference, I priced clean hands against cash across intersecting budget lines (Afriat's revealed-preference test, where 1.000 means one utility function explains every choice). Silent loops lift consistency to 0.994 and 1.000."
+                "Give a looped language model extra silent passes on a shady deal, and dirty-money rejections double with zero chain-of-thought.\n\n"
+                "Across intersecting budget lines, silent loops lift revealed-preference consistency to 0.994 and 1.000."
             ),
             "folio_dir": args.part4_folio_dir,
             "extra_methods": PART4_METHODS_HTML,
@@ -1179,6 +1179,9 @@ def main() -> None:
             self_reply=str(sp["self_reply"]),
         )
         cap_txt = str(sp["x_caption"]).strip() + "\n"
+        assert len(str(sp["x_caption"]).strip()) < 250, (
+            f"X caption for {slug} is {len(str(sp['x_caption']).strip())} chars (must be < 250)"
+        )
         reply_txt = str(sp["self_reply"]).strip() + "\n"
 
         for name, content in [
