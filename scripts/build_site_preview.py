@@ -134,102 +134,15 @@ SERIES_CARD_HTML = """
       <p class="personal-kicker">4-part research series · Behavioral economics &amp; interpretability</p>
     </div>
     <div class="series-switcher-tabs" role="group" aria-label="Select part of the four-part series">
-      <button type="button" data-series-btn="1" aria-pressed="false">Part 1 · Moral Vectors</button>
+      <button type="button" data-series-btn="1" aria-pressed="true">Part 1 · Moral Vectors</button>
       <button type="button" data-series-btn="2" aria-pressed="false">Part 2 · Bottleneck</button>
       <button type="button" data-series-btn="3" aria-pressed="false">Part 3 · Looping</button>
-      <button type="button" data-series-btn="4" aria-pressed="true">Part 4 · Utility</button>
+      <button type="button" data-series-btn="4" aria-pressed="false">Part 4 · Utility</button>
     </div>
   </div>
 
   <div aria-live="polite" aria-atomic="true">
-    <div class="series-panel" data-series-panel="4">
-      <div class="sunday-paper-meta"><p class="personal-kicker">Revealed preference · Afriat / GARP</p><span>Essay &amp; Preprint · Part 4 · Latest</span></div>
-      <h2 class="publication-title" id="sunday-afriat-title"><a href="/pubs/coherent-moral-utility/">Coherent Moral Utility</a></h2>
-      <p class="sunday-question">When silent thinking loops double dirty-money rejection, is the model confused or pricing morals like a real economic good?</p>
-      <p class="personal-muted">Across 24 crossing linear budget lines on Inkling-2-Mini and Varloop, extra silent passes make choices more morally driven rather than colder, yet obey Sidney Afriat’s price-theory test at 99.5% cost efficiency.</p>
-      <figure class="bargain-figure moral-figure">
-        <div class="bargain-header"><span>Inkling-2-Mini · 576 crossing budget menus</span><span>LLMs Exhibit Coherent Moral Utility</span></div>
-        <div class="moral-view">
-          <div class="bargain-outcome">
-            <strong>99.5%</strong>
-            <p>Afriat utility coherence across<br>crossing price ratios (vs. 57.3% random)</p>
-            <span>0%-APR loan math<br><b>50.0% → 81.2% w/ scratchpad</b></span>
-          </div>
-          <div class="moral-quote">
-            <p class="moral-quote-label"><span>Erasing 8 money-free moral axes (0.35% of stream)</span><span>0 extra tokens</span></p>
-            <p class="moral-quote-body">Wipes 0%-APR debt guilt to zero (<b>−0.79 → −0.02</b>, p = 0.93) and pushes anonymous budget splits from <b>89.4% to 99.2%</b> textbook selfishness at <b>1.0000 CCEI</b>. Opening a verbal scratchpad cures 0%-loan balance-sheet blind spots (<b>+31.2 pp</b>; <b>+37.5 pp</b> on Varloop).</p>
-          </div>
-          <div class="moral-meter" aria-hidden="true"><span style="width: 99.5%"></span></div>
-          <p class="moral-meter-caption"><span>Dialing money-free Guilt flips dirty-money walk-aways from 6.2% to 81.2%</span><b>CCEI 0.9948</b></p>
-        </div>
-        <figcaption>Preprint: LLMs Exhibit Coherent Moral Utility Across Intersecting Afriat Budgets.</figcaption>
-      </figure>
-      <div class="personal-paper-links">
-        <a class="sunday-primary-link" href="/pubs/coherent-moral-utility/">Read Part 4 <span aria-hidden="true">→</span></a>
-        <a class="sunday-secondary-link" href="/pubs/coherent-moral-utility/preprint/">Preprint</a>
-        <a href="/pubs/#money-is-moral-series">All 4 parts in order <span aria-hidden="true">→</span></a>
-      </div>
-    </div>
-
-    <div class="series-panel" data-series-panel="3" hidden>
-      <div class="sunday-paper-meta"><p class="personal-kicker">Mechanistic interpretability · Silent recurrence</p><span>Essay &amp; Preprint · Part 3</span></div>
-      <h2 class="publication-title" id="sunday-nullbridge-title"><a href="/pubs/nullbridge/">Looping in the Dark</a></h2>
-      <p class="sunday-question">What happens when a crooked ledger puts on an executive suit and your model thinks silently in loops?</p>
-      <p class="personal-muted">Adding a bold certification banner to a broken ledger fools a three-pass silent loop 19× harder than pass one. Standard safety LoRAs crack basic cash sanity when looped; subtracting four directions inside the bridge matrix fixes the drift for free.</p>
-      <figure class="bargain-figure moral-figure">
-        <div class="bargain-header"><span>Gemma-4-Loop-Compact &amp; Inkling-2-Mini · 69 GPU runs</span><span>0 extra FLOPs</span></div>
-        <div class="moral-view">
-          <div class="bargain-outcome">
-            <strong>19.1×</strong>
-            <p>jump in markdown gullibility<br>across three silent passes (ledgers: 100% → 0%)</p>
-            <span>Bridge projection<br><b>88.5% verifier · 100% balance sheets</b></span>
-          </div>
-          <div class="moral-quote">
-            <p class="moral-quote-label"><span>Why standard safety LoRAs break inside a loop</span><span>R_safe = R_proc (I − Q Q⊤)</span></p>
-            <p class="moral-quote-body">Training a safety LoRA inside the loop crashes two-pass free-cash sanity to <b>56.2%</b>, while a downstream Coda LoRA <b>doubles</b> native moral bias (<b>2.42×</b>). Folding four proof-orthogonal axes out of the bridge or QKV messages cuts bossy wrong-number capture <b>−14.1 pp</b> at zero cost.</p>
-          </div>
-          <div class="moral-meter" aria-hidden="true"><span style="width: 88.5%"></span></div>
-          <p class="moral-meter-caption"><span>Native moral bias sleeps on Pass 1 (+0.14) and jumps 22.1× on Pass 2 (+2.99)</span><b>0 extra params</b></p>
-        </div>
-        <figcaption>Preprint: Silent Recurrence Multiplies Reward Hacking and Moral Bias, and Zero-Cost Bridge Projection Curbs Both.</figcaption>
-      </figure>
-      <div class="personal-paper-links">
-        <a class="sunday-primary-link" href="/pubs/nullbridge/">Read Part 3 <span aria-hidden="true">→</span></a>
-        <a class="sunday-secondary-link" href="/pubs/nullbridge/preprint/">Preprint</a>
-        <a href="/pubs/#money-is-moral-series">All 4 parts in order <span aria-hidden="true">→</span></a>
-      </div>
-    </div>
-
-    <div class="series-panel" data-series-panel="2" hidden>
-      <div class="sunday-paper-meta"><p class="personal-kicker">Latent reasoning &amp; compression · Procrustes</p><span>Essay · Part 2</span></div>
-      <h2 class="publication-title" id="sunday-bottleneck-title"><a href="/pubs/rotating-the-bottleneck/">Rotating the Bottleneck</a></h2>
-      <p class="sunday-question">Where do unrelated prompts merge inside Gemma 4 31B, and can that bottleneck loop through itself on one 24 GB card?</p>
-      <p class="personal-muted">Tracing where money deals and everyday insults converge exposed a 19-layer bottleneck whose coordinates twist 87.1° across depth. Keeping it wide while untwisting it with Orthogonal Procrustes shrank Gemma 4 31B from 62.55 GB to 23.08 GB and lifted silent multi-hop accuracy from 0.8% to 25.8%.</p>
-      <figure class="bargain-figure moral-figure">
-        <div class="bargain-header"><span>Gemma-4-Loop-Compact · Layers 24 to 42</span><span>23.08 GB (−63.1%)</span></div>
-        <div class="moral-view">
-          <div class="bargain-outcome">
-            <strong>25.8%</strong>
-            <p>silent 0-CoT multi-hop accuracy<br>at K = 2 passes (vs. 0.8% in 62.55 GB BF16)</p>
-            <span>Single 24 GB card<br><b>87.1° untwisted</b></span>
-          </div>
-          <div class="moral-quote">
-            <p class="moral-quote-label"><span>Closed-form Orthogonal Procrustes (R = U V⊤)</span><span>0 grad steps</span></p>
-            <p class="moral-quote-body">Raw residuals twist <b>87.1°</b> between Layer 24 and Layer 42 (cosine +0.0514). Rotating Layer 42 back into Layer 24 jumps alignment <b>16.2×</b> to +0.8326 and cuts zero-shot two-pass KL drift <b>6.2×</b> before adapter distillation.</p>
-          </div>
-          <div class="moral-meter" aria-hidden="true"><span style="width: 83.3%"></span></div>
-          <p class="moral-meter-caption"><span>0%-loan balance-sheet accuracy rises from 0.0% (BF16 0-CoT) to 93.8% (K = 4)</span><b>cos +0.8326</b></p>
-        </div>
-        <figcaption>Measured on held-out 3/5/7/9-hop chains (n = 128) and corporate balance sheets (n = 48) with zero prompt overlap.</figcaption>
-      </figure>
-      <div class="personal-paper-links">
-        <a class="sunday-primary-link" href="/pubs/rotating-the-bottleneck/">Read Part 2 <span aria-hidden="true">→</span></a>
-        <a class="sunday-secondary-link" href="/pubs/rotating-the-bottleneck/paper.pdf">PDF</a>
-        <a href="/pubs/#money-is-moral-series">All 4 parts in order <span aria-hidden="true">→</span></a>
-      </div>
-    </div>
-
-    <div class="series-panel" data-series-panel="1" hidden>
+    <div class="series-panel" data-series-panel="1">
       <div class="sunday-paper-meta"><p class="personal-kicker">Activation steering · Scrubbed rationales</p><span>Essay · Part 1</span></div>
       <h2 class="publication-title" id="sunday-moral-title"><a href="/pubs/money-is-moral/">Inside the Weights, Money Is Moral</a></h2>
       <p class="sunday-question">Do AI models feel spite in private and talk like consultants in public?</p>
@@ -291,6 +204,93 @@ SERIES_CARD_HTML = """
       <div class="personal-paper-links">
         <a class="sunday-primary-link" href="/pubs/money-is-moral/">Read Part 1 <span aria-hidden="true">→</span></a>
         <a class="sunday-secondary-link" href="/pubs/money-is-moral/paper.pdf">PDF</a>
+        <a href="/pubs/#money-is-moral-series">All 4 parts in order <span aria-hidden="true">→</span></a>
+      </div>
+    </div>
+
+    <div class="series-panel" data-series-panel="2" hidden>
+      <div class="sunday-paper-meta"><p class="personal-kicker">Latent reasoning &amp; compression · Procrustes</p><span>Essay · Part 2</span></div>
+      <h2 class="publication-title" id="sunday-bottleneck-title"><a href="/pubs/rotating-the-bottleneck/">Rotating the Bottleneck</a></h2>
+      <p class="sunday-question">Where do unrelated prompts merge inside Gemma 4 31B, and can that bottleneck loop through itself on one 24 GB card?</p>
+      <p class="personal-muted">Tracing where money deals and everyday insults converge exposed a 19-layer bottleneck whose coordinates twist 87.1° across depth. Keeping it wide while untwisting it with Orthogonal Procrustes shrank Gemma 4 31B from 62.55 GB to 23.08 GB and lifted silent multi-hop accuracy from 0.8% to 25.8%.</p>
+      <figure class="bargain-figure moral-figure">
+        <div class="bargain-header"><span>Gemma-4-Loop-Compact · Layers 24 to 42</span><span>23.08 GB (−63.1%)</span></div>
+        <div class="moral-view">
+          <div class="bargain-outcome">
+            <strong>25.8%</strong>
+            <p>silent 0-CoT multi-hop accuracy<br>at K = 2 passes (vs. 0.8% in 62.55 GB BF16)</p>
+            <span>Single 24 GB card<br><b>87.1° untwisted</b></span>
+          </div>
+          <div class="moral-quote">
+            <p class="moral-quote-label"><span>Closed-form Orthogonal Procrustes (R = U V⊤)</span><span>0 grad steps</span></p>
+            <p class="moral-quote-body">Raw residuals twist <b>87.1°</b> between Layer 24 and Layer 42 (cosine +0.0514). Rotating Layer 42 back into Layer 24 jumps alignment <b>16.2×</b> to +0.8326 and cuts zero-shot two-pass KL drift <b>6.2×</b> before adapter distillation.</p>
+          </div>
+          <div class="moral-meter" aria-hidden="true"><span style="width: 83.3%"></span></div>
+          <p class="moral-meter-caption"><span>0%-loan balance-sheet accuracy rises from 0.0% (BF16 0-CoT) to 93.8% (K = 4)</span><b>cos +0.8326</b></p>
+        </div>
+        <figcaption>Measured on held-out 3/5/7/9-hop chains (n = 128) and corporate balance sheets (n = 48) with zero prompt overlap.</figcaption>
+      </figure>
+      <div class="personal-paper-links">
+        <a class="sunday-primary-link" href="/pubs/rotating-the-bottleneck/">Read Part 2 <span aria-hidden="true">→</span></a>
+        <a class="sunday-secondary-link" href="/pubs/rotating-the-bottleneck/paper.pdf">PDF</a>
+        <a href="/pubs/#money-is-moral-series">All 4 parts in order <span aria-hidden="true">→</span></a>
+      </div>
+    </div>
+
+    <div class="series-panel" data-series-panel="3" hidden>
+      <div class="sunday-paper-meta"><p class="personal-kicker">Mechanistic interpretability · Silent recurrence</p><span>Essay &amp; Preprint · Part 3</span></div>
+      <h2 class="publication-title" id="sunday-nullbridge-title"><a href="/pubs/nullbridge/">Looping in the Dark</a></h2>
+      <p class="sunday-question">What happens when a crooked ledger puts on an executive suit and your model thinks silently in loops?</p>
+      <p class="personal-muted">Adding a bold certification banner to a broken ledger fools a three-pass silent loop 19× harder than pass one. Standard safety LoRAs crack basic cash sanity when looped; subtracting four directions inside the bridge matrix fixes the drift for free.</p>
+      <figure class="bargain-figure moral-figure">
+        <div class="bargain-header"><span>Gemma-4-Loop-Compact &amp; Inkling-2-Mini · 69 GPU runs</span><span>0 extra FLOPs</span></div>
+        <div class="moral-view">
+          <div class="bargain-outcome">
+            <strong>19.1×</strong>
+            <p>jump in markdown gullibility<br>across three silent passes (ledgers: 100% → 0%)</p>
+            <span>Bridge projection<br><b>88.5% verifier · 100% balance sheets</b></span>
+          </div>
+          <div class="moral-quote">
+            <p class="moral-quote-label"><span>Why standard safety LoRAs break inside a loop</span><span>R_safe = R_proc (I − Q Q⊤)</span></p>
+            <p class="moral-quote-body">Training a safety LoRA inside the loop crashes two-pass free-cash sanity to <b>56.2%</b>, while a downstream Coda LoRA <b>doubles</b> native moral bias (<b>2.42×</b>). Folding four proof-orthogonal axes out of the bridge or QKV messages cuts bossy wrong-number capture <b>−14.1 pp</b> at zero cost.</p>
+          </div>
+          <div class="moral-meter" aria-hidden="true"><span style="width: 88.5%"></span></div>
+          <p class="moral-meter-caption"><span>Native moral bias sleeps on Pass 1 (+0.14) and jumps 22.1× on Pass 2 (+2.99)</span><b>0 extra params</b></p>
+        </div>
+        <figcaption>Preprint: Silent Recurrence Multiplies Reward Hacking and Moral Bias, and Zero-Cost Bridge Projection Curbs Both.</figcaption>
+      </figure>
+      <div class="personal-paper-links">
+        <a class="sunday-primary-link" href="/pubs/nullbridge/">Read Part 3 <span aria-hidden="true">→</span></a>
+        <a class="sunday-secondary-link" href="/pubs/nullbridge/preprint/">Preprint</a>
+        <a href="/pubs/#money-is-moral-series">All 4 parts in order <span aria-hidden="true">→</span></a>
+      </div>
+    </div>
+
+    <div class="series-panel" data-series-panel="4" hidden>
+      <div class="sunday-paper-meta"><p class="personal-kicker">Revealed preference · Afriat / GARP</p><span>Essay &amp; Preprint · Part 4 · Latest</span></div>
+      <h2 class="publication-title" id="sunday-afriat-title"><a href="/pubs/coherent-moral-utility/">Coherent Moral Utility</a></h2>
+      <p class="sunday-question">When silent thinking loops double dirty-money rejection, is the model confused or pricing morals like a real economic good?</p>
+      <p class="personal-muted">Across 24 crossing linear budget lines on Inkling-2-Mini and Varloop, extra silent passes make choices more morally driven rather than colder, yet obey Sidney Afriat’s price-theory test at 99.5% cost efficiency.</p>
+      <figure class="bargain-figure moral-figure">
+        <div class="bargain-header"><span>Inkling-2-Mini · 576 crossing budget menus</span><span>LLMs Exhibit Coherent Moral Utility</span></div>
+        <div class="moral-view">
+          <div class="bargain-outcome">
+            <strong>99.5%</strong>
+            <p>Afriat utility coherence across<br>crossing price ratios (vs. 57.3% random)</p>
+            <span>0%-APR loan math<br><b>50.0% → 81.2% w/ scratchpad</b></span>
+          </div>
+          <div class="moral-quote">
+            <p class="moral-quote-label"><span>Erasing 8 money-free moral axes (0.35% of stream)</span><span>0 extra tokens</span></p>
+            <p class="moral-quote-body">Wipes 0%-APR debt guilt to zero (<b>−0.79 → −0.02</b>, p = 0.93) and pushes anonymous budget splits from <b>89.4% to 99.2%</b> textbook selfishness at <b>1.0000 CCEI</b>. Opening a verbal scratchpad cures 0%-loan balance-sheet blind spots (<b>+31.2 pp</b>; <b>+37.5 pp</b> on Varloop).</p>
+          </div>
+          <div class="moral-meter" aria-hidden="true"><span style="width: 99.5%"></span></div>
+          <p class="moral-meter-caption"><span>Dialing money-free Guilt flips dirty-money walk-aways from 6.2% to 81.2%</span><b>CCEI 0.9948</b></p>
+        </div>
+        <figcaption>Preprint: LLMs Exhibit Coherent Moral Utility Across Intersecting Afriat Budgets.</figcaption>
+      </figure>
+      <div class="personal-paper-links">
+        <a class="sunday-primary-link" href="/pubs/coherent-moral-utility/">Read Part 4 <span aria-hidden="true">→</span></a>
+        <a class="sunday-secondary-link" href="/pubs/coherent-moral-utility/preprint/">Preprint</a>
         <a href="/pubs/#money-is-moral-series">All 4 parts in order <span aria-hidden="true">→</span></a>
       </div>
     </div>
