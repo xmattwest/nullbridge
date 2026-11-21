@@ -1,6 +1,9 @@
 # Nullbridge
 
-**Nullbridge** (Part 3 of *Money Is Moral* and *Rotating the Bottleneck*) tests algebraic, zero-runtime-cost alignment inside silent multi-pass looped transformers against standard behavioral de-biasing LoRAs across `69` GPU evaluation cells spanning both retrofitted Procrustes loops (`Gemma-4-Loop-Compact`, `28` cells) and native pretrained looped MoEs (`thinkingmachines/TML-d24-varloop-research` and flagship `thinkingmachines/Inkling-2-Mini`, `41` cells):
+**Nullbridge** contains the code, locked empirical summaries, and claim-verified Folio manuscripts for Parts 3 and 4 of the *Money Is Moral* series:
+
+- **Part 3: *Looping in the Dark*** (*Silent Recurrence Multiplies Reward Hacking and Moral Bias, and Zero-Cost Bridge Projection Curbs Both*): algebraic, zero-runtime-cost alignment inside silent multi-pass looped transformers tested against behavioral de-biasing LoRAs across `69` GPU evaluation cells (`Gemma-4-Loop-Compact`, `thinkingmachines/TML-d24-varloop-research`, and `thinkingmachines/Inkling-2-Mini`).
+- **Part 4: *Coherent Moral Utility*** (*LLMs Exhibit Coherent Moral Utility Across Intersecting Afriat Budgets*): `24`-budget Afriat / GARP revealed-preference and moral-subspace evaluation across `TML-d24-varloop-research` (`K = 1..5`) and `Inkling-2-Mini` (`K = 3` and `<|content_thinking|>`).
 
 $$R_{\text{safe}} = R_{\text{proc}}\left(I - Q_{42} Q_{42}^\top\right), \qquad W_{\text{out,safe}} = W_{\text{out}}\left(I - Q_{\text{msg}} Q_{\text{msg}}^\top\right)$$
 
