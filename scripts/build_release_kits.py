@@ -608,10 +608,12 @@ def extract_substack_body(raw_html: str, slug: str) -> str:
 
     body = body.replace("R = U V^T", "R = U V\u1d40")
     body = body.replace("<code>I \u2212 Q_42 Q_42^T</code>", "<code>I \u2212 Q Q\u1d40</code>")
+    body = body.replace("first-pass state <code>H_24^(0)</code>", "first-pass Layer 24 state")
     body = body.replace("state <code>H_24^(0)</code>", "first-pass Layer 24 state")
     body = body.replace("<code>H_24^(0)</code>", "the first-pass Layer 24 state")
     body = body.replace("R^2 = 0.9999", "R\u00b2 = 0.9999")
     body = body.replace("of <code>R^2304</code>", "of the 2,304-dimensional stream")
+    body = body.replace("folded <code>R_safe</code> matrix", "folded bridge matrix")
     body = body.replace("<code>R_safe</code>", "the folded bridge")
     body = body.replace("<code>R_proc</code>", "the Procrustes bridge")
 
@@ -780,6 +782,7 @@ def make_substack_doc(
 def make_x_article_doc(
     slug: str,
     title: str,
+    x_caption: str,
     banner_path: pathlib.Path,
     body_html: str,
     ordered_figs: list[str],
@@ -837,6 +840,7 @@ def make_x_article_doc(
         )
 
     title_js = html_mod.escape(title.replace("\\", "\\\\").replace("'", "\\'"))
+    cap_js = html_mod.escape(x_caption.strip().replace("\\", "\\\\").replace("'", "\\'").replace("\n", "\\n"))
     reply_js = html_mod.escape(self_reply.strip().replace("\\", "\\\\").replace("'", "\\'").replace("\n", "\\n"))
 
     return f"""<!doctype html>
@@ -855,9 +859,12 @@ def make_x_article_doc(
   <p><strong>1. Cover Banner (5:2 · 2500x1000, zero text):</strong><br><code>{html_mod.escape(str(resolved_banner))}</code></p>
   <img src="x_banner_5x2.png" alt="5:2 X Article cover banner" style="margin:8px 0 12px; border:1px solid #dfd9cc;">
   <p><strong>2. Article Title:</strong> {html_mod.escape(title)}</p>
+  <p><strong>3. X Share Post Caption:</strong></p>
+  <pre style="background:#fff; border:1px solid #dfd9cc; border-radius:6px; padding:10px 12px; font-size:12.5px; white-space:pre-wrap; margin:6px 0 10px;">{html_mod.escape(x_caption.strip())}</pre>
   <div class="toolbar">
     <button class="copy-btn" type="button" onclick="copyRichZone('x-copy-zone', this)">Copy X Article Body (With File Path Markers)</button>
     <button class="copy-btn secondary" type="button" onclick="copyPlain('{title_js}', this)">Copy Title</button>
+    <button class="copy-btn secondary" type="button" onclick="copyPlain('{cap_js}', this)">Copy X Share Caption</button>
     <button class="copy-btn secondary" type="button" onclick="copyPlain('{reply_js}', this)">Copy 1-Min Self-Reply</button>
   </div>
   <p style="color:#555; font-size:13px; margin-top:8px;">X Articles do not auto-fetch external image URLs on paste, so the copyable body below has clean <code>[DROP IMAGE XX: /exact/path]</code> text markers (zero broken image placeholders). Paste the body, drop each file at its numbered marker, delete the marker line, publish, and post <code>self_reply.txt</code> 1 minute later.</p>
@@ -930,9 +937,11 @@ def build_launchpad_html(kits: list[dict[str, object]]) -> str:
 
         title_str = str(k["title"])
         sub_str = str(k["subtitle"])
+        cap_str = str(k["x_caption"]).strip()
         reply_str = str(k["self_reply"]).strip()
         title_js = html_mod.escape(title_str.replace("\\", "\\\\").replace("'", "\\'"))
         sub_js = html_mod.escape(sub_str.replace("\\", "\\\\").replace("'", "\\'"))
+        cap_js = html_mod.escape(cap_str.replace("\\", "\\\\").replace("'", "\\'").replace("\n", "\\n"))
         reply_js = html_mod.escape(reply_str.replace("\\", "\\\\").replace("'", "\\'").replace("\n", "\\n"))
         banner_js = html_mod.escape(str(banner_path).replace("\\", "\\\\").replace("'", "\\'"))
 
@@ -951,6 +960,13 @@ def build_launchpad_html(kits: list[dict[str, object]]) -> str:
             <a class="btn-primary" href="{slug}/x_article_paste_ready.html" target="_blank">Open X Article Paste-Ready HTML (With File Paths) ↗</a>
             <button class="btn-secondary" type="button" onclick="copyPlain('{title_js}', this)">Copy Title</button>
             <button class="btn-secondary" type="button" onclick="copyPlain('{sub_js}', this)">Copy Subtitle</button>
+          </div>
+          <div class="reply-box">
+            <div class="reply-head">
+              <p class="reply-label">X Article Share Post Caption (<code>{slug}/x_caption.txt</code>)</p>
+              <button class="mini-btn" type="button" onclick="copyPlain('{cap_js}', this)">Copy X Caption</button>
+            </div>
+            <pre>{html_mod.escape(cap_str)}</pre>
           </div>
           <div class="reply-box">
             <div class="reply-head">
@@ -1037,6 +1053,10 @@ def main() -> None:
             "window": "Day 1 · 8:30 AM MT",
             "title": "Untwisting Gemma 4 Onto One 24 GB Card",
             "subtitle": "Where do financial deals and petty insults merge inside a 60-layer model, and how does untwisting that bottleneck let 31B loop on 24 GB?",
+            "x_caption": (
+                "Financial deals and petty personal insults share zero trigger neurons inside Gemma 4 31B, yet pour into the exact same 19-layer bottleneck whose coordinate frame twists 87.1° from entry to exit.\n\n"
+                "Keeping that neck wide while pruning the outer corridors shrinks 31B from 62.55 GB onto one 24 GB card (23.08 GB), and untwisting the 87.1° turn in closed form lets it loop silently through its own middle layers:"
+            ),
             "folio_dir": args.afriat_folio_dir,
             "extra_methods": "",
             "closing_url": PART2_WEB_URL,
@@ -1054,6 +1074,10 @@ def main() -> None:
             "window": "Day 4 · 8:30 AM MT",
             "title": "Looping in the Dark",
             "subtitle": "What happens when a crooked ledger puts on an executive suit, your model thinks silently in loops, and standard safety LoRAs backfire?",
+            "x_caption": (
+                "When a crooked ledger puts on an executive suit and an LLM thinks silently in loops without a readable scratchpad, standard safety LoRAs backfire.\n\n"
+                "Across 69 GPU cells on Gemma-4-Loop-Compact, Varloop, and Inkling-2-Mini, folding four shortcut axes out of the recurrent bridge or message bank once offline cuts silent sycophancy and bluster at zero extra runtime FLOPs:"
+            ),
             "folio_dir": args.part3_folio_dir,
             "extra_methods": PART3_METHODS_HTML,
             "closing_url": PART3_WEB_URL,
@@ -1070,6 +1094,10 @@ def main() -> None:
             "window": "Day 7 · 9:00 AM MT",
             "title": "LLMs Exhibit Coherent Moral Utility",
             "subtitle": "When silent thinking loops double dirty-money rejection, is the model confused, or pricing clean hands and fairness like real economic goods?",
+            "x_caption": (
+                "When silent thinking loops double dirty-money rejection inside native looped MoEs, is the model confused, or maximizing a real utility function?\n\n"
+                "Across intersecting Afriat budget lines on Varloop and Inkling-2-Mini, silent passes ignite coherent moral utility (CCEI 0.994 to 1.000) calibrated strictly on money-free human stories:"
+            ),
             "folio_dir": args.part4_folio_dir,
             "extra_methods": PART4_METHODS_HTML,
             "closing_url": PART4_WEB_URL,
@@ -1141,6 +1169,7 @@ def main() -> None:
         x_doc = make_x_article_doc(
             slug=slug,
             title=str(sp["title"]),
+            x_caption=str(sp["x_caption"]),
             banner_path=final_banner,
             body_html=body,
             ordered_figs=ordered_figs,
@@ -1149,11 +1178,13 @@ def main() -> None:
             repo_url=str(sp["repo_url"]),
             self_reply=str(sp["self_reply"]),
         )
+        cap_txt = str(sp["x_caption"]).strip() + "\n"
         reply_txt = str(sp["self_reply"]).strip() + "\n"
 
         for name, content in [
             ("substack_paste_ready.html", sub_doc),
             ("x_article_paste_ready.html", x_doc),
+            ("x_caption.txt", cap_txt),
             ("self_reply.txt", reply_txt),
         ]:
             assert "\u2014" not in content, f"Em dash found in {slug}/{name}"
