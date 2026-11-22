@@ -1064,7 +1064,7 @@ def main() -> None:
             "self_reply": (
                 "Weights (23.08 GB), loop trainer, and full essay with PDF:\n\n"
                 "Essay & PDF: https://shelltoho.me/pubs/rotating-the-bottleneck/\n"
-                "Weights: https://huggingface.co/mattyxcakes/Gemma-4-31B-Loop-Compact\n"
+                "Weights: https://huggingface.co/xmattwest/Gemma-4-31B-Loop-Compact\n"
                 "Code: https://github.com/xmattwest/afriat"
             ),
         },

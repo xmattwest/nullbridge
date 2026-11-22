@@ -639,7 +639,7 @@ def build_pubs_index_html(stylesheet_links: str) -> str:
             <a href="https://scholar.google.com/citations?user=khPjLQcAAAAJ&amp;hl=en" rel="me">Google Scholar ↗</a>
             <a href="https://orcid.org/0009-0008-5557-9394" rel="me">ORCID ↗</a>
             <a href="https://github.com/xmattwest" rel="me">GitHub ↗</a>
-            <a href="https://huggingface.co/mattyxcakes" rel="me">Hugging Face ↗</a>
+            <a href="https://huggingface.co/xmattwest" rel="me">Hugging Face ↗</a>
             <a href="/rss.xml">RSS Feed ↗</a>
           </nav>
         </section>
@@ -670,7 +670,7 @@ def build_pubs_index_html(stylesheet_links: str) -> str:
                   <a class="pub-secondary" href="/pubs/money-is-moral/paper.pdf">PDF</a>
                   <a href="https://doi.org/10.5281/zenodo.24419425">DOI 10.5281/zenodo.24419425 ↗</a>
                   <a href="https://github.com/xmattwest/afriat">Code ↗</a>
-                  <a href="https://huggingface.co/datasets/mattyxcakes/afriat-bench">Dataset ↗</a>
+                  <a href="https://huggingface.co/datasets/xmattwest/afriat-bench">Dataset ↗</a>
                 </div>
               </div>
             </article>
@@ -691,7 +691,7 @@ def build_pubs_index_html(stylesheet_links: str) -> str:
                 <div class="pub-links">
                   <a class="pub-primary" href="/pubs/rotating-the-bottleneck/">Read Part 2 <span aria-hidden="true">→</span></a>
                   <a class="pub-secondary" href="/pubs/rotating-the-bottleneck/paper.pdf">PDF</a>
-                  <a href="https://huggingface.co/mattyxcakes/Gemma-4-31B-Loop-Compact">Weights ↗</a>
+                  <a href="https://huggingface.co/xmattwest/Gemma-4-31B-Loop-Compact">Weights ↗</a>
                   <a href="https://doi.org/10.5281/zenodo.24419425">DOI ↗</a>
                   <a href="https://github.com/xmattwest/afriat">Code ↗</a>
                 </div>
