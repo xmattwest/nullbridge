@@ -30,6 +30,7 @@ from PIL import Image
 
 
 PART1_SUBSTACK_URL = "https://termsofplenty.substack.com/p/how-llms-price-spite-disgust-and"
+PART2_SUBSTACK_URL = "https://termsofplenty.substack.com/p/untwisting-gemma-4-onto-one-24-gb"
 PART1_WEB_URL = "https://shelltoho.me/pubs/money-is-moral/"
 PART2_WEB_URL = "https://shelltoho.me/pubs/rotating-the-bottleneck/"
 PART3_WEB_URL = "https://shelltoho.me/pubs/nullbridge/"
@@ -613,14 +614,21 @@ def extract_substack_body(raw_html: str, slug: str) -> str:
     body = body.replace("<code>H_24^(0)</code>", "the first-pass Layer 24 state")
     body = body.replace("R^2 = 0.9999", "R\u00b2 = 0.9999")
     body = body.replace("of <code>R^2304</code>", "of the 2,304-dimensional stream")
+    body = body.replace("46.3 to 79.9 apart", "46.3\u00b0 to 79.9\u00b0 apart")
     body = body.replace("folded <code>R_safe</code> matrix", "folded bridge matrix")
     body = body.replace("<code>R_safe</code>", "the folded bridge")
+    body = body.replace("matrix <code>R_proc</code>", "bridge matrix")
     body = body.replace("<code>R_proc</code>", "the Procrustes bridge")
 
     body = re.sub(
         r"<p><em>Interactive web edition, full tables, and code by Matt West at [\s\S]*?</em></p>\s*$",
         "",
         body,
+    )
+    body = re.sub(
+        r"<p>(?:All code|Code),[\s\S]*?github\.com/xmattwest/nullbridge[\s\S]*?</p>\s*$",
+        "",
+        body.strip(),
     )
     assert "<blockquote><p><code>" not in body, f"Unconverted ASCII equation block left in {slug}"
     assert "^(" not in body and "^T" not in body and "^2" not in body, f"Raw ASCII caret left in {slug}"
@@ -817,6 +825,7 @@ def make_x_article_doc(
     assert "<img " not in x_body, f"Unexpected <img> left inside X copy zone for {slug}"
 
     x_body = x_body.replace(PART1_SUBSTACK_URL, PART1_WEB_URL)
+    x_body = x_body.replace(PART2_SUBSTACK_URL, PART2_WEB_URL)
     x_body = re.sub(r"<h3>Methods, Repo &amp; Technical Notes</h3>[\s\S]*$", "", x_body).strip()
     x_body = re.sub(r"<h2>Methods, Repo &amp; Technical Notes</h2>[\s\S]*$", "", x_body).strip()
     x_body += (
@@ -1143,6 +1152,8 @@ def main() -> None:
             body = body.replace("<h2>Methods, Repo &amp; Technical Notes</h2>", "<h3>Methods, Repo &amp; Technical Notes</h3>")
             if sp["extra_methods"]:
                 body = f"{body}\n\n{sp['extra_methods']}"
+            if slug != "01_part2_bottleneck":
+                body = body.replace(f'href="{PART2_WEB_URL}"', f'href="{PART2_SUBSTACK_URL}"')
 
             if (kdir / "figures").exists():
                 shutil.rmtree(kdir / "figures")
