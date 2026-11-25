@@ -1,0 +1,49 @@
+{
+  "upload_type": "software",
+  "title": "Nullbridge: Zero-FLOP Null-Space Alignment, Biophysical Loop Dynamics, and Coherent Moral Utility in Looped Transformers",
+  "creators": [
+    {
+      "name": "West, Matt",
+      "affiliation": "Independent research",
+      "orcid": "0009-0008-5557-9394"
+    }
+  ],
+  "description": "<p>Complete codebase, locked SHA-256 empirical JSON artifacts, Dawn State SVG/PNG figures, and claim-verified Folio manuscripts for <strong>Nullbridge</strong> across retrofitted and native looped transformers (<code>Gemma-4-Loop-Compact</code>, <code>thinkingmachines/TML-d24-varloop-research</code>, and <code>thinkingmachines/Inkling-2-Mini</code>):</p><ul><li><strong>Part 3 (<a href=\"https://shelltoho.me/pubs/nullbridge/\">Looping in the Dark</a>):</strong> Zero-FLOP offline null-space folding inside Procrustes loop bridges and 4-channel cross-pass message banks curbs silent-loop reward hacking and covert moral bias where behavioral safety LoRAs backfire.</li><li><strong>Part 4 (<a href=\"https://shelltoho.me/pubs/coherent-moral-utility/\">Coherent Moral Utility</a>):</strong> Intersecting 24-budget Afriat/GARP revealed-preference audits showing <code>0.9948</code> modal CCEI utility coherence in <code>Inkling-2-Mini</code>, Pass-2 moral ignition, message-bank clamping, and <code>&lt;|content_thinking|&gt;</code> cures for silent 0%-APR loan blind spots.</li><li><strong>Phase 6 (Biophysical Loop Dynamics):</strong> Five causal perturbation studies on <code>Inkling-2-Mini</code> spanning exact 16-term Walsh-Hadamard synaptic channel epistasis, non-normal Coda Jacobian conductance, Fisher pullback and Coda formatting-shunt dynamics, somatic-reset hysteresis shielding, and neuromodulatory pass-clock mode switching.</li></ul>",
+  "access_right": "open",
+  "license": "mit",
+  "publication_date": "2026-11-25",
+  "keywords": [
+    "mechanistic interpretability",
+    "looped transformers",
+    "null-space projection",
+    "Orthogonal Procrustes",
+    "Inkling-2-Mini",
+    "Gemma 4",
+    "Walsh-Hadamard epistasis",
+    "revealed preference",
+    "Afriat CCEI",
+    "AI alignment"
+  ],
+  "related_identifiers": [
+    {
+      "identifier": "https://shelltoho.me/pubs/nullbridge/",
+      "relation": "isSupplementTo",
+      "resource_type": "publication-preprint"
+    },
+    {
+      "identifier": "https://shelltoho.me/pubs/coherent-moral-utility/",
+      "relation": "isSupplementTo",
+      "resource_type": "publication-preprint"
+    },
+    {
+      "identifier": "https://github.com/xmattwest/nullbridge",
+      "relation": "isSupplementTo",
+      "resource_type": "software"
+    },
+    {
+      "identifier": "https://huggingface.co/xmattwest/Gemma-4-31B-Loop-Compact",
+      "relation": "references",
+      "resource_type": "other"
+    }
+  ]
+}

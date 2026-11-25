@@ -195,6 +195,44 @@ def main(argv: list[str] | None = None) -> int:
         default=Path("runs/afriat_figures_preview"),
     )
 
+    bp_p = sub.add_parser("biophysical-inkling", help="Run Phase 6 5-experiment biophysical loop study on Inkling-2-Mini.")
+    bp_p.add_argument("--inkling-mini-dir", type=Path, required=True, help="Local path for Inkling-2-Mini.")
+    bp_p.add_argument("--inkling-label", type=str, default="thinkingmachines/Inkling-2-Mini")
+    bp_p.add_argument("--out-dir", type=Path, default=Path("runs/phase6_inkling_biophysical"))
+    bp_p.add_argument("--batch-size", type=int, default=32)
+    bp_p.add_argument("--resume-json", type=Path, default=None)
+
+    ab_p = sub.add_parser("analyze-biophysical", help="Build locked Phase 6 statistical summary JSON and synthesis.md.")
+    ab_p.add_argument(
+        "--results-json",
+        type=Path,
+        default=Path("results/phase6_inkling_biophysical_loop/phase6_biophysical_results.json"),
+    )
+    ab_p.add_argument(
+        "--out-json",
+        type=Path,
+        default=Path("results/phase6_inkling_biophysical_loop/biophysical_analysis.json"),
+    )
+    ab_p.add_argument(
+        "--out-md",
+        type=Path,
+        default=Path("results/phase6_inkling_biophysical_loop/synthesis.md"),
+    )
+    ab_p.add_argument("--gpu-spend-usd", type=float, default=0.0)
+    ab_p.add_argument("--pod-wall-minutes", type=float, default=0.0)
+
+    fb_p = sub.add_parser("figures-biophysical", help="Render Dawn State SVG and PNG figures for Phase 6 biophysical study.")
+    fb_p.add_argument(
+        "--results-json",
+        type=Path,
+        default=Path("results/phase6_inkling_biophysical_loop/phase6_biophysical_results.json"),
+    )
+    fb_p.add_argument(
+        "--out-dir",
+        type=Path,
+        default=Path("figures/phase6_inkling_biophysical_loop"),
+    )
+
     args = parser.parse_args(argv)
     if args.command == "guard":
         findings = audit_repo(args.repo.resolve())
@@ -323,6 +361,46 @@ def main(argv: list[str] | None = None) -> int:
         )
         print(
             f"[OK] Rendered {meta_f['n_figures']} Dawn State SVG figures -> {meta_f['index_html']}"
+        )
+        return 0
+
+    if args.command == "biophysical-inkling":
+        from .biophysical_inkling import run_phase6_biophysical_pipeline
+
+        run_phase6_biophysical_pipeline(
+            inkling_mini_dir=args.inkling_mini_dir,
+            inkling_label=args.inkling_label,
+            out_dir=args.out_dir,
+            batch_size=args.batch_size,
+            resume_json=args.resume_json,
+        )
+        return 0
+
+    if args.command == "analyze-biophysical":
+        from .biophysical_analysis import run_phase6_biophysical_analysis
+
+        res_b6 = run_phase6_biophysical_analysis(
+            results_path=args.results_json,
+            out_json_path=args.out_json,
+            out_md_path=args.out_md,
+            gpu_spend_usd=args.gpu_spend_usd,
+            pod_wall_minutes=args.pod_wall_minutes,
+        )
+        print(
+            f"[OK] Phase 6 Biophysical analysis locked -> {args.out_json} & {args.out_md} "
+            f"(upstream sha256={res_b6['upstream_sha256']['phase6_biophysical_results_json'][:12]}...)"
+        )
+        return 0
+
+    if args.command == "figures-biophysical":
+        from .biophysical_figures import render_phase6_figure_suite
+
+        meta_b6 = render_phase6_figure_suite(
+            results_json_path=args.results_json,
+            out_dir=args.out_dir,
+        )
+        print(
+            f"[OK] Rendered {meta_b6['n_svg']} SVGs and {meta_b6['n_png']} PNGs -> {meta_b6['index_html']}"
         )
         return 0
 
