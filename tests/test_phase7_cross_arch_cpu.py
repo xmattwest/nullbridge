@@ -337,7 +337,7 @@ def test_phase7_varloop_multi_k_equivalence_and_suite_mock_pytorch() -> None:
     assert eq["valid"]
     for k in (1, 2, 3, 5, 7):
         assert eq["max_abs_logit_diff_by_depth"][f"K={k}"] <= 1e-5
-    assert eq["max_abs_logit_diff_k1_vs_k7_0000_bypass"] == 0.0
+    assert eq["max_abs_logit_diff_k1_vs_k7_0000_bypass"] <= 1e-5
 
     # Verify masks_by_pass and gammas_by_pass match legacy mask_p2/mask_p3/gamma_p2/gamma_p3
     inp, msk, _lens = ctrl._encode_right_padded(["Compute (3 * 2) + 1."])

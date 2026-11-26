@@ -473,8 +473,8 @@ def main(argv: list[str] | None = None) -> int:
         type=Path,
         default=Path("results/phase6_inkling_biophysical_loop/synthesis.md"),
     )
-    ab_p.add_argument("--gpu-spend-usd", type=float, default=0.0)
-    ab_p.add_argument("--pod-wall-minutes", type=float, default=0.0)
+    ab_p.add_argument("--gpu-spend-usd", type=float, default=0.62)
+    ab_p.add_argument("--pod-wall-minutes", type=float, default=8.47)
 
     fb_p = sub.add_parser("figures-biophysical", help="Render Dawn State SVG and PNG figures for Phase 6 biophysical study.")
     fb_p.add_argument(
