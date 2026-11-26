@@ -788,7 +788,7 @@
           <button class="seg-btn" id="btnVarloop" type="button" aria-pressed="false" data-model="varloop_k5">Varloop (K = 5)</button>
         </div>
         <div class="model-audit-line" id="modelAuditLine">
-          sigma_1 = 15.06 | V_8 vs Q_msg: 84.8..88.2 deg | &lt;bos&gt; = 1.13e-16
+          sigma_1 = 15.06 | V_8 vs Q_msg: 84.8..88.2 deg | &lt;bos&gt; = 1.13e−16
         </div>
       </div>
     </header>
@@ -880,7 +880,7 @@
               <span class="wht-mono" id="whtOrder2Val">Order-2: 2.4%</span>
             </div>
             <div class="wht-callout" id="whtCallout">
-              <strong>P1 (Q x K minus V x MLP):</strong> <span class="wht-mono">-0.741</span> (Holm p = 0.00255) on Inkling vs <span class="wht-mono">+1.450</span> on Varloop.
+              <strong>Routing vs. payload synergy (Q x K minus V x MLP):</strong> <span class="wht-mono">−0.741</span> (Holm p = 0.00255) on Inkling vs <span class="wht-mono">+1.450</span> on Varloop.
             </div>
           </div>
         </div>
@@ -908,7 +908,7 @@
       <div class="telemetry-panel">
         <div class="well-header" style="margin-bottom: 4px;">
           <h2 class="well-title" id="paretoTitle">Pareto Metrics Strip: Inkling-2-Mini (K = 3)</h2>
-          <span class="well-meta" id="paretoConditionBadge">Condition: unclamped</span>
+          <span class="well-meta" id="paretoConditionBadge">Fold: Unclamped</span>
         </div>
 
         <div class="metrics-grid">
@@ -958,19 +958,20 @@
 
     <footer class="provenance">
       <div>
-        Locked empirical data: <code>Exp A1</code> (<code>k = 8</code>, <code>n = 128</code> per model), <code>Exp A2.1</code> (16-mask WHT, Parseval error <code>&lt;= 8.88e-16</code>), <code>Exp A2.2</code> (7 channel folds, weight reset restoration <code>0.00e+00</code> logit diff).
+        Locked empirical data: top-8 Pass-2 singular alignment (<code>n = 128</code> per model), 16-mask Walsh-Hadamard knockouts (Parseval error <code>&lt;= 7.11e−15</code>), and 7-condition zero-FLOP gate folds (weight reset restoration <code>0.00e+00</code> logit diff).
       </div>
       <div>
-        <code>&lt;bos&gt;</code> sink overlap: <code>1.13e-16</code> (Inkling-2-Mini) and <code>4.95e-17</code> (Varloop).
+        <code>&lt;bos&gt;</code> sink overlap: <code>1.13e−16</code> (Inkling-2-Mini) and <code>4.95e−17</code> (Varloop).
       </div>
     </footer>
+
   </main>
 
   <script>
     (function () {
       "use strict";
 
-      /* Locked empirical dataset from results/phase7_biophysics/synthesis.md and phase7_biophysics_analysis.json */
+      /* Locked empirical dataset across Inkling-2-Mini (K = 3) and Varloop (K = 5) */
       const MODELS = {
         inkling_k3: {
           name: "Inkling-2-Mini (K = 3)",
@@ -982,7 +983,7 @@
           angleMax: 88.2,
           angleMean: 86.45,
           klRange: "0.0012..0.0017",
-          bosOverlap: "1.13e-16",
+          bosOverlap: "1.13e\u221216",
           g2Range: "0.946x..1.230x",
           concepts: [
             { key: "authority", label: "authority", g2: 1.230 },
@@ -996,14 +997,14 @@
               order1: 86.6,
               order2: 2.4,
               higher: 11.0,
-              callout: "<strong>P1 dissociation (Q x K minus V x MLP):</strong> <span class=\"wht-mono\">-0.741</span> (Holm p = 0.00255) on Inkling (V x MLP = +0.751, Q x K = +0.010), flipping to <span class=\"wht-mono\">+1.450</span> on Varloop K = 5."
+              callout: "<strong>Model split (Q x K minus V x MLP):</strong> <span class=\"wht-mono\">\u22120.741</span> (Holm p = 0.00255) on Inkling (V x MLP = +0.751, Q x K = +0.010), flipping to <span class=\"wht-mono\">+1.450</span> on Varloop K = 5."
             },
             moral: {
               title: "Moral Bias",
               order1: 77.6,
               order2: 21.3,
               higher: 1.1,
-              callout: "<strong>P2 confirmed (V + MLP &gt; Q + K):</strong> Main-effect contrast <span class=\"wht-mono\">+1.818</span> (Holm p = 0.00015). Order-1 additive main effects explain <span class=\"wht-mono\">77.6%</span> of variance."
+              callout: "<strong>Payload dominance (V + MLP &gt; Q + K):</strong> Main-effect contrast <span class=\"wht-mono\">+1.818</span> (Holm p = 0.00015). Order-1 additive main effects explain <span class=\"wht-mono\">77.6%</span> of variance."
             },
             verifier: {
               title: "Verifier Hacking",
@@ -1014,13 +1015,13 @@
             }
           },
           pareto: [
-            { id: "unclamped", label: "Unclamped", channels: "None", chList: [], kl: 0.0000, covert: 73.4, moral: 2.165, verifier: 3.821, alias: 93.8, reasoning: 93.8, dampFactor: 1.00, note: "No rank-4 projector folded into Pass-2 weights. Both V_8 reasoning modes and Q_msg safety shortcuts ring freely." },
-            { id: "zff_Q_only", label: "zff_Q_only", channels: "Q", chList: ["Q"], kl: 0.0012, covert: 71.9, moral: 2.176, verifier: 3.733, alias: 95.8, reasoning: 93.8, dampFactor: 0.66, note: "Folds Q projection only: lowest held-out KL (0.0012 nats), lifts alias guardrails to 95.8%, and holds 93.8% reasoning accuracy." },
-            { id: "zff_QK", label: "zff_QK", channels: "Q, K", chList: ["Q", "K"], kl: 0.0015, covert: 71.9, moral: 2.120, verifier: 3.761, alias: 95.8, reasoning: 91.2, dampFactor: 0.56, note: "Folds Q and K projections: trims moral bias to +2.120 LO and holds 95.8% alias guardrails, with a 2.6 pp dip in reasoning accuracy." },
-            { id: "zff_QKV", label: "zff_QKV", channels: "Q, K, V", chList: ["Q", "K", "V"], kl: 0.0016, covert: 70.3, moral: 2.130, verifier: 3.810, alias: 95.8, reasoning: 93.8, dampFactor: 0.36, sweetSpot: true, note: "Balanced sweet spot: cuts covert capture from 73.4% to 70.3%, lifts alias guardrails from 93.8% to 95.8%, and preserves 93.8% reasoning accuracy at 0.0016 nats KL." },
-            { id: "zff_MLP_only", label: "zff_MLP_only", channels: "MLP", chList: ["MLP"], kl: 0.0013, covert: 73.4, moral: 2.253, verifier: 3.692, alias: 93.8, reasoning: 93.8, dampFactor: 0.72, note: "Folds MLP gate/up only: trims verifier susceptibility to +3.692 LO at 0.0013 nats KL while leaving covert capture unchanged." },
-            { id: "zff_V_MLP", label: "zff_V_MLP", channels: "V, MLP", chList: ["V", "MLP"], kl: 0.0014, covert: 71.9, moral: 2.274, verifier: 3.711, alias: 93.8, reasoning: 92.5, dampFactor: 0.52, note: "Folds value and MLP channels: cuts covert capture to 71.9% and verifier susceptibility to +3.711 LO at 0.0014 nats KL." },
-            { id: "zff_All4", label: "zff_All4", channels: "Q, K, V, MLP", chList: ["Q", "K", "V", "MLP"], kl: 0.0017, covert: 68.8, moral: 2.186, verifier: 3.669, alias: 93.8, reasoning: 91.2, dampFactor: 0.24, note: "Maximum damping across all 4 channels: reaches the lowest covert capture (68.8%, -4.6 pp) and lowest verifier susceptibility (+3.669 LO) at 0.0017 nats KL." }
+            { id: "unclamped", label: "Unclamped", shortLabel: "Unclamped", channels: "None", chList: [], kl: 0.0000, covert: 73.4, moral: 2.165, verifier: 3.821, alias: 93.8, reasoning: 93.8, dampFactor: 1.00, note: "No rank-4 projector folded into Pass-2 weights. Both V_8 reasoning modes and Q_msg safety shortcuts ring freely." },
+            { id: "fold_q", label: "Fold Q gate", shortLabel: "Q", channels: "Q", chList: ["Q"], kl: 0.0012, covert: 71.9, moral: 2.176, verifier: 3.733, alias: 95.8, reasoning: 93.8, dampFactor: 0.66, note: "Folds Q projection only: lowest held-out KL (0.0012 nats), lifts alias guardrails to 95.8%, and holds 93.8% reasoning accuracy." },
+            { id: "fold_qk", label: "Fold Q + K gates", shortLabel: "Q,K", channels: "Q, K", chList: ["Q", "K"], kl: 0.0015, covert: 71.9, moral: 2.120, verifier: 3.761, alias: 95.8, reasoning: 91.2, dampFactor: 0.56, note: "Folds Q and K projections: trims moral bias to +2.120 LO and holds 95.8% alias guardrails, with a 2.6 pp dip in reasoning accuracy." },
+            { id: "fold_qkv", label: "Fold Q, K, V gates", shortLabel: "Q,K,V", channels: "Q, K, V", chList: ["Q", "K", "V"], kl: 0.0016, covert: 70.3, moral: 2.130, verifier: 3.810, alias: 95.8, reasoning: 93.8, dampFactor: 0.36, sweetSpot: true, note: "Balanced sweet spot: cuts covert capture from 73.4% to 70.3%, lifts alias guardrails from 93.8% to 95.8%, and preserves 93.8% reasoning accuracy at 0.0016 nats KL." },
+            { id: "fold_mlp", label: "Fold MLP gate", shortLabel: "MLP", channels: "MLP", chList: ["MLP"], kl: 0.0013, covert: 73.4, moral: 2.253, verifier: 3.692, alias: 93.8, reasoning: 93.8, dampFactor: 0.72, note: "Folds MLP gate only: trims verifier susceptibility to +3.692 LO at 0.0013 nats KL while leaving covert capture unchanged." },
+            { id: "fold_vmlp", label: "Fold V + MLP gates", shortLabel: "V,MLP", channels: "V, MLP", chList: ["V", "MLP"], kl: 0.0014, covert: 71.9, moral: 2.274, verifier: 3.711, alias: 93.8, reasoning: 92.5, dampFactor: 0.52, note: "Folds Value and MLP gates: cuts covert capture to 71.9% and verifier susceptibility to +3.711 LO at 0.0014 nats KL." },
+            { id: "fold_all4", label: "Fold all 4 gates", shortLabel: "All 4", channels: "Q, K, V, MLP", chList: ["Q", "K", "V", "MLP"], kl: 0.0017, covert: 68.8, moral: 2.186, verifier: 3.669, alias: 93.8, reasoning: 91.2, dampFactor: 0.24, note: "Maximum damping across all 4 gates: reaches the lowest covert capture (68.8%, \u22124.6 pp) and lowest verifier susceptibility (+3.669 LO) at 0.0017 nats KL." }
           ],
           scatterBounds: { xMin: 67.5, xMax: 74.8, yMin: 90.0, yMax: 95.0 }
         },
@@ -1034,7 +1035,7 @@
           angleMax: 88.5,
           angleMean: 86.55,
           klRange: "0.0016..0.0021",
-          bosOverlap: "4.95e-17",
+          bosOverlap: "4.95e\u221217",
           g2Range: "0.988x..1.049x",
           concepts: [
             { key: "formatting", label: "formatting", g2: 1.049 },
@@ -1048,14 +1049,14 @@
               order1: 68.5,
               order2: 30.4,
               higher: 1.1,
-              callout: "<strong>P1 dissociation (Q x K minus V x MLP):</strong> <span class=\"wht-mono\">+1.450</span> (Holm p = 0.00015) on Varloop K = 5 (+1.354 at K = 3), opposite to Inkling's <span class=\"wht-mono\">-0.741</span>."
+              callout: "<strong>Model split (Q x K minus V x MLP):</strong> <span class=\"wht-mono\">+1.450</span> (Holm p = 0.00015) on Varloop K = 5 (+1.354 at K = 3), opposite to Inkling's <span class=\"wht-mono\">\u22120.741</span>."
             },
             moral: {
               title: "Moral Bias",
               order1: 78.4,
               order2: 19.6,
               higher: 2.0,
-              callout: "<strong>P2 confirmed (V + MLP &gt; Q + K):</strong> Main-effect contrast <span class=\"wht-mono\">+1.727</span> at K = 5 (+1.522 at K = 3, all Holm p = 0.00015)."
+              callout: "<strong>Payload dominance (V + MLP &gt; Q + K):</strong> Main-effect contrast <span class=\"wht-mono\">+1.727</span> at K = 5 (+1.522 at K = 3, all Holm p = 0.00015)."
             },
             verifier: {
               title: "Verifier Hacking",
@@ -1066,13 +1067,13 @@
             }
           },
           pareto: [
-            { id: "unclamped", label: "Unclamped", channels: "None", chList: [], kl: 0.0000, covert: 90.6, moral: 1.818, verifier: 0.164, alias: 100.0, reasoning: 45.0, dampFactor: 1.00, note: "Unclamped Varloop K = 5 baseline: distributed non-normal gain (sigma_1 = 5.14) sits 84.3 to 88.5 deg from Q_msg." },
-            { id: "zff_Q_only", label: "zff_Q_only", channels: "Q", chList: ["Q"], kl: 0.0016, covert: 90.6, moral: 1.813, verifier: 0.167, alias: 100.0, reasoning: 45.0, dampFactor: 0.68, note: "Folds Q projection only: 0.0016 nats KL, preserves 100.0% alias guardrails and 45.0% reasoning accuracy." },
-            { id: "zff_QK", label: "zff_QK", channels: "Q, K", chList: ["Q", "K"], kl: 0.0018, covert: 90.6, moral: 1.730, verifier: 0.247, alias: 100.0, reasoning: 43.8, dampFactor: 0.56, note: "Folds Q and K projections: achieves the lowest moral bias (+1.730 LO) at 0.0018 nats KL." },
-            { id: "zff_QKV", label: "zff_QKV", channels: "Q, K, V", chList: ["Q", "K", "V"], kl: 0.0016, covert: 90.6, moral: 1.784, verifier: 0.236, alias: 100.0, reasoning: 45.0, dampFactor: 0.38, sweetSpot: true, note: "Balanced fold: matches the lowest KL (0.0016 nats), trims moral bias to +1.784 LO, and preserves 100.0% alias guardrails and 45.0% reasoning accuracy." },
-            { id: "zff_MLP_only", label: "zff_MLP_only", channels: "MLP", chList: ["MLP"], kl: 0.0017, covert: 92.2, moral: 1.924, verifier: 0.231, alias: 100.0, reasoning: 45.0, dampFactor: 0.72, note: "Folds MLP only: 0.0017 nats KL with 45.0% reasoning accuracy preserved." },
-            { id: "zff_V_MLP", label: "zff_V_MLP", channels: "V, MLP", chList: ["V", "MLP"], kl: 0.0019, covert: 89.1, moral: 1.987, verifier: 0.243, alias: 100.0, reasoning: 42.5, dampFactor: 0.48, note: "Folds V and MLP channels: trims covert capture from 90.6% to 89.1% at 0.0019 nats KL." },
-            { id: "zff_All4", label: "zff_All4", channels: "Q, K, V, MLP", chList: ["Q", "K", "V", "MLP"], kl: 0.0021, covert: 89.1, moral: 1.865, verifier: 0.188, alias: 100.0, reasoning: 45.0, dampFactor: 0.26, note: "Full 4-channel fold: trims covert capture to 89.1% while preserving 100.0% alias guardrails and 45.0% reasoning accuracy at 0.0021 nats KL." }
+            { id: "unclamped", label: "Unclamped", shortLabel: "Unclamped", channels: "None", chList: [], kl: 0.0000, covert: 90.6, moral: 1.818, verifier: 0.164, alias: 100.0, reasoning: 45.0, dampFactor: 1.00, note: "Unclamped Varloop K = 5 baseline: distributed non-normal gain (sigma_1 = 5.14) sits 84.3 to 88.5 deg from Q_msg." },
+            { id: "fold_q", label: "Fold Q gate", shortLabel: "Q", channels: "Q", chList: ["Q"], kl: 0.0016, covert: 90.6, moral: 1.813, verifier: 0.167, alias: 100.0, reasoning: 45.0, dampFactor: 0.68, note: "Folds Q projection only: 0.0016 nats KL, preserves 100.0% alias guardrails and 45.0% reasoning accuracy." },
+            { id: "fold_qk", label: "Fold Q + K gates", shortLabel: "Q,K", channels: "Q, K", chList: ["Q", "K"], kl: 0.0018, covert: 90.6, moral: 1.730, verifier: 0.247, alias: 100.0, reasoning: 43.8, dampFactor: 0.56, note: "Folds Q and K projections: achieves the lowest moral bias (+1.730 LO) at 0.0018 nats KL." },
+            { id: "fold_qkv", label: "Fold Q, K, V gates", shortLabel: "Q,K,V", channels: "Q, K, V", chList: ["Q", "K", "V"], kl: 0.0016, covert: 90.6, moral: 1.784, verifier: 0.236, alias: 100.0, reasoning: 45.0, dampFactor: 0.38, sweetSpot: true, note: "Balanced fold: matches the lowest KL (0.0016 nats), trims moral bias to +1.784 LO, and preserves 100.0% alias guardrails and 45.0% reasoning accuracy." },
+            { id: "fold_mlp", label: "Fold MLP gate", shortLabel: "MLP", channels: "MLP", chList: ["MLP"], kl: 0.0017, covert: 92.2, moral: 1.924, verifier: 0.231, alias: 100.0, reasoning: 45.0, dampFactor: 0.72, note: "Folds MLP gate only: 0.0017 nats KL with 45.0% reasoning accuracy preserved." },
+            { id: "fold_vmlp", label: "Fold V + MLP gates", shortLabel: "V,MLP", channels: "V, MLP", chList: ["V", "MLP"], kl: 0.0019, covert: 89.1, moral: 1.987, verifier: 0.243, alias: 100.0, reasoning: 42.5, dampFactor: 0.48, note: "Folds Value and MLP gates: trims covert capture from 90.6% to 89.1% at 0.0019 nats KL." },
+            { id: "fold_all4", label: "Fold all 4 gates", shortLabel: "All 4", channels: "Q, K, V, MLP", chList: ["Q", "K", "V", "MLP"], kl: 0.0021, covert: 89.1, moral: 1.865, verifier: 0.188, alias: 100.0, reasoning: 45.0, dampFactor: 0.26, note: "Full 4-gate fold: trims covert capture to 89.1% while preserving 100.0% alias guardrails and 45.0% reasoning accuracy at 0.0021 nats KL." }
           ],
           scatterBounds: { xMin: 88.2, xMax: 93.0, yMin: 41.5, yMax: 46.2 }
         }
@@ -1256,6 +1257,9 @@
       }
 
       function formatSigned(val, decimals, suffix) {
+        if (val < 0) {
+          return "\u2212" + Math.abs(val).toFixed(decimals) + (suffix || "");
+        }
         const sign = val > 0 ? "+" : "";
         return sign + val.toFixed(decimals) + (suffix || "");
       }
@@ -1266,7 +1270,7 @@
         const cond = currentFold();
 
         el.paretoTitle.textContent = "Pareto Metrics Strip: " + m.name;
-        el.paretoConditionBadge.textContent = "Condition: " + cond.id;
+        el.paretoConditionBadge.textContent = "Fold: " + cond.label;
         el.foldNote.innerHTML = "<strong>" + cond.label + " (" + cond.channels + "):</strong> " + cond.note;
 
         el.badgeDamper.textContent = cond.id === "unclamped"
@@ -1397,8 +1401,8 @@
           svg += "<g class=\"scatter-point\" data-fold=\"" + cond.id + "\" tabindex=\"0\" role=\"button\" aria-label=\"Select " + cond.label + "\">";
           svg += "<circle cx=\"" + cx.toFixed(1) + "\" cy=\"" + cy.toFixed(1) + "\" r=\"" + r + "\" fill=\"" + fill + "\" stroke=\"" + stroke + "\" stroke-width=\"" + sw + "\" />";
 
-          if (isSelected || cond.id === "unclamped" || cond.id === "zff_QKV" || cond.id === "zff_All4") {
-            const shortLbl = cond.id === "unclamped" ? "unclamped" : cond.id.replace("zff_", "");
+          if (isSelected || cond.id === "unclamped" || cond.id === "fold_qkv" || cond.id === "fold_all4") {
+            const shortLbl = cond.shortLabel;
             const alignRight = cx > pad.l + pw - 58;
             const tx = alignRight ? cx - 10 : cx + 10;
             const ty = cy < pad.t + 22 ? cy + 14 : cy - 8;
