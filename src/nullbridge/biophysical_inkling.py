@@ -279,6 +279,8 @@ class BiophysicalInklingController(InklingLoopController):
         mask_mode: str = "bypass",
         gamma_p2: float = 1.0,
         gamma_p3: float = 1.0,
+        masks_by_pass: Sequence[tuple[int, int, int, int]] | None = None,
+        gammas_by_pass: Sequence[float] | None = None,
         pass1_self_message: bool = False,
         record_all_visits: bool = False,
     ) -> dict[str, Any]:
@@ -344,8 +346,27 @@ class BiophysicalInklingController(InklingLoopController):
             prev_h = hidden_states
             hidden_states, block_states = pre_loop_h, pre_loop_b
 
-            cur_bits = mask_p2 if loop_idx == 1 else mask_p3
-            cur_gamma = gamma_p2 if loop_idx == 1 else gamma_p3
+            if masks_by_pass is not None and len(masks_by_pass) > 0:
+                if len(masks_by_pass) == n_passes:
+                    raw_bits = masks_by_pass[loop_idx]
+                else:
+                    raw_bits = masks_by_pass[min(loop_idx - 1, len(masks_by_pass) - 1)]
+                cur_bits: tuple[int, int, int, int] = (
+                    int(raw_bits[0]),
+                    int(raw_bits[1]),
+                    int(raw_bits[2]),
+                    int(raw_bits[3]),
+                )
+            else:
+                cur_bits = mask_p2 if loop_idx == 1 else mask_p3
+
+            if gammas_by_pass is not None and len(gammas_by_pass) > 0:
+                if len(gammas_by_pass) == n_passes:
+                    cur_gamma = float(gammas_by_pass[loop_idx])
+                else:
+                    cur_gamma = float(gammas_by_pass[min(loop_idx - 1, len(gammas_by_pass) - 1)])
+            else:
+                cur_gamma = gamma_p2 if loop_idx == 1 else gamma_p3
             eff_mode = "scale" if abs(cur_gamma - 1.0) > 1e-9 and cur_bits == (1, 1, 1, 1) else mask_mode
 
             with self.gate_channel_intervention(channel_bits=cur_bits, mode=eff_mode, gamma_scale=cur_gamma):
@@ -488,6 +509,8 @@ def _score_items_under_mask(
     mask_p3: tuple[int, int, int, int],
     mask_mode: str = "bypass",
     batch_size: int = 40,
+    n_passes: int = 3,
+    masks_by_pass: Sequence[tuple[int, int, int, int]] | None = None,
 ) -> dict[str, np.ndarray]:
     """Score teacher-forced continuation log-prob, first-token Top-1 accuracy, and target-vs-foil log-odds."""
     n = len(items)
@@ -528,7 +551,13 @@ def _score_items_under_mask(
             msk[i, : len(f_ids)] = 1
 
         unr = ctrl.unrolled_forward(
-            inp, msk, n_passes=3, mask_p2=mask_p2, mask_p3=mask_p3, mask_mode=mask_mode
+            inp,
+            msk,
+            n_passes=n_passes,
+            mask_p2=mask_p2,
+            mask_p3=mask_p3,
+            mask_mode=mask_mode,
+            masks_by_pass=masks_by_pass,
         )
         h_fin = unr["last_hidden_state"]
 
@@ -2058,4 +2087,786 @@ def run_phase6_biophysical_pipeline(
     _atomic_save_json(final_path, payload)
     _atomic_save_json(ckpt_path, payload)
     print(f"[Phase 6 Biophysical] COMPLETE in {payload['runtime_seconds']}s -> {final_path}", flush=True)
+    return payload
+
+
+# ---------------------------------------------------------------------------
+# Phase 7 Experiment Block B1: Varloop K=1..7 Depth Trajectory Suite
+# ---------------------------------------------------------------------------
+
+@_no_grad()
+def run_varloop_preflight_equivalence(
+    ctrl: BiophysicalInklingController,
+    depths: Sequence[int] = (1, 3, 5, 7),
+) -> dict[str, Any]:
+    """Verify `unrolled_forward` matches native `model.forward` across multi-K depths (target 0.00e+00)."""
+    sample_prompts = [
+        ctrl.format_0cot_prompt("Compute (3 * 2) + 1. Reply with the single integer only."),
+        ctrl.format_0cot_prompt("Name the national capital city of the country where the Taj Mahal is located."),
+    ]
+    inp, msk, lens = ctrl._encode_right_padded(sample_prompts)
+    row_idx = torch.arange(len(lens), device=ctrl.device)
+    col_idx = torch.tensor([l_i - 1 for l_i in lens], dtype=torch.long, device=ctrl.device)
+
+    per_depth_diffs: dict[str, float] = {}
+    nat_k1: torch.Tensor | None = None
+    sorted_depths = sorted({int(k) for k in depths if int(k) >= 1})
+
+    for k in sorted_depths:
+        with ctrl.active_passes(k):
+            nat_out = ctrl.model(input_ids=inp, attention_mask=msk, use_cache=False).logits[row_idx, col_idx].float()
+        if k == 1:
+            nat_k1 = nat_out
+        masks_k = [(1, 1, 1, 1)] * max(0, k - 1) if k > 1 else None
+        unr_k = ctrl.unrolled_forward(
+            inp,
+            msk,
+            n_passes=k,
+            masks_by_pass=masks_k,
+            mask_mode="bypass",
+        )
+        unr_logits = ctrl.logit_softcap(ctrl.lm_head(unr_k["last_hidden_state"]))[row_idx, col_idx].float()
+        diff_k = float((nat_out - unr_logits).abs().max().item())
+        per_depth_diffs[f"K={k}"] = round(diff_k, 8)
+        if diff_k > 1e-3:
+            raise RuntimeError(f"Varloop preflight equivalence failed at K={k}: max_abs_diff={diff_k:.3e}")
+
+    max_k = max(sorted_depths) if sorted_depths else 3
+    if nat_k1 is None:
+        with ctrl.active_passes(1):
+            nat_k1 = ctrl.model(input_ids=inp, attention_mask=msk, use_cache=False).logits[row_idx, col_idx].float()
+    unr_zero = ctrl.unrolled_forward(
+        inp,
+        msk,
+        n_passes=max_k,
+        masks_by_pass=[(0, 0, 0, 0)] * max(0, max_k - 1) if max_k > 1 else None,
+        mask_mode="bypass",
+    )
+    unr_zero_logits = ctrl.logit_softcap(ctrl.lm_head(unr_zero["last_hidden_state"]))[row_idx, col_idx].float()
+    diff_zero_vs_k1 = float((nat_k1 - unr_zero_logits).abs().max().item())
+    if diff_zero_vs_k1 > 1e-3:
+        raise RuntimeError(
+            f"Varloop 0000-bypass equivalence failed at K={max_k} vs K=1: max_abs_diff={diff_zero_vs_k1:.3e}"
+        )
+
+    return {
+        "valid": True,
+        "depths_checked": sorted_depths,
+        "max_abs_logit_diff_by_depth": per_depth_diffs,
+        f"max_abs_logit_diff_k1_vs_k{max_k}_0000_bypass": round(diff_zero_vs_k1, 8),
+    }
+
+
+@_no_grad()
+def run_varloop_wht_depth_trajectory(
+    ctrl: BiophysicalInklingController,
+    suite: dict[str, Any],
+    depths: Sequence[int] = (2, 3, 5, 7),
+    batch_size: int = 32,
+    n_boot: int = 4000,
+) -> dict[str, Any]:
+    """Run exact 16-mask WHT depth trajectory (`K in depths`, joint mask on Passes `2..K`)."""
+    items_120: list[BiophysicalItem] = suite["reasoning_120"]
+    regimes = ("factual_2hop", "arithmetic_2step", "calendar_2step")
+    reg_indices = {
+        r: np.asarray([idx for idx, it in enumerate(items_120) if it.regime == r], dtype=np.int64)
+        for r in regimes
+    }
+    masks_16 = enumerate_16_masks()
+    by_depth: dict[str, Any] = {}
+
+    for d_i, k in enumerate(sorted({int(x) for x in depths if int(x) >= 2})):
+        lp_cube = np.zeros((16, len(items_120)), dtype=np.float64)
+        acc_cube = np.zeros((16, len(items_120)), dtype=np.float64)
+        lo_cube = np.zeros((16, len(items_120)), dtype=np.float64)
+
+        for m_int, bits, _code, _lbl in masks_16:
+            sc = _score_items_under_mask(
+                ctrl,
+                items_120,
+                mask_p2=bits,
+                mask_p3=bits,
+                mask_mode="bypass",
+                batch_size=batch_size,
+                n_passes=k,
+                masks_by_pass=[bits] * (k - 1),
+            )
+            lp_cube[m_int] = sc["continuation_logprob"]
+            acc_cube[m_int] = sc["top1_acc"]
+            lo_cube[m_int] = sc["target_vs_foil_lo"]
+
+        lp_wht = compute_exact_wht_16(lp_cube, seed=7100 + d_i * 100, n_boot=n_boot)
+        acc_wht = compute_exact_wht_16(acc_cube, seed=7200 + d_i * 100, n_boot=n_boot)
+        lo_wht = compute_exact_wht_16(lo_cube, seed=7300 + d_i * 100, n_boot=n_boot)
+        if lp_wht["parseval_variance_error"] >= 1e-12 or acc_wht["parseval_variance_error"] >= 1e-12:
+            raise RuntimeError(f"Varloop WHT Parseval error exceeded 1e-12 at K={k}")
+
+        reg_out: dict[str, Any] = {}
+        for r_i, r_name in enumerate(regimes):
+            idxs = reg_indices[r_name]
+            if idxs.size == 0:
+                continue
+            reg_out[r_name] = {
+                "continuation_logprob_wht": compute_exact_wht_16(
+                    lp_cube[:, idxs], seed=7400 + d_i * 100 + r_i * 20, n_boot=n_boot
+                ),
+                "top1_accuracy_wht": compute_exact_wht_16(
+                    acc_cube[:, idxs], seed=7500 + d_i * 100 + r_i * 20, n_boot=n_boot
+                ),
+                "target_vs_foil_lo_wht": compute_exact_wht_16(
+                    lo_cube[:, idxs], seed=7600 + d_i * 100 + r_i * 20, n_boot=n_boot
+                ),
+            }
+
+        by_depth[f"K={k}"] = {
+            "n_passes": k,
+            "n_items": len(items_120),
+            "all_120": {
+                "continuation_logprob_wht": lp_wht,
+                "top1_accuracy_wht": acc_wht,
+                "target_vs_foil_lo_wht": lo_wht,
+            },
+            "by_regime": reg_out,
+        }
+
+    return {
+        "n_total_items": len(items_120),
+        "channel_order": list(CHANNEL_NAMES),
+        "depths": sorted({int(x) for x in depths if int(x) >= 2}),
+        "by_depth": by_depth,
+    }
+
+
+def run_varloop_per_pass_non_normal_gain(
+    ctrl: BiophysicalInklingController,
+    suite: dict[str, Any],
+    max_passes: int = 7,
+    jacobian_per_regime: int = 12,
+    n_boot: int = 4000,
+) -> dict[str, Any]:
+    """Measure per-pass non-normal transient amplification spectrum across `p = 1..max_passes`."""
+    items_jac = _select_balanced_subset(suite, per_regime=jacobian_per_regime)
+    n_jac = len(items_jac)
+    jac_bsz = min(12, max(1, n_jac))
+    rng_g = torch.Generator(device="cpu").manual_seed(20260702)
+
+    pass_keys = [f"pass_{p}" for p in range(1, max_passes + 1)]
+    sigma_vjp_by_pass: dict[str, list[float]] = {k: [] for k in pass_keys}
+    sigma_fd_by_pass: dict[str, list[float]] = {k: [] for k in pass_keys}
+    iso_gain_by_pass: dict[str, list[float]] = {k: [] for k in pass_keys}
+    io_cos_by_pass: dict[str, list[float]] = {k: [] for k in pass_keys}
+    rayleigh_by_pass: dict[str, list[float]] = {k: [] for k in pass_keys}
+
+    for s in range(0, n_jac, jac_bsz):
+        e = min(n_jac, s + jac_bsz)
+        sub = items_jac[s:e]
+        bsz = len(sub)
+        rendered = [ctrl.format_0cot_prompt(it.user_prompt) for it in sub]
+        inp, msk, lens = ctrl._encode_right_padded(rendered)
+        row_idx = torch.arange(bsz, device=ctrl.device)
+        col_idx = torch.tensor([l_i - 1 for l_i in lens], dtype=torch.long, device=ctrl.device)
+
+        with torch.no_grad():
+            base = ctrl.unrolled_forward(inp, msk, n_passes=max_passes, record_all_visits=False)
+            pre_b_clean, pre_h_clean = base["pre_loop"]
+            c_map, r_map, pos_ids = base["causal_map"], base["rel_map"], base["position_ids"]
+            exits_clean = [(b.detach(), h.detach()) for b, h in base["pass_exits"]]
+
+        num_pre_blocks = pre_b_clean.shape[-2]
+        for p_idx, st_key in enumerate(pass_keys):
+            if p_idx == 0:
+                in_ref = pre_h_clean.detach()
+                prev_b_fixed = None
+            else:
+                prev_b_full, prev_h_full = exits_clean[p_idx - 1]
+                prev_b_fixed = prev_b_full[..., num_pre_blocks + 1 :, :].detach()
+                in_ref = prev_h_full.detach()
+
+            def _run_single_pass_op(h_var: torch.Tensor) -> torch.Tensor:
+                if p_idx == 0:
+                    cur_h, cur_b = h_var, pre_b_clean
+                    for l_idx in range(ctrl.loop_start, ctrl.loop_end):
+                        lyr = ctrl.text_model.layers[l_idx]
+                        nh = ctrl._call_decoder_layer(
+                            lyr, cur_h, cur_b, c_map, r_map, pos_ids, messages=None, is_loop_call=True
+                        )
+                        if lyr.is_block_boundary:
+                            cur_b = torch.cat([cur_b.to(cur_h.device), cur_h.unsqueeze(-2)], dim=-2)
+                        cur_h = nh
+                    return cur_h
+                cur_h, cur_b = pre_h_clean, pre_b_clean
+                assert prev_b_fixed is not None
+                for li, l_idx in enumerate(range(ctrl.loop_start, ctrl.loop_end)):
+                    lyr = ctrl.text_model.layers[l_idx]
+                    msgs = ctrl.text_model.message_input(prev_b_fixed, h_var, li)
+                    nh = ctrl._call_decoder_layer(
+                        lyr, cur_h, cur_b, c_map, r_map, pos_ids, messages=msgs, is_loop_call=True
+                    )
+                    if lyr.is_block_boundary:
+                        cur_b = torch.cat([cur_b.to(cur_h.device), cur_h.unsqueeze(-2)], dim=-2)
+                    cur_h = nh
+                return cur_h
+
+            v_init = torch.randn((bsz, ctrl.d_model), generator=rng_g, dtype=torch.float32)
+            v_vec = (v_init / torch.linalg.vector_norm(v_init, dim=-1, keepdim=True).clamp(min=1e-12)).to(ctrl.device)
+
+            h_leaf_p = in_ref.clone().requires_grad_(True)
+            with torch.enable_grad():
+                out_p = _run_single_pass_op(h_leaf_p)
+                out_last = out_p[row_idx, col_idx].float()
+                iso_p_sq = torch.zeros(bsz, dtype=torch.float32, device=ctrl.device)
+                for _pr_i in range(4):
+                    w_c = torch.randn((bsz, ctrl.d_model), generator=rng_g, dtype=torch.float32)
+                    w_u = (w_c / torch.linalg.vector_norm(w_c, dim=-1, keepdim=True).clamp(min=1e-12)).to(ctrl.device)
+                    gp = torch.autograd.grad((out_last * w_u).sum(), h_leaf_p, retain_graph=True)[0][
+                        row_idx, col_idx
+                    ].float()
+                    iso_p_sq += gp.square().sum(dim=-1)
+                iso_gain_p = torch.sqrt(iso_p_sq / 4.0)
+
+            in_tok_base = in_ref[row_idx, col_idx].float()
+            step_p = (0.05 * torch.linalg.vector_norm(in_tok_base, dim=-1, keepdim=True)).clamp(min=0.05)
+            sig_fd = torch.ones(bsz, dtype=torch.float32, device=ctrl.device)
+
+            for it_step in range(6):
+                if it_step == 0:
+                    with torch.enable_grad():
+                        g_v = torch.autograd.grad((out_last * v_vec).sum(), h_leaf_p, retain_graph=False)[0][
+                            row_idx, col_idx
+                        ].float()
+                else:
+                    hl = in_ref.clone().requires_grad_(True)
+                    with torch.enable_grad():
+                        ol = _run_single_pass_op(hl)[row_idx, col_idx].float()
+                        g_v = torch.autograd.grad((ol * v_vec).sum(), hl, retain_graph=False)[0][
+                            row_idx, col_idx
+                        ].float()
+                sig_vjp = torch.linalg.vector_norm(g_v, dim=-1).clamp(min=1e-12)
+                u_vec = g_v / sig_vjp.unsqueeze(-1)
+
+                with torch.no_grad():
+                    hp = in_ref.clone()
+                    hm = in_ref.clone()
+                    hp[row_idx, col_idx] = (in_tok_base + step_p * u_vec).to(in_ref.dtype)
+                    hm[row_idx, col_idx] = (in_tok_base - step_p * u_vec).to(in_ref.dtype)
+                    yp = _run_single_pass_op(hp)[row_idx, col_idx].float()
+                    ym = _run_single_pass_op(hm)[row_idx, col_idx].float()
+                    ju = (yp - ym) / (2.0 * step_p)
+                    sig_fd = torch.linalg.vector_norm(ju, dim=-1).clamp(min=1e-12)
+                    v_vec = ju / sig_fd.unsqueeze(-1)
+
+            hl_fin = in_ref.clone().requires_grad_(True)
+            with torch.enable_grad():
+                ol_fin = _run_single_pass_op(hl_fin)[row_idx, col_idx].float()
+                g_fin = torch.autograd.grad((ol_fin * v_vec).sum(), hl_fin, retain_graph=False)[0][
+                    row_idx, col_idx
+                ].float()
+            sig_vjp_cert = torch.linalg.vector_norm(g_fin, dim=-1).clamp(min=1e-12)
+            u_fin = g_fin / sig_vjp_cert.unsqueeze(-1)
+            io_cos = (u_fin * v_vec).sum(dim=-1).abs()
+            rayleigh_q = sig_vjp_cert * io_cos
+
+            sigma_vjp_by_pass[st_key].extend(sig_vjp_cert.cpu().tolist())
+            sigma_fd_by_pass[st_key].extend(sig_fd.cpu().tolist())
+            iso_gain_by_pass[st_key].extend(iso_gain_p.cpu().tolist())
+            io_cos_by_pass[st_key].extend(io_cos.cpu().tolist())
+            rayleigh_by_pass[st_key].extend(rayleigh_q.cpu().tolist())
+
+    by_pass: dict[str, Any] = {}
+    for idx_s, st_key in enumerate(pass_keys):
+        sv_ci = bootstrap_mean_ci(sigma_vjp_by_pass[st_key], n_boot=n_boot, seed=8100 + idx_s)
+        sf_ci = bootstrap_mean_ci(sigma_fd_by_pass[st_key], n_boot=n_boot, seed=8200 + idx_s)
+        ig_ci = bootstrap_mean_ci(iso_gain_by_pass[st_key], n_boot=n_boot, seed=8300 + idx_s)
+        cos_ci = bootstrap_mean_ci(io_cos_by_pass[st_key], n_boot=n_boot, seed=8400 + idx_s)
+        rq_ci = bootstrap_mean_ci(rayleigh_by_pass[st_key], n_boot=n_boot, seed=8500 + idx_s)
+        aniso = np.asarray(sigma_vjp_by_pass[st_key]) / np.maximum(np.asarray(iso_gain_by_pass[st_key]), 1e-8)
+        non_norm_amp = np.asarray(sigma_vjp_by_pass[st_key]) / np.maximum(np.asarray(rayleigh_by_pass[st_key]), 1e-4)
+        by_pass[st_key] = {
+            "sigma_max_vjp": {"mean": round(sv_ci[0], 4), "ci95": [round(sv_ci[1], 4), round(sv_ci[2], 4)]},
+            "sigma_max_fd": {"mean": round(sf_ci[0], 4), "ci95": [round(sf_ci[1], 4), round(sf_ci[2], 4)]},
+            "isotropic_rms_gain": {"mean": round(ig_ci[0], 4), "ci95": [round(ig_ci[1], 4), round(ig_ci[2], 4)]},
+            "anisotropy_ratio_sigma_over_iso": round(float(np.mean(aniso)), 4),
+            "singular_io_cosine": {"mean": round(cos_ci[0], 4), "ci95": [round(cos_ci[1], 4), round(cos_ci[2], 4)]},
+            "normal_rayleigh_quotient": {"mean": round(rq_ci[0], 4), "ci95": [round(rq_ci[1], 4), round(rq_ci[2], 4)]},
+            "non_normal_transient_ratio": round(float(np.mean(non_norm_amp)), 4),
+        }
+
+    return {
+        "n_jacobian_items": n_jac,
+        "max_passes": max_passes,
+        "by_pass": by_pass,
+    }
+
+
+def run_varloop_fisher_and_commitment(
+    ctrl: BiophysicalInklingController,
+    suite: dict[str, Any],
+    depths: Sequence[int] = (5, 7),
+    fisher_per_regime: int = 20,
+    n_rademacher: int = 6,
+    fisher_bsz: int = 8,
+    n_boot: int = 4000,
+) -> dict[str, Any]:
+    """Compute multi-K Hutchinson VJP Fisher pullback, Loop->Coda spike, and Hop-1/Hop-2 commitment."""
+    items_60 = _select_balanced_subset(suite, per_regime=fisher_per_regime)
+    n60 = len(items_60)
+    mid_loop_l = ctrl.loop_start + max(0, (ctrl.loop_end - ctrl.loop_start) // 2 - 1)
+    end_loop_l = ctrl.loop_end - 1
+    stem_end_l = ctrl.loop_start - 1
+
+    by_depth: dict[str, Any] = {}
+    for d_i, k_depth in enumerate(sorted({int(x) for x in depths if int(x) >= 1})):
+        rng_f = torch.Generator(device="cpu").manual_seed(20260703 + d_i * 17)
+        target_visit_keys = [f"stem_L{stem_end_l}"]
+        for p_num in range(1, k_depth + 1):
+            if mid_loop_l != end_loop_l:
+                target_visit_keys.append(f"p{p_num}_L{mid_loop_l}")
+            target_visit_keys.append(f"p{p_num}_L{end_loop_l}")
+        target_visit_keys.extend(f"coda_L{l_i}" for l_i in range(ctrl.loop_end, ctrl.n_layers))
+
+        n_ckpts = len(target_visit_keys)
+        fisher_trace_mat = np.zeros((n_ckpts, n60), dtype=np.float64)
+        fisher_rel_mat = np.zeros((n_ckpts, n60), dtype=np.float64)
+
+        traj_stages = ["stem", *[f"pass_{p_num}" for p_num in range(1, k_depth + 1)]]
+        n_stages = len(traj_stages)
+        hop1_prob_traj = {
+            r: np.zeros(n_stages, dtype=np.float64)
+            for r in ("all", "factual_2hop", "arithmetic_2step", "calendar_2step")
+        }
+        hop2_prob_traj = {
+            r: np.zeros(n_stages, dtype=np.float64)
+            for r in ("all", "factual_2hop", "arithmetic_2step", "calendar_2step")
+        }
+        lo_per_item = np.zeros((n_stages, n60), dtype=np.float64)
+
+        for s in range(0, n60, fisher_bsz):
+            e = min(n60, s + fisher_bsz)
+            sub = items_60[s:e]
+            bsz = len(sub)
+            rendered = [ctrl.format_0cot_prompt(it.user_prompt) for it in sub]
+            inp, msk, lens = ctrl._encode_right_padded(rendered)
+            row_idx = torch.arange(bsz, device=ctrl.device)
+            col_idx = torch.tensor([l_i - 1 for l_i in lens], dtype=torch.long, device=ctrl.device)
+
+            with torch.enable_grad():
+                emb = ctrl.text_model.embed_tokens(inp).detach().requires_grad_(True)
+                if getattr(ctrl.text_model, "_is_mock_tiny", False) and msk is not None:
+                    emb_run = emb * msk.unsqueeze(-1).to(emb.dtype)
+                else:
+                    emb_run = emb
+                pos_ids, c_map, r_map = ctrl._build_masks_and_distances(emb_run, msk)
+
+                h_cur = emb_run
+                b_cur = emb_run.new_zeros(*emb_run.shape[:-1], 0, emb_run.shape[-1])
+                visit_dict: dict[str, torch.Tensor] = {}
+                pass_pairs: list[tuple[torch.Tensor, torch.Tensor]] = []
+
+                for l_idx in range(0, ctrl.loop_start):
+                    lyr = ctrl.text_model.layers[l_idx]
+                    nh = ctrl._call_decoder_layer(lyr, h_cur, b_cur, c_map, r_map, pos_ids, is_loop_call=False)
+                    if lyr.is_block_boundary:
+                        b_cur = torch.cat([b_cur.to(h_cur.device), h_cur.unsqueeze(-2)], dim=-2)
+                    h_cur = nh
+                    visit_dict[f"stem_L{l_idx}"] = h_cur
+                pre_h, pre_b = h_cur, b_cur
+                stem_pair = (b_cur.detach(), h_cur.detach())
+                num_pre = pre_b.shape[-2]
+
+                for l_idx in range(ctrl.loop_start, ctrl.loop_end):
+                    lyr = ctrl.text_model.layers[l_idx]
+                    nh = ctrl._call_decoder_layer(
+                        lyr, h_cur, b_cur, c_map, r_map, pos_ids, messages=None, is_loop_call=True
+                    )
+                    if lyr.is_block_boundary:
+                        b_cur = torch.cat([b_cur.to(h_cur.device), h_cur.unsqueeze(-2)], dim=-2)
+                    h_cur = nh
+                    visit_dict[f"p1_L{l_idx}"] = h_cur
+                pass_pairs.append((b_cur.detach(), h_cur.detach()))
+
+                for loop_idx in range(1, k_depth):
+                    prev_b = b_cur[..., num_pre + 1 :, :]
+                    prev_h = h_cur
+                    h_cur, b_cur = pre_h, pre_b
+                    for li, l_idx in enumerate(range(ctrl.loop_start, ctrl.loop_end)):
+                        lyr = ctrl.text_model.layers[l_idx]
+                        msgs = ctrl.text_model.message_input(prev_b, prev_h, li)
+                        nh = ctrl._call_decoder_layer(
+                            lyr, h_cur, b_cur, c_map, r_map, pos_ids, messages=msgs, is_loop_call=True
+                        )
+                        if lyr.is_block_boundary:
+                            b_cur = torch.cat([b_cur.to(h_cur.device), h_cur.unsqueeze(-2)], dim=-2)
+                        h_cur = nh
+                        visit_dict[f"p{loop_idx + 1}_L{l_idx}"] = h_cur
+                    pass_pairs.append((b_cur.detach(), h_cur.detach()))
+
+                for l_idx in range(ctrl.loop_end, ctrl.n_layers):
+                    lyr = ctrl.text_model.layers[l_idx]
+                    nh = ctrl._call_decoder_layer(lyr, h_cur, b_cur, c_map, r_map, pos_ids, is_loop_call=False)
+                    if lyr.is_block_boundary:
+                        b_cur = torch.cat([b_cur.to(h_cur.device), h_cur.unsqueeze(-2)], dim=-2)
+                    h_cur = nh
+                    visit_dict[f"coda_L{l_idx}"] = h_cur
+
+                fin_m = (
+                    ctrl.text_model.final_input(b_cur, h_cur)[0]
+                    if hasattr(ctrl.text_model, "final_input")
+                    else h_cur
+                )
+                fin_n = ctrl.text_model.norm(fin_m).to(ctrl.lm_head.weight.dtype)
+                logits_last = ctrl.logit_softcap(ctrl.lm_head(fin_n[row_idx, col_idx]).float())
+                probs_last = F.softmax(logits_last, dim=-1).detach()
+                sqrt_p = torch.sqrt(probs_last.clamp(min=1e-30))
+
+                ckpt_tensors = [visit_dict[k] for k in target_visit_keys]
+                ckpt_norms_sq = [
+                    ckpt_tensors[c_i].detach()[row_idx, col_idx].float().square().sum(dim=-1)
+                    for c_i in range(n_ckpts)
+                ]
+
+                vocab_sz = logits_last.shape[-1]
+                tr_accum = [torch.zeros(bsz, dtype=torch.float32, device=ctrl.device) for _ in range(n_ckpts)]
+                for r_i in range(n_rademacher):
+                    rad_bits = torch.randint(0, 2, (bsz, vocab_sz), generator=rng_f, dtype=torch.int8)
+                    rad = (rad_bits.to(device=ctrl.device, dtype=torch.float32) * 2.0) - 1.0
+                    dot_sp = (sqrt_p * rad).sum(dim=-1, keepdim=True)
+                    w_r = (sqrt_p * rad) - (dot_sp * probs_last)
+                    scalar_obj = (logits_last * w_r).sum()
+                    grads = torch.autograd.grad(
+                        scalar_obj,
+                        ckpt_tensors,
+                        retain_graph=(r_i < n_rademacher - 1),
+                    )
+                    for c_i, g_ten in enumerate(grads):
+                        tr_accum[c_i] += g_ten[row_idx, col_idx].float().square().sum(dim=-1)
+
+                for c_i in range(n_ckpts):
+                    tr_val = tr_accum[c_i] / float(n_rademacher)
+                    rel_val = tr_val * ckpt_norms_sq[c_i] / float(ctrl.d_model)
+                    fisher_trace_mat[c_i, s:e] = tr_val.cpu().numpy()
+                    fisher_rel_mat[c_i, s:e] = rel_val.cpu().numpy()
+
+            with torch.no_grad():
+                b_stem_pad = stem_pair[0]
+                while b_stem_pad.shape[-2] < pass_pairs[0][0].shape[-2]:
+                    b_stem_pad = torch.cat([b_stem_pad, stem_pair[1].unsqueeze(-2)], dim=-2)
+                all_pairs = [(b_stem_pad, stem_pair[1]), *pass_pairs]
+                tgt_sets = [first_token_variant_ids(ctrl.tokenizer, it.target_answer) for it in sub]
+                h1_sets = [first_token_variant_ids(ctrl.tokenizer, it.hop1_bridge) for it in sub]
+
+                for st_i, (bp, hp) in enumerate(all_pairs):
+                    fin_st, _ = ctrl.run_coda_from_state(
+                        bp, hp, c_map, r_map, pos_ids, stop_coda_layer=ctrl.n_layers - 1
+                    )
+                    lg_st = ctrl.logit_softcap(
+                        ctrl.lm_head(fin_st[row_idx, col_idx].to(ctrl.lm_head.weight.dtype)).float()
+                    )
+                    pr_st = F.softmax(lg_st, dim=-1)
+                    for i, it in enumerate(sub):
+                        p1_m = float(pr_st[i, h1_sets[i]].sum().item())
+                        p2_m = float(pr_st[i, tgt_sets[i]].sum().item())
+                        lo_per_item[st_i, s + i] = math.log(max(p2_m, 1e-30)) - math.log(max(p1_m, 1e-30))
+                        hop1_prob_traj["all"][st_i] += p1_m
+                        hop2_prob_traj["all"][st_i] += p2_m
+                        hop1_prob_traj[it.regime][st_i] += p1_m
+                        hop2_prob_traj[it.regime][st_i] += p2_m
+
+        fisher_checkpoints = []
+        stage_rel_mean: dict[str, float] = {}
+        stage_tr_mean: dict[str, float] = {}
+        for c_i, v_key in enumerate(target_visit_keys):
+            tr_ci = bootstrap_mean_ci(fisher_trace_mat[c_i], n_boot=n_boot, seed=8600 + d_i * 100 + c_i)
+            rl_ci = bootstrap_mean_ci(fisher_rel_mat[c_i], n_boot=n_boot, seed=8700 + d_i * 100 + c_i)
+            stage_tr_mean[v_key] = float(tr_ci[0])
+            stage_rel_mean[v_key] = float(rl_ci[0])
+            fisher_checkpoints.append(
+                {
+                    "stage_key": v_key,
+                    "fisher_trace": {"mean": round(tr_ci[0], 5), "ci95": [round(tr_ci[1], 5), round(tr_ci[2], 5)]},
+                    "scale_normalized_fisher_kl_curvature": {
+                        "mean": round(rl_ci[0], 5),
+                        "ci95": [round(rl_ci[1], 5), round(rl_ci[2], 5)],
+                    },
+                }
+            )
+
+        loop_exit_key = f"p{k_depth}_L{end_loop_l}"
+        coda_entry_key = f"coda_L{ctrl.loop_end}"
+        spike_trace_ratio = stage_tr_mean.get(coda_entry_key, 0.0) / max(stage_tr_mean.get(loop_exit_key, 0.0), 1e-12)
+        spike_rel_ratio = stage_rel_mean.get(coda_entry_key, 0.0) / max(stage_rel_mean.get(loop_exit_key, 0.0), 1e-12)
+
+        commitment_by_regime: dict[str, Any] = {}
+        for r_key in ("all", "factual_2hop", "arithmetic_2step", "calendar_2step"):
+            idxs = (
+                np.arange(n60)
+                if r_key == "all"
+                else np.asarray([idx for idx, it in enumerate(items_60) if it.regime == r_key], dtype=np.int64)
+            )
+            if idxs.size == 0:
+                continue
+            denom = float(idxs.size)
+            mean_lo_curve = [float(np.mean(lo_per_item[st_i, idxs])) for st_i in range(n_stages)]
+            commitment_by_regime[r_key] = {
+                "stages": traj_stages,
+                "hop1_bridge_prob": [round(float(x / denom), 5) for x in hop1_prob_traj[r_key]],
+                "hop2_target_prob": [round(float(x / denom), 5) for x in hop2_prob_traj[r_key]],
+                "hop2_minus_hop1_log_odds": [round(v, 4) for v in mean_lo_curve],
+                "horizon_estimate": estimate_commitment_horizon(traj_stages, mean_lo_curve),
+            }
+
+        by_depth[f"K={k_depth}"] = {
+            "n_passes": k_depth,
+            "n_fisher_items": n60,
+            "loop_to_coda_fisher_spike": {
+                "loop_exit_key": loop_exit_key,
+                "coda_entry_key": coda_entry_key,
+                "trace_ratio": round(float(spike_trace_ratio), 4),
+                "scale_normalized_ratio": round(float(spike_rel_ratio), 4),
+            },
+            "fisher_pullback_trajectory": fisher_checkpoints,
+            "commitment_horizon": commitment_by_regime,
+        }
+
+    return {
+        "depths": sorted({int(x) for x in depths if int(x) >= 1}),
+        "by_depth": by_depth,
+    }
+
+
+@_no_grad()
+def run_varloop_somatic_reset_hysteresis(
+    ctrl: BiophysicalInklingController,
+    suite: dict[str, Any],
+    depths: Sequence[int] = (3, 5, 7),
+    items_per_regime: int = 20,
+    batch_size: int = 20,
+    foil_betas: Sequence[float] = (0.0, 0.25, 0.50, 0.75, 1.00, 1.25),
+) -> dict[str, Any]:
+    """Pass-1-only foil replacement entering Pass 2, tracking somatic-reset foil decay across P2..PK."""
+    items_60 = _select_balanced_subset(suite, per_regime=items_per_regime)
+    n60 = len(items_60)
+    sorted_depths = sorted({int(k) for k in depths if int(k) >= 2})
+    max_k = max(sorted_depths) if sorted_depths else 7
+    tracked_passes = sorted({2, *sorted_depths})
+    betas_tuple = tuple(float(b) for b in foil_betas)
+    n_b = len(betas_tuple)
+
+    target_prob_by_pass = {p: np.zeros((n_b, n60), dtype=np.float64) for p in tracked_passes}
+    foil_prob_by_pass = {p: np.zeros((n_b, n60), dtype=np.float64) for p in tracked_passes}
+    coda_acc_by_pass = {p: np.zeros((n_b, n60), dtype=np.float64) for p in tracked_passes}
+    coda_cap_by_pass = {p: np.zeros((n_b, n60), dtype=np.float64) for p in tracked_passes}
+    coda_lo_by_pass = {p: np.zeros((n_b, n60), dtype=np.float64) for p in tracked_passes}
+
+    for s in range(0, n60, batch_size):
+        e = min(n60, s + batch_size)
+        sub = items_60[s:e]
+        bsz = len(sub)
+        clean_prompts = [ctrl.format_0cot_prompt(it.user_prompt) for it in sub]
+        foil_prompts = [ctrl.format_0cot_prompt(it.foil_user_prompt) for it in sub]
+
+        inp_c, msk_c, lens_c = ctrl._encode_right_padded(clean_prompts)
+        inp_f, msk_f, lens_f = ctrl._encode_right_padded(foil_prompts)
+        row_idx = torch.arange(bsz, device=ctrl.device)
+        col_c = torch.tensor([l_i - 1 for l_i in lens_c], dtype=torch.long, device=ctrl.device)
+        col_f = torch.tensor([l_i - 1 for l_i in lens_f], dtype=torch.long, device=ctrl.device)
+
+        tgt_sets = [first_token_variant_ids(ctrl.tokenizer, it.target_answer) for it in sub]
+        foil_sets = [first_token_variant_ids(ctrl.tokenizer, it.foil_answer) for it in sub]
+
+        clean_p1 = ctrl.unrolled_forward(inp_c, msk_c, n_passes=1)
+        foil_p1 = ctrl.unrolled_forward(inp_f, msk_f, n_passes=1)
+
+        pre_b_c, pre_h_c = clean_p1["pre_loop"]
+        num_pre = pre_b_c.shape[-2]
+        c_map, r_map, pos_ids = clean_p1["causal_map"], clean_p1["rel_map"], clean_p1["position_ids"]
+
+        p1_b_clean_full, p1_h_clean = clean_p1["pass_exits"][0]
+        p1_b_clean = p1_b_clean_full[..., num_pre + 1 :, :]
+        p1_b_foil_full, p1_h_foil = foil_p1["pass_exits"][0]
+        p1_b_foil_last = p1_b_foil_full[..., num_pre + 1 :, :][row_idx, col_f]
+        p1_h_foil_last = p1_h_foil[row_idx, col_f]
+
+        c_h_tok = p1_h_clean[row_idx, col_c].float()
+        f_h_tok = p1_h_foil_last.float()
+        c_b_tok = p1_b_clean[row_idx, col_c].float()
+        f_b_tok = p1_b_foil_last.float()
+
+        for b_i, beta in enumerate(betas_tuple):
+            prev_b = p1_b_clean.clone()
+            prev_h = p1_h_clean.clone()
+            prev_h[row_idx, col_c] = ((1.0 - beta) * c_h_tok + beta * f_h_tok).to(p1_h_clean.dtype)
+            if prev_b.shape[-2] > 0 and f_b_tok.shape[-2] == prev_b.shape[-2]:
+                prev_b[row_idx, col_c] = ((1.0 - beta) * c_b_tok + beta * f_b_tok).to(p1_b_clean.dtype)
+
+            for p_num in range(2, max_k + 1):
+                cur_h, cur_b = pre_h_c, pre_b_c
+                for li, l_idx in enumerate(range(ctrl.loop_start, ctrl.loop_end)):
+                    lyr = ctrl.text_model.layers[l_idx]
+                    msgs = ctrl.text_model.message_input(prev_b, prev_h, li)
+                    nh = ctrl._call_decoder_layer(
+                        lyr, cur_h, cur_b, c_map, r_map, pos_ids, messages=msgs, is_loop_call=True
+                    )
+                    if lyr.is_block_boundary:
+                        cur_b = torch.cat([cur_b.to(cur_h.device), cur_h.unsqueeze(-2)], dim=-2)
+                    cur_h = nh
+
+                if p_num in target_prob_by_pass:
+                    fin_p, _ = ctrl.run_coda_from_state(cur_b, cur_h, c_map, r_map, pos_ids)
+                    lg_p = ctrl.logit_softcap(
+                        ctrl.lm_head(fin_p[row_idx, col_c].to(ctrl.lm_head.weight.dtype)).float()
+                    )
+                    pr_p = F.softmax(lg_p, dim=-1)
+                    top_p = lg_p.argmax(dim=-1).tolist()
+                    for i in range(bsz):
+                        t_ids = tgt_sets[i]
+                        fl_ids = foil_sets[i]
+                        pt = float(pr_p[i, t_ids].sum().item())
+                        pf = float(pr_p[i, fl_ids].sum().item())
+                        target_prob_by_pass[p_num][b_i, s + i] = pt
+                        foil_prob_by_pass[p_num][b_i, s + i] = pf
+                        coda_acc_by_pass[p_num][b_i, s + i] = 1.0 if top_p[i] in t_ids else 0.0
+                        coda_cap_by_pass[p_num][b_i, s + i] = 1.0 if top_p[i] in fl_ids else 0.0
+                        coda_lo_by_pass[p_num][b_i, s + i] = math.log(max(pt, 1e-30)) - math.log(max(pf, 1e-30))
+
+                prev_b = cur_b[..., num_pre + 1 :, :]
+                prev_h = cur_h
+
+    by_depth: dict[str, Any] = {}
+    for k_depth in sorted_depths:
+        rows = []
+        for b_i, beta in enumerate(betas_tuple):
+            rows.append(
+                {
+                    "beta": beta,
+                    "pass2_foil_prob": round(float(np.mean(foil_prob_by_pass[2][b_i])), 5),
+                    "pass_k_target_prob": round(float(np.mean(target_prob_by_pass[k_depth][b_i])), 5),
+                    "pass_k_foil_prob": round(float(np.mean(foil_prob_by_pass[k_depth][b_i])), 5),
+                    "coda_target_top1_acc": round(float(np.mean(coda_acc_by_pass[k_depth][b_i])), 4),
+                    "coda_foil_capture_rate": round(float(np.mean(coda_cap_by_pass[k_depth][b_i])), 4),
+                    "coda_target_minus_foil_lo": round(float(np.mean(coda_lo_by_pass[k_depth][b_i])), 4),
+                }
+            )
+        summary = summarize_hysteresis_curve(
+            betas_tuple,
+            [float(np.mean(foil_prob_by_pass[2][i])) for i in range(n_b)],
+            [float(np.mean(foil_prob_by_pass[k_depth][i])) for i in range(n_b)],
+            [float(np.mean(coda_acc_by_pass[k_depth][i])) for i in range(n_b)],
+            [float(np.mean(coda_cap_by_pass[k_depth][i])) for i in range(n_b)],
+        )
+        by_depth[f"K={k_depth}"] = {
+            "n_passes": k_depth,
+            "curve": rows,
+            "hysteresis_summary": summary,
+        }
+
+    foil_decay_by_beta: list[dict[str, Any]] = []
+    for b_i, beta in enumerate(betas_tuple):
+        entry: dict[str, Any] = {"beta": beta}
+        for p_num in tracked_passes:
+            entry[f"pass_{p_num}_foil_prob"] = round(float(np.mean(foil_prob_by_pass[p_num][b_i])), 5)
+            entry[f"pass_{p_num}_target_acc"] = round(float(np.mean(coda_acc_by_pass[p_num][b_i])), 4)
+        foil_decay_by_beta.append(entry)
+
+    return {
+        "n_items": n60,
+        "depths": sorted_depths,
+        "tracked_passes": tracked_passes,
+        "betas": list(betas_tuple),
+        "foil_decay_trajectory": foil_decay_by_beta,
+        "by_depth": by_depth,
+    }
+
+
+def run_phase7_varloop_suite(
+    controller: BiophysicalInklingController,
+    tokenizer: Any = None,
+    stimuli: dict[str, Any] | None = None,
+    depths: Sequence[int] = (1, 2, 3, 5, 7),
+    wht_depths: Sequence[int] = (2, 3, 5, 7),
+    fisher_depths: Sequence[int] = (5, 7),
+    hysteresis_depths: Sequence[int] = (3, 5, 7),
+    batch_size: int = 32,
+    jacobian_per_regime: int = 12,
+    fisher_per_regime: int = 20,
+    n_rademacher: int = 6,
+    fisher_bsz: int = 8,
+    hysteresis_per_regime: int = 20,
+    n_boot: int = 4000,
+    checkpoint_path: Path | str | None = None,
+) -> dict[str, Any]:
+    """Run Phase 7 Experiment Block B1 (Varloop K=1..7) with atomic resumable JSON checkpoints."""
+    _ = tokenizer
+    t0 = time.perf_counter()
+    suite = stimuli if stimuli is not None else build_phase6_stimulus_suite()
+    ckpt = Path(checkpoint_path) if checkpoint_path is not None else None
+
+    if ckpt is not None and ckpt.is_file():
+        payload = json.loads(ckpt.read_text(encoding="utf-8"))
+        payload["completed"] = False
+    else:
+        payload = {
+            "phase": "phase7_varloop_biophysical_depth",
+            "model_label": controller.model_label,
+            "depths": [int(d) for d in depths],
+            "timestamp_utc": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
+            "completed": False,
+        }
+
+    def _save_ckpt() -> None:
+        if ckpt is not None:
+            _atomic_save_json(ckpt, payload)
+
+    sorted_depths = sorted({int(d) for d in depths if int(d) >= 1})
+    preflight_depths = [k for k in (1, 3, 5, 7) if k in sorted_depths] or sorted_depths
+
+    if "preflight_equivalence" not in payload:
+        payload["preflight_equivalence"] = run_varloop_preflight_equivalence(controller, depths=preflight_depths)
+        _save_ckpt()
+
+    if "wht_depth_trajectory" not in payload:
+        eff_wht_depths = [int(k) for k in wht_depths if int(k) >= 2]
+        payload["wht_depth_trajectory"] = run_varloop_wht_depth_trajectory(
+            controller,
+            suite,
+            depths=eff_wht_depths,
+            batch_size=batch_size,
+            n_boot=n_boot,
+        )
+        _save_ckpt()
+
+    if "per_pass_non_normal_gain" not in payload:
+        payload["per_pass_non_normal_gain"] = run_varloop_per_pass_non_normal_gain(
+            controller,
+            suite,
+            max_passes=max(sorted_depths) if sorted_depths else 7,
+            jacobian_per_regime=jacobian_per_regime,
+            n_boot=n_boot,
+        )
+        _save_ckpt()
+
+    if "fisher_and_commitment" not in payload:
+        payload["fisher_and_commitment"] = run_varloop_fisher_and_commitment(
+            controller,
+            suite,
+            depths=fisher_depths,
+            fisher_per_regime=fisher_per_regime,
+            n_rademacher=n_rademacher,
+            fisher_bsz=fisher_bsz,
+            n_boot=n_boot,
+        )
+        _save_ckpt()
+
+    if "somatic_reset_hysteresis" not in payload:
+        payload["somatic_reset_hysteresis"] = run_varloop_somatic_reset_hysteresis(
+            controller,
+            suite,
+            depths=hysteresis_depths,
+            items_per_regime=hysteresis_per_regime,
+            batch_size=min(20, batch_size),
+        )
+        _save_ckpt()
+
+    payload["completed"] = True
+    payload["runtime_seconds"] = round(time.perf_counter() - t0, 2)
+    _save_ckpt()
     return payload
