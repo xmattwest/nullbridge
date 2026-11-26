@@ -329,6 +329,7 @@ PY
   printf '[nb-p7] Running pre-flight PyTorch unit tests before any weight downloads...\n'
   (
     cd /workspace
+    OMP_NUM_THREADS=4 MKL_NUM_THREADS=4 OPENBLAS_NUM_THREADS=4 \
     PYTHONPATH=/workspace/src python3 -m pytest -q \
       tests/test_phase6_biophysical_cpu.py \
       tests/test_phase7_safety_cpu.py \
