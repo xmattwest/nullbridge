@@ -265,6 +265,12 @@ cfg = AutoConfig.from_pretrained(model_dir, local_files_only=True, trust_remote_
 # Build a tiny 1-block RavenConfig clone to verify RavenForCausalLM forward compatibility
 cfg.n_embd = 64
 cfg.n_heads = 4
+if hasattr(cfg, "num_key_value_heads"):
+    cfg.num_key_value_heads = 4
+if hasattr(cfg, "n_kv_heads"):
+    cfg.n_kv_heads = 4
+if hasattr(cfg, "head_dim"):
+    cfg.head_dim = 16
 cfg.intermediate_size = 128
 cfg.n_layers_in_prelude = 1
 cfg.n_layers_in_recurrent_block = 1
@@ -431,10 +437,10 @@ PY
       rm -rf /opt/huginn-venv
       uv venv --system-site-packages --python "$PY_BIN" /opt/huginn-venv
       HUGINN_PY="/opt/huginn-venv/bin/python"
-      if ! (uv pip install --python "$HUGINN_PY" --no-cache "transformers==4.48.3" accelerate && \
+      if ! (uv pip install --python "$HUGINN_PY" --no-cache --no-deps "transformers==4.44.2" "tokenizers==0.19.1" "huggingface-hub==0.26.5" && \
             probe_huginn_compat "$HUGINN_PY" "$HUG_DST"); then
-        printf '[nb-p7] Retrying /opt/huginn-venv with transformers==4.44.2...\n'
-        uv pip install --python "$HUGINN_PY" --no-cache "transformers==4.44.2" accelerate
+        printf '[nb-p7] Retrying /opt/huginn-venv with transformers==4.48.3...\n'
+        uv pip install --python "$HUGINN_PY" --no-cache --no-deps "transformers==4.48.3" "tokenizers==0.21.4" "huggingface-hub==0.29.3"
         probe_huginn_compat "$HUGINN_PY" "$HUG_DST"
       fi
     fi
