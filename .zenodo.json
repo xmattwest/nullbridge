@@ -8,10 +8,10 @@
       "orcid": "0009-0008-5557-9394"
     }
   ],
-  "description": "<p>Complete codebase, locked SHA-256 empirical JSON artifacts, Dawn State SVG/PNG figures, and claim-verified Folio manuscripts for <strong>Nullbridge</strong> across retrofitted and native looped transformers (<code>Gemma-4-Loop-Compact</code>, <code>thinkingmachines/TML-d24-varloop-research</code>, and <code>thinkingmachines/Inkling-2-Mini</code>):</p><ul><li><strong>Part 3 (<a href=\"https://shelltoho.me/pubs/nullbridge/\">Looping in the Dark</a>):</strong> Zero-FLOP offline null-space folding inside Procrustes loop bridges and 4-channel cross-pass message banks curbs silent-loop reward hacking and covert moral bias where behavioral safety LoRAs backfire.</li><li><strong>Part 4 (<a href=\"https://shelltoho.me/pubs/coherent-moral-utility/\">Coherent Moral Utility</a>):</strong> Intersecting 24-budget Afriat/GARP revealed-preference audits showing <code>0.9948</code> modal CCEI utility coherence in <code>Inkling-2-Mini</code>, Pass-2 moral ignition, message-bank clamping, and <code>&lt;|content_thinking|&gt;</code> cures for silent 0%-APR loan blind spots.</li><li><strong>Phase 6 (Biophysical Loop Dynamics):</strong> Five causal perturbation studies on <code>Inkling-2-Mini</code> spanning exact 16-term Walsh-Hadamard synaptic channel epistasis, non-normal Coda Jacobian conductance, Fisher pullback and Coda formatting-shunt dynamics, somatic-reset hysteresis shielding, and neuromodulatory pass-clock mode switching.</li></ul>",
+  "description": "<p>Complete codebase, locked SHA-256 empirical JSON artifacts, Dawn State SVG/PNG figures, and claim-verified Folio manuscripts for <strong>Nullbridge</strong> across retrofitted and native looped transformers (<code>Gemma-4-Loop-Compact</code>, <code>thinkingmachines/TML-d24-varloop-research</code>, <code>thinkingmachines/Inkling-2-Mini</code>, and <code>tomg-group-umd/huginn-0125</code>):</p><ul><li><strong>Part 3 (<a href=\"https://shelltoho.me/pubs/nullbridge/\">Looping in the Dark</a>):</strong> Zero-FLOP offline null-space folding inside Procrustes loop bridges and 4-channel cross-pass message banks curbs silent-loop reward hacking and covert moral bias where behavioral safety LoRAs backfire.</li><li><strong>Part 4 (<a href=\"https://shelltoho.me/pubs/coherent-moral-utility/\">Coherent Moral Utility</a>):</strong> Intersecting 24-budget Afriat/GARP revealed-preference audits showing <code>0.9948</code> modal CCEI utility coherence in <code>Inkling-2-Mini</code>, Pass-2 moral ignition, message-bank clamping, and <code>&lt;|content_thinking|&gt;</code> cures for silent 0%-APR loan blind spots.</li><li><strong>Part 5 (<a href=\"https://shelltoho.me/pubs/biophysics-looped-transformer/\">Biophysics of a Looped Transformer</a>, Phases 6 &amp; 7):</strong> Exact 16-mask Walsh-Hadamard synaptic epistasis across reasoning and safety, universal non-normal transient amplification across <code>Inkling-2-Mini</code> (<code>K = 3</code>), <code>Varloop</code> (<code>K = 1..7</code>), and dense <code>Huginn-0125</code> (<code>K = 1..8</code>), Pass-2 spectral orthogonal separation enabling <code>&lt;= 0.0017</code> nats zero-FLOP Nullbridge folds, 6-layer vs. 2-layer Coda Fisher pullback contrast, Labovich recall-theorem hysteresis shielding, and inverted-U neuromodulatory conductance curves.</li></ul>",
   "access_right": "open",
   "license": "mit",
-  "publication_date": "2026-11-25",
+  "publication_date": "2026-11-26",
   "keywords": [
     "mechanistic interpretability",
     "looped transformers",
@@ -32,6 +32,11 @@
     },
     {
       "identifier": "https://shelltoho.me/pubs/coherent-moral-utility/",
+      "relation": "isSupplementTo",
+      "resource_type": "publication-preprint"
+    },
+    {
+      "identifier": "https://shelltoho.me/pubs/biophysics-looped-transformer/",
       "relation": "isSupplementTo",
       "resource_type": "publication-preprint"
     },

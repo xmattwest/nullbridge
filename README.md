@@ -1,9 +1,10 @@
 # Nullbridge
 
-**Nullbridge** contains the code, locked empirical summaries, and claim-verified Folio manuscripts for Parts 3 and 4 of the *Money Is Moral* series:
+**Nullbridge** contains the code, locked empirical summaries, and claim-verified Folio manuscripts for Parts 3, 4, and 5 of the *Money Is Moral* and *Biophysics of a Looped Transformer* research series:
 
 - **Part 3: *Looping in the Dark*** (*Silent Recurrence Multiplies Reward Hacking and Moral Bias, and Zero-Cost Bridge Projection Curbs Both*): algebraic, zero-runtime-cost alignment inside silent multi-pass looped transformers tested against behavioral de-biasing LoRAs across `69` GPU evaluation cells (`Gemma-4-Loop-Compact`, `thinkingmachines/TML-d24-varloop-research`, and `thinkingmachines/Inkling-2-Mini`).
 - **Part 4: *Coherent Moral Utility*** (*LLMs Exhibit Coherent Moral Utility Across Intersecting Afriat Budgets*): `24`-budget Afriat / GARP revealed-preference and moral-subspace evaluation across `TML-d24-varloop-research` (`K = 1..5`) and `Inkling-2-Mini` (`K = 3` and `<|content_thinking|>`).
+- **Part 5: *Biophysics of a Looped Transformer*** (Phases 6 & 7): exact 16-mask Walsh-Hadamard synaptic epistasis, universal non-normal transient amplification, spectral orthogonal separation of latent safety, Loop-to-Coda Fisher pullback cliffs, Labovich recall-theorem hysteresis shielding, and inverted-U neuromodulatory conductance across `Inkling-2-Mini` (`K = 3`), `TML-d24-varloop-research` (`K = 1..7`), and dense `tomg-group-umd/huginn-0125` (`K = 1..8`).
 
 $$R_{\text{safe}} = R_{\text{proc}}\left(I - Q_{42} Q_{42}^\top\right), \qquad W_{\text{out,safe}} = W_{\text{out}}\left(I - Q_{\text{msg}} Q_{\text{msg}}^\top\right)$$
 
@@ -31,14 +32,19 @@ $$R_{\text{safe}} = R_{\text{proc}}\left(I - Q_{42} Q_{42}^\top\right), \qquad W
 3. **Near-Exact Afriat Utility Coherence (`CCEI = 0.9948`):** Across `4` intersecting `T = 24` linear budget regimes (`576` menus/cell, `100.0%` Bronars rejection power against `0.5731` random `CCEI`), `Inkling-2-Mini` reaches `0.9948` mean modal `CCEI` (`0.9787` expected-bundle `CCEI`), proving its moral tradeoffs maximize a coherent utility function. Passively projecting out `8` moral directions (`0.35%` of `R^2304`) erases `0%`-APR debt distortion (`−0.79` to `−0.02`, Holm `p = 0.927`), cuts asymmetric-split rejection `−51.5%`, and shifts neutral GARP self-payout capture `+9.9 pp` (`89.4%` to `99.2%`) at exact `1.0000` `CCEI`, while additive message-bank steering drives `+5.45` (`spite`) and `+8.51` (`guilt` on dirty money) log-odds swings.
 4. **Silent `0-CoT` Corporate Rationalization vs. `<|content_thinking|>` Loan Math Cure:** Silent `0-CoT` wraps choices in `100.0%` cold financial jargon while stalling at `50.0%` (chance) on `0%`-APR loan net-worth subtraction; enabling `<|content_thinking|>` surfaces `91.7%` private moral deliberation and lifts `0%`-APR balance-sheet accuracy to `81.2%` (`+31.2 pp`) on `Inkling-2-Mini` and `87.5%` (`+37.5 pp`) on `Varloop`.
 
+## Part 5 Findings: Biophysics of a Looped Transformer (Phases 6 & 7: `Inkling-2-Mini`, `Varloop K = 1..7`, `Huginn-0125 K = 1..8`)
+
+1. **Exact 16-Mask Walsh-Hadamard Epistasis (`Parseval <= 7.11e-15`):** On `Inkling-2-Mini` (`n = 120` multi-hop items), opening all four cross-pass message channels lifts `0-CoT` Top-1 accuracy from `1.7%` (`0000`) to `69.2%` (`1111`), partitioning variance into `94.4%` Order-1 main effects plus opposite-sign Order-2 circuits: superadditive `QxK` pointer synergy (`+0.890` nats on `Inkling-2-Mini`; `+0.212 -> +0.778 -> +1.210` across `Varloop` `K = 2, 3, 5`) versus redundant `VxMLP` payload backup (`−0.908` nats). On latent safety suites, pre-registered prediction P2 is confirmed across both models (`V + MLP > Q + K` on moral distortion by `+1.818` on `Inkling-2-Mini` and `+1.726` on `Varloop` `K = 5`, Holm `p = 0.00015`), while P1 dissociates by model because native recurrence self-corrects covert anchoring on `Inkling-2-Mini`.
+2. **Universal Non-Normal Transient Amplification & Training-Horizon Conditioning:** Isotropic random-tangent RMS gain stays strictly contractive (`0.17` to `0.73`) across all three architectures, while exact VJP `sigma_max` jumps to `13.60` on `Inkling-2-Mini` Pass 2 (`21.9x` isotropic, I/O `cos = 0.045`), `7.62` on `Varloop` Pass 3 (spreading gain across passes and remaining bounded at OOD `K = 7` `sigma_max = 6.30`), and `7.63` on dense `Huginn-0125` Step 1 (`10.5x` isotropic, I/O `cos = 0.037`).
+3. **Spectral Orthogonal Separation & Zero-FLOP Nullbridge Pareto Frontier:** Pass-2 top-8 input singular modes `V_8` sit `84.8°` to `88.2°` orthogonal to the `<bos>`-safe 4D safety subspace `Q_msg` (`Inkling-2-Mini`), explaining why offline channel-selective zero-FLOP Nullbridge folding trims covert wrong capture (`73.4% -> 68.8%` for `All-4`, `70.3%` with `93.8%` reasoning retention for `QKV`) at only `0.0012` to `0.0017` nats held-out KL.
+4. **Coda Fisher Cliffs, Labovich Recall Shielding, & Inverted-U Gain Curves:** Deep 6-layer MoE Codas trigger `87.9x` (`Inkling-2-Mini`) and `141.7x` (`Varloop` `K = 5`) loop-to-Coda Fisher pullback cliffs, whereas 2-layer dense `Huginn-0125` climbs smoothly (`84.8x`) inside the loop with a `0.77x` Coda handoff. Exact 2-channel adapter WHT confirms Labovich (`2604.15259`): ablating prelude recall collapses `Huginn-0125` accuracy to `0.0%` (`+12.01` nats recall main effect), while intact recall or somatic reset prevents foil bifurcation (`beta_c = None`) across all three models and produces inverted-U conductance gain curves (`70.0%` at `gamma = 1.00` on `Inkling-2-Mini`; `41.7%` at `gamma = 0.75` on `Huginn-0125`).
+
 ## Repository Layout
 
-- `src/nullbridge/`: Closed-form Procrustes and message-bank null-space folding (`algebra.py`), zero-leakage benchmark suite (`benchmarks.py`), synthetic loop verification (`mock_loop.py`), NDIF harness (`ndif_harness.py`), `Gemma-4-Loop-Compact` loader and Track B pipeline (`gemma4_compact.py`, `track_b.py`), native `Inkling` / `Varloop` Track A pipeline (`track_a.py`), and deterministic statistical analysis (`analysis.py`).
-- `results/phase0_audit/`: Locked Phase 0 mathematical, benchmark-disjointness, and `K = 1..8` synthetic message-bank audit JSON.
-- `results/phase3_gemma4_nullbridge/`: Locked 28-cell GPU evaluation (`track_b_results.json`), derived statistical analysis (`statistical_analysis.json`), and synthesis (`synthesis.md`).
-- `results/phase4_native_inkling_nullbridge/`: Locked 41-cell GPU evaluation across `TML-d24-varloop-research` and `Inkling-2-Mini` (`track_a_results.json`), derived statistical analysis (`track_a_analysis.json`), and synthesis (`synthesis.md`).
-- `results/phase5_inkling_afriat_garp/`: Locked 5-block Afriat / GARP and *Money Is Moral* GPU evaluation (`afriat_inkling_results.json`), derived statistical analysis (`afriat_inkling_analysis.json`), and synthesis (`synthesis.md`).
-- `folio/nullbridge.toml` & `folio/inkling_afriat.toml`: Claim-verified Dawn State manuscript manifests compiled across `5` publication targets each.
+- `src/nullbridge/`: Closed-form Procrustes and message-bank null-space folding (`algebra.py`), zero-leakage benchmark suite (`benchmarks.py`), Track A & B pipelines (`track_a.py`, `track_b.py`), Afriat / GARP suite (`afriat_inkling.py`), Phase 6 & 7 biophysical controllers (`biophysical_wht.py`, `biophysical_inkling.py`, `biophysical_safety.py`, `biophysical_huginn.py`), deterministic analysis (`analysis.py`, `biophysical_analysis.py`, `biophysical_phase7_analysis.py`), and Dawn State figure generators (`biophysical_figures.py`, `biophysical_phase7_figures.py`).
+- `results/phase0_audit/` through `results/phase7_biophysics/`: Locked SHA-256 empirical JSON artifacts, deterministic statistical analyses, and zero-em-dash Warm Precision syntheses.
+- `figures/phase6_inkling_biophysical_loop/` & `figures/phase7_biophysics/`: Dawn State SVG and 2x Retina PNG figure suites with HTML galleries.
+- `folio/nullbridge.toml`, `folio/inkling_afriat.toml`, & `folio/biophysics.toml`: Claim-verified Dawn State manuscript manifests compiled across `5` publication targets each.
 - `design-system/`: Embedded Dawn State / Warm Precision visual and editorial specification.
 - `runs/` *(gitignored)*: Raw pod artifacts, rendered SVG bundles, and compiled Folio HTML/Markdown outputs.
 
@@ -49,11 +55,15 @@ uv sync --extra dev
 uv run pytest -q
 uv run nullbridge audit --audit-only
 uv run nullbridge analyze
+uv run nullbridge analyze-biophysical
+uv run nullbridge analyze-phase7
+uv run nullbridge figures-phase7
 uv run nullbridge guard
 
 # Verify and compile all 5 Dawn State publication surfaces with Folio:
-folio verify folio/nullbridge.toml
-folio build folio/nullbridge.toml --out runs/folio
+folio guard --repo .
+folio verify folio/biophysics.toml
+folio build folio/biophysics.toml --out runs/folio_biophysics
 ```
 
 ## License
