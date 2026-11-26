@@ -24,11 +24,11 @@ export LC_ALL=C
 
 INKLING_NAME="${INKLING_NAME:-inkling-2-mini}"
 INKLING_REPO="${INKLING_REPO:-thinkingmachines/Inkling-2-Mini}"
-INKLING_REV="${INKLING_REV:-c9d028302cd0f035fdf8e7e91f089a4ce94d2195}"
+INKLING_REV="${INKLING_REV:-ed40e7da625f594fc9c4990f5f66be24873c22d7}"
 
 VARLOOP_NAME="${VARLOOP_NAME:-tml-d24-varloop-research}"
 VARLOOP_REPO="${VARLOOP_REPO:-thinkingmachines/TML-d24-varloop-research}"
-VARLOOP_REV="${VARLOOP_REV:-91a57fe2b779bbd12c0f74d1f518cbd5b84e8d0d}"
+VARLOOP_REV="${VARLOOP_REV:-657b53ba5da7baefe9ff15dca5cd25f5bd3dbaa2}"
 
 HUGINN_NAME="${HUGINN_NAME:-huginn-0125}"
 HUGINN_REPO="${HUGINN_REPO:-tomg-group-umd/huginn-0125}"
