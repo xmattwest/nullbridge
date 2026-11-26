@@ -2125,7 +2125,7 @@ def run_varloop_preflight_equivalence(
             masks_by_pass=masks_k,
             mask_mode="bypass",
         )
-        unr_logits = ctrl.logit_softcap(ctrl.lm_head(unr_k["last_hidden_state"]))[row_idx, col_idx].float()
+        unr_logits = ctrl.logit_softcap(ctrl.lm_head(unr_k["last_hidden_state"][row_idx, col_idx]).float())
         diff_k = float((nat_out - unr_logits).abs().max().item())
         per_depth_diffs[f"K={k}"] = round(diff_k, 8)
         if diff_k > 1e-3:
@@ -2142,7 +2142,7 @@ def run_varloop_preflight_equivalence(
         masks_by_pass=[(0, 0, 0, 0)] * max(0, max_k - 1) if max_k > 1 else None,
         mask_mode="bypass",
     )
-    unr_zero_logits = ctrl.logit_softcap(ctrl.lm_head(unr_zero["last_hidden_state"]))[row_idx, col_idx].float()
+    unr_zero_logits = ctrl.logit_softcap(ctrl.lm_head(unr_zero["last_hidden_state"][row_idx, col_idx]).float())
     diff_zero_vs_k1 = float((nat_k1 - unr_zero_logits).abs().max().item())
     if diff_zero_vs_k1 > 1e-3:
         raise RuntimeError(
