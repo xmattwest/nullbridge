@@ -30,7 +30,7 @@
   <!-- TOP EDITORIAL HEADER BAND (y = 0..104)                              -->
   <!-- =================================================================== -->
   <g id="header">
-    <text x="36" y="28" fill="#1E3447" font-family="Inter, -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Arial, sans-serif" font-size="11.5" font-weight="600" letter-spacing="1.4">PLATE II  |  BIOPHYSICAL CIRCUIT ANATOMY OF RECURRENT TRANSFORMERS</text>
+    <text x="36" y="28" fill="#1E3447" font-family="Inter, -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Arial, sans-serif" font-size="11.5" font-weight="600" letter-spacing="1.4">ARCHITECTURAL OVERVIEW  |  BIOPHYSICAL CIRCUIT ANATOMY OF RECURRENT TRANSFORMERS</text>
     <text x="36" y="60" fill="#0F0F0F" font-family="Newsreader, Georgia, 'Times New Roman', serif" font-size="28" font-weight="600" letter-spacing="-0.6">The Cajal-Meets-Transformer Synaptic Plate</text>
     <text x="36" y="84" fill="#1E3447" font-family="Inter, -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Arial, sans-serif" font-size="13" font-weight="400">How recurrent layers combine hard somatic resets, braided QxK synapses, non-normal shear, and a Coda prism.</text>
 
@@ -104,8 +104,8 @@
       <!-- Soma labels -->
       <text x="50" y="370" fill="#1E3447" font-family="Inter, -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Arial, sans-serif" font-size="11" font-weight="600">Prompt</text>
       <text x="50" y="384" fill="#808B90" font-family="Inter, -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Arial, sans-serif" font-size="10.5">tokens</text>
-      <text x="142" y="352" text-anchor="middle" fill="#0F0F0F" font-family="Inter, -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Arial, sans-serif" font-size="12" font-weight="600">Stem L0..L5</text>
-      <text x="142" y="367" text-anchor="middle" fill="#1E3447" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="10.5">(pre_loop_h, b)</text>
+      <text x="148" y="352" text-anchor="middle" fill="#0F0F0F" font-family="Inter, -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Arial, sans-serif" font-size="12" font-weight="600">Stem L0..L5</text>
+      <text x="148" y="367" text-anchor="middle" fill="#1E3447" font-family="Inter, -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Arial, sans-serif" font-size="10.5">clean anchor</text>
     </g>
 
     <!-- Axon hillock to Hard Somatic Reset Relay -->
@@ -132,10 +132,10 @@
     <rect x="50" y="406" width="320" height="122" rx="8" fill="#F5EEDC" stroke="#2C3E50" stroke-width="1.2" stroke-opacity="0.35"/>
     <rect x="50" y="406" width="5" height="122" rx="2" fill="#87A96B"/>
     <text x="66" y="427" fill="#5F7F4A" font-family="Inter, -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Arial, sans-serif" font-size="12" font-weight="700">Hard Somatic Reset Outcomes</text>
-    <text x="66" y="447" fill="#0F0F0F" font-family="Inter, -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Arial, sans-serif" font-size="11.5">Reloads <tspan font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="10.5">(pre_loop_h, pre_loop_b)</tspan> on every pass</text>
+    <text x="66" y="447" fill="#0F0F0F" font-family="Inter, -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Arial, sans-serif" font-size="11.5">Reloads clean Stem activations on every pass</text>
     <text x="66" y="468" fill="#0F0F0F" font-family="Inter, -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Arial, sans-serif" font-size="11.5">Inkling foil capture: <tspan font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-weight="700" fill="#5F7F4A">0.0%</tspan> (no bifurcation)</text>
     <text x="66" y="489" fill="#0F0F0F" font-family="Inter, -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Arial, sans-serif" font-size="11.5">Varloop healing deepens with K:</text>
-    <text x="66" y="508" fill="#1E3447" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="10.8">foil 18.3% -&gt; 15.0% -&gt; 13.3% (K=2..5)</text>
+    <text x="66" y="508" fill="#1E3447" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="10.8">foil 18.3% -&gt; 15.0% -&gt; 13.3% (K = 3, 5, 7)</text>
 
     <!-- Bottom Comparison Inset: Huginn-0125 Continuous Axon & Recall Tether (y = 556..772) -->
     <g id="huginn-soma-inset">
@@ -170,7 +170,7 @@
       <!-- Quantitative proof lines -->
       <text x="52" y="700" fill="#0F0F0F" font-family="Inter, -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Arial, sans-serif" font-size="11.2">Labovich Recall WHT: <tspan font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-weight="600">+12.013</tspan> nats (state <tspan font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace">+3.478</tspan>)</text>
       <text x="52" y="721" fill="#0F0F0F" font-family="Inter, -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Arial, sans-serif" font-size="11.2">Intact foil capture: <tspan font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-weight="700" fill="#96590A">10.0%..11.7%</tspan> (vs. 0.0% Inkling)</text>
-      <text x="52" y="742" fill="#1E3447" font-family="Inter, -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Arial, sans-serif" font-size="11">Recovery integral at K=8: <tspan font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace">-0.0491</tspan>; tangent damp <tspan font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace">0.142x</tspan></text>
+      <text x="52" y="742" fill="#1E3447" font-family="Inter, -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Arial, sans-serif" font-size="11">Recovery integral at K=8: <tspan font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace">−0.0491</tspan>; tangent damp <tspan font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace">0.142x</tspan></text>
       <text x="52" y="760" fill="#808B90" font-family="Inter, -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Arial, sans-serif" font-size="10.5">Synergy (state x recall): +4.453 nats at K = 8</text>
     </g>
   </g>
@@ -235,7 +235,7 @@
       <text x="706" y="195" fill="#96590A" font-family="Inter, -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Arial, sans-serif" font-size="12" font-weight="700">QxK Superadditive Synergy</text>
       <text x="706" y="216" fill="#0F0F0F" font-family="Inter, -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Arial, sans-serif" font-size="11.2">Inkling (K=3): <tspan font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-weight="700" fill="#96590A">+0.890</tspan> nats</text>
       <text x="706" y="237" fill="#0F0F0F" font-family="Inter, -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Arial, sans-serif" font-size="10.8">Varloop K=2..5: <tspan font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="9.6" font-weight="600">+0.212 -&gt; +0.778 -&gt; +1.210</tspan></text>
-      <text x="706" y="258" fill="#1E3447" font-family="Inter, -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Arial, sans-serif" font-size="11.2">Varloop OOD K=7: <tspan font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-weight="600">+1.117</tspan> nats</text>
+      <text x="706" y="258" fill="#1E3447" font-family="Inter, -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Arial, sans-serif" font-size="11.2">Varloop untrained K=7: <tspan font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-weight="600">+1.117</tspan> nats</text>
       <text x="706" y="275" fill="#808B90" font-family="Inter, -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Arial, sans-serif" font-size="10">Neither Q nor K alone suffices for multi-hop</text>
     </g>
 
@@ -267,10 +267,10 @@
       <rect x="690" y="296" width="286" height="110" rx="8" fill="#F5EEDC" stroke="#2C3E50" stroke-width="1.2" stroke-opacity="0.35"/>
       <rect x="690" y="296" width="6" height="110" rx="2" fill="#87A96B" stroke="#2C3E50" stroke-width="0.8"/>
       <text x="706" y="317" fill="#5F7F4A" font-family="Inter, -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Arial, sans-serif" font-size="12" font-weight="700">VxMLP Redundancy &amp; Payload</text>
-      <text x="706" y="338" fill="#0F0F0F" font-family="Inter, -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Arial, sans-serif" font-size="11.2">Inkling VxMLP: <tspan font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-weight="700" fill="#5F7F4A">-0.908</tspan> nats (redundant)</text>
-      <text x="706" y="359" fill="#0F0F0F" font-family="Inter, -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Arial, sans-serif" font-size="11.2">Varloop VxMLP: <tspan font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-weight="600">-1.081 .. -0.303</tspan> nats</text>
+      <text x="706" y="338" fill="#0F0F0F" font-family="Inter, -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Arial, sans-serif" font-size="11.2">Inkling VxMLP: <tspan font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-weight="700" fill="#5F7F4A">−0.908</tspan> nats (redundant)</text>
+      <text x="706" y="359" fill="#0F0F0F" font-family="Inter, -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Arial, sans-serif" font-size="11.2">Varloop VxMLP: <tspan font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-weight="600">−1.081 .. −0.303</tspan> nats</text>
       <text x="706" y="380" fill="#1E3447" font-family="Inter, -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Arial, sans-serif" font-size="11.2">V+MLP moral bias: <tspan font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-weight="600">+1.818</tspan> (<tspan font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="10">p=0.00015</tspan>)</text>
-      <text x="706" y="397" fill="#808B90" font-family="Inter, -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Arial, sans-serif" font-size="10">P2 confirmed across Inkling &amp; Varloop</text>
+      <text x="706" y="397" fill="#808B90" font-family="Inter, -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Arial, sans-serif" font-size="10">Payload outweighs routing on both models</text>
     </g>
 
     <!-- Clean orthogonal connector in gutter between Dendrites and Recurrent Loop Ring -->
@@ -359,12 +359,12 @@
     <g id="safety-separation-inset">
       <rect x="754" y="614" width="220" height="144" rx="8" fill="#F5EEDC" stroke="#2C3E50" stroke-width="1.2" stroke-opacity="0.35"/>
       <text x="766" y="634" fill="#1E3447" font-family="Inter, -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Arial, sans-serif" font-size="11.2" font-weight="700">Spectral Safety Separation</text>
-      <text x="766" y="652" fill="#0F0F0F" font-family="Inter, -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Arial, sans-serif" font-size="10.8">Top-8 shear <tspan font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-weight="600">V_8</tspan> vs safety <tspan font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-weight="600">Q_msg</tspan>:</text>
-      <text x="766" y="670" fill="#1E3447" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="10.8" font-weight="700">84.3 deg .. 88.5 deg</text>
+      <text x="766" y="652" fill="#0F0F0F" font-family="Inter, -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Arial, sans-serif" font-size="10.8">Top-8 Pass-2 modes vs safety basis:</text>
+      <text x="766" y="670" fill="#1E3447" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="10.8" font-weight="700">84.3° .. 88.5°</text>
       <text x="766" y="690" fill="#0F0F0F" font-family="Inter, -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Arial, sans-serif" font-size="10.5">Reasoning rides top shear modes;</text>
       <text x="766" y="706" fill="#0F0F0F" font-family="Inter, -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Arial, sans-serif" font-size="10.5">safety sits in mid-spectrum (k&gt;8).</text>
       <line x1="766" y1="718" x2="962" y2="718" stroke="#2C3E50" stroke-width="0.9" stroke-opacity="0.22"/>
-      <text x="766" y="736" fill="#5F7F4A" font-family="Inter, -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Arial, sans-serif" font-size="10.5" font-weight="600">Zero-FLOP Nullbridge (zff_QKV):</text>
+      <text x="766" y="736" fill="#5F7F4A" font-family="Inter, -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Arial, sans-serif" font-size="10.5" font-weight="600">Zero-FLOP gate fold (Q, K, V):</text>
       <text x="766" y="750" fill="#1E3447" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="10">KL 0.0016 nats | 93.8% reason</text>
     </g>
   </g>
@@ -437,7 +437,7 @@
     <text x="1038" y="427" fill="#1E3447" font-family="Inter, -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Arial, sans-serif" font-size="12" font-weight="700">Loop-to-Coda Fisher Cliff</text>
     <text x="1038" y="448" fill="#0F0F0F" font-family="Inter, -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Arial, sans-serif" font-size="11.5">Inkling-2-Mini (K=3): <tspan font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-weight="700" fill="#2C3E50">87.9x</tspan> Fisher jump</text>
     <text x="1038" y="469" fill="#0F0F0F" font-family="Inter, -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Arial, sans-serif" font-size="11.5">Varloop (K=5): <tspan font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-weight="700" fill="#2C3E50">141.7x</tspan> Fisher jump</text>
-    <text x="1038" y="490" fill="#0F0F0F" font-family="Inter, -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Arial, sans-serif" font-size="11.5">Varloop OOD (K=7): <tspan font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-weight="600">120.9x</tspan> Fisher jump</text>
+    <text x="1038" y="490" fill="#0F0F0F" font-family="Inter, -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Arial, sans-serif" font-size="11.5">Varloop untrained (K=7): <tspan font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-weight="600">120.9x</tspan> Fisher jump</text>
     <text x="1038" y="512" fill="#808B90" font-family="Inter, -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Arial, sans-serif" font-size="10.5">Computation stays hidden until the 6-layer Coda</text>
 
     <!-- Bottom Comparison Inset: Huginn-0125 Thin 2-Layer Coda (y = 556..772) -->
@@ -479,7 +479,7 @@
   <g id="footer">
     <line x1="36" y1="802" x2="1364" y2="802" stroke="#2C3E50" stroke-width="1.5"/>
     <text x="36" y="824" fill="#0F0F0F" font-family="Inter, -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Arial, sans-serif" font-size="11.8" font-weight="600">Figure Notes: <tspan font-weight="400" fill="#1E3447">Comparative biophysical anatomy across Inkling-2-Mini (K = 3, 6-layer Coda), Varloop (K = 1..7, 6-layer Coda), and Huginn-0125 (3.5B, K = 1..8, 2-layer Coda).</tspan></text>
-    <text x="36" y="845" fill="#1E3447" font-family="Inter, -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Arial, sans-serif" font-size="11.2">Provenance: Locked Phase 6 (n = 120 reasoning, WHT Parseval &lt;= 8.88e-16) and Phase 7 (n = 64..128 safety &amp; spectral suites, 0.00e+00 unroll diff, SHA-256 7b779e05).</text>
-    <text x="1364" y="845" text-anchor="end" fill="#808B90" font-family="Inter, -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Arial, sans-serif" font-size="11" font-weight="500">Dawn State  |  Warm Precision Plate</text>
+    <text x="36" y="845" fill="#1E3447" font-family="Inter, -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Arial, sans-serif" font-size="11.2">Empirical scope: n = 120 multi-hop reasoning (WHT Parseval error &lt;= 7.11e−15) and n = 64..128 safety &amp; spectral suites (0.00e+00 unrolled logit diff).</text>
+    <text x="1364" y="845" text-anchor="end" fill="#808B90" font-family="Inter, -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Arial, sans-serif" font-size="11" font-weight="500">Dawn State  |  Warm Precision</text>
   </g>
 </svg>

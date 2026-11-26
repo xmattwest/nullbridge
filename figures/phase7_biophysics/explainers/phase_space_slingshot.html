@@ -569,7 +569,7 @@
 <body>
 <div class="page">
   <header class="header">
-    <p class="kicker">Phase 7 Biophysics: Interactive Balanced-Circuit Bench</p>
+    <p class="kicker">Biophysical Circuit Bench: Non-Normal Amplification &amp; Reset</p>
     <h1 class="title">The Phase-Space Slingshot</h1>
     <p class="lede">
       Looped transformers act as contractive balanced circuits: isotropic noise shrinks on every pass (0.27x to 0.73x), while a narrow task-aligned mode v_1 shears nearly 90 degrees into u_1 at up to 13.60x gain directly into the Coda readout aperture. Drag the unit vector to test directional selectivity, inject a Pass-1 foil, or sweep neuromodulatory conductance gamma.
@@ -656,7 +656,7 @@
           <div class="metric-card">
             <div class="metric-label">Foil Capture (beta)</div>
             <div class="metric-value" id="telFoil">0.0%</div>
-            <div class="metric-sub" id="telFoilSub">beta_c = None | ERI +0.231</div>
+            <div class="metric-sub" id="telFoilSub">No tipping point | ERI +0.231</div>
           </div>
         </div>
       </section>
@@ -718,7 +718,7 @@
   </main>
 
   <footer class="footer">
-    <span>Empirical source: Phase 6 Inkling-2-Mini (n=120) and Phase 7 Varloop / Huginn-0125 replication (0.00e+00 unrolled logit diff).</span>
+    <span>Empirical source: Inkling-2-Mini (n = 120), Varloop (K = 1..7), and Huginn-0125 (K = 1..8), with 0.00e+00 unrolled logit diff.</span>
     <span class="mono">Dawn State / Warm Precision</span>
   </footer>
 </div>
@@ -727,7 +727,7 @@
 (function () {
   "use strict";
 
-  // Empirical architecture specifications from Phase 6 & Phase 7 locked JSON results
+  // Empirical architecture specifications from locked JSON results
   const ARCHS = {
     inkling: {
       name: "Inkling-2-Mini",
@@ -739,9 +739,9 @@
       qMsgGain: 1.08,
       fisherLabel: "Fisher cliff 87.9x",
       passes: [
-        { label: "P1", sigma: 2.85, iso: 0.166, cos: 0.0466, rayleigh: 33.1 },
-        { label: "P2", sigma: 13.60, iso: 0.639, cos: 0.0447, rayleigh: 28.7 },
-        { label: "P3", sigma: 8.39, iso: 0.628, cos: 0.1092, rayleigh: 11.7 }
+        { label: "Pass 1", sigma: 2.85, iso: 0.166, cos: 0.0466, rayleigh: 33.1 },
+        { label: "Pass 2", sigma: 13.60, iso: 0.639, cos: 0.0447, rayleigh: 28.7 },
+        { label: "Pass 3", sigma: 8.39, iso: 0.628, cos: 0.1092, rayleigh: 11.7 }
       ],
       gammaCurve: [
         { g: 0.00, acc: 3.3 },
@@ -768,13 +768,13 @@
       qMsgGain: 1.02,
       fisherLabel: "Fisher cliff 141.7x (K=5)",
       passes: [
-        { label: "P1", sigma: 5.21, iso: 0.270, cos: 0.0280, rayleigh: 108.7 },
-        { label: "P2", sigma: 4.47, iso: 0.281, cos: 0.0264, rayleigh: 142.6 },
-        { label: "P3", sigma: 7.62, iso: 0.451, cos: 0.0520, rayleigh: 40.7 },
-        { label: "P4", sigma: 6.06, iso: 0.387, cos: 0.0427, rayleigh: 38.5 },
-        { label: "P5", sigma: 5.95, iso: 0.371, cos: 0.0402, rayleigh: 43.0 },
-        { label: "P6", sigma: 6.00, iso: 0.372, cos: 0.0396, rayleigh: 85.1 },
-        { label: "P7", sigma: 6.30, iso: 0.383, cos: 0.0347, rayleigh: 59.0 }
+        { label: "Pass 1", sigma: 5.21, iso: 0.270, cos: 0.0280, rayleigh: 108.7 },
+        { label: "Pass 2", sigma: 4.47, iso: 0.281, cos: 0.0264, rayleigh: 142.6 },
+        { label: "Pass 3", sigma: 7.62, iso: 0.451, cos: 0.0520, rayleigh: 40.7 },
+        { label: "Pass 4", sigma: 6.06, iso: 0.387, cos: 0.0427, rayleigh: 38.5 },
+        { label: "Pass 5", sigma: 5.95, iso: 0.371, cos: 0.0402, rayleigh: 43.0 },
+        { label: "Pass 6", sigma: 6.00, iso: 0.372, cos: 0.0396, rayleigh: 85.1 },
+        { label: "Pass 7", sigma: 6.30, iso: 0.383, cos: 0.0347, rayleigh: 59.0 }
       ],
       // Empirical K=3 (35.0%), K=5 (32.5%), K=7 (27.5%) at gamma=1.0; smooth model curve anchored at gamma=1.0
       gammaCurveByDepth: {
@@ -792,10 +792,10 @@
         ]
       },
       gammaPeakText: "Anchored @ 1.00 (K-dependent)",
-      gammaNote: "Varloop anchors at 35.0% (K=3), 32.5% (K=5), and 27.5% (K=7) at gamma=1.00 vs 24.2% unlooped (0000). Off-unity gamma values are illustrative conductance scaling.",
+      gammaNote: "Varloop anchors at 35.0% (K=3), 32.5% (K=5), and 27.5% (K=7) at gamma=1.00 vs 24.2% with all four gates closed. Off-unity gamma values are illustrative conductance scaling.",
       foilAtBeta1: { 3: 18.3, 5: 15.0, 7: 13.3 },
       eriByDepth: { 3: "+0.013", 5: "+0.032", 7: "+0.049" },
-      summary: "<strong>Varloop (K=1..7):</strong> Variable-depth training distributes non-normal gain across passes (4.47x to 7.62x, peaking at Pass 3, 15.5x to 19.8x isotropic RMS 0.27x to 0.45x). Deeper loops strengthen somatic-reset elastic recovery (+0.013 to +0.049) and cut beta=1.0 foil capture from 18.3% (K=3) to 13.3% (K=7) with no bifurcation."
+      summary: "<strong>Varloop (K=1..7):</strong> Variable-depth training distributes non-normal gain across passes (4.47x to 7.62x, peaking at Pass 3, 15.5x to 19.8x isotropic RMS 0.27x to 0.45x). Deeper loops strengthen somatic-reset elastic recovery (+0.013 to +0.049) and cut beta=1.0 foil capture from 18.3% (K=3) to 13.3% (K=7) with no tipping point."
     },
     huginn: {
       name: "Huginn-0125",
@@ -807,14 +807,14 @@
       qMsgGain: 1.05,
       fisherLabel: "84.8x loop climb, 0.77x Coda",
       passes: [
-        { label: "S1", sigma: 7.63, iso: 0.729, cos: 0.0371, rayleigh: 63.8 },
-        { label: "S2", sigma: 4.60, iso: 0.592, cos: 0.0316, rayleigh: 54.2 },
-        { label: "S3", sigma: 4.52, iso: 0.599, cos: 0.0884, rayleigh: 16.0 },
-        { label: "S4", sigma: 5.25, iso: 0.634, cos: 0.1016, rayleigh: 10.2 },
-        { label: "S5", sigma: 5.39, iso: 0.643, cos: 0.1030, rayleigh: 10.9 },
-        { label: "S6", sigma: 5.53, iso: 0.652, cos: 0.1044, rayleigh: 11.6 },
-        { label: "S7", sigma: 5.59, iso: 0.651, cos: 0.1032, rayleigh: 11.0 },
-        { label: "S8", sigma: 5.64, iso: 0.650, cos: 0.1020, rayleigh: 10.4 }
+        { label: "Step 1", sigma: 7.63, iso: 0.729, cos: 0.0371, rayleigh: 63.8 },
+        { label: "Step 2", sigma: 4.60, iso: 0.592, cos: 0.0316, rayleigh: 54.2 },
+        { label: "Step 3", sigma: 4.52, iso: 0.599, cos: 0.0884, rayleigh: 16.0 },
+        { label: "Step 4", sigma: 5.25, iso: 0.634, cos: 0.1016, rayleigh: 10.2 },
+        { label: "Step 5", sigma: 5.39, iso: 0.643, cos: 0.1030, rayleigh: 10.9 },
+        { label: "Step 6", sigma: 5.53, iso: 0.652, cos: 0.1044, rayleigh: 11.6 },
+        { label: "Step 7", sigma: 5.59, iso: 0.651, cos: 0.1032, rayleigh: 11.0 },
+        { label: "Step 8", sigma: 5.64, iso: 0.650, cos: 0.1020, rayleigh: 10.4 }
       ],
       gammaCurve: [
         { g: 0.00, acc: 1.7 },
@@ -828,8 +828,8 @@
       gammaPeakText: "Peak 41.7% @ 0.75",
       gammaNote: "Empirical inverted-U adapter conductance curve on Huginn-0125 (1.7% at 0.00, 41.7% peak at 0.75, 40.0% at 1.00, 11.7% at 1.50). Cutting the recall tether collapses accuracy to 0.0%.",
       foilAtBeta1: { 4: 10.0, 8: 11.7 },
-      eriByDepth: { 4: "-0.036", 8: "-0.049" },
-      summary: "<strong>Huginn-0125 (3.5B, K=1..8):</strong> Dense continuous recurrence replicates non-normal transient amplification (Step 1 sigma_max = 7.63, 10.5x isotropic RMS 0.73x, I/O cos = 0.037). Linear prelude recall prevents bifurcation (beta_c = None) yet leaves 10.0% to 11.7% foil capture; ablating recall collapses accuracy to 0.0% (Labovich 2026)."
+      eriByDepth: { 4: "\u22120.036", 8: "\u22120.049" },
+      summary: "<strong>Huginn-0125 (3.5B, K=1..8):</strong> Dense continuous recurrence replicates non-normal transient amplification (Step 1 sigma_max = 7.63, 10.5x isotropic RMS 0.73x, I/O cos = 0.037). Linear prelude recall prevents foil tipping points yet leaves 10.0% to 11.7% foil capture; ablating recall collapses accuracy to 0.0% (Labovich 2026)."
     }
   };
 
@@ -1167,7 +1167,7 @@
       telFoil.className =
         foil.capturePct === 0 ? "metric-value positive-text" : "metric-value focal-text";
       const eri = cfg.eriByDepth[state.depthK] || "+0.000";
-      telFoilSub.textContent = "beta_c = None | ERI " + eri;
+      telFoilSub.textContent = "No tipping point | ERI " + eri;
     }
 
     // Controls labels
@@ -1184,11 +1184,11 @@
         "Hard somatic reset on Inkling snaps Pass-1 foil injections cleanly back to 0.0% capture (Pass-2 foil 18.6% drops to 0.005% by Pass 3).";
     } else if (state.arch === "varloop") {
       foilNote.textContent =
-        "Varloop heals more strongly with loop depth: beta=1.0 foil capture falls 18.3% (K=3) to 15.0% (K=5) to 13.3% (K=7) with beta_c = None.";
+        "Varloop heals more strongly with loop depth: beta=1.0 foil capture falls 18.3% (K=3) to 15.0% (K=5) to 13.3% (K=7) with no tipping point.";
     } else {
       foilNote.textContent = state.tetherCut
         ? "Prelude recall tether cut: Huginn accuracy collapses straight to 0.0% regardless of loop depth, confirming Labovich (2026)."
-        : "Linear prelude recall tether prevents bifurcation (beta_c = None) yet leaves 10.0% to 11.7% foil capture. Toggle Cut Recall Tether to test ablation.";
+        : "Linear prelude recall tether prevents foil tipping points yet leaves 10.0% to 11.7% foil capture. Toggle Cut Recall Tether to test ablation.";
     }
 
     // Tether button state
