@@ -39,6 +39,7 @@ artifacts/
 *.npz
 *.tar.gz
 *.tgz
+*.mp4
 
 # OS / editor
 .DS_Store

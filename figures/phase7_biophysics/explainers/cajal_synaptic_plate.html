@@ -1,0 +1,636 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>The Cajal-Meets-Transformer Synaptic Plate</title>
+  <style>
+    :root {
+      --ivory: #FFFFF0;
+      --parchment: #F5EEDC;
+      --onyx: #0F0F0F;
+      --slate-deep: #1E3447;
+      --blue-slate: #2C3E50;
+      --slate-mist: #808B90;
+      --sage: #87A96B;
+      --sage-deep: #5F7F4A;
+      --orange: #F39C12;
+      --copper-deep: #96590A;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body {
+      background: var(--ivory);
+      color: var(--onyx);
+      font-family: Inter, -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Arial, sans-serif;
+      line-height: 1.55;
+      -webkit-font-smoothing: antialiased;
+    }
+    .shell {
+      max-width: 1464px;
+      margin: 0 auto;
+      padding: 28px 32px 48px;
+    }
+    .topbar {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 16px;
+      padding-bottom: 16px;
+      margin-bottom: 20px;
+      border-bottom: 1.5px solid rgba(44, 62, 80, 0.25);
+    }
+    .kicker {
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--slate-deep);
+    }
+    .actions {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+    }
+    .btn {
+      display: inline-block;
+      padding: 8px 14px;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 600;
+      text-decoration: none;
+      border: 1.5px solid var(--blue-slate);
+      color: var(--blue-slate);
+      background: var(--ivory);
+      transition: background 150ms ease-out;
+    }
+    .btn:hover {
+      background: var(--parchment);
+    }
+    .btn-primary {
+      background: var(--blue-slate);
+      color: var(--ivory);
+    }
+    .btn-primary:hover {
+      background: var(--slate-deep);
+    }
+    .plate-wrap {
+      background: var(--ivory);
+      border: 1px solid rgba(44, 62, 80, 0.22);
+      border-radius: 12px;
+      padding: 12px;
+      overflow-x: auto;
+    }
+    .plate-wrap svg {
+      width: 100%;
+      min-width: 980px;
+      height: auto;
+      display: block;
+    }
+    .notes {
+      margin-top: 24px;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 16px;
+    }
+    .note-card {
+      background: var(--parchment);
+      border: 1px solid rgba(44, 62, 80, 0.22);
+      border-radius: 10px;
+      padding: 16px 18px;
+    }
+    .note-card h2 {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--slate-deep);
+      margin-bottom: 6px;
+    }
+    .note-card p {
+      font-size: 13.5px;
+      color: var(--onyx);
+    }
+    .note-card code {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      font-size: 12.5px;
+      color: var(--slate-deep);
+    }
+  </style>
+</head>
+<body>
+  <main class="shell">
+    <header class="topbar">
+      <div>
+        <div class="kicker">Phase 7 Biophysical Explainer  |  Plate II</div>
+      </div>
+      <div class="actions">
+        <a class="btn btn-primary" href="cajal_synaptic_plate.svg" download="cajal_synaptic_plate.svg">Download SVG</a>
+        <a class="btn" href="cajal_synaptic_plate.png" download="cajal_synaptic_plate.png">Download 2x PNG</a>
+      </div>
+    </header>
+
+    <section class="plate-wrap" aria-label="The Cajal-Meets-Transformer Synaptic Plate">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1400 880" width="1400" height="880" role="img" aria-labelledby="plate-title plate-desc">
+  <title id="plate-title">The Cajal-Meets-Transformer Synaptic Plate</title>
+  <desc id="plate-desc">Three-column Dawn State anatomical plate comparing recurrent transformer circuits across Inkling-2-Mini (K=3), Varloop (K=1..7), and Huginn-0125 (3.5B, K=1..8): Column I shows the Stem soma, hard somatic reset relay, and Huginn linear recall tether; Column II shows the braided QxK coincidence-detector synapse, Sage Green V and MLP twin backup cables, balanced non-normal shear loop ring, neuromodulatory gamma inverted-U curve, and orthogonal safety spectral separation; Column III shows private rotated loop waves refracting through the 6-layer Coda optical prism across the Fisher cliff versus Huginn's thin 2-layer Coda.</desc>
+
+  <defs>
+    <!-- Crisp arrowheads in Dawn State tokens -->
+    <marker id="arrow-slate" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto-start-reverse">
+      <path d="M 1 1.5 L 8.5 5 L 1 8.5 z" fill="#2C3E50"/>
+    </marker>
+    <marker id="arrow-orange" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 1 1.5 L 8.5 5 L 1 8.5 z" fill="#F39C12" stroke="#2C3E50" stroke-width="0.9"/>
+    </marker>
+    <marker id="arrow-sage" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto-start-reverse">
+      <path d="M 1 1.5 L 8.5 5 L 1 8.5 z" fill="#5F7F4A"/>
+    </marker>
+    <marker id="arrow-mist" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 1 1.8 L 8.5 5 L 1 8.2 z" fill="#808B90"/>
+    </marker>
+
+    <!-- Subtle Cajal botanical stipple pattern for prism & soma accents -->
+    <pattern id="cajal-hatch" width="8" height="8" patternUnits="userSpaceOnUse" patternTransform="rotate(35)">
+      <line x1="0" y1="0" x2="0" y2="8" stroke="#2C3E50" stroke-width="0.7" stroke-opacity="0.14"/>
+    </pattern>
+  </defs>
+
+  <!-- Flat Ivory Canvas Edge-to-Edge -->
+  <rect x="0" y="0" width="1400" height="880" fill="#FFFFF0"/>
+
+  <!-- =================================================================== -->
+  <!-- TOP EDITORIAL HEADER BAND (y = 0..104)                              -->
+  <!-- =================================================================== -->
+  <g id="header">
+    <text x="36" y="28" fill="#1E3447" font-family="Inter, -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Arial, sans-serif" font-size="11.5" font-weight="600" letter-spacing="1.4">PLATE II  |  BIOPHYSICAL CIRCUIT ANATOMY OF RECURRENT TRANSFORMERS</text>
+    <text x="36" y="60" fill="#0F0F0F" font-family="Newsreader, Georgia, 'Times New Roman', serif" font-size="28" font-weight="600" letter-spacing="-0.6">The Cajal-Meets-Transformer Synaptic Plate</text>
+    <text x="36" y="84" fill="#1E3447" font-family="Inter, -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Arial, sans-serif" font-size="13" font-weight="400">How recurrent layers combine hard somatic resets, braided QxK synapses, non-normal shear, and a Coda prism.</text>
+
+    <!-- Compact 2x2 Legend (right-aligned, x=944..1364) -->
+    <g id="legend" transform="translate(944, 18)">
+      <rect x="0" y="0" width="420" height="72" rx="8" fill="#F5EEDC" stroke="#2C3E50" stroke-width="1" stroke-opacity="0.28"/>
+      <!-- Row 1 -->
+      <line x1="14" y1="24" x2="40" y2="24" stroke="#2C3E50" stroke-width="2.5"/>
+      <text x="48" y="28" fill="#0F0F0F" font-family="Inter, -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Arial, sans-serif" font-size="11.5" font-weight="500">Stem / structural pathway</text>
+
+      <rect x="216" y="16" width="24" height="14" rx="4" fill="#F39C12" stroke="#2C3E50" stroke-width="2"/>
+      <text x="248" y="28" fill="#96590A" font-family="Inter, -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Arial, sans-serif" font-size="11.5" font-weight="600">Focal QxK &amp; Pass-2 shear</text>
+
+      <!-- Row 2 -->
+      <line x1="14" y1="50" x2="40" y2="50" stroke="#87A96B" stroke-width="4.5" stroke-linecap="round"/>
+      <line x1="14" y1="50" x2="40" y2="50" stroke="#2C3E50" stroke-width="0.9"/>
+      <text x="48" y="54" fill="#5F7F4A" font-family="Inter, -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Arial, sans-serif" font-size="11.5" font-weight="600">V &amp; MLP backup cables</text>
+
+      <line x1="216" y1="50" x2="240" y2="50" stroke="#808B90" stroke-width="2" stroke-dasharray="4 3"/>
+      <text x="248" y="54" fill="#1E3447" font-family="Inter, -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Arial, sans-serif" font-size="11.5" font-weight="400">Damped noise / private wave</text>
+    </g>
+
+    <line x1="36" y1="104" x2="1364" y2="104" stroke="#2C3E50" stroke-width="1.5"/>
+  </g>
+
+  <!-- Subtle Column Dividers (vertical guides between columns) -->
+  <line x1="394" y1="120" x2="394" y2="782" stroke="#2C3E50" stroke-width="1" stroke-opacity="0.16" stroke-dasharray="3 4"/>
+  <line x1="998" y1="120" x2="998" y2="782" stroke="#2C3E50" stroke-width="1" stroke-opacity="0.16" stroke-dasharray="3 4"/>
+
+  <!-- =================================================================== -->
+  <!-- COLUMN I: THE SOMA & RESET SWITCH (x = 36..384)                     -->
+  <!-- =================================================================== -->
+  <g id="panel-soma">
+    <text x="36" y="132" fill="#1E3447" font-family="Inter, -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Arial, sans-serif" font-size="12" font-weight="700" letter-spacing="1.0">I. THE SOMA &amp; RESET SWITCH</text>
+    <text x="36" y="150" fill="#808B90" font-family="Inter, -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Arial, sans-serif" font-size="11.5" font-weight="500">Stem L0..L5 holding clean prompt memory</text>
+
+    <!-- Upper Panel Architectural Frame (quiet hairline) -->
+    <rect x="36" y="162" width="348" height="380" rx="10" fill="#FFFFF0" stroke="#2C3E50" stroke-width="1" stroke-opacity="0.22"/>
+
+    <!-- Top Path Label -->
+    <text x="50" y="184" fill="#0F0F0F" font-family="Inter, -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Arial, sans-serif" font-size="12.5" font-weight="600">Inkling-2-Mini (K = 3) &amp; Varloop (K = 1..7)</text>
+    <text x="50" y="200" fill="#808B90" font-family="Inter, -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Arial, sans-serif" font-size="11">Hard somatic reset reloads Stem memory every pass</text>
+
+    <!-- Cajal Pyramidal Soma & Basal/Apical Dendrites -->
+    <g id="cajal-soma">
+      <!-- Fine Cajal input dendrites branching from left -->
+      <path d="M 52 246 C 72 252, 86 266, 114 274" fill="none" stroke="#2C3E50" stroke-width="1.6" stroke-linecap="round"/>
+      <path d="M 56 232 C 72 244, 82 254, 92 264" fill="none" stroke="#2C3E50" stroke-width="1.1" stroke-linecap="round"/>
+      <path d="M 48 288 C 70 288, 88 288, 110 290" fill="none" stroke="#2C3E50" stroke-width="1.8" stroke-linecap="round"/>
+      <path d="M 54 334 C 74 326, 90 314, 114 306" fill="none" stroke="#2C3E50" stroke-width="1.6" stroke-linecap="round"/>
+      <path d="M 60 348 C 76 336, 86 326, 96 318" fill="none" stroke="#2C3E50" stroke-width="1.1" stroke-linecap="round"/>
+      <!-- Apical dendrite tuft rising upward -->
+      <path d="M 140 248 C 138 228, 134 218, 124 210" fill="none" stroke="#2C3E50" stroke-width="1.4" stroke-linecap="round"/>
+      <path d="M 140 248 C 144 228, 150 220, 160 212" fill="none" stroke="#2C3E50" stroke-width="1.4" stroke-linecap="round"/>
+
+      <!-- Pyramidal Soma Cell Body (Cajal pen-and-ink silhouette) -->
+      <path d="M 140 246 C 156 262, 174 280, 188 292 C 174 306, 158 326, 134 328 C 114 330, 106 312, 108 290 C 110 268, 126 254, 140 246 Z" fill="#F5EEDC" stroke="#2C3E50" stroke-width="2.2" stroke-linejoin="round"/>
+      <!-- Subtle engraving hatching inside soma -->
+            <line x1="116.0" y1="266.0" x2="130.0" y2="286.0" stroke="#2C3E50" stroke-width="0.7" stroke-opacity="0.22"/>
+      <line x1="122.0" y1="256.0" x2="136.0" y2="298.0" stroke="#2C3E50" stroke-width="0.7" stroke-opacity="0.22"/>
+      <line x1="130.0" y1="250.0" x2="144.0" y2="310.0" stroke="#2C3E50" stroke-width="0.7" stroke-opacity="0.22"/>
+      <line x1="138.0" y1="248.0" x2="152.0" y2="318.0" stroke="#2C3E50" stroke-width="0.7" stroke-opacity="0.22"/>
+      <line x1="146.0" y1="254.0" x2="160.0" y2="322.0" stroke="#2C3E50" stroke-width="0.7" stroke-opacity="0.22"/>
+      <line x1="154.0" y1="262.0" x2="168.0" y2="320.0" stroke="#2C3E50" stroke-width="0.7" stroke-opacity="0.22"/>
+      <line x1="162.0" y1="272.0" x2="176.0" y2="316.0" stroke="#2C3E50" stroke-width="0.7" stroke-opacity="0.22"/>
+      <line x1="170.0" y1="282.0" x2="184.0" y2="310.0" stroke="#2C3E50" stroke-width="0.7" stroke-opacity="0.22"/>
+      <!-- Nucleus (clean prompt state anchor) -->
+      <circle cx="142" cy="291" r="17" fill="#FFFFF0" stroke="#2C3E50" stroke-width="1.6"/>
+      <circle cx="142" cy="291" r="5" fill="#2C3E50"/>
+
+      <!-- Soma labels -->
+      <text x="50" y="370" fill="#1E3447" font-family="Inter, -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Arial, sans-serif" font-size="11" font-weight="600">Prompt</text>
+      <text x="50" y="384" fill="#808B90" font-family="Inter, -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Arial, sans-serif" font-size="10.5">tokens</text>
+      <text x="142" y="352" text-anchor="middle" fill="#0F0F0F" font-family="Inter, -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Arial, sans-serif" font-size="12" font-weight="600">Stem L0..L5</text>
+      <text x="142" y="367" text-anchor="middle" fill="#1E3447" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="10.5">(pre_loop_h, b)</text>
+    </g>
+
+    <!-- Axon hillock to Hard Somatic Reset Relay -->
+    <path d="M 188 292 L 246 292" fill="none" stroke="#2C3E50" stroke-width="2.5" marker-end="url(#arrow-slate)"/>
+
+    <!-- Hard Somatic Reset Relay Switch (x=252..342, y=256..328) -->
+    <g id="reset-relay">
+      <rect x="252" y="256" width="90" height="72" rx="8" fill="#F5EEDC" stroke="#2C3E50" stroke-width="2"/>
+      <text x="297" y="274" text-anchor="middle" fill="#1E3447" font-family="Inter, -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Arial, sans-serif" font-size="10.5" font-weight="700">RESET RELAY</text>
+      <!-- Switch schematic inside box -->
+      <circle cx="272" cy="296" r="4" fill="#2C3E50"/>
+      <circle cx="322" cy="296" r="4" fill="#2C3E50"/>
+      <line x1="276" y1="296" x2="318" y2="284" stroke="#5F7F4A" stroke-width="2.4" stroke-linecap="round"/>
+      <!-- Reset pulse arrow arcing over the top of the switch -->
+      <path d="M 326 256 C 326 228, 268 228, 268 252" fill="none" stroke="#5F7F4A" stroke-width="1.8" stroke-dasharray="4 2.5" marker-end="url(#arrow-sage)"/>
+      <text x="297" y="224" text-anchor="middle" fill="#5F7F4A" font-family="Inter, -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Arial, sans-serif" font-size="10.5" font-weight="600">Reload each pass</text>
+      <text x="297" y="317" text-anchor="middle" fill="#1E3447" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="9.5">h_k &lt;- h_0</text>
+    </g>
+
+    <!-- Outgoing Axon from Reset Relay into Column II -->
+    <path d="M 342 292 L 384 292" fill="none" stroke="#2C3E50" stroke-width="2.8"/>
+
+    <!-- Empirical Callout Well inside Upper Panel -->
+    <rect x="50" y="406" width="320" height="122" rx="8" fill="#F5EEDC" stroke="#2C3E50" stroke-width="1.2" stroke-opacity="0.35"/>
+    <rect x="50" y="406" width="5" height="122" rx="2" fill="#87A96B"/>
+    <text x="66" y="427" fill="#5F7F4A" font-family="Inter, -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Arial, sans-serif" font-size="12" font-weight="700">Hard Somatic Reset Outcomes</text>
+    <text x="66" y="447" fill="#0F0F0F" font-family="Inter, -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Arial, sans-serif" font-size="11.5">Reloads <tspan font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="10.5">(pre_loop_h, pre_loop_b)</tspan> on every pass</text>
+    <text x="66" y="468" fill="#0F0F0F" font-family="Inter, -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Arial, sans-serif" font-size="11.5">Inkling foil capture: <tspan font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-weight="700" fill="#5F7F4A">0.0%</tspan> (no bifurcation)</text>
+    <text x="66" y="489" fill="#0F0F0F" font-family="Inter, -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Arial, sans-serif" font-size="11.5">Varloop healing deepens with K:</text>
+    <text x="66" y="508" fill="#1E3447" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="10.8">foil 18.3% -&gt; 15.0% -&gt; 13.3% (K=2..5)</text>
+
+    <!-- Bottom Comparison Inset: Huginn-0125 Continuous Axon & Recall Tether (y = 556..772) -->
+    <g id="huginn-soma-inset">
+      <rect x="36" y="556" width="348" height="216" rx="10" fill="#F5EEDC" stroke="#2C3E50" stroke-width="1.5"/>
+      <text x="52" y="578" fill="#1E3447" font-family="Inter, -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Arial, sans-serif" font-size="11" font-weight="700" letter-spacing="0.8">COMPARISON: HUGINN-0125 (3.5B, DENSE)</text>
+      <text x="52" y="594" fill="#808B90" font-family="Inter, -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Arial, sans-serif" font-size="11">Continuous recurrent axon + linear recall tether</text>
+
+      <!-- Mini schematic of Prelude + Tether + Continuous Recurrent Loop -->
+      <rect x="50" y="610" width="58" height="44" rx="6" fill="#FFFFF0" stroke="#2C3E50" stroke-width="1.5"/>
+      <text x="79" y="629" text-anchor="middle" fill="#0F0F0F" font-family="Inter, -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Arial, sans-serif" font-size="10.2" font-weight="600">Prelude</text>
+      <text x="79" y="644" text-anchor="middle" fill="#808B90" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="9.2">recall e</text>
+
+      <!-- Linear Recall Tether with cut mark -->
+      <line x1="108" y1="632" x2="226" y2="632" stroke="#2C3E50" stroke-width="2" stroke-dasharray="5 3" marker-end="url(#arrow-slate)"/>
+      <text x="167" y="621" text-anchor="middle" fill="#1E3447" font-family="Inter, -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Arial, sans-serif" font-size="9.8" font-weight="600">Linear Recall Tether</text>
+      <!-- Cut indicator -->
+      <line x1="161" y1="638" x2="173" y2="650" stroke="#96590A" stroke-width="1.8"/>
+      <line x1="173" y1="638" x2="161" y2="650" stroke="#96590A" stroke-width="1.8"/>
+      <text x="167" y="666" text-anchor="middle" fill="#96590A" font-family="Inter, -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Arial, sans-serif" font-size="9.8" font-weight="600">Cut recall -&gt; 0.0% acc</text>
+
+      <!-- Continuous Recurrent Loop Ring (mini) -->
+      <circle cx="274" cy="632" r="24" fill="#FFFFF0" stroke="#2C3E50" stroke-width="2.2"/>
+      <path d="M 290 614 A 24 24 0 0 1 298 632" fill="none" stroke="#2C3E50" stroke-width="2.2" marker-end="url(#arrow-slate)"/>
+      <text x="274" y="629" text-anchor="middle" fill="#0F0F0F" font-family="Inter, -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Arial, sans-serif" font-size="9.5" font-weight="600">State</text>
+      <text x="274" y="642" text-anchor="middle" fill="#808B90" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="8.5">K=1..8</text>
+      <text x="334" y="628" text-anchor="middle" fill="#1E3447" font-family="Inter, -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Arial, sans-serif" font-size="9.5" font-weight="600">No hard</text>
+      <text x="334" y="641" text-anchor="middle" fill="#1E3447" font-family="Inter, -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Arial, sans-serif" font-size="9.5" font-weight="600">reset</text>
+
+      <!-- Divider -->
+      <line x1="52" y1="680" x2="368" y2="680" stroke="#2C3E50" stroke-width="1" stroke-opacity="0.22"/>
+
+      <!-- Quantitative proof lines -->
+      <text x="52" y="700" fill="#0F0F0F" font-family="Inter, -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Arial, sans-serif" font-size="11.2">Labovich Recall WHT: <tspan font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-weight="600">+12.013</tspan> nats (state <tspan font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace">+3.478</tspan>)</text>
+      <text x="52" y="721" fill="#0F0F0F" font-family="Inter, -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Arial, sans-serif" font-size="11.2">Intact foil capture: <tspan font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-weight="700" fill="#96590A">10.0%..11.7%</tspan> (vs. 0.0% Inkling)</text>
+      <text x="52" y="742" fill="#1E3447" font-family="Inter, -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Arial, sans-serif" font-size="11">Recovery integral at K=8: <tspan font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace">-0.0491</tspan>; tangent damp <tspan font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace">0.142x</tspan></text>
+      <text x="52" y="760" fill="#808B90" font-family="Inter, -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Arial, sans-serif" font-size="10.5">Synergy (state x recall): +4.453 nats at K = 8</text>
+    </g>
+  </g>
+
+  <!-- =================================================================== -->
+  <!-- COLUMN II: THE 4 SYNAPTIC DENDRITES & RECURRENT LOOP (x = 404..988) -->
+  <!-- =================================================================== -->
+  <g id="panel-loop">
+    <text x="404" y="132" fill="#1E3447" font-family="Inter, -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Arial, sans-serif" font-size="12" font-weight="700" letter-spacing="1.0">II. THE 4 SYNAPTIC DENDRITES &amp; BALANCED RECURRENT LOOP</text>
+    <text x="404" y="150" fill="#808B90" font-family="Inter, -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Arial, sans-serif" font-size="11.5" font-weight="500">Shared Recurrent Block (L6..L17)  |  Exact 16-Mask WHT Epistasis &amp; Non-Normal Shear Law</text>
+
+    <!-- Incoming Bridge from Column I into the 4 Dendrites -->
+    <path d="M 384 292 L 418 292" fill="none" stroke="#2C3E50" stroke-width="2.8"/>
+    <circle cx="418" cy="292" r="4.5" fill="#2C3E50"/>
+    <!-- Fork up to Q/K and down to V/MLP -->
+    <path d="M 418 292 C 424 292, 424 236, 438 236" fill="none" stroke="#2C3E50" stroke-width="2.2"/>
+    <path d="M 418 292 C 424 292, 424 352, 438 352" fill="none" stroke="#2C3E50" stroke-width="2.2"/>
+
+    <!-- UPPER ZONE: 4 SYNAPTIC DENDRITES (y = 162..418) -->
+    <rect x="404" y="162" width="584" height="256" rx="10" fill="#FFFFF0" stroke="#2C3E50" stroke-width="1" stroke-opacity="0.22"/>
+
+    <!-- A. Focal QxK Braided Coincidence-Detector Synapse -->
+    <g id="qxk-synapse">
+      <!-- Subtle flat halo rings (no gradient/shadow) around focal synapse -->
+      <circle cx="642" cy="236" r="34" fill="#F39C12" fill-opacity="0.14"/>
+      <circle cx="642" cy="236" r="23" fill="#F39C12" fill-opacity="0.24"/>
+
+      <!-- Braided Q and K strands (Blue Slate outline + Golden Orange inner glow) -->
+      <path d="M 438.0 232.5 L 441.0 230.2 L 444.0 228.1 L 447.0 226.2 L 450.0 224.7 L 453.0 223.7 L 456.0 223.3 L 459.0 223.6 L 462.0 224.5 L 465.0 226.1 L 468.0 228.3 L 471.0 230.9 L 474.0 234.0 L 477.0 237.2 L 480.0 240.4 L 483.0 243.5 L 486.0 246.2 L 489.0 248.5 L 492.0 250.2 L 495.0 251.1 L 498.0 251.3 L 501.0 250.8 L 504.0 249.5 L 507.0 247.5 L 510.0 245.0 L 513.0 242.0 L 516.0 238.8 L 519.0 235.5 L 522.0 232.4 L 525.0 229.5 L 528.0 227.0 L 531.0 225.0 L 534.0 223.7 L 537.0 223.0 L 540.0 223.0 L 543.0 223.7 L 546.0 224.9 L 549.0 226.6 L 552.0 228.7 L 555.0 231.0 L 558.0 233.4 L 561.0 235.8 L 564.0 238.0 L 567.0 239.9 L 570.0 241.5 L 573.0 242.6 L 576.0 243.2 L 579.0 243.5 L 582.0 243.3 L 585.0 242.7 L 588.0 241.9 L 591.0 240.8 L 594.0 239.6 L 597.0 238.4 L 600.0 237.3 L 603.0 236.3 L 606.0 235.4 L 609.0 234.8 L 612.0 234.4 L 615.0 234.2 L 618.0 234.3 L 621.0 234.5 L 624.0 234.8 L 627.0 235.2 L 630.0 236.0" fill="none" stroke="#2C3E50" stroke-width="6.5" stroke-linecap="round"/>
+      <path d="M 438.0 232.5 L 441.0 230.2 L 444.0 228.1 L 447.0 226.2 L 450.0 224.7 L 453.0 223.7 L 456.0 223.3 L 459.0 223.6 L 462.0 224.5 L 465.0 226.1 L 468.0 228.3 L 471.0 230.9 L 474.0 234.0 L 477.0 237.2 L 480.0 240.4 L 483.0 243.5 L 486.0 246.2 L 489.0 248.5 L 492.0 250.2 L 495.0 251.1 L 498.0 251.3 L 501.0 250.8 L 504.0 249.5 L 507.0 247.5 L 510.0 245.0 L 513.0 242.0 L 516.0 238.8 L 519.0 235.5 L 522.0 232.4 L 525.0 229.5 L 528.0 227.0 L 531.0 225.0 L 534.0 223.7 L 537.0 223.0 L 540.0 223.0 L 543.0 223.7 L 546.0 224.9 L 549.0 226.6 L 552.0 228.7 L 555.0 231.0 L 558.0 233.4 L 561.0 235.8 L 564.0 238.0 L 567.0 239.9 L 570.0 241.5 L 573.0 242.6 L 576.0 243.2 L 579.0 243.5 L 582.0 243.3 L 585.0 242.7 L 588.0 241.9 L 591.0 240.8 L 594.0 239.6 L 597.0 238.4 L 600.0 237.3 L 603.0 236.3 L 606.0 235.4 L 609.0 234.8 L 612.0 234.4 L 615.0 234.2 L 618.0 234.3 L 621.0 234.5 L 624.0 234.8 L 627.0 235.2 L 630.0 236.0" fill="none" stroke="#F39C12" stroke-width="2.8" stroke-linecap="round"/>
+
+      <path d="M 438.0 239.5 L 441.0 241.8 L 444.0 243.9 L 447.0 245.8 L 450.0 247.3 L 453.0 248.3 L 456.0 248.7 L 459.0 248.4 L 462.0 247.5 L 465.0 245.9 L 468.0 243.7 L 471.0 241.1 L 474.0 238.0 L 477.0 234.8 L 480.0 231.6 L 483.0 228.5 L 486.0 225.8 L 489.0 223.5 L 492.0 221.8 L 495.0 220.9 L 498.0 220.7 L 501.0 221.2 L 504.0 222.5 L 507.0 224.5 L 510.0 227.0 L 513.0 230.0 L 516.0 233.2 L 519.0 236.5 L 522.0 239.6 L 525.0 242.5 L 528.0 245.0 L 531.0 247.0 L 534.0 248.3 L 537.0 249.0 L 540.0 249.0 L 543.0 248.3 L 546.0 247.1 L 549.0 245.4 L 552.0 243.3 L 555.0 241.0 L 558.0 238.6 L 561.0 236.2 L 564.0 234.0 L 567.0 232.1 L 570.0 230.5 L 573.0 229.4 L 576.0 228.8 L 579.0 228.5 L 582.0 228.7 L 585.0 229.3 L 588.0 230.1 L 591.0 231.2 L 594.0 232.4 L 597.0 233.6 L 600.0 234.7 L 603.0 235.7 L 606.0 236.6 L 609.0 237.2 L 612.0 237.6 L 615.0 237.8 L 618.0 237.7 L 621.0 237.5 L 624.0 237.2 L 627.0 236.8 L 630.0 236.0" fill="none" stroke="#2C3E50" stroke-width="6.5" stroke-linecap="round"/>
+      <path d="M 438.0 239.5 L 441.0 241.8 L 444.0 243.9 L 447.0 245.8 L 450.0 247.3 L 453.0 248.3 L 456.0 248.7 L 459.0 248.4 L 462.0 247.5 L 465.0 245.9 L 468.0 243.7 L 471.0 241.1 L 474.0 238.0 L 477.0 234.8 L 480.0 231.6 L 483.0 228.5 L 486.0 225.8 L 489.0 223.5 L 492.0 221.8 L 495.0 220.9 L 498.0 220.7 L 501.0 221.2 L 504.0 222.5 L 507.0 224.5 L 510.0 227.0 L 513.0 230.0 L 516.0 233.2 L 519.0 236.5 L 522.0 239.6 L 525.0 242.5 L 528.0 245.0 L 531.0 247.0 L 534.0 248.3 L 537.0 249.0 L 540.0 249.0 L 543.0 248.3 L 546.0 247.1 L 549.0 245.4 L 552.0 243.3 L 555.0 241.0 L 558.0 238.6 L 561.0 236.2 L 564.0 234.0 L 567.0 232.1 L 570.0 230.5 L 573.0 229.4 L 576.0 228.8 L 579.0 228.5 L 582.0 228.7 L 585.0 229.3 L 588.0 230.1 L 591.0 231.2 L 594.0 232.4 L 597.0 233.6 L 600.0 234.7 L 603.0 235.7 L 606.0 236.6 L 609.0 237.2 L 612.0 237.6 L 615.0 237.8 L 618.0 237.7 L 621.0 237.5 L 624.0 237.2 L 627.0 236.8 L 630.0 236.0" fill="none" stroke="#FFFFF0" stroke-width="2.4" stroke-linecap="round"/>
+      <path d="M 438.0 239.5 L 441.0 241.8 L 444.0 243.9 L 447.0 245.8 L 450.0 247.3 L 453.0 248.3 L 456.0 248.7 L 459.0 248.4 L 462.0 247.5 L 465.0 245.9 L 468.0 243.7 L 471.0 241.1 L 474.0 238.0 L 477.0 234.8 L 480.0 231.6 L 483.0 228.5 L 486.0 225.8 L 489.0 223.5 L 492.0 221.8 L 495.0 220.9 L 498.0 220.7 L 501.0 221.2 L 504.0 222.5 L 507.0 224.5 L 510.0 227.0 L 513.0 230.0 L 516.0 233.2 L 519.0 236.5 L 522.0 239.6 L 525.0 242.5 L 528.0 245.0 L 531.0 247.0 L 534.0 248.3 L 537.0 249.0 L 540.0 249.0 L 543.0 248.3 L 546.0 247.1 L 549.0 245.4 L 552.0 243.3 L 555.0 241.0 L 558.0 238.6 L 561.0 236.2 L 564.0 234.0 L 567.0 232.1 L 570.0 230.5 L 573.0 229.4 L 576.0 228.8 L 579.0 228.5 L 582.0 228.7 L 585.0 229.3 L 588.0 230.1 L 591.0 231.2 L 594.0 232.4 L 597.0 233.6 L 600.0 234.7 L 603.0 235.7 L 606.0 236.6 L 609.0 237.2 L 612.0 237.6 L 615.0 237.8 L 618.0 237.7 L 621.0 237.5 L 624.0 237.2 L 627.0 236.8 L 630.0 236.0" fill="none" stroke="#F39C12" stroke-width="1.6" stroke-dasharray="7 5" stroke-linecap="round"/>
+
+      <!-- Strand labels -->
+      <rect x="444" y="190" width="24" height="20" rx="4" fill="#F39C12" stroke="#2C3E50" stroke-width="1.5"/>
+      <text x="456" y="204" text-anchor="middle" fill="#0F0F0F" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="11.5" font-weight="700">Q</text>
+
+      <rect x="444" y="260" width="24" height="20" rx="4" fill="#F39C12" stroke="#2C3E50" stroke-width="1.5"/>
+      <text x="456" y="274" text-anchor="middle" fill="#0F0F0F" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="11.5" font-weight="700">K</text>
+
+      <!-- Coincidence-Detector Synaptic Bouton (Golden Orange + 2px Blue Slate outline) -->
+      <circle cx="642" cy="236" r="15" fill="#F39C12" stroke="#2C3E50" stroke-width="2.2"/>
+      <!-- Synaptic vesicles inside bouton -->
+      <circle cx="637" cy="232" r="2.2" fill="#FFFFF0" stroke="#2C3E50" stroke-width="0.8"/>
+      <circle cx="646" cy="231" r="2.2" fill="#FFFFF0" stroke="#2C3E50" stroke-width="0.8"/>
+      <circle cx="642" cy="240" r="2.4" fill="#FFFFF0" stroke="#2C3E50" stroke-width="0.8"/>
+      <!-- Coincidence spark ticks -->
+      <line x1="642" y1="212" x2="642" y2="217" stroke="#96590A" stroke-width="1.8" stroke-linecap="round"/>
+      <line x1="642" y1="255" x2="642" y2="260" stroke="#96590A" stroke-width="1.8" stroke-linecap="round"/>
+      <line x1="660" y1="220" x2="664" y2="216" stroke="#96590A" stroke-width="1.8" stroke-linecap="round"/>
+      <line x1="660" y1="252" x2="664" y2="256" stroke="#96590A" stroke-width="1.8" stroke-linecap="round"/>
+
+      <text x="542" y="196" text-anchor="middle" fill="#96590A" font-family="Inter, -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Arial, sans-serif" font-size="11" font-weight="700">Braided Q x K Pointer</text>
+      <text x="642" y="284" text-anchor="middle" fill="#96590A" font-family="Inter, -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Arial, sans-serif" font-size="10.2" font-weight="700">Coincidence</text>
+      <text x="642" y="297" text-anchor="middle" fill="#96590A" font-family="Inter, -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Arial, sans-serif" font-size="10.2" font-weight="700">Synapse</text>
+
+      <!-- QxK Quantitative Callout Card (x=690..976, y=174..284) -->
+      <rect x="690" y="174" width="286" height="110" rx="8" fill="#F5EEDC" stroke="#2C3E50" stroke-width="1.2" stroke-opacity="0.35"/>
+      <rect x="690" y="174" width="6" height="110" rx="2" fill="#F39C12" stroke="#2C3E50" stroke-width="1"/>
+      <text x="706" y="195" fill="#96590A" font-family="Inter, -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Arial, sans-serif" font-size="12" font-weight="700">QxK Superadditive Synergy</text>
+      <text x="706" y="216" fill="#0F0F0F" font-family="Inter, -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Arial, sans-serif" font-size="11.2">Inkling (K=3): <tspan font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-weight="700" fill="#96590A">+0.890</tspan> nats</text>
+      <text x="706" y="237" fill="#0F0F0F" font-family="Inter, -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Arial, sans-serif" font-size="10.8">Varloop K=2..5: <tspan font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="9.6" font-weight="600">+0.212 -&gt; +0.778 -&gt; +1.210</tspan></text>
+      <text x="706" y="258" fill="#1E3447" font-family="Inter, -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Arial, sans-serif" font-size="11.2">Varloop OOD K=7: <tspan font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-weight="600">+1.117</tspan> nats</text>
+      <text x="706" y="275" fill="#808B90" font-family="Inter, -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Arial, sans-serif" font-size="10">Neither Q nor K alone suffices for multi-hop</text>
+    </g>
+
+    <!-- B. Sage Green V & MLP Twin Backup Cables -->
+    <g id="v-mlp-cables">
+      <!-- Parallel V cable (y=338) -->
+      <line x1="438" y1="338" x2="654" y2="338" stroke="#2C3E50" stroke-width="7.5" stroke-linecap="round"/>
+      <line x1="438" y1="338" x2="654" y2="338" stroke="#87A96B" stroke-width="4.8" stroke-linecap="round"/>
+      <!-- Parallel MLP cable (y=368) -->
+      <line x1="438" y1="368" x2="654" y2="368" stroke="#2C3E50" stroke-width="7.5" stroke-linecap="round"/>
+      <line x1="438" y1="368" x2="654" y2="368" stroke="#87A96B" stroke-width="4.8" stroke-linecap="round"/>
+
+      <!-- Redundant backup cross-ties between V and MLP -->
+      <line x1="504" y1="341" x2="504" y2="365" stroke="#5F7F4A" stroke-width="1.6" stroke-dasharray="2.5 2"/>
+      <line x1="556" y1="341" x2="556" y2="365" stroke="#5F7F4A" stroke-width="1.6" stroke-dasharray="2.5 2"/>
+      <line x1="608" y1="341" x2="608" y2="365" stroke="#5F7F4A" stroke-width="1.6" stroke-dasharray="2.5 2"/>
+
+      <!-- Cable badges -->
+      <rect x="444" y="328" width="24" height="20" rx="4" fill="#87A96B" stroke="#2C3E50" stroke-width="1.5"/>
+      <text x="456" y="342" text-anchor="middle" fill="#0F0F0F" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="11.5" font-weight="700">V</text>
+
+      <rect x="440" y="358" width="34" height="20" rx="4" fill="#87A96B" stroke="#2C3E50" stroke-width="1.5"/>
+      <text x="457" y="372" text-anchor="middle" fill="#0F0F0F" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="10.5" font-weight="700">MLP</text>
+
+      <text x="550" y="324" text-anchor="middle" fill="#5F7F4A" font-family="Inter, -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Arial, sans-serif" font-size="11" font-weight="700">Twin Parallel Backup Cables</text>
+      <text x="550" y="394" text-anchor="middle" fill="#808B90" font-family="Inter, -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Arial, sans-serif" font-size="10.5">Subadditive redundancy buffers payload</text>
+
+      <!-- V & MLP Quantitative Callout Card (x=690..976, y=296..406) -->
+      <rect x="690" y="296" width="286" height="110" rx="8" fill="#F5EEDC" stroke="#2C3E50" stroke-width="1.2" stroke-opacity="0.35"/>
+      <rect x="690" y="296" width="6" height="110" rx="2" fill="#87A96B" stroke="#2C3E50" stroke-width="0.8"/>
+      <text x="706" y="317" fill="#5F7F4A" font-family="Inter, -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Arial, sans-serif" font-size="12" font-weight="700">VxMLP Redundancy &amp; Payload</text>
+      <text x="706" y="338" fill="#0F0F0F" font-family="Inter, -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Arial, sans-serif" font-size="11.2">Inkling VxMLP: <tspan font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-weight="700" fill="#5F7F4A">-0.908</tspan> nats (redundant)</text>
+      <text x="706" y="359" fill="#0F0F0F" font-family="Inter, -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Arial, sans-serif" font-size="11.2">Varloop VxMLP: <tspan font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-weight="600">-1.081 .. -0.303</tspan> nats</text>
+      <text x="706" y="380" fill="#1E3447" font-family="Inter, -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Arial, sans-serif" font-size="11.2">V+MLP moral bias: <tspan font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-weight="600">+1.818</tspan> (<tspan font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="10">p=0.00015</tspan>)</text>
+      <text x="706" y="397" fill="#808B90" font-family="Inter, -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Arial, sans-serif" font-size="10">P2 confirmed across Inkling &amp; Varloop</text>
+    </g>
+
+    <!-- Clean orthogonal connector in gutter between Dendrites and Recurrent Loop Ring -->
+    <path d="M 658 236 L 678 236 L 678 424 L 594 424 L 594 494" fill="none" stroke="#2C3E50" stroke-width="2" stroke-dasharray="4 3" marker-end="url(#arrow-slate)"/>
+    <path d="M 654 353 L 678 353" fill="none" stroke="#5F7F4A" stroke-width="2.2"/>
+
+    <!-- LOWER ZONE: BALANCED NON-NORMAL RECURRENT LOOP RING (y = 432..772) -->
+    <rect x="404" y="432" width="584" height="340" rx="10" fill="#FFFFF0" stroke="#2C3E50" stroke-width="1" stroke-opacity="0.22"/>
+
+    <text x="420" y="454" fill="#0F0F0F" font-family="Inter, -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Arial, sans-serif" font-size="12.5" font-weight="600">Balanced Non-Normal Shear Loop</text>
+    <text x="420" y="470" fill="#808B90" font-family="Inter, -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Arial, sans-serif" font-size="11">Isotropic noise contracts while one orthogonal mode amplifies</text>
+
+    <!-- Recurrent Loop Ring (centered at lcx=594, lcy=608, lr=94) -->
+    <g id="loop-ring">
+      <!-- Quiet inner track circle -->
+      <circle cx="594" cy="608" r="74" fill="#F5EEDC" fill-opacity="0.55" stroke="#2C3E50" stroke-width="1" stroke-opacity="0.2"/>
+      <!-- Base Pass 1 arc (Blue Slate) -->
+      <path d="M 500.9 594.9 A 94.0 94.0 0 0 1 590.7 514.1" fill="none" stroke="#2C3E50" stroke-width="3.2" marker-end="url(#arrow-slate)"/>
+      <!-- Base Pass 3 arc (Blue Slate) -->
+      <path d="M 673.7 657.8 A 94.0 94.0 0 0 1 500.5 617.8" fill="none" stroke="#2C3E50" stroke-width="3.2" marker-end="url(#arrow-slate)"/>
+
+      <!-- FOCAL PASS-2 NON-NORMAL AMPLIFICATION ARC (Golden Orange with 2px Blue Slate outline) -->
+      <path d="M 607.1 514.9 A 94.0 94.0 0 0 1 681.2 643.2" fill="none" stroke="#2C3E50" stroke-width="10.5" stroke-linecap="round"/>
+      <path d="M 607.1 514.9 A 94.0 94.0 0 0 1 681.2 643.2" fill="none" stroke="#F39C12" stroke-width="6.2" stroke-linecap="round" marker-end="url(#arrow-orange)"/>
+
+      <!-- Pass Labels around ring -->
+      <text x="512" y="524" text-anchor="end" fill="#1E3447" font-family="Inter, -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Arial, sans-serif" font-size="11" font-weight="600">Pass 1</text>
+      <text x="512" y="538" text-anchor="end" fill="#808B90" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="10">setup</text>
+
+      <text x="674" y="520" text-anchor="start" fill="#96590A" font-family="Inter, -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Arial, sans-serif" font-size="11" font-weight="700">Pass 2 Boost</text>
+      <text x="674" y="534" text-anchor="start" fill="#96590A" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="10" font-weight="700">13.60x shear</text>
+
+      <text x="594" y="726" text-anchor="middle" fill="#1E3447" font-family="Inter, -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Arial, sans-serif" font-size="11" font-weight="600">Pass 3 (or Varloop K=2..7)</text>
+      <text x="594" y="742" text-anchor="middle" fill="#808B90" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="10">Varloop distributed: 4.47x..7.62x</text>
+
+      <!-- Damped Isotropic Noise Inward Spirals (cleanly left of ring, zero overlap) -->
+      <path d="M 456 592 C 472 595, 482 601, 492 608" fill="none" stroke="#808B90" stroke-width="1.8" stroke-dasharray="4 3" marker-end="url(#arrow-mist)"/>
+      <path d="M 456 644 C 472 640, 482 634, 494 625" fill="none" stroke="#808B90" stroke-width="1.8" stroke-dasharray="4 3" marker-end="url(#arrow-mist)"/>
+      <text x="416" y="576" fill="#1E3447" font-family="Inter, -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Arial, sans-serif" font-size="10.2" font-weight="600">Isotropic noise</text>
+      <text x="416" y="662" fill="#808B90" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="9.5">damped</text>
+      <text x="416" y="675" fill="#808B90" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="9.5">0.17x..0.73x</text>
+
+      <!-- Orthogonal v_1 -> u_1 Shear Diagram inside Ring Center -->
+      <g transform="translate(594, 608)">
+        <!-- v_1 horizontal input mode -->
+        <line x1="-38" y1="16" x2="24" y2="16" stroke="#2C3E50" stroke-width="2" marker-end="url(#arrow-slate)"/>
+        <text x="29" y="20" fill="#2C3E50" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="10.5" font-weight="700">v_1</text>
+        <!-- u_1 near-orthogonal output mode (87.4 deg) -->
+        <line x1="-38" y1="16" x2="-35" y2="-38" stroke="#F39C12" stroke-width="3" marker-end="url(#arrow-orange)"/>
+        <text x="-27" y="-38" fill="#96590A" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="10.5" font-weight="700">u_1</text>
+        <!-- Right-angle square marker -->
+        <path d="M -29 16 L -29 7 L -38 7" fill="none" stroke="#2C3E50" stroke-width="1.1"/>
+        <!-- Shear arc from v_1 to u_1 -->
+        <path d="M -8 12 A 28 28 0 0 0 -33 -12" fill="none" stroke="#96590A" stroke-width="1.3" stroke-dasharray="3 2"/>
+        <text x="16" y="-8" text-anchor="middle" fill="#0F0F0F" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="9.8" font-weight="700">cos=0.045</text>
+        <text x="4" y="38" text-anchor="middle" fill="#1E3447" font-family="Inter, -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Arial, sans-serif" font-size="9.8">v_1 -&gt; u_1 boost</text>
+      </g>
+    </g>
+
+    <!-- Right Sub-card 1: Neuromodulatory Gamma Inverted-U (x=754..974, y=448..602) -->
+    <g id="gamma-inset">
+      <rect x="754" y="448" width="220" height="154" rx="8" fill="#F5EEDC" stroke="#2C3E50" stroke-width="1.2" stroke-opacity="0.35"/>
+      <text x="766" y="467" fill="#1E3447" font-family="Inter, -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Arial, sans-serif" font-size="11.2" font-weight="700">Neuromodulatory Gain (gamma)</text>
+      <text x="766" y="482" fill="#808B90" font-family="Inter, -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Arial, sans-serif" font-size="10">Inverted-U conductance curve</text>
+
+      <!-- Axes -->
+      <line x1="788" y1="576" x2="960" y2="576" stroke="#2C3E50" stroke-width="1.2"/>
+      <line x1="788" y1="576" x2="788" y2="496" stroke="#2C3E50" stroke-width="1.2"/>
+      <!-- Sweet-spot shaded band (0.75..1.00) -->
+      <rect x="872.0" y="496" width="28.0" height="80" fill="#87A96B" fill-opacity="0.22"/>
+      <!-- Curve -->
+      <path d="M 788.0 573.0 C 802.0 573.0, 802.0 553.8, 816.0 553.8 C 830.0 553.8, 830.0 522.7, 844.0 522.7 C 858.0 522.7, 858.0 503.5, 872.0 503.5 C 886.0 503.5, 886.0 506.4, 900.0 506.4 C 914.0 506.4, 914.0 536.0, 928.0 536.0 C 942.0 536.0, 942.0 556.8, 956.0 556.8" fill="none" stroke="#2C3E50" stroke-width="2.4" stroke-linecap="round"/>
+      <!-- Peak dot in Golden Orange with Blue Slate outline -->
+      <circle cx="872.0" cy="503.5" r="4.5" fill="#F39C12" stroke="#2C3E50" stroke-width="1.6"/>
+      <circle cx="900.0" cy="506.4" r="3.5" fill="#87A96B" stroke="#2C3E50" stroke-width="1.4"/>
+
+      <!-- Axis labels -->
+      <text x="788" y="591" text-anchor="middle" fill="#808B90" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="9.5">0.0</text>
+      <text x="886.0" y="591" text-anchor="middle" fill="#5F7F4A" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="9.5" font-weight="700">0.75..1.00</text>
+      <text x="956" y="591" text-anchor="middle" fill="#808B90" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="9.5">1.5</text>
+      <text x="774" y="538" text-anchor="middle" fill="#808B90" font-family="Inter, -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Arial, sans-serif" font-size="9.5" transform="rotate(-90 774 538)">Acc</text>
+      <text x="876.0" y="495" fill="#5F7F4A" font-family="Inter, -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Arial, sans-serif" font-size="9.5" font-weight="700">Peak</text>
+    </g>
+
+    <!-- Right Sub-card 2: Orthogonal Safety Separation (x=754..974, y=614..758) -->
+    <g id="safety-separation-inset">
+      <rect x="754" y="614" width="220" height="144" rx="8" fill="#F5EEDC" stroke="#2C3E50" stroke-width="1.2" stroke-opacity="0.35"/>
+      <text x="766" y="634" fill="#1E3447" font-family="Inter, -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Arial, sans-serif" font-size="11.2" font-weight="700">Spectral Safety Separation</text>
+      <text x="766" y="652" fill="#0F0F0F" font-family="Inter, -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Arial, sans-serif" font-size="10.8">Top-8 shear <tspan font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-weight="600">V_8</tspan> vs safety <tspan font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-weight="600">Q_msg</tspan>:</text>
+      <text x="766" y="670" fill="#1E3447" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="10.8" font-weight="700">84.3 deg .. 88.5 deg</text>
+      <text x="766" y="690" fill="#0F0F0F" font-family="Inter, -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Arial, sans-serif" font-size="10.5">Reasoning rides top shear modes;</text>
+      <text x="766" y="706" fill="#0F0F0F" font-family="Inter, -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Arial, sans-serif" font-size="10.5">safety sits in mid-spectrum (k&gt;8).</text>
+      <line x1="766" y1="718" x2="962" y2="718" stroke="#2C3E50" stroke-width="0.9" stroke-opacity="0.22"/>
+      <text x="766" y="736" fill="#5F7F4A" font-family="Inter, -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Arial, sans-serif" font-size="10.5" font-weight="600">Zero-FLOP Nullbridge (zff_QKV):</text>
+      <text x="766" y="750" fill="#1E3447" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="10">KL 0.0016 nats | 93.8% reason</text>
+    </g>
+  </g>
+
+  <!-- =================================================================== -->
+  <!-- COLUMN III: THE CODA OPTICAL PRISM (x = 1008..1364)                 -->
+  <!-- =================================================================== -->
+  <g id="panel-coda">
+    <text x="1008" y="132" fill="#1E3447" font-family="Inter, -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Arial, sans-serif" font-size="12" font-weight="700" letter-spacing="1.0">III. THE CODA OPTICAL PRISM</text>
+    <text x="1008" y="150" fill="#808B90" font-family="Inter, -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Arial, sans-serif" font-size="11.5" font-weight="500">L18..L23 readout refraction &amp; Fisher cliff</text>
+
+    <!-- Upper Panel Frame -->
+    <rect x="1008" y="162" width="356" height="380" rx="10" fill="#FFFFF0" stroke="#2C3E50" stroke-width="1" stroke-opacity="0.22"/>
+
+    <text x="1022" y="184" fill="#0F0F0F" font-family="Inter, -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Arial, sans-serif" font-size="12.5" font-weight="600">6-Layer Coda Prism (Inkling &amp; Varloop)</text>
+    <text x="1022" y="200" fill="#808B90" font-family="Inter, -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Arial, sans-serif" font-size="11">Rotates private loop waves into vocabulary logits</text>
+
+    <!-- Incoming Private Rotated Loop Waves (crossing from Col II into Prism) -->
+    <g id="private-waves">
+      <path d="M 990.0 276.0 L 992.6 279.3 L 995.2 282.3 L 997.8 284.5 L 1000.3 285.8 L 1002.9 285.9 L 1005.5 284.9 L 1008.1 282.9 L 1010.7 280.1 L 1013.2 276.8 L 1015.8 273.4 L 1018.4 270.3 L 1021.0 267.9 L 1023.6 266.4 L 1026.2 266.0 L 1028.8 266.8 L 1031.3 268.6 L 1033.9 271.2 L 1036.5 274.4 L 1039.1 277.8 L 1041.7 281.0 L 1044.2 283.6 L 1046.8 285.3 L 1049.4 286.0 L 1052.0 285.5 L 1054.6 283.9 L 1057.2 281.4 L 1059.8 278.3 L 1062.3 275.0 L 1064.9 271.7 L 1067.5 268.9 L 1070.1 267.0 L 1072.7 266.1 L 1075.2 266.3 L 1077.8 267.6 L 1080.4 269.9 L 1083.0 272.9 L 1085.6 276.3 L 1088.2 279.6 L 1090.8 282.5 L 1093.3 284.7 L 1095.9 285.8 L 1098.5 285.9 L 1101.1 284.8 L 1103.7 282.7 L 1106.2 279.8 L 1108.8 276.5 L 1111.4 273.2 L 1114.0 270.1" fill="none" stroke="#808B90" stroke-width="1.8" stroke-dasharray="5 3"/>
+      <path d="M 990.0 308.8 L 992.6 308.7 L 995.2 306.6 L 997.8 303.0 L 1000.3 298.4 L 1002.9 293.6 L 1005.5 289.3 L 1008.1 286.3 L 1010.7 285.0 L 1013.2 285.7 L 1015.8 288.2 L 1018.4 292.1 L 1021.0 296.8 L 1023.6 301.6 L 1026.2 305.6 L 1028.8 308.2 L 1031.3 309.0 L 1033.9 307.8 L 1036.5 304.9 L 1039.1 300.7 L 1041.7 295.9 L 1044.2 291.3 L 1046.8 287.6 L 1049.4 285.4 L 1052.0 285.1 L 1054.6 286.8 L 1057.2 290.1 L 1059.8 294.5 L 1062.3 299.3 L 1064.9 303.8 L 1067.5 307.1 L 1070.1 308.9 L 1072.7 308.6 L 1075.2 306.5 L 1077.8 302.9 L 1080.4 298.3 L 1083.0 293.4 L 1085.6 289.2 L 1088.2 286.2 L 1090.8 285.0 L 1093.3 285.7 L 1095.9 288.3 L 1098.5 292.3 L 1101.1 297.0 L 1103.7 301.7 L 1106.2 305.7 L 1108.8 308.3 L 1111.4 309.0 L 1114.0 307.8" fill="none" stroke="#2C3E50" stroke-width="2.1"/>
+      <path d="M 990.0 320.2 L 992.6 317.6 L 995.2 315.0 L 997.8 312.8 L 1000.3 310.9 L 1002.9 309.6 L 1005.5 309.0 L 1008.1 309.2 L 1010.7 310.1 L 1013.2 311.6 L 1015.8 313.7 L 1018.4 316.1 L 1021.0 318.7 L 1023.6 321.2 L 1026.2 323.4 L 1028.8 325.2 L 1031.3 326.5 L 1033.9 327.0 L 1036.5 326.8 L 1039.1 325.8 L 1041.7 324.2 L 1044.2 322.1 L 1046.8 319.7 L 1049.4 317.1 L 1052.0 314.6 L 1054.6 312.4 L 1057.2 310.6 L 1059.8 309.5 L 1062.3 309.0 L 1064.9 309.3 L 1067.5 310.3 L 1070.1 311.9 L 1072.7 314.1 L 1075.2 316.5 L 1077.8 319.1 L 1080.4 321.6 L 1083.0 323.8 L 1085.6 325.5 L 1088.2 326.6 L 1090.8 327.0 L 1093.3 326.6 L 1095.9 325.6 L 1098.5 323.9 L 1101.1 321.7 L 1103.7 319.2 L 1106.2 316.6 L 1108.8 314.2 L 1111.4 312.0 L 1114.0 310.4" fill="none" stroke="#808B90" stroke-width="1.8" stroke-dasharray="4 3"/>
+      <text x="1058" y="236" text-anchor="middle" fill="#1E3447" font-family="Inter, -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Arial, sans-serif" font-size="10.5" font-weight="600">Private rotated</text>
+      <text x="1058" y="249" text-anchor="middle" fill="#1E3447" font-family="Inter, -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Arial, sans-serif" font-size="10.5" font-weight="600">loop waves</text>
+      <text x="1058" y="348" text-anchor="middle" fill="#808B90" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="10">&lt;= 6.7% logit lens</text>
+    </g>
+
+    <!-- The 6-Layer Coda Optical Prism (x=1112..1234, y=218..366) -->
+    <g id="coda-prism">
+      <!-- Triangular prism body -->
+      <polygon points="1114,364 1174,218 1236,364" fill="#F5EEDC" stroke="#2C3E50" stroke-width="2.4" stroke-linejoin="round"/>
+      <!-- Subtle Cajal cross-hatch overlay on left facet -->
+      <polygon points="1114,364 1174,218 1174,364" fill="url(#cajal-hatch)"/>
+      <!-- Internal 6-layer vertical refraction strata (L18..L23) -->
+      <line x1="1134" y1="316" x2="1134" y2="364" stroke="#2C3E50" stroke-width="0.9" stroke-opacity="0.35"/>
+      <line x1="1150" y1="277" x2="1150" y2="364" stroke="#2C3E50" stroke-width="0.9" stroke-opacity="0.35"/>
+      <line x1="1166" y1="238" x2="1166" y2="364" stroke="#2C3E50" stroke-width="0.9" stroke-opacity="0.35"/>
+      <line x1="1182" y1="238" x2="1182" y2="364" stroke="#2C3E50" stroke-width="0.9" stroke-opacity="0.35"/>
+      <line x1="1198" y1="277" x2="1198" y2="364" stroke="#2C3E50" stroke-width="0.9" stroke-opacity="0.35"/>
+      <line x1="1214" y1="316" x2="1214" y2="364" stroke="#2C3E50" stroke-width="0.9" stroke-opacity="0.35"/>
+
+      <!-- Internal refracted ray path inside prism -->
+      <polygon points="1142,294 1200,278 1216,318 1142,294" fill="#F39C12" fill-opacity="0.16"/>
+
+      <text x="1175" y="382" text-anchor="middle" fill="#0F0F0F" font-family="Inter, -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Arial, sans-serif" font-size="11.5" font-weight="700">Coda L18..L23</text>
+    </g>
+
+    <!-- Sharp Refracted Decoded Language Beams (exiting prism to right) -->
+    <g id="decoded-beams">
+      <line x1="1200" y1="278" x2="1324" y2="234" stroke="#2C3E50" stroke-width="2.6" marker-end="url(#arrow-slate)"/>
+      <line x1="1205" y1="292" x2="1324" y2="274" stroke="#5F7F4A" stroke-width="2.6" marker-end="url(#arrow-sage)"/>
+      <!-- Focal decoded target token beam -->
+      <line x1="1210" y1="304" x2="1324" y2="314" stroke="#2C3E50" stroke-width="5.2" stroke-linecap="round"/>
+      <line x1="1210" y1="304" x2="1324" y2="314" stroke="#F39C12" stroke-width="2.6" marker-end="url(#arrow-orange)"/>
+      <line x1="1215" y1="318" x2="1324" y2="352" stroke="#808B90" stroke-width="2.0" marker-end="url(#arrow-mist)"/>
+
+      <!-- Target Vocabulary Column (right edge of prism zone) -->
+      <rect x="1332" y="224" width="18" height="136" rx="4" fill="#F5EEDC" stroke="#2C3E50" stroke-width="1.5"/>
+      <rect x="1334" y="302" width="14" height="22" rx="2" fill="#F39C12" stroke="#2C3E50" stroke-width="1.2"/>
+      <rect x="1334" y="264" width="14" height="16" rx="2" fill="#87A96B"/>
+      <rect x="1334" y="228" width="14" height="12" rx="2" fill="#2C3E50"/>
+
+      <text x="1296" y="220" text-anchor="middle" fill="#0F0F0F" font-family="Inter, -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Arial, sans-serif" font-size="11" font-weight="600">Decoded</text>
+      <text x="1296" y="376" text-anchor="middle" fill="#1E3447" font-family="Inter, -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Arial, sans-serif" font-size="10.5" font-weight="600">Token Logits</text>
+    </g>
+
+    <!-- Fisher Cliff Quantitative Callout Well (y=406..528) -->
+    <rect x="1022" y="406" width="328" height="122" rx="8" fill="#F5EEDC" stroke="#2C3E50" stroke-width="1.2" stroke-opacity="0.35"/>
+    <rect x="1022" y="406" width="5" height="122" rx="2" fill="#2C3E50"/>
+    <text x="1038" y="427" fill="#1E3447" font-family="Inter, -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Arial, sans-serif" font-size="12" font-weight="700">Loop-to-Coda Fisher Cliff</text>
+    <text x="1038" y="448" fill="#0F0F0F" font-family="Inter, -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Arial, sans-serif" font-size="11.5">Inkling-2-Mini (K=3): <tspan font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-weight="700" fill="#2C3E50">87.9x</tspan> Fisher jump</text>
+    <text x="1038" y="469" fill="#0F0F0F" font-family="Inter, -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Arial, sans-serif" font-size="11.5">Varloop (K=5): <tspan font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-weight="700" fill="#2C3E50">141.7x</tspan> Fisher jump</text>
+    <text x="1038" y="490" fill="#0F0F0F" font-family="Inter, -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Arial, sans-serif" font-size="11.5">Varloop OOD (K=7): <tspan font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-weight="600">120.9x</tspan> Fisher jump</text>
+    <text x="1038" y="512" fill="#808B90" font-family="Inter, -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Arial, sans-serif" font-size="10.5">Computation stays hidden until the 6-layer Coda</text>
+
+    <!-- Bottom Comparison Inset: Huginn-0125 Thin 2-Layer Coda (y = 556..772) -->
+    <g id="huginn-coda-inset">
+      <rect x="1008" y="556" width="356" height="216" rx="10" fill="#F5EEDC" stroke="#2C3E50" stroke-width="1.5"/>
+      <text x="1024" y="578" fill="#1E3447" font-family="Inter, -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Arial, sans-serif" font-size="11" font-weight="700" letter-spacing="0.8">COMPARISON: HUGINN-0125 (2-LAYER CODA)</text>
+      <text x="1024" y="594" fill="#808B90" font-family="Inter, -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Arial, sans-serif" font-size="11">Thin readout lens; decoding occurs inside the loop</text>
+
+      <!-- Mini schematic: waves -> thin 2-layer glass plate -> straight-through logits -->
+      <path d="M 1036.0 623.3 L 1038.8 624.9 L 1041.5 626.3 L 1044.2 627.4 L 1047.0 628.2 L 1049.8 628.5 L 1052.5 628.4 L 1055.2 627.8 L 1058.0 626.9 L 1060.8 625.6 L 1063.5 624.1 L 1066.2 622.4 L 1069.0 620.7 L 1071.8 619.1 L 1074.5 617.7 L 1077.2 616.6 L 1080.0 615.8 L 1082.8 615.5 L 1085.5 615.6 L 1088.2 616.2 L 1091.0 617.1 L 1093.8 618.4 L 1096.5 619.9 L 1099.2 621.6 L 1102.0 623.3 L 1104.8 624.9 L 1107.5 626.3 L 1110.2 627.4 L 1113.0 628.2 L 1115.8 628.5 L 1118.5 628.4 L 1121.2 627.8 L 1124.0 626.9 L 1126.8 625.6 L 1129.5 624.1 L 1132.2 622.4 L 1135.0 620.7 L 1137.8 619.1 L 1140.5 617.7 L 1143.2 616.6 L 1146.0 615.8 L 1148.8 615.5 L 1151.5 615.6 L 1154.2 616.2 L 1157.0 617.1 L 1159.8 618.4 L 1162.5 619.9 L 1165.2 621.6 L 1168.0 623.3" fill="none" stroke="#2C3E50" stroke-width="1.9"/>
+      <path d="M 1036.0 643.3 L 1038.8 642.7 L 1041.5 641.7 L 1044.2 640.4 L 1047.0 638.9 L 1049.8 637.2 L 1052.5 635.5 L 1055.2 633.9 L 1058.0 632.6 L 1060.8 631.5 L 1063.5 630.8 L 1066.2 630.5 L 1069.0 630.7 L 1071.8 631.3 L 1074.5 632.3 L 1077.2 633.6 L 1080.0 635.1 L 1082.8 636.8 L 1085.5 638.5 L 1088.2 640.1 L 1091.0 641.4 L 1093.8 642.5 L 1096.5 643.2 L 1099.2 643.5 L 1102.0 643.3 L 1104.8 642.7 L 1107.5 641.7 L 1110.2 640.4 L 1113.0 638.9 L 1115.8 637.2 L 1118.5 635.5 L 1121.2 633.9 L 1124.0 632.6 L 1126.8 631.5 L 1129.5 630.8 L 1132.2 630.5 L 1135.0 630.7 L 1137.8 631.3 L 1140.5 632.3 L 1143.2 633.6 L 1146.0 635.1 L 1148.8 636.8 L 1151.5 638.5 L 1154.2 640.1 L 1157.0 641.4 L 1159.8 642.5 L 1162.5 643.2 L 1165.2 643.5 L 1168.0 643.3" fill="none" stroke="#5F7F4A" stroke-width="1.7" stroke-dasharray="4 2.5"/>
+      <text x="1100" y="662" text-anchor="middle" fill="#1E3447" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="10" font-weight="600">31.7% raw logit lens</text>
+
+      <!-- Thin 2-layer Coda glass slab -->
+      <rect x="1174" y="606" width="20" height="50" rx="3" fill="#FFFFF0" stroke="#2C3E50" stroke-width="2"/>
+      <line x1="1184" y1="606" x2="1184" y2="656" stroke="#2C3E50" stroke-width="1" stroke-dasharray="2 2"/>
+      <text x="1184" y="671" text-anchor="middle" fill="#0F0F0F" font-family="Inter, -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Arial, sans-serif" font-size="9.5" font-weight="700">2L Coda</text>
+
+      <!-- Straight-through handoff arrows -->
+      <line x1="1194" y1="622" x2="1328" y2="622" stroke="#2C3E50" stroke-width="2" marker-end="url(#arrow-slate)"/>
+      <line x1="1194" y1="638" x2="1328" y2="638" stroke="#5F7F4A" stroke-width="2" marker-end="url(#arrow-sage)"/>
+      <text x="1264" y="614" text-anchor="middle" fill="#1E3447" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="10" font-weight="600">0.77x handoff</text>
+      <text x="1264" y="658" text-anchor="middle" fill="#808B90" font-family="Inter, -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Arial, sans-serif" font-size="9.5">No sharp cliff</text>
+
+      <!-- Divider -->
+      <line x1="1024" y1="680" x2="1348" y2="680" stroke="#2C3E50" stroke-width="1" stroke-opacity="0.22"/>
+
+      <!-- Quantitative proof lines -->
+      <text x="1024" y="700" fill="#0F0F0F" font-family="Inter, -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Arial, sans-serif" font-size="11.2">Inside-loop Fisher climb: <tspan font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-weight="600">0.0079 -&gt; 0.6698</tspan> (<tspan font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace">84.8x</tspan>)</text>
+      <text x="1024" y="721" fill="#0F0F0F" font-family="Inter, -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Arial, sans-serif" font-size="11.2">Coda handoff ratio: <tspan font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-weight="700">0.77x</tspan> (vs. 87.9x..141.7x)</text>
+      <text x="1024" y="742" fill="#1E3447" font-family="Inter, -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Arial, sans-serif" font-size="11">Mid-loop readability: <tspan font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-weight="700" fill="#5F7F4A">31.7%</tspan> (vs. &lt;= 6.7% Inkling)</text>
+      <text x="1024" y="760" fill="#808B90" font-family="Inter, -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Arial, sans-serif" font-size="10.5">Non-normal shear still universal: Step 1 sigma_max = 7.63</text>
+    </g>
+  </g>
+
+  <!-- =================================================================== -->
+  <!-- FOOTER CAPTION & PROVENANCE STRIP (y = 800..872)                    -->
+  <!-- =================================================================== -->
+  <g id="footer">
+    <line x1="36" y1="802" x2="1364" y2="802" stroke="#2C3E50" stroke-width="1.5"/>
+    <text x="36" y="824" fill="#0F0F0F" font-family="Inter, -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Arial, sans-serif" font-size="11.8" font-weight="600">Figure Notes: <tspan font-weight="400" fill="#1E3447">Comparative biophysical anatomy across Inkling-2-Mini (K = 3, 6-layer Coda), Varloop (K = 1..7, 6-layer Coda), and Huginn-0125 (3.5B, K = 1..8, 2-layer Coda).</tspan></text>
+    <text x="36" y="845" fill="#1E3447" font-family="Inter, -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Arial, sans-serif" font-size="11.2">Provenance: Locked Phase 6 (n = 120 reasoning, WHT Parseval &lt;= 8.88e-16) and Phase 7 (n = 64..128 safety &amp; spectral suites, 0.00e+00 unroll diff, SHA-256 7b779e05).</text>
+    <text x="1364" y="845" text-anchor="end" fill="#808B90" font-family="Inter, -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Arial, sans-serif" font-size="11" font-weight="500">Dawn State  |  Warm Precision Plate</text>
+  </g>
+</svg>
+
+    </section>
+
+    <section class="notes" aria-label="Reading guide">
+      <article class="note-card">
+        <h2>I. Somatic Reset vs. Linear Recall</h2>
+        <p>Inkling-2-Mini and Varloop reload clean Stem memory <code>(pre_loop_h, pre_loop_b)</code> on every pass, suppressing foil capture to <code>0.0%</code> on Inkling and deepening recovery with <code>K</code> on Varloop. Dense Huginn-0125 relies on a continuous recurrent state plus a linear prelude recall tether (<code>+12.013</code> nats); cutting recall collapses accuracy to <code>0.0%</code>.</p>
+      </article>
+      <article class="note-card">
+        <h2>II. Coincidence Synapse &amp; Non-Normal Shear</h2>
+        <p>Exact 16-mask Walsh-Hadamard analysis separates braided <code>QxK</code> pointer synergy (<code>+0.890</code> nats on Inkling; up to <code>+1.210</code> on Varloop) from redundant <code>V</code> and <code>MLP</code> backup cables (<code>-0.908</code> nats) that also carry moral valuation bias (<code>+1.818</code>, <code>p = 0.00015</code>). Inside the loop, isotropic noise contracts (<code>0.17x..0.73x</code>) while one orthogonal mode amplifies <code>13.60x</code> (<code>cos = 0.045</code>).</p>
+      </article>
+      <article class="note-card">
+        <h2>III. The Coda Optical Prism</h2>
+        <p>Six-layer Coda architectures (Inkling, Varloop) compute in a rotated private basis (<code>&lt;= 6.7%</code> raw logit lens) before refracting into decoded vocabulary across an <code>87.9x</code> to <code>141.7x</code> Fisher cliff. Huginn-0125 uses a thin 2-layer Coda (<code>0.77x</code> handoff) and decodes progressively inside the loop (<code>31.7%</code> raw logit lens).</p>
+      </article>
+    </section>
+  </main>
+</body>
+</html>

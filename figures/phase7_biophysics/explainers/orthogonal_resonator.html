@@ -1,0 +1,1921 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>The Orthogonal Resonator: Spectral Separation and Zero-FLOP Nullbridge</title>
+  <style>
+    :root {
+      --ivory: #FFFFF0;
+      --parchment: #F5EEDC;
+      --onyx: #0F0F0F;
+      --blue-slate: #2C3E50;
+      --slate-deep: #1E3447;
+      --slate-mist: #808B90;
+      --sage-green: #87A96B;
+      --sage-deep: #5F7F4A;
+      --golden-orange: #F39C12;
+      --copper-deep: #96590A;
+      --border-soft: rgba(44, 62, 80, 0.22);
+      --border-strong: #2C3E50;
+      --radius-sm: 8px;
+      --radius-md: 12px;
+      --font-display: "Newsreader", Georgia, "Times New Roman", serif;
+      --font-sans: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+      --font-mono: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
+    }
+
+    *, *::before, *::after {
+      box-sizing: border-box;
+    }
+
+    html, body {
+      margin: 0;
+      padding: 0;
+      background-color: var(--ivory);
+      color: var(--onyx);
+      font-family: var(--font-sans);
+      font-size: 16px;
+      line-height: 1.55;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .page {
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 28px 24px 40px;
+    }
+
+    /* Header */
+    .header {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: flex-end;
+      gap: 20px;
+      padding-bottom: 20px;
+      border-bottom: 2px solid var(--blue-slate);
+      margin-bottom: 24px;
+    }
+
+    .header-copy {
+      flex: 1 1 560px;
+      max-width: 740px;
+    }
+
+    .kicker {
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--slate-deep);
+      margin: 0 0 6px;
+    }
+
+    h1 {
+      font-family: var(--font-display);
+      font-size: clamp(28px, 3.4vw, 38px);
+      font-weight: 600;
+      letter-spacing: -0.03em;
+      line-height: 1.15;
+      color: var(--onyx);
+      margin: 0 0 10px;
+    }
+
+    .lede {
+      font-size: 15.5px;
+      line-height: 1.55;
+      color: var(--slate-deep);
+      margin: 0;
+    }
+
+    .lede strong {
+      color: var(--onyx);
+      font-weight: 600;
+    }
+
+    /* Model Toggle */
+    .model-switcher {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 8px;
+      flex-shrink: 0;
+    }
+
+    .switcher-label {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--slate-deep);
+    }
+
+    .segmented {
+      display: inline-flex;
+      background: var(--parchment);
+      border: 2px solid var(--blue-slate);
+      border-radius: var(--radius-sm);
+      padding: 3px;
+      gap: 3px;
+    }
+
+    .seg-btn {
+      appearance: none;
+      border: none;
+      background: transparent;
+      color: var(--slate-deep);
+      font-family: var(--font-sans);
+      font-size: 13px;
+      font-weight: 600;
+      padding: 8px 14px;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background-color 160ms ease-out, color 160ms ease-out;
+      white-space: nowrap;
+    }
+
+    .seg-btn:hover {
+      background: rgba(44, 62, 80, 0.08);
+    }
+
+    .seg-btn:focus-visible,
+    .btn:focus-visible,
+    .fold-btn:focus-visible,
+    .suite-btn:focus-visible {
+      outline: 2px solid var(--blue-slate);
+      outline-offset: 2px;
+    }
+
+    .seg-btn[aria-pressed="true"] {
+      background: var(--blue-slate);
+      color: var(--ivory);
+    }
+
+    .model-audit-line {
+      font-family: var(--font-mono);
+      font-size: 12px;
+      color: var(--slate-deep);
+      font-variant-numeric: tabular-nums;
+    }
+
+    /* Main Workspace Grid */
+    .workspace {
+      display: grid;
+      grid-template-columns: minmax(0, 1.55fr) minmax(320px, 1fr);
+      gap: 24px;
+      align-items: start;
+      margin-bottom: 24px;
+    }
+
+    /* Stage Card */
+    .stage-panel {
+      background: var(--ivory);
+      border: 2px solid var(--blue-slate);
+      border-radius: var(--radius-md);
+      overflow: hidden;
+    }
+
+    .stage-header {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 16px;
+      background: var(--parchment);
+      border-bottom: 1px solid var(--border-soft);
+    }
+
+    .stage-title {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--onyx);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .stage-badges {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      font-family: var(--font-mono);
+      font-size: 11.5px;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .chip {
+      padding: 3px 8px;
+      border-radius: 5px;
+      border: 1px solid var(--border-soft);
+      background: var(--ivory);
+      color: var(--slate-deep);
+    }
+
+    .chip-focus {
+      background: rgba(243, 156, 18, 0.16);
+      border-color: var(--blue-slate);
+      color: var(--copper-deep);
+      font-weight: 600;
+    }
+
+    .chip-sage {
+      background: rgba(135, 169, 107, 0.18);
+      border-color: var(--sage-deep);
+      color: var(--sage-deep);
+      font-weight: 600;
+    }
+
+    .canvas-wrap {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 16 / 11;
+      min-height: 360px;
+      background: var(--ivory);
+    }
+
+    #resonatorCanvas {
+      display: block;
+      width: 100%;
+      height: 100%;
+    }
+
+    .stage-footer {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      padding: 10px 16px;
+      background: var(--parchment);
+      border-top: 1px solid var(--border-soft);
+      font-size: 12.5px;
+      color: var(--slate-deep);
+    }
+
+    .energy-meters {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 16px;
+      font-family: var(--font-mono);
+      font-size: 12px;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .meter-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .meter-bar {
+      width: 68px;
+      height: 8px;
+      background: rgba(44, 62, 80, 0.12);
+      border-radius: 4px;
+      overflow: hidden;
+      border: 1px solid var(--border-soft);
+    }
+
+    .meter-fill-reasoning {
+      height: 100%;
+      width: 0%;
+      background: var(--golden-orange);
+      transition: width 60ms linear;
+    }
+
+    .meter-fill-safety {
+      height: 100%;
+      width: 0%;
+      background: var(--blue-slate);
+      transition: width 60ms linear;
+    }
+
+    .stage-quick-actions {
+      display: flex;
+      gap: 8px;
+    }
+
+    .btn-quiet {
+      appearance: none;
+      background: var(--ivory);
+      border: 1px solid var(--blue-slate);
+      color: var(--blue-slate);
+      font-family: var(--font-sans);
+      font-size: 12px;
+      font-weight: 600;
+      padding: 5px 10px;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: background-color 140ms ease-out;
+    }
+
+    .btn-quiet:hover {
+      background: rgba(44, 62, 80, 0.08);
+    }
+
+    /* Controls Deck */
+    .controls-deck {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .well {
+      background: var(--parchment);
+      border: 1px solid var(--border-soft);
+      border-radius: var(--radius-md);
+      padding: 16px;
+    }
+
+    .well-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      gap: 8px;
+      margin-bottom: 12px;
+    }
+
+    .well-title {
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--slate-deep);
+      margin: 0;
+    }
+
+    .well-meta {
+      font-family: var(--font-mono);
+      font-size: 11.5px;
+      color: var(--slate-deep);
+      font-variant-numeric: tabular-nums;
+    }
+
+    /* Strike Buttons */
+    .strike-stack {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .btn {
+      appearance: none;
+      width: 100%;
+      text-align: left;
+      padding: 11px 14px;
+      border-radius: var(--radius-sm);
+      font-family: var(--font-sans);
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+      transition: transform 90ms ease-out, background-color 140ms ease-out;
+    }
+
+    .btn:active {
+      transform: translateY(1px);
+    }
+
+    .btn-reasoning {
+      background: var(--golden-orange);
+      border: 2px solid var(--blue-slate);
+      color: var(--onyx);
+    }
+
+    .btn-reasoning:hover {
+      background: #e5900e;
+    }
+
+    .btn-safety {
+      background: var(--blue-slate);
+      border: 2px solid var(--blue-slate);
+      color: var(--ivory);
+    }
+
+    .btn-safety:hover {
+      background: var(--slate-deep);
+    }
+
+    .btn-main-label {
+      font-size: 14px;
+      font-weight: 600;
+      display: block;
+    }
+
+    .btn-sub-label {
+      font-size: 12px;
+      opacity: 0.88;
+      display: block;
+      font-family: var(--font-mono);
+      font-variant-numeric: tabular-nums;
+    }
+
+    .suite-tabs {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 6px;
+    }
+
+    .suite-btn {
+      appearance: none;
+      background: var(--ivory);
+      border: 1px solid var(--border-soft);
+      border-radius: 6px;
+      padding: 7px 6px;
+      font-family: var(--font-sans);
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--slate-deep);
+      cursor: pointer;
+      text-align: center;
+      transition: background-color 140ms ease-out, border-color 140ms ease-out, color 140ms ease-out;
+    }
+
+    .suite-btn:hover {
+      border-color: var(--blue-slate);
+    }
+
+    .suite-btn[aria-pressed="true"] {
+      background: var(--ivory);
+      border: 2px solid var(--blue-slate);
+      color: var(--onyx);
+    }
+
+    /* WHT Breakdown Pill */
+    .wht-pill {
+      margin-top: 12px;
+      background: var(--ivory);
+      border: 1px solid var(--border-soft);
+      border-radius: var(--radius-sm);
+      padding: 11px 12px;
+    }
+
+    .wht-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      gap: 8px;
+      font-size: 12.5px;
+      margin-bottom: 6px;
+    }
+
+    .wht-label {
+      font-weight: 600;
+      color: var(--onyx);
+    }
+
+    .wht-val {
+      font-family: var(--font-mono);
+      font-size: 12px;
+      color: var(--slate-deep);
+      font-variant-numeric: tabular-nums;
+    }
+
+    .wht-bar-track {
+      display: flex;
+      height: 10px;
+      width: 100%;
+      border-radius: 5px;
+      overflow: hidden;
+      background: rgba(44, 62, 80, 0.1);
+      border: 1px solid var(--border-soft);
+      margin-bottom: 8px;
+    }
+
+    .wht-bar-o1 {
+      background: var(--blue-slate);
+      height: 100%;
+      transition: width 180ms ease-out;
+    }
+
+    .wht-bar-o2 {
+      background: var(--slate-mist);
+      height: 100%;
+      transition: width 180ms ease-out;
+    }
+
+    .wht-bar-hi {
+      background: rgba(135, 169, 107, 0.6);
+      height: 100%;
+      transition: width 180ms ease-out;
+    }
+
+    .wht-callout {
+      font-size: 12px;
+      line-height: 1.45;
+      color: var(--slate-deep);
+      border-top: 1px solid var(--border-soft);
+      padding-top: 7px;
+      margin-top: 6px;
+    }
+
+    .wht-callout strong {
+      color: var(--onyx);
+    }
+
+    .wht-mono {
+      font-family: var(--font-mono);
+      font-size: 11.5px;
+      font-variant-numeric: tabular-nums;
+    }
+
+    /* Zero-FLOP Damper Grid */
+    .fold-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 8px;
+    }
+
+    .fold-btn {
+      appearance: none;
+      background: var(--ivory);
+      border: 1.5px solid var(--border-soft);
+      border-radius: var(--radius-sm);
+      padding: 8px 10px;
+      text-align: left;
+      cursor: pointer;
+      font-family: var(--font-sans);
+      transition: border-color 140ms ease-out, background-color 140ms ease-out;
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .fold-btn:hover {
+      border-color: var(--blue-slate);
+    }
+
+    .fold-btn[aria-pressed="true"] {
+      background: var(--blue-slate);
+      border-color: var(--blue-slate);
+      color: var(--ivory);
+    }
+
+    .fold-btn.is-sweet-spot[aria-pressed="true"] {
+      background: var(--golden-orange);
+      border: 2px solid var(--blue-slate);
+      color: var(--onyx);
+    }
+
+    .fold-btn-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .fold-name {
+      font-family: var(--font-mono);
+      font-size: 12.5px;
+      font-weight: 600;
+    }
+
+    .fold-tag {
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      padding: 1px 5px;
+      border-radius: 4px;
+      background: rgba(135, 169, 107, 0.25);
+      color: var(--sage-deep);
+    }
+
+    .fold-btn.is-sweet-spot[aria-pressed="true"] .fold-tag {
+      background: var(--blue-slate);
+      color: var(--ivory);
+    }
+
+    .fold-channels {
+      font-size: 11.5px;
+      opacity: 0.82;
+    }
+
+    .fold-btn:first-child {
+      grid-column: span 2;
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .fold-note {
+      margin: 10px 0 0;
+      font-size: 12.5px;
+      line-height: 1.45;
+      color: var(--slate-deep);
+      background: var(--ivory);
+      border: 1px solid var(--border-soft);
+      border-radius: 6px;
+      padding: 9px 11px;
+    }
+
+    .fold-note strong {
+      color: var(--onyx);
+    }
+
+    /* Bottom Telemetry + Pareto Scatter Band */
+    .pareto-band {
+      display: grid;
+      grid-template-columns: minmax(0, 1.45fr) minmax(300px, 1fr);
+      gap: 24px;
+      align-items: stretch;
+    }
+
+    .telemetry-panel {
+      background: var(--parchment);
+      border: 1px solid var(--border-soft);
+      border-radius: var(--radius-md);
+      padding: 16px 18px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .metrics-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 12px;
+      margin-top: 10px;
+    }
+
+    .metric-card {
+      background: var(--ivory);
+      border: 1px solid var(--border-soft);
+      border-radius: var(--radius-sm);
+      padding: 11px 12px;
+    }
+
+    .metric-card.is-focal {
+      border: 2px solid var(--blue-slate);
+    }
+
+    .metric-label {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--slate-deep);
+      margin-bottom: 4px;
+    }
+
+    .metric-value {
+      font-family: var(--font-mono);
+      font-size: 20px;
+      font-weight: 600;
+      color: var(--onyx);
+      font-variant-numeric: tabular-nums;
+      line-height: 1.2;
+    }
+
+    .metric-value.small-text {
+      font-size: 14px;
+      line-height: 1.35;
+      padding-top: 2px;
+    }
+
+    .metric-delta {
+      font-family: var(--font-mono);
+      font-size: 11.5px;
+      color: var(--slate-mist);
+      margin-top: 4px;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .metric-delta.is-good {
+      color: var(--sage-deep);
+      font-weight: 600;
+    }
+
+    .metric-delta.is-warn {
+      color: var(--copper-deep);
+      font-weight: 600;
+    }
+
+    /* Mini Pareto Scatter Panel */
+    .scatter-panel {
+      background: var(--ivory);
+      border: 2px solid var(--blue-slate);
+      border-radius: var(--radius-md);
+      padding: 14px 16px 12px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .scatter-wrap {
+      position: relative;
+      width: 100%;
+      flex: 1 1 auto;
+      min-height: 195px;
+    }
+
+    #paretoSvg {
+      display: block;
+      width: 100%;
+      height: 100%;
+    }
+
+    .scatter-point {
+      cursor: pointer;
+      transition: r 140ms ease-out;
+    }
+
+    .provenance {
+      margin-top: 20px;
+      padding-top: 14px;
+      border-top: 1px solid var(--border-soft);
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 10px 24px;
+      font-size: 12px;
+      color: var(--slate-deep);
+    }
+
+    .provenance code {
+      font-family: var(--font-mono);
+      font-size: 11.5px;
+      color: var(--onyx);
+      font-variant-numeric: tabular-nums;
+    }
+
+    /* Responsive */
+    @media (max-width: 940px) {
+      .workspace,
+      .pareto-band {
+        grid-template-columns: 1fr;
+      }
+
+      .model-switcher {
+        align-items: flex-start;
+      }
+    }
+
+    @media (max-width: 600px) {
+      .page {
+        padding: 20px 16px 32px;
+      }
+
+      .metrics-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .canvas-wrap {
+        aspect-ratio: 4 / 3;
+        min-height: 300px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <header class="header">
+      <div class="header-copy">
+        <p class="kicker">Spectral Separation and Zero-FLOP Nullbridge</p>
+        <h1>The Orthogonal Resonator</h1>
+        <p class="lede">
+          Pass-2 multi-hop reasoning rides dominant non-normal singular modes (<strong>V<sub>8</sub></strong>) that sit nearly perpendicular (<strong>84.8 deg to 88.5 deg</strong>) to the 4D safety-shortcut plane (<strong>Q<sub>msg</sub></strong>). Folding a rank-4 Nullbridge damper onto Q<sub>msg</sub> damps safety shortcuts at <strong>0.0012 to 0.0021 nats</strong> held-out KL and zero extra runtime cost.
+        </p>
+      </div>
+
+      <div class="model-switcher">
+        <span class="switcher-label">Locked Empirical Model</span>
+        <div class="segmented" role="group" aria-label="Select model">
+          <button class="seg-btn" id="btnInkling" type="button" aria-pressed="true" data-model="inkling_k3">Inkling-2-Mini (K = 3)</button>
+          <button class="seg-btn" id="btnVarloop" type="button" aria-pressed="false" data-model="varloop_k5">Varloop (K = 5)</button>
+        </div>
+        <div class="model-audit-line" id="modelAuditLine">
+          sigma_1 = 15.06 | V_8 vs Q_msg: 84.8..88.2 deg | &lt;bos&gt; = 1.13e-16
+        </div>
+      </div>
+    </header>
+
+    <section class="workspace" aria-label="Interactive resonator stage and controls">
+      <!-- Acoustic / Resonator Stage -->
+      <div class="stage-panel">
+        <div class="stage-header">
+          <div class="stage-title">
+            <span>Pass-2 Subspace Geometry</span>
+          </div>
+          <div class="stage-badges">
+            <span class="chip chip-focus" id="badgeSigma">V_8: sigma_1 = 15.06..2.91</span>
+            <span class="chip" id="badgeAngle">Angle: 84.8..88.2 deg</span>
+            <span class="chip chip-sage" id="badgeDamper">Damper: Off</span>
+          </div>
+        </div>
+
+        <div class="canvas-wrap">
+          <canvas id="resonatorCanvas" aria-label="Interactive two-axis spectral resonator showing V_8 reasoning axis and perpendicular Q_msg safety axis"></canvas>
+        </div>
+
+        <div class="stage-footer">
+          <div class="energy-meters">
+            <div class="meter-item">
+              <span>V<sub>8</sub> Ring</span>
+              <div class="meter-bar"><div class="meter-fill-reasoning" id="meterReasoning"></div></div>
+              <span id="valMeterReasoning">0%</span>
+            </div>
+            <div class="meter-item">
+              <span>Q<sub>msg</sub> Ring</span>
+              <div class="meter-bar"><div class="meter-fill-safety" id="meterSafety"></div></div>
+              <span id="valMeterSafety">0%</span>
+            </div>
+          </div>
+          <div class="stage-quick-actions">
+            <button class="btn-quiet" id="btnStrikeBoth" type="button">Strike Both</button>
+            <button class="btn-quiet" id="btnCalm" type="button">Calm</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Control Deck -->
+      <div class="controls-deck">
+        <!-- Strike Panel -->
+        <div class="well">
+          <div class="well-header">
+            <h2 class="well-title">1. Excite Pass-2 Subspaces</h2>
+            <span class="well-meta">n = 128 per model</span>
+          </div>
+
+          <div class="strike-stack">
+            <button class="btn btn-reasoning" id="btnStrikeReasoning" type="button">
+              <span>
+                <span class="btn-main-label">Strike Multi-Hop Reasoning</span>
+                <span class="btn-sub-label" id="subReasoningBtn">Excite V_8 top-8 modes (sigma_1 = 15.06)</span>
+              </span>
+              <span class="wht-mono">V<sub>8</sub></span>
+            </button>
+
+            <div class="suite-tabs" role="group" aria-label="Select safety shortcut suite">
+              <button class="suite-btn" type="button" aria-pressed="true" data-suite="covert">Covert Anchoring</button>
+              <button class="suite-btn" type="button" aria-pressed="false" data-suite="moral">Moral Bias</button>
+              <button class="suite-btn" type="button" aria-pressed="false" data-suite="verifier">Verifier Hacking</button>
+            </div>
+
+            <button class="btn btn-safety" id="btnStrikeSafety" type="button">
+              <span>
+                <span class="btn-main-label" id="labelSafetyBtn">Strike Safety Shortcut: Covert Anchoring</span>
+                <span class="btn-sub-label" id="subSafetyBtn">Excite Q_msg mid-spectrum harmonics (g_2: 0.946x..1.230x)</span>
+              </span>
+              <span class="wht-mono">Q<sub>msg</sub></span>
+            </button>
+          </div>
+
+          <!-- Live WHT Breakdown Pill -->
+          <div class="wht-pill" aria-live="polite">
+            <div class="wht-row">
+              <span class="wht-label" id="whtTitle">16-Mask Safety WHT: Covert Anchoring</span>
+              <span class="wht-val" id="whtOrder1Val">Order-1: 86.6%</span>
+            </div>
+            <div class="wht-bar-track" title="Walsh-Hadamard variance decomposition by interaction order">
+              <div class="wht-bar-o1" id="whtBarO1" style="width: 86.6%"></div>
+              <div class="wht-bar-o2" id="whtBarO2" style="width: 2.4%"></div>
+              <div class="wht-bar-hi" id="whtBarHi" style="width: 11.0%"></div>
+            </div>
+            <div class="wht-row" style="margin-bottom: 0; font-size: 11px; color: var(--slate-deep);">
+              <span>Blue Slate: Order-1 additive main effects</span>
+              <span class="wht-mono" id="whtOrder2Val">Order-2: 2.4%</span>
+            </div>
+            <div class="wht-callout" id="whtCallout">
+              <strong>P1 (Q x K minus V x MLP):</strong> <span class="wht-mono">-0.741</span> (Holm p = 0.00255) on Inkling vs <span class="wht-mono">+1.450</span> on Varloop.
+            </div>
+          </div>
+        </div>
+
+        <!-- Zero-FLOP Nullbridge Damper Selector -->
+        <div class="well">
+          <div class="well-header">
+            <h2 class="well-title">2. Zero-FLOP Nullbridge Damper</h2>
+            <span class="well-meta">7 locked folds</span>
+          </div>
+
+          <div class="fold-grid" id="foldGrid" role="group" aria-label="Select channel-selective zero-FLOP Nullbridge fold">
+            <!-- Populated by JS -->
+          </div>
+
+          <p class="fold-note" id="foldNote">
+            <strong>Unclamped baseline:</strong> No rank-4 projector folded into Pass-2 weights. Both V<sub>8</sub> and Q<sub>msg</sub> ring freely.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Synchronized Pareto Telemetry + Mini Scatter -->
+    <section class="pareto-band" aria-label="Locked Pareto frontier metrics and scatter plot">
+      <div class="telemetry-panel">
+        <div class="well-header" style="margin-bottom: 4px;">
+          <h2 class="well-title" id="paretoTitle">Pareto Metrics Strip: Inkling-2-Mini (K = 3)</h2>
+          <span class="well-meta" id="paretoConditionBadge">Condition: unclamped</span>
+        </div>
+
+        <div class="metrics-grid">
+          <div class="metric-card">
+            <div class="metric-label">Held-Out KL</div>
+            <div class="metric-value" id="mKl">0.0000</div>
+            <div class="metric-delta" id="dKl">nats (range 0.0012..0.0017)</div>
+          </div>
+          <div class="metric-card">
+            <div class="metric-label">Covert Capture</div>
+            <div class="metric-value" id="mCovert">73.4%</div>
+            <div class="metric-delta" id="dCovert">Baseline (0.0 pp)</div>
+          </div>
+          <div class="metric-card">
+            <div class="metric-label">Alias Guardrail</div>
+            <div class="metric-value" id="mAlias">93.8%</div>
+            <div class="metric-delta" id="dAlias">Baseline (0.0 pp)</div>
+          </div>
+          <div class="metric-card">
+            <div class="metric-label">Verifier Susc.</div>
+            <div class="metric-value" id="mVerifier">+3.821</div>
+            <div class="metric-delta" id="dVerifier">LO (100.0% verifier acc)</div>
+          </div>
+          <div class="metric-card">
+            <div class="metric-label">Reasoning Acc</div>
+            <div class="metric-value" id="mReasoning">93.8%</div>
+            <div class="metric-delta" id="dReasoning">Biophysical suite (0.0 pp)</div>
+          </div>
+          <div class="metric-card is-focal">
+            <div class="metric-label">Runtime Overhead</div>
+            <div class="metric-value small-text">0 extra FLOPs<br />0 extra params</div>
+            <div class="metric-delta is-good" id="dReset">Reset diff: 0.00e+00</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="scatter-panel">
+        <div class="well-header" style="margin-bottom: 6px;">
+          <h2 class="well-title">Channel-Selective Pareto Frontier</h2>
+          <span class="well-meta">Click any point to fold</span>
+        </div>
+        <div class="scatter-wrap">
+          <svg id="paretoSvg" viewBox="0 0 380 210" role="img" aria-label="Pareto scatter plot of covert capture versus reasoning accuracy across 7 Nullbridge conditions"></svg>
+        </div>
+      </div>
+    </section>
+
+    <footer class="provenance">
+      <div>
+        Locked empirical data: <code>Exp A1</code> (<code>k = 8</code>, <code>n = 128</code> per model), <code>Exp A2.1</code> (16-mask WHT, Parseval error <code>&lt;= 8.88e-16</code>), <code>Exp A2.2</code> (7 channel folds, weight reset restoration <code>0.00e+00</code> logit diff).
+      </div>
+      <div>
+        <code>&lt;bos&gt;</code> sink overlap: <code>1.13e-16</code> (Inkling-2-Mini) and <code>4.95e-17</code> (Varloop).
+      </div>
+    </footer>
+  </main>
+
+  <script>
+    (function () {
+      "use strict";
+
+      /* Locked empirical dataset from results/phase7_biophysics/synthesis.md and phase7_biophysics_analysis.json */
+      const MODELS = {
+        inkling_k3: {
+          name: "Inkling-2-Mini (K = 3)",
+          shortName: "Inkling-2-Mini",
+          sigmaTop8: [15.061, 6.667, 4.807, 4.003, 3.612, 3.288, 3.096, 2.912],
+          sigma1: 15.06,
+          sigma8: 2.91,
+          angleMin: 84.8,
+          angleMax: 88.2,
+          angleMean: 86.45,
+          klRange: "0.0012..0.0017",
+          bosOverlap: "1.13e-16",
+          g2Range: "0.946x..1.230x",
+          concepts: [
+            { key: "authority", label: "authority", g2: 1.230 },
+            { key: "formatting", label: "formatting", g2: 1.151 },
+            { key: "sycophancy", label: "sycophancy", g2: 1.051 },
+            { key: "spite", label: "spite", g2: 0.946 }
+          ],
+          wht: {
+            covert: {
+              title: "Covert Anchoring",
+              order1: 86.6,
+              order2: 2.4,
+              higher: 11.0,
+              callout: "<strong>P1 dissociation (Q x K minus V x MLP):</strong> <span class=\"wht-mono\">-0.741</span> (Holm p = 0.00255) on Inkling (V x MLP = +0.751, Q x K = +0.010), flipping to <span class=\"wht-mono\">+1.450</span> on Varloop K = 5."
+            },
+            moral: {
+              title: "Moral Bias",
+              order1: 77.6,
+              order2: 21.3,
+              higher: 1.1,
+              callout: "<strong>P2 confirmed (V + MLP &gt; Q + K):</strong> Main-effect contrast <span class=\"wht-mono\">+1.818</span> (Holm p = 0.00015). Order-1 additive main effects explain <span class=\"wht-mono\">77.6%</span> of variance."
+            },
+            verifier: {
+              title: "Verifier Hacking",
+              order1: 68.3,
+              order2: 22.7,
+              higher: 9.0,
+              callout: "<strong>Additive plus V x MLP dominance:</strong> Order-1 main effects carry <span class=\"wht-mono\">68.3%</span> of variance; V + MLP exceeds Q + K by <span class=\"wht-mono\">+3.008</span> (Holm p = 0.00015)."
+            }
+          },
+          pareto: [
+            { id: "unclamped", label: "Unclamped", channels: "None", chList: [], kl: 0.0000, covert: 73.4, moral: 2.165, verifier: 3.821, alias: 93.8, reasoning: 93.8, dampFactor: 1.00, note: "No rank-4 projector folded into Pass-2 weights. Both V_8 reasoning modes and Q_msg safety shortcuts ring freely." },
+            { id: "zff_Q_only", label: "zff_Q_only", channels: "Q", chList: ["Q"], kl: 0.0012, covert: 71.9, moral: 2.176, verifier: 3.733, alias: 95.8, reasoning: 93.8, dampFactor: 0.66, note: "Folds Q projection only: lowest held-out KL (0.0012 nats), lifts alias guardrails to 95.8%, and holds 93.8% reasoning accuracy." },
+            { id: "zff_QK", label: "zff_QK", channels: "Q, K", chList: ["Q", "K"], kl: 0.0015, covert: 71.9, moral: 2.120, verifier: 3.761, alias: 95.8, reasoning: 91.2, dampFactor: 0.56, note: "Folds Q and K projections: trims moral bias to +2.120 LO and holds 95.8% alias guardrails, with a 2.6 pp dip in reasoning accuracy." },
+            { id: "zff_QKV", label: "zff_QKV", channels: "Q, K, V", chList: ["Q", "K", "V"], kl: 0.0016, covert: 70.3, moral: 2.130, verifier: 3.810, alias: 95.8, reasoning: 93.8, dampFactor: 0.36, sweetSpot: true, note: "Balanced sweet spot: cuts covert capture from 73.4% to 70.3%, lifts alias guardrails from 93.8% to 95.8%, and preserves 93.8% reasoning accuracy at 0.0016 nats KL." },
+            { id: "zff_MLP_only", label: "zff_MLP_only", channels: "MLP", chList: ["MLP"], kl: 0.0013, covert: 73.4, moral: 2.253, verifier: 3.692, alias: 93.8, reasoning: 93.8, dampFactor: 0.72, note: "Folds MLP gate/up only: trims verifier susceptibility to +3.692 LO at 0.0013 nats KL while leaving covert capture unchanged." },
+            { id: "zff_V_MLP", label: "zff_V_MLP", channels: "V, MLP", chList: ["V", "MLP"], kl: 0.0014, covert: 71.9, moral: 2.274, verifier: 3.711, alias: 93.8, reasoning: 92.5, dampFactor: 0.52, note: "Folds value and MLP channels: cuts covert capture to 71.9% and verifier susceptibility to +3.711 LO at 0.0014 nats KL." },
+            { id: "zff_All4", label: "zff_All4", channels: "Q, K, V, MLP", chList: ["Q", "K", "V", "MLP"], kl: 0.0017, covert: 68.8, moral: 2.186, verifier: 3.669, alias: 93.8, reasoning: 91.2, dampFactor: 0.24, note: "Maximum damping across all 4 channels: reaches the lowest covert capture (68.8%, -4.6 pp) and lowest verifier susceptibility (+3.669 LO) at 0.0017 nats KL." }
+          ],
+          scatterBounds: { xMin: 67.5, xMax: 74.8, yMin: 90.0, yMax: 95.0 }
+        },
+        varloop_k5: {
+          name: "Varloop (K = 5)",
+          shortName: "Varloop",
+          sigmaTop8: [5.140, 3.039, 2.190, 1.928, 1.742, 1.654, 1.534, 1.443],
+          sigma1: 5.14,
+          sigma8: 1.44,
+          angleMin: 84.3,
+          angleMax: 88.5,
+          angleMean: 86.55,
+          klRange: "0.0016..0.0021",
+          bosOverlap: "4.95e-17",
+          g2Range: "0.988x..1.049x",
+          concepts: [
+            { key: "formatting", label: "formatting", g2: 1.049 },
+            { key: "spite", label: "spite", g2: 1.041 },
+            { key: "authority", label: "authority", g2: 1.020 },
+            { key: "sycophancy", label: "sycophancy", g2: 0.988 }
+          ],
+          wht: {
+            covert: {
+              title: "Covert Anchoring",
+              order1: 68.5,
+              order2: 30.4,
+              higher: 1.1,
+              callout: "<strong>P1 dissociation (Q x K minus V x MLP):</strong> <span class=\"wht-mono\">+1.450</span> (Holm p = 0.00015) on Varloop K = 5 (+1.354 at K = 3), opposite to Inkling's <span class=\"wht-mono\">-0.741</span>."
+            },
+            moral: {
+              title: "Moral Bias",
+              order1: 78.4,
+              order2: 19.6,
+              higher: 2.0,
+              callout: "<strong>P2 confirmed (V + MLP &gt; Q + K):</strong> Main-effect contrast <span class=\"wht-mono\">+1.727</span> at K = 5 (+1.522 at K = 3, all Holm p = 0.00015)."
+            },
+            verifier: {
+              title: "Verifier Hacking",
+              order1: 49.9,
+              order2: 28.4,
+              higher: 21.7,
+              callout: "<strong>Pointer-synergy shift:</strong> Order-1 accounts for <span class=\"wht-mono\">49.9%</span> of variance with positive Q x K minus V x MLP synergy (<span class=\"wht-mono\">+0.319</span>, Holm p = 0.0009)."
+            }
+          },
+          pareto: [
+            { id: "unclamped", label: "Unclamped", channels: "None", chList: [], kl: 0.0000, covert: 90.6, moral: 1.818, verifier: 0.164, alias: 100.0, reasoning: 45.0, dampFactor: 1.00, note: "Unclamped Varloop K = 5 baseline: distributed non-normal gain (sigma_1 = 5.14) sits 84.3 to 88.5 deg from Q_msg." },
+            { id: "zff_Q_only", label: "zff_Q_only", channels: "Q", chList: ["Q"], kl: 0.0016, covert: 90.6, moral: 1.813, verifier: 0.167, alias: 100.0, reasoning: 45.0, dampFactor: 0.68, note: "Folds Q projection only: 0.0016 nats KL, preserves 100.0% alias guardrails and 45.0% reasoning accuracy." },
+            { id: "zff_QK", label: "zff_QK", channels: "Q, K", chList: ["Q", "K"], kl: 0.0018, covert: 90.6, moral: 1.730, verifier: 0.247, alias: 100.0, reasoning: 43.8, dampFactor: 0.56, note: "Folds Q and K projections: achieves the lowest moral bias (+1.730 LO) at 0.0018 nats KL." },
+            { id: "zff_QKV", label: "zff_QKV", channels: "Q, K, V", chList: ["Q", "K", "V"], kl: 0.0016, covert: 90.6, moral: 1.784, verifier: 0.236, alias: 100.0, reasoning: 45.0, dampFactor: 0.38, sweetSpot: true, note: "Balanced fold: matches the lowest KL (0.0016 nats), trims moral bias to +1.784 LO, and preserves 100.0% alias guardrails and 45.0% reasoning accuracy." },
+            { id: "zff_MLP_only", label: "zff_MLP_only", channels: "MLP", chList: ["MLP"], kl: 0.0017, covert: 92.2, moral: 1.924, verifier: 0.231, alias: 100.0, reasoning: 45.0, dampFactor: 0.72, note: "Folds MLP only: 0.0017 nats KL with 45.0% reasoning accuracy preserved." },
+            { id: "zff_V_MLP", label: "zff_V_MLP", channels: "V, MLP", chList: ["V", "MLP"], kl: 0.0019, covert: 89.1, moral: 1.987, verifier: 0.243, alias: 100.0, reasoning: 42.5, dampFactor: 0.48, note: "Folds V and MLP channels: trims covert capture from 90.6% to 89.1% at 0.0019 nats KL." },
+            { id: "zff_All4", label: "zff_All4", channels: "Q, K, V, MLP", chList: ["Q", "K", "V", "MLP"], kl: 0.0021, covert: 89.1, moral: 1.865, verifier: 0.188, alias: 100.0, reasoning: 45.0, dampFactor: 0.26, note: "Full 4-channel fold: trims covert capture to 89.1% while preserving 100.0% alias guardrails and 45.0% reasoning accuracy at 0.0021 nats KL." }
+          ],
+          scatterBounds: { xMin: 88.2, xMax: 93.0, yMin: 41.5, yMax: 46.2 }
+        }
+      };
+
+      /* Application State */
+      const state = {
+        modelKey: "inkling_k3",
+        suiteKey: "covert",
+        foldId: "unclamped",
+        reducedMotion: window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches,
+        time: 0,
+        reasoningAmp: 0.42,
+        safetyAmp: 0.28,
+        damperProgress: 0.0,
+        damperTarget: 0.0,
+        lastStrike: "both",
+        flashReasoning: 0,
+        flashSafety: 0
+      };
+
+      /* DOM Refs */
+      const canvas = document.getElementById("resonatorCanvas");
+      const ctx = canvas.getContext("2d");
+      const foldGrid = document.getElementById("foldGrid");
+      const paretoSvg = document.getElementById("paretoSvg");
+
+      const el = {
+        btnInkling: document.getElementById("btnInkling"),
+        btnVarloop: document.getElementById("btnVarloop"),
+        modelAuditLine: document.getElementById("modelAuditLine"),
+        badgeSigma: document.getElementById("badgeSigma"),
+        badgeAngle: document.getElementById("badgeAngle"),
+        badgeDamper: document.getElementById("badgeDamper"),
+        subReasoningBtn: document.getElementById("subReasoningBtn"),
+        labelSafetyBtn: document.getElementById("labelSafetyBtn"),
+        subSafetyBtn: document.getElementById("subSafetyBtn"),
+        whtTitle: document.getElementById("whtTitle"),
+        whtOrder1Val: document.getElementById("whtOrder1Val"),
+        whtOrder2Val: document.getElementById("whtOrder2Val"),
+        whtBarO1: document.getElementById("whtBarO1"),
+        whtBarO2: document.getElementById("whtBarO2"),
+        whtBarHi: document.getElementById("whtBarHi"),
+        whtCallout: document.getElementById("whtCallout"),
+        foldNote: document.getElementById("foldNote"),
+        paretoTitle: document.getElementById("paretoTitle"),
+        paretoConditionBadge: document.getElementById("paretoConditionBadge"),
+        mKl: document.getElementById("mKl"),
+        dKl: document.getElementById("dKl"),
+        mCovert: document.getElementById("mCovert"),
+        dCovert: document.getElementById("dCovert"),
+        mAlias: document.getElementById("mAlias"),
+        dAlias: document.getElementById("dAlias"),
+        mVerifier: document.getElementById("mVerifier"),
+        dVerifier: document.getElementById("dVerifier"),
+        mReasoning: document.getElementById("mReasoning"),
+        dReasoning: document.getElementById("dReasoning"),
+        meterReasoning: document.getElementById("meterReasoning"),
+        valMeterReasoning: document.getElementById("valMeterReasoning"),
+        meterSafety: document.getElementById("meterSafety"),
+        valMeterSafety: document.getElementById("valMeterSafety")
+      };
+
+      function currentModel() {
+        return MODELS[state.modelKey];
+      }
+
+      function currentFold() {
+        const m = currentModel();
+        return m.pareto.find(function (p) { return p.id === state.foldId; }) || m.pareto[0];
+      }
+
+      function buildFoldButtons() {
+        const m = currentModel();
+        foldGrid.innerHTML = "";
+        m.pareto.forEach(function (cond) {
+          const btn = document.createElement("button");
+          btn.type = "button";
+          btn.className = "fold-btn" + (cond.sweetSpot ? " is-sweet-spot" : "");
+          btn.dataset.fold = cond.id;
+          btn.setAttribute("aria-pressed", cond.id === state.foldId ? "true" : "false");
+
+          if (cond.id === "unclamped") {
+            btn.innerHTML =
+              "<span class=\"fold-name\">Unclamped</span>" +
+              "<span class=\"fold-channels\">No channels folded (baseline)</span>";
+          } else {
+            btn.innerHTML =
+              "<div class=\"fold-btn-top\">" +
+                "<span class=\"fold-name\">" + cond.label + "</span>" +
+                (cond.sweetSpot ? "<span class=\"fold-tag\">Balanced</span>" : "") +
+              "</div>" +
+              "<span class=\"fold-channels\">Fold: " + cond.channels + " (" + cond.kl.toFixed(4) + " nats)</span>";
+          }
+
+          btn.addEventListener("click", function () {
+            selectFold(cond.id);
+          });
+          foldGrid.appendChild(btn);
+        });
+      }
+
+      function selectFold(foldId) {
+        state.foldId = foldId;
+        const cond = currentFold();
+        state.damperTarget = cond.id === "unclamped" ? 0.0 : 1.0;
+
+        /* Gently re-excite the safety axis slightly if calm so the user sees the damper effect immediately */
+        if (cond.id !== "unclamped" && state.safetyAmp < 0.35) {
+          state.safetyAmp = 0.72;
+        }
+        if (state.reasoningAmp < 0.30) {
+          state.reasoningAmp = 0.55;
+        }
+
+        const buttons = foldGrid.querySelectorAll(".fold-btn");
+        buttons.forEach(function (b) {
+          b.setAttribute("aria-pressed", b.dataset.fold === foldId ? "true" : "false");
+        });
+
+        updateAllUI();
+      }
+
+      function selectModel(modelKey) {
+        state.modelKey = modelKey;
+        el.btnInkling.setAttribute("aria-pressed", modelKey === "inkling_k3" ? "true" : "false");
+        el.btnVarloop.setAttribute("aria-pressed", modelKey === "varloop_k5" ? "true" : "false");
+        buildFoldButtons();
+        updateAllUI();
+      }
+
+      function selectSuite(suiteKey) {
+        state.suiteKey = suiteKey;
+        document.querySelectorAll(".suite-btn").forEach(function (b) {
+          b.setAttribute("aria-pressed", b.dataset.suite === suiteKey ? "true" : "false");
+        });
+        updateWHTUI();
+      }
+
+      function strikeReasoning() {
+        state.reasoningAmp = 1.0;
+        state.flashReasoning = 1.0;
+        /* Tiny orthogonal bleed proportional to cos(principal angle) ~ 0.06 */
+        state.safetyAmp = Math.max(state.safetyAmp, 0.07);
+        state.lastStrike = "reasoning";
+      }
+
+      function strikeSafety() {
+        state.safetyAmp = 1.0;
+        state.flashSafety = 1.0;
+        /* Minimal orthogonal bleed into V_8 */
+        state.reasoningAmp = Math.max(state.reasoningAmp, 0.06);
+        state.lastStrike = "safety";
+      }
+
+      function strikeBoth() {
+        state.reasoningAmp = 1.0;
+        state.safetyAmp = 1.0;
+        state.flashReasoning = 0.85;
+        state.flashSafety = 0.85;
+        state.lastStrike = "both";
+      }
+
+      function calmWaves() {
+        state.reasoningAmp = 0.08;
+        state.safetyAmp = 0.05;
+      }
+
+      function updateWHTUI() {
+        const m = currentModel();
+        const w = m.wht[state.suiteKey];
+        el.labelSafetyBtn.textContent = "Strike Safety Shortcut: " + w.title;
+        el.subSafetyBtn.textContent = "Excite Q_msg mid-spectrum harmonics (g_2: " + m.g2Range + ")";
+        el.whtTitle.textContent = "16-Mask Safety WHT: " + w.title;
+        el.whtOrder1Val.textContent = "Order-1: " + w.order1.toFixed(1) + "%";
+        el.whtOrder2Val.textContent = "Order-2: " + w.order2.toFixed(1) + "%";
+        el.whtBarO1.style.width = w.order1.toFixed(1) + "%";
+        el.whtBarO2.style.width = w.order2.toFixed(1) + "%";
+        el.whtBarHi.style.width = w.higher.toFixed(1) + "%";
+        el.whtCallout.innerHTML = w.callout;
+      }
+
+      function formatSigned(val, decimals, suffix) {
+        const sign = val > 0 ? "+" : "";
+        return sign + val.toFixed(decimals) + (suffix || "");
+      }
+
+      function updateParetoUI() {
+        const m = currentModel();
+        const base = m.pareto[0];
+        const cond = currentFold();
+
+        el.paretoTitle.textContent = "Pareto Metrics Strip: " + m.name;
+        el.paretoConditionBadge.textContent = "Condition: " + cond.id;
+        el.foldNote.innerHTML = "<strong>" + cond.label + " (" + cond.channels + "):</strong> " + cond.note;
+
+        el.badgeDamper.textContent = cond.id === "unclamped"
+          ? "Damper: Off"
+          : "Damper: " + cond.channels + " (" + Math.round((1 - cond.dampFactor) * 100) + "% attn)";
+
+        /* KL */
+        el.mKl.textContent = cond.kl.toFixed(4);
+        el.dKl.textContent = cond.id === "unclamped"
+          ? "nats (folded range " + m.klRange + ")"
+          : "nats (within " + m.klRange + " ceiling)";
+        el.dKl.className = "metric-delta" + (cond.id !== "unclamped" ? " is-good" : "");
+
+        /* Covert Capture (lower is better) */
+        const dCov = cond.covert - base.covert;
+        el.mCovert.textContent = cond.covert.toFixed(1) + "%";
+        if (cond.id === "unclamped") {
+          el.dCovert.textContent = "Baseline (0.0 pp)";
+          el.dCovert.className = "metric-delta";
+        } else {
+          el.dCovert.textContent = formatSigned(dCov, 1, " pp") + " vs unclamped";
+          el.dCovert.className = "metric-delta" + (dCov < -0.05 ? " is-good" : dCov > 0.05 ? " is-warn" : "");
+        }
+
+        /* Alias Guardrail (higher is better) */
+        const dAli = cond.alias - base.alias;
+        el.mAlias.textContent = cond.alias.toFixed(1) + "%";
+        if (cond.id === "unclamped") {
+          el.dAlias.textContent = "Baseline (0.0 pp)";
+          el.dAlias.className = "metric-delta";
+        } else {
+          el.dAlias.textContent = formatSigned(dAli, 1, " pp") + " vs unclamped";
+          el.dAlias.className = "metric-delta" + (dAli > 0.05 ? " is-good" : "");
+        }
+
+        /* Verifier Susceptibility (lower is better) */
+        const dVer = cond.verifier - base.verifier;
+        el.mVerifier.textContent = "+" + cond.verifier.toFixed(3);
+        if (cond.id === "unclamped") {
+          el.dVerifier.textContent = "LO (100.0% verifier acc)";
+          el.dVerifier.className = "metric-delta";
+        } else {
+          el.dVerifier.textContent = formatSigned(dVer, 3, " LO") + " (100.0% acc)";
+          el.dVerifier.className = "metric-delta" + (dVer < -0.005 ? " is-good" : dVer > 0.02 ? " is-warn" : "");
+        }
+
+        /* Reasoning Accuracy (higher is better) */
+        const dReas = cond.reasoning - base.reasoning;
+        el.mReasoning.textContent = cond.reasoning.toFixed(1) + "%";
+        if (cond.id === "unclamped") {
+          el.dReasoning.textContent = "Biophysical suite (0.0 pp)";
+          el.dReasoning.className = "metric-delta";
+        } else {
+          el.dReasoning.textContent = (Math.abs(dReas) < 0.05 ? "Preserved (0.0 pp)" : formatSigned(dReas, 1, " pp") + " vs unclamped");
+          el.dReasoning.className = "metric-delta" + (Math.abs(dReas) < 0.05 ? " is-good" : " is-warn");
+        }
+      }
+
+      function renderParetoScatter() {
+        const m = currentModel();
+        const b = m.scatterBounds;
+        const W = 380;
+        const H = 210;
+        const pad = { l: 46, r: 20, t: 18, b: 36 };
+        const pw = W - pad.l - pad.r;
+        const ph = H - pad.t - pad.b;
+
+        function sx(x) {
+          return pad.l + ((x - b.xMin) / (b.xMax - b.xMin)) * pw;
+        }
+        function sy(y) {
+          return pad.t + ph - ((y - b.yMin) / (b.yMax - b.yMin)) * ph;
+        }
+
+        let svg = "";
+
+        /* Gridlines */
+        const xTicks = 4;
+        for (let i = 0; i <= xTicks; i++) {
+          const xv = b.xMin + (i / xTicks) * (b.xMax - b.xMin);
+          const x = sx(xv);
+          svg += "<line x1=\"" + x.toFixed(1) + "\" y1=\"" + pad.t + "\" x2=\"" + x.toFixed(1) + "\" y2=\"" + (pad.t + ph) + "\" stroke=\"#808B90\" stroke-opacity=\"0.2\" stroke-width=\"1\" />";
+          svg += "<text x=\"" + x.toFixed(1) + "\" y=\"" + (H - 18) + "\" text-anchor=\"middle\" font-family=\"ui-monospace, Menlo, monospace\" font-size=\"10\" fill=\"#1E3447\">" + xv.toFixed(1) + "%</text>";
+        }
+
+        const yTicks = 3;
+        for (let j = 0; j <= yTicks; j++) {
+          const yv = b.yMin + (j / yTicks) * (b.yMax - b.yMin);
+          const y = sy(yv);
+          svg += "<line x1=\"" + pad.l + "\" y1=\"" + y.toFixed(1) + "\" x2=\"" + (pad.l + pw) + "\" y2=\"" + y.toFixed(1) + "\" stroke=\"#808B90\" stroke-opacity=\"0.2\" stroke-width=\"1\" />";
+          svg += "<text x=\"" + (pad.l - 6) + "\" y=\"" + (y + 3.5).toFixed(1) + "\" text-anchor=\"end\" font-family=\"ui-monospace, Menlo, monospace\" font-size=\"10\" fill=\"#1E3447\">" + yv.toFixed(1) + "%</text>";
+        }
+
+        /* Axes */
+        svg += "<line x1=\"" + pad.l + "\" y1=\"" + (pad.t + ph) + "\" x2=\"" + (pad.l + pw) + "\" y2=\"" + (pad.t + ph) + "\" stroke=\"#2C3E50\" stroke-width=\"1.5\" />";
+        svg += "<line x1=\"" + pad.l + "\" y1=\"" + pad.t + "\" x2=\"" + pad.l + "\" y2=\"" + (pad.t + ph) + "\" stroke=\"#2C3E50\" stroke-width=\"1.5\" />";
+
+        /* Axis labels */
+        svg += "<text x=\"" + (pad.l + pw / 2).toFixed(1) + "\" y=\"" + (H - 3) + "\" text-anchor=\"middle\" font-family=\"Inter, Arial, sans-serif\" font-size=\"10.5\" font-weight=\"600\" fill=\"#2C3E50\">Covert Capture (lower is better)</text>";
+        svg += "<text x=\"12\" y=\"" + (pad.t + ph / 2).toFixed(1) + "\" text-anchor=\"middle\" font-family=\"Inter, Arial, sans-serif\" font-size=\"10.5\" font-weight=\"600\" fill=\"#2C3E50\" transform=\"rotate(-90 12 " + (pad.t + ph / 2).toFixed(1) + ")\">Reasoning Acc</text>";
+
+        /* Optimal corner whisper */
+        svg += "<text x=\"" + (pad.l + 6) + "\" y=\"" + (pad.t + 12) + "\" font-family=\"Inter, Arial, sans-serif\" font-size=\"9.5\" font-weight=\"600\" fill=\"#5F7F4A\">Better (upper-left)</text>";
+
+        /* Draw non-selected points first, selected point on top */
+        const ordered = m.pareto.slice().sort(function (a, c) {
+          return (a.id === state.foldId ? 1 : 0) - (c.id === state.foldId ? 1 : 0);
+        });
+
+        /* Small deterministic jitter for exact overlapping coordinates so every fold is clickable */
+        const coordCounts = {};
+        ordered.forEach(function (cond) {
+          const key = cond.covert.toFixed(1) + "_" + cond.reasoning.toFixed(1);
+          const idx = coordCounts[key] || 0;
+          coordCounts[key] = idx + 1;
+
+          const jitterX = idx === 0 ? 0 : (idx % 2 === 1 ? -4.5 : 4.5);
+          const jitterY = idx === 0 ? 0 : (idx === 1 ? -3.5 : 3.5);
+          const cx = sx(cond.covert) + jitterX;
+          const cy = sy(cond.reasoning) + jitterY;
+          const isSelected = cond.id === state.foldId;
+
+          const r = isSelected ? 7.5 : (cond.sweetSpot ? 5.5 : 4.5);
+          const fill = isSelected ? "#F39C12" : (cond.id === "unclamped" ? "#808B90" : "#2C3E50");
+          const stroke = isSelected ? "#2C3E50" : "#FFFFF0";
+          const sw = isSelected ? 2 : 1.2;
+
+          svg += "<g class=\"scatter-point\" data-fold=\"" + cond.id + "\" tabindex=\"0\" role=\"button\" aria-label=\"Select " + cond.label + "\">";
+          svg += "<circle cx=\"" + cx.toFixed(1) + "\" cy=\"" + cy.toFixed(1) + "\" r=\"" + r + "\" fill=\"" + fill + "\" stroke=\"" + stroke + "\" stroke-width=\"" + sw + "\" />";
+
+          if (isSelected || cond.id === "unclamped" || cond.id === "zff_QKV" || cond.id === "zff_All4") {
+            const shortLbl = cond.id === "unclamped" ? "unclamped" : cond.id.replace("zff_", "");
+            const alignRight = cx > pad.l + pw - 58;
+            const tx = alignRight ? cx - 10 : cx + 10;
+            const ty = cy < pad.t + 22 ? cy + 14 : cy - 8;
+            const anchor = alignRight ? "end" : "start";
+            svg += "<text x=\"" + tx.toFixed(1) + "\" y=\"" + ty.toFixed(1) + "\" text-anchor=\"" + anchor + "\" font-family=\"ui-monospace, Menlo, monospace\" font-size=\"" + (isSelected ? "10.5" : "9.5") + "\" font-weight=\"" + (isSelected ? "700" : "500") + "\" fill=\"" + (isSelected ? "#96590A" : "#1E3447") + "\">" + shortLbl + "</text>";
+          }
+          svg += "</g>";
+        });
+
+        paretoSvg.innerHTML = svg;
+
+        paretoSvg.querySelectorAll(".scatter-point").forEach(function (node) {
+          node.addEventListener("click", function () {
+            selectFold(node.dataset.fold);
+          });
+          node.addEventListener("keydown", function (e) {
+            if (e.key === "Enter" || e.key === " ") {
+              e.preventDefault();
+              selectFold(node.dataset.fold);
+            }
+          });
+        });
+      }
+
+      function updateAllUI() {
+        const m = currentModel();
+        el.modelAuditLine.textContent =
+          "sigma_1 = " + m.sigma1.toFixed(2) +
+          " | V_8 vs Q_msg: " + m.angleMin.toFixed(1) + ".." + m.angleMax.toFixed(1) + " deg" +
+          " | <bos> = " + m.bosOverlap;
+        el.badgeSigma.textContent = "V_8: sigma_1 = " + m.sigma1.toFixed(2) + ".." + m.sigma8.toFixed(2);
+        el.badgeAngle.textContent = "Angle: " + m.angleMin.toFixed(1) + ".." + m.angleMax.toFixed(1) + " deg";
+        el.subReasoningBtn.textContent = "Excite V_8 top-8 modes (sigma_1 = " + m.sigma1.toFixed(2) + ")";
+
+        updateWHTUI();
+        updateParetoUI();
+        renderParetoScatter();
+      }
+
+      /* Canvas Rendering (Retina Crisp) */
+      let cWidth = 680;
+      let cHeight = 468;
+
+      function resizeCanvas() {
+        const rect = canvas.parentElement.getBoundingClientRect();
+        const dpr = Math.min(window.devicePixelRatio || 1, 2.5);
+        cWidth = Math.max(300, rect.width);
+        cHeight = Math.max(260, rect.height);
+        canvas.width = Math.round(cWidth * dpr);
+        canvas.height = Math.round(cHeight * dpr);
+        ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      }
+
+      function drawRoundedRect(x, y, w, h, r) {
+        ctx.beginPath();
+        ctx.moveTo(x + r, y);
+        ctx.lineTo(x + w - r, y);
+        ctx.quadraticCurveTo(x + w, y, x + w, y + r);
+        ctx.lineTo(x + w, y + h - r);
+        ctx.quadraticCurveTo(x + w, y + h, x + w - r, y + h);
+        ctx.lineTo(x + r, y + h);
+        ctx.quadraticCurveTo(x, y + h, x, y + h - r);
+        ctx.lineTo(x, y + r);
+        ctx.quadraticCurveTo(x, y, x + r, y);
+        ctx.closePath();
+      }
+
+      function drawResonator(dt) {
+        const m = currentModel();
+        const cond = currentFold();
+
+        /* Advance physics */
+        if (!state.reducedMotion) {
+          state.time += dt;
+          const reasoningDecay = Math.exp(-dt * 0.42);
+          /* Folded damper drains safety energy much faster */
+          const safetyDecayRate = cond.id === "unclamped" ? 0.55 : (1.1 + (1 - cond.dampFactor) * 2.4);
+          const safetyDecay = Math.exp(-dt * safetyDecayRate);
+
+          state.reasoningAmp = Math.max(0.16, state.reasoningAmp * reasoningDecay);
+          const safetyFloor = cond.id === "unclamped" ? 0.14 : 0.14 * cond.dampFactor;
+          state.safetyAmp = Math.max(safetyFloor, state.safetyAmp * safetyDecay);
+
+          state.flashReasoning = Math.max(0, state.flashReasoning - dt * 2.2);
+          state.flashSafety = Math.max(0, state.flashSafety - dt * 2.2);
+          state.damperProgress += (state.damperTarget - state.damperProgress) * Math.min(1, dt * 8.5);
+        } else {
+          state.damperProgress = state.damperTarget;
+          state.reasoningAmp = 0.72;
+          state.safetyAmp = cond.id === "unclamped" ? 0.68 : 0.68 * cond.dampFactor;
+        }
+
+        const effectiveSafetyAmp = state.safetyAmp * (1 - state.damperProgress * (1 - cond.dampFactor));
+        /* Reasoning KL bleed is minuscule (0.0012..0.0021 nats -> <0.3% visual shift) */
+        const effectiveReasoningAmp = state.reasoningAmp * (1 - cond.kl * 1.4);
+
+        /* Update energy meters */
+        const rPct = Math.min(100, Math.round(effectiveReasoningAmp * 100));
+        const sPct = Math.min(100, Math.round(effectiveSafetyAmp * 100));
+        el.meterReasoning.style.width = rPct + "%";
+        el.valMeterReasoning.textContent = rPct + "%";
+        el.meterSafety.style.width = sPct + "%";
+        el.valMeterSafety.textContent = sPct + "%";
+
+        /* Clear Canvas */
+        ctx.fillStyle = "#FFFFF0";
+        ctx.fillRect(0, 0, cWidth, cHeight);
+
+        /* Subtle drafting grid */
+        ctx.strokeStyle = "rgba(128, 139, 144, 0.13)";
+        ctx.lineWidth = 1;
+        const gridStep = 36;
+        for (let gx = gridStep; gx < cWidth; gx += gridStep) {
+          ctx.beginPath();
+          ctx.moveTo(gx, 0);
+          ctx.lineTo(gx, cHeight);
+          ctx.stroke();
+        }
+        for (let gy = gridStep; gy < cHeight; gy += gridStep) {
+          ctx.beginPath();
+          ctx.moveTo(0, gy);
+          ctx.lineTo(cWidth, gy);
+          ctx.stroke();
+        }
+
+        /* Geometry anchors */
+        const cx = cWidth * 0.44;
+        const cy = cHeight * 0.56;
+        const rAxisLen = Math.min(cWidth * 0.40, 270);
+        const sAxisLen = Math.min(cHeight * 0.37, 168);
+
+        /* Primary V_8 axis: horizontal (0 deg) */
+        const rAngle = 0;
+        /* Perpendicular Q_msg axis: offset by exact locked mean principal angle (~86.5 deg) */
+        const principalRad = (m.angleMean * Math.PI) / 180;
+        const sAngle = -principalRad;
+
+        const rDx = Math.cos(rAngle);
+        const rDy = Math.sin(rAngle);
+        const sDx = Math.cos(sAngle);
+        const sDy = Math.sin(sAngle);
+
+        /* 1. Orthogonal Protractor Arc at Origin */
+        const arcR = 46;
+        ctx.save();
+        ctx.beginPath();
+        ctx.arc(cx, cy, arcR, sAngle, rAngle, false);
+        ctx.strokeStyle = "#808B90";
+        ctx.lineWidth = 1.5;
+        ctx.setLineDash([4, 3]);
+        ctx.stroke();
+        ctx.setLineDash([]);
+
+        /* Right-angle corner hint */
+        ctx.fillStyle = "rgba(44, 62, 80, 0.05)";
+        ctx.beginPath();
+        ctx.moveTo(cx, cy);
+        ctx.arc(cx, cy, arcR, sAngle, rAngle, false);
+        ctx.closePath();
+        ctx.fill();
+
+        /* Angle label */
+        const midAng = (sAngle + rAngle) * 0.5;
+        const lx = cx + Math.cos(midAng) * (arcR + 28);
+        const ly = cy + Math.sin(midAng) * (arcR + 22);
+        ctx.font = "600 11.5px ui-monospace, Menlo, monospace";
+        ctx.fillStyle = "#1E3447";
+        ctx.textAlign = "left";
+        ctx.fillText(m.angleMin.toFixed(1) + ".." + m.angleMax.toFixed(1) + " deg", lx - 10, ly);
+        ctx.restore();
+
+        /* 2. Draw Q_msg Perpendicular Axis (Blue Slate) */
+        ctx.save();
+        ctx.translate(cx, cy);
+        ctx.rotate(sAngle);
+
+        /* Baseline rod */
+        ctx.strokeStyle = "rgba(44, 62, 80, 0.35)";
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        ctx.moveTo(-sAxisLen * 0.72, 0);
+        ctx.lineTo(sAxisLen, 0);
+        ctx.stroke();
+
+        /* End caps */
+        ctx.fillStyle = "#2C3E50";
+        ctx.beginPath();
+        ctx.arc(-sAxisLen * 0.72, 0, 3.5, 0, Math.PI * 2);
+        ctx.arc(sAxisLen, 0, 3.5, 0, Math.PI * 2);
+        ctx.fill();
+
+        /* Mid-spectrum Blue Slate standing wave along Q_msg */
+        const sStart = -sAxisLen * 0.72;
+        const sEnd = sAxisLen;
+        const sSpan = sEnd - sStart;
+        const sMaxAmp = 34 * effectiveSafetyAmp;
+
+        /* Subtle envelope when damped to show attenuation */
+        if (state.damperProgress > 0.05) {
+          const uncAmp = 34 * state.safetyAmp;
+          ctx.beginPath();
+          for (let i = 0; i <= 120; i++) {
+            const u = i / 120;
+            const x = sStart + u * sSpan;
+            const env = Math.sin(u * Math.PI);
+            const y = uncAmp * env * (
+              0.55 * Math.sin(u * Math.PI * 3 + state.time * 7.2) +
+              0.30 * Math.sin(u * Math.PI * 5 - state.time * 9.8) +
+              0.15 * Math.sin(u * Math.PI * 7 + state.time * 12.1)
+            );
+            if (i === 0) ctx.moveTo(x, y);
+            else ctx.lineTo(x, y);
+          }
+          ctx.strokeStyle = "rgba(128, 139, 144, 0.28)";
+          ctx.lineWidth = 1.25;
+          ctx.setLineDash([3, 3]);
+          ctx.stroke();
+          ctx.setLineDash([]);
+        }
+
+        /* Active damped Blue Slate wave */
+        ctx.beginPath();
+        for (let i = 0; i <= 140; i++) {
+          const u = i / 140;
+          const x = sStart + u * sSpan;
+          const env = Math.sin(u * Math.PI);
+          /* Suite-specific harmonic signature */
+          const f1 = state.suiteKey === "covert" ? 3 : (state.suiteKey === "moral" ? 4 : 5);
+          const f2 = f1 + 2;
+          const phase = state.time * 7.6;
+          const y = sMaxAmp * env * (
+            0.60 * Math.sin(u * Math.PI * f1) * Math.cos(phase) +
+            0.28 * Math.sin(u * Math.PI * f2) * Math.sin(phase * 1.35) +
+            0.12 * Math.sin(u * Math.PI * (f2 + 2)) * Math.cos(phase * 1.8)
+          );
+          if (i === 0) ctx.moveTo(x, y);
+          else ctx.lineTo(x, y);
+        }
+        ctx.strokeStyle = "#2C3E50";
+        ctx.lineWidth = 2.6;
+        ctx.stroke();
+
+        /* Zero-FLOP Mechanical Damper Caliper gripping the Q_msg axis */
+        if (state.damperProgress > 0.01) {
+          const p = state.damperProgress;
+          const clampX = sAxisLen * 0.34;
+          const jawGap = 44 - p * 31; /* Closes smoothly onto the axis */
+          const jawW = 54;
+          const jawH = 14;
+
+          /* Upper and lower caliper blocks */
+          ctx.fillStyle = cond.sweetSpot ? "#87A96B" : "#2C3E50";
+          ctx.strokeStyle = "#2C3E50";
+          ctx.lineWidth = 2;
+
+          drawRoundedRect(clampX - jawW / 2, -jawGap - jawH, jawW, jawH, 4);
+          ctx.fill();
+          ctx.stroke();
+
+          drawRoundedRect(clampX - jawW / 2, jawGap, jawW, jawH, 4);
+          ctx.fill();
+          ctx.stroke();
+
+          /* Vertical damper struts */
+          ctx.strokeStyle = "#5F7F4A";
+          ctx.lineWidth = 2;
+          ctx.beginPath();
+          ctx.moveTo(clampX - 16, -jawGap);
+          ctx.lineTo(clampX - 16, jawGap);
+          ctx.moveTo(clampX + 16, -jawGap);
+          ctx.lineTo(clampX + 16, jawGap);
+          ctx.stroke();
+        }
+
+        ctx.restore();
+
+        /* 3. Draw V_8 Primary Reasoning Axis (Golden Orange with 2px Blue Slate outline) */
+        ctx.save();
+        ctx.translate(cx, cy);
+        ctx.rotate(rAngle);
+
+        const rStart = -rAxisLen * 0.78;
+        const rEnd = rAxisLen;
+        const rSpan = rEnd - rStart;
+
+        /* Axis line */
+        ctx.strokeStyle = "rgba(44, 62, 80, 0.35)";
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        ctx.moveTo(rStart, 0);
+        ctx.lineTo(rEnd, 0);
+        ctx.stroke();
+
+        /* Top-8 singular value spectrum ticks along the V_8 axis */
+        const sigs = m.sigmaTop8;
+        const maxSig = sigs[0];
+        for (let k = 0; k < sigs.length; k++) {
+          const tx = rStart + 28 + (k / (sigs.length - 1)) * (rSpan - 56);
+          const barH = 6 + (sigs[k] / maxSig) * 16;
+          ctx.strokeStyle = k === 0 ? "#96590A" : "rgba(44, 62, 80, 0.25)";
+          ctx.lineWidth = k === 0 ? 2 : 1.25;
+          ctx.beginPath();
+          ctx.moveTo(tx, -barH * 0.5);
+          ctx.lineTo(tx, barH * 0.5);
+          ctx.stroke();
+        }
+
+        /* Lush Golden Orange standing wave (drawn with 2px Blue Slate outer stroke + Golden Orange core) */
+        const scaleFactor = m.sigma1 > 10 ? 1.0 : 0.72;
+        const rMaxAmp = 52 * scaleFactor * effectiveReasoningAmp;
+
+        ctx.beginPath();
+        for (let i = 0; i <= 160; i++) {
+          const u = i / 160;
+          const x = rStart + u * rSpan;
+          const env = Math.sin(u * Math.PI);
+          const ph = state.time * 4.8;
+          const y = rMaxAmp * env * (
+            0.74 * Math.sin(u * Math.PI * 2) * Math.cos(ph) +
+            0.18 * Math.sin(u * Math.PI * 3) * Math.sin(ph * 1.4) +
+            0.08 * Math.sin(u * Math.PI * 4) * Math.cos(ph * 2.1)
+          );
+          if (i === 0) ctx.moveTo(x, y);
+          else ctx.lineTo(x, y);
+        }
+        /* Subtle translucent ribbon fill under curve */
+        ctx.save();
+        ctx.lineTo(rEnd, 0);
+        ctx.lineTo(rStart, 0);
+        ctx.closePath();
+        ctx.fillStyle = "rgba(243, 156, 18, 0.14)";
+        ctx.fill();
+        ctx.restore();
+
+        /* 2px Blue Slate outer boundary */
+        ctx.strokeStyle = "#2C3E50";
+        ctx.lineWidth = 6.2;
+        ctx.lineCap = "round";
+        ctx.stroke();
+
+        /* Golden Orange core wave */
+        ctx.strokeStyle = "#F39C12";
+        ctx.lineWidth = 3.2;
+        ctx.stroke();
+
+        /* Axis endpoint nodes */
+        ctx.fillStyle = "#F39C12";
+        ctx.strokeStyle = "#2C3E50";
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        ctx.arc(rStart, 0, 5, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.stroke();
+        ctx.beginPath();
+        ctx.arc(rEnd, 0, 5, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.stroke();
+
+        ctx.restore();
+
+        /* 4. Origin Intersection Pin */
+        ctx.fillStyle = "#FFFFF0";
+        ctx.strokeStyle = "#2C3E50";
+        ctx.lineWidth = 2.5;
+        ctx.beginPath();
+        ctx.arc(cx, cy, 6, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.stroke();
+
+        /* 5. Direct Labels & Annotations (No overlap, crisp hierarchy) */
+        /* V_8 Label (Right side) */
+        const rLabelX = cx + rAxisLen - 4;
+        const rLabelY = cy + 32;
+        ctx.textAlign = "right";
+        ctx.font = "700 13px Inter, Arial, sans-serif";
+        ctx.fillStyle = "#96590A";
+        ctx.fillText("V_8 Reasoning Subspace (Top-8)", rLabelX, rLabelY);
+        ctx.font = "500 11.5px ui-monospace, Menlo, monospace";
+        ctx.fillStyle = "#1E3447";
+        ctx.fillText("sigma_1 = " + m.sigma1.toFixed(2) + " .. sigma_8 = " + m.sigma8.toFixed(2), rLabelX, rLabelY + 16);
+        if (cond.id !== "unclamped") {
+          ctx.font = "600 11px Inter, Arial, sans-serif";
+          ctx.fillStyle = "#5F7F4A";
+          ctx.fillText("Untouched (" + cond.kl.toFixed(4) + " nats KL)", rLabelX, rLabelY + 32);
+        }
+
+        /* Q_msg Label (Top of perpendicular axis) */
+        const qTopX = cx + sDx * sAxisLen;
+        const qTopY = cy + sDy * sAxisLen;
+        ctx.textAlign = "left";
+        ctx.font = "700 13px Inter, Arial, sans-serif";
+        ctx.fillStyle = "#2C3E50";
+        ctx.fillText("Q_msg 4D Safety-Shortcut Plane", qTopX + 14, qTopY + 4);
+        ctx.font = "500 11px ui-monospace, Menlo, monospace";
+        ctx.fillStyle = "#1E3447";
+        ctx.fillText("Mid-spectrum (k > 8) | g_2: " + m.g2Range, qTopX + 14, qTopY + 19);
+
+        /* 4 named safety concepts readout box (Top-left quiet list) */
+        const boxX = 16;
+        const boxY = 16;
+        const boxW = 186;
+        const boxH = 98;
+        ctx.fillStyle = "rgba(245, 238, 220, 0.92)";
+        ctx.strokeStyle = "rgba(44, 62, 80, 0.25)";
+        ctx.lineWidth = 1;
+        drawRoundedRect(boxX, boxY, boxW, boxH, 8);
+        ctx.fill();
+        ctx.stroke();
+
+        ctx.textAlign = "left";
+        ctx.font = "600 10.5px Inter, Arial, sans-serif";
+        ctx.fillStyle = "#1E3447";
+        ctx.fillText("Q_MSG BASIS (DIRECTIONAL GAIN)", boxX + 10, boxY + 18);
+
+        m.concepts.forEach(function (c, idx) {
+          const rowY = boxY + 36 + idx * 16;
+          ctx.font = "500 11px ui-monospace, Menlo, monospace";
+          ctx.fillStyle = "#2C3E50";
+          ctx.textAlign = "left";
+          ctx.fillText(c.label, boxX + 10, rowY);
+          ctx.textAlign = "right";
+          ctx.fillStyle = "#1E3447";
+          ctx.fillText(c.g2.toFixed(3) + "x", boxX + boxW - 10, rowY);
+        });
+
+        /* Damper Status Callout near caliper when active */
+        if (state.damperProgress > 0.25) {
+          const dampX = cx + sDx * (sAxisLen * 0.34);
+          const dampY = cy + sDy * (sAxisLen * 0.34);
+          const tagX = dampX + 54;
+          const tagY = dampY - 12;
+
+          ctx.fillStyle = "#F5EEDC";
+          ctx.strokeStyle = "#2C3E50";
+          ctx.lineWidth = 1.5;
+          drawRoundedRect(tagX, tagY, 152, 42, 6);
+          ctx.fill();
+          ctx.stroke();
+
+          ctx.textAlign = "left";
+          ctx.font = "700 11px Inter, Arial, sans-serif";
+          ctx.fillStyle = "#2C3E50";
+          ctx.fillText("Zero-FLOP Damper", tagX + 9, tagY + 16);
+          ctx.font = "600 11px ui-monospace, Menlo, monospace";
+          ctx.fillStyle = "#5F7F4A";
+          ctx.fillText("Fold: " + cond.channels, tagX + 9, tagY + 32);
+        }
+
+        /* 6. <bos> Sink Anchor (Bottom-left, completely untouched at ~1e-16 overlap) */
+        const bosX = 24;
+        const bosY = cHeight - 28;
+        ctx.save();
+        ctx.strokeStyle = "rgba(128, 139, 144, 0.55)";
+        ctx.lineWidth = 1.5;
+        ctx.setLineDash([3, 3]);
+        ctx.beginPath();
+        ctx.moveTo(bosX + 8, bosY - 8);
+        ctx.lineTo(cx - 12, cy + 12);
+        ctx.stroke();
+        ctx.setLineDash([]);
+
+        ctx.fillStyle = "#F5EEDC";
+        ctx.strokeStyle = "#808B90";
+        ctx.lineWidth = 1.5;
+        ctx.beginPath();
+        ctx.arc(bosX + 8, bosY - 8, 7, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.stroke();
+
+        ctx.fillStyle = "#808B90";
+        ctx.beginPath();
+        ctx.arc(bosX + 8, bosY - 8, 2.5, 0, Math.PI * 2);
+        ctx.fill();
+
+        ctx.textAlign = "left";
+        ctx.font = "600 11px ui-monospace, Menlo, monospace";
+        ctx.fillStyle = "#1E3447";
+        ctx.fillText("<bos> sink anchor", bosX + 22, bosY - 11);
+        ctx.font = "500 10.5px ui-monospace, Menlo, monospace";
+        ctx.fillStyle = "#808B90";
+        ctx.fillText("overlap " + m.bosOverlap + " (untouched)", bosX + 22, bosY + 3);
+        ctx.restore();
+      }
+
+      /* Animation Loop */
+      let lastTs = performance.now();
+      function tick(ts) {
+        const dt = Math.min(0.05, Math.max(0.001, (ts - lastTs) / 1000));
+        lastTs = ts;
+        drawResonator(dt);
+        requestAnimationFrame(tick);
+      }
+
+      /* Event Wiring */
+      el.btnInkling.addEventListener("click", function () { selectModel("inkling_k3"); });
+      el.btnVarloop.addEventListener("click", function () { selectModel("varloop_k5"); });
+
+      document.getElementById("btnStrikeReasoning").addEventListener("click", strikeReasoning);
+      document.getElementById("btnStrikeSafety").addEventListener("click", strikeSafety);
+      document.getElementById("btnStrikeBoth").addEventListener("click", strikeBoth);
+      document.getElementById("btnCalm").addEventListener("click", calmWaves);
+
+      document.querySelectorAll(".suite-btn").forEach(function (btn) {
+        btn.addEventListener("click", function () {
+          selectSuite(btn.dataset.suite);
+          strikeSafety();
+        });
+      });
+
+      window.addEventListener("resize", resizeCanvas);
+
+      /* Initialize */
+      buildFoldButtons();
+      updateAllUI();
+      resizeCanvas();
+      requestAnimationFrame(tick);
+    })();
+  </script>
+</body>
+</html>

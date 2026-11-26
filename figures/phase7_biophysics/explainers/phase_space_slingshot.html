@@ -1,0 +1,1966 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Phase-Space Slingshot: Balanced-Circuit Bench</title>
+<style>
+  :root {
+    --ivory: #FFFFF0;
+    --parchment: #F5EEDC;
+    --onyx: #0F0F0F;
+    --blue-slate: #2C3E50;
+    --slate-deep: #1E3447;
+    --slate-mist: #808B90;
+    --sage-green: #87A96B;
+    --sage-deep: #5F7F4A;
+    --golden-orange: #F39C12;
+    --copper-deep: #96590A;
+    --line-subtle: rgba(44, 62, 80, 0.22);
+    --line-track: rgba(44, 62, 80, 0.12);
+    --font-display: "Newsreader", Georgia, "Times New Roman", serif;
+    --font-sans: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    --radius-sm: 8px;
+    --radius-md: 12px;
+    --t-fast: 180ms ease-out;
+  }
+
+  * {
+    box-sizing: border-box;
+  }
+
+  html, body {
+    margin: 0;
+    padding: 0;
+    background: var(--ivory);
+    color: var(--onyx);
+    font-family: var(--font-sans);
+    font-size: 16px;
+    line-height: 1.55;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .page {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 32px 24px 56px;
+  }
+
+  /* Header */
+  .header {
+    margin-bottom: 24px;
+    border-bottom: 2px solid var(--blue-slate);
+    padding-bottom: 18px;
+  }
+
+  .kicker {
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--slate-deep);
+    margin: 0 0 6px;
+  }
+
+  .title {
+    font-family: var(--font-display);
+    font-size: clamp(28px, 4vw, 40px);
+    font-weight: 600;
+    letter-spacing: -0.03em;
+    line-height: 1.15;
+    margin: 0 0 10px;
+    color: var(--onyx);
+  }
+
+  .lede {
+    font-size: 17px;
+    color: var(--slate-deep);
+    max-width: 78ch;
+    margin: 0;
+  }
+
+  /* Architecture Switcher */
+  .arch-bar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 20px;
+    align-items: center;
+  }
+
+  .arch-btn {
+    appearance: none;
+    background: var(--parchment);
+    color: var(--slate-deep);
+    border: 1px solid var(--line-subtle);
+    border-radius: var(--radius-sm);
+    padding: 10px 14px;
+    font-family: var(--font-sans);
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background var(--t-fast), color var(--t-fast), border-color var(--t-fast);
+    text-align: left;
+    min-height: 44px;
+  }
+
+  .arch-btn:hover {
+    border-color: var(--blue-slate);
+  }
+
+  .arch-btn:focus-visible,
+  .btn:focus-visible,
+  .chip:focus-visible,
+  input[type="range"]:focus-visible {
+    outline: 2px solid var(--blue-slate);
+    outline-offset: 2px;
+  }
+
+  .arch-btn.active {
+    background: var(--blue-slate);
+    color: var(--ivory);
+    border-color: var(--blue-slate);
+  }
+
+  .arch-sub {
+    display: block;
+    font-size: 12px;
+    font-weight: 400;
+    opacity: 0.85;
+    margin-top: 2px;
+  }
+
+  .depth-picker {
+    display: none;
+    align-items: center;
+    gap: 6px;
+    margin-left: auto;
+    background: var(--parchment);
+    border: 1px solid var(--line-subtle);
+    border-radius: var(--radius-sm);
+    padding: 6px 10px;
+  }
+
+  .depth-picker.visible {
+    display: inline-flex;
+  }
+
+  .depth-label {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--slate-deep);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-right: 4px;
+  }
+
+  /* Main Workspace Grid */
+  .bench-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1.38fr) minmax(320px, 0.92fr);
+    gap: 24px;
+    align-items: start;
+  }
+
+  @media (max-width: 960px) {
+    .bench-grid {
+      grid-template-columns: 1fr;
+    }
+    .depth-picker {
+      margin-left: 0;
+    }
+  }
+
+  /* Arena Card */
+  .arena-panel {
+    background: var(--ivory);
+    border: 2px solid var(--blue-slate);
+    border-radius: var(--radius-md);
+    padding: 16px;
+  }
+
+  .arena-top {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 12px;
+  }
+
+  .arena-caption {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--slate-deep);
+  }
+
+  .preset-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+
+  .chip {
+    appearance: none;
+    background: var(--parchment);
+    color: var(--slate-deep);
+    border: 1px solid var(--line-subtle);
+    border-radius: 6px;
+    padding: 5px 10px;
+    font-family: var(--font-sans);
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    min-height: 32px;
+    transition: background var(--t-fast), border-color var(--t-fast);
+  }
+
+  .chip:hover {
+    border-color: var(--blue-slate);
+  }
+
+  .chip.active {
+    background: var(--blue-slate);
+    color: var(--ivory);
+    border-color: var(--blue-slate);
+  }
+
+  .chip.focal-chip.active {
+    background: var(--golden-orange);
+    color: var(--onyx);
+    border: 2px solid var(--blue-slate);
+  }
+
+  .canvas-wrap {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 4 / 3;
+    min-height: 340px;
+    background: var(--ivory);
+    border: 1px solid var(--line-subtle);
+    border-radius: var(--radius-sm);
+    overflow: hidden;
+    touch-action: none;
+  }
+
+  canvas#arena {
+    display: block;
+    width: 100%;
+    height: 100%;
+    cursor: grab;
+  }
+
+  canvas#arena.dragging {
+    cursor: grabbing;
+  }
+
+  /* Playback Bar */
+  .playback-bar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-top: 14px;
+    padding-top: 12px;
+    border-top: 1px solid var(--line-subtle);
+  }
+
+  .btn-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .btn {
+    appearance: none;
+    background: var(--parchment);
+    color: var(--onyx);
+    border: 1px solid var(--blue-slate);
+    border-radius: var(--radius-sm);
+    padding: 8px 14px;
+    font-family: var(--font-sans);
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    min-height: 40px;
+    transition: background var(--t-fast), color var(--t-fast);
+  }
+
+  .btn:hover {
+    background: #EBE2CA;
+  }
+
+  .btn.primary {
+    background: var(--blue-slate);
+    color: var(--ivory);
+  }
+
+  .btn.primary:hover {
+    background: var(--slate-deep);
+  }
+
+  .btn.focal {
+    background: var(--golden-orange);
+    color: var(--onyx);
+    border: 2px solid var(--blue-slate);
+  }
+
+  .btn.focal:hover {
+    background: #E5900D;
+  }
+
+  .btn.active-danger {
+    background: var(--copper-deep);
+    color: var(--ivory);
+    border-color: var(--onyx);
+  }
+
+  .btn:disabled {
+    opacity: 0.45;
+    cursor: not-allowed;
+  }
+
+  .pass-strip {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    flex-wrap: wrap;
+  }
+
+  .pass-pill {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    padding: 4px 8px;
+    border-radius: 6px;
+    border: 1px solid var(--line-subtle);
+    background: var(--ivory);
+    color: var(--slate-mist);
+  }
+
+  .pass-pill.done {
+    background: var(--parchment);
+    color: var(--slate-deep);
+    border-color: var(--blue-slate);
+  }
+
+  .pass-pill.current {
+    background: var(--golden-orange);
+    color: var(--onyx);
+    border: 2px solid var(--blue-slate);
+    font-weight: 700;
+  }
+
+  .pass-pill.coda-active {
+    background: var(--sage-green);
+    color: var(--onyx);
+    border: 2px solid var(--blue-slate);
+    font-weight: 700;
+  }
+
+  /* Legend Strip */
+  .legend-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 14px;
+    margin-top: 12px;
+    font-size: 12px;
+    color: var(--slate-deep);
+  }
+
+  .legend-item {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .swatch {
+    width: 12px;
+    height: 12px;
+    border-radius: 3px;
+    display: inline-block;
+  }
+
+  .swatch.focal {
+    background: var(--golden-orange);
+    border: 2px solid var(--blue-slate);
+  }
+
+  .swatch.noise {
+    background: var(--slate-mist);
+  }
+
+  .swatch.coda {
+    background: var(--sage-green);
+    border: 1px solid var(--sage-deep);
+  }
+
+  .swatch.foil {
+    background: var(--ivory);
+    border: 2px dashed var(--copper-deep);
+  }
+
+  /* Right Column: Telemetry & Controls */
+  .side-col {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .well {
+    background: var(--parchment);
+    border: 1px solid var(--line-subtle);
+    border-radius: var(--radius-md);
+    padding: 16px;
+  }
+
+  .well-title {
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--slate-deep);
+    margin: 0 0 12px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  /* Telemetry Grid */
+  .telemetry-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+  }
+
+  .metric-card {
+    background: var(--ivory);
+    border: 1px solid var(--line-subtle);
+    border-radius: var(--radius-sm);
+    padding: 10px 12px;
+  }
+
+  .metric-label {
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--slate-mist);
+    margin-bottom: 4px;
+  }
+
+  .metric-value {
+    font-family: var(--font-mono);
+    font-size: 20px;
+    font-weight: 700;
+    font-variant-numeric: tabular-nums;
+    color: var(--onyx);
+    line-height: 1.2;
+  }
+
+  .metric-value.focal-text {
+    color: var(--copper-deep);
+  }
+
+  .metric-value.positive-text {
+    color: var(--sage-deep);
+  }
+
+  .metric-sub {
+    font-size: 12px;
+    color: var(--slate-deep);
+    margin-top: 3px;
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* Sliders & Controls */
+  .control-block {
+    margin-bottom: 14px;
+  }
+
+  .control-block:last-child {
+    margin-bottom: 0;
+  }
+
+  .control-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 6px;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--onyx);
+  }
+
+  .control-val {
+    font-family: var(--font-mono);
+    font-variant-numeric: tabular-nums;
+    color: var(--blue-slate);
+  }
+
+  input[type="range"] {
+    width: 100%;
+    accent-color: var(--blue-slate);
+    cursor: pointer;
+    margin: 2px 0;
+  }
+
+  .control-note {
+    font-size: 12px;
+    color: var(--slate-deep);
+    margin: 6px 0 0;
+    line-height: 1.45;
+  }
+
+  .toggle-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 10px;
+  }
+
+  /* Inverted-U Canvas */
+  .gamma-chart-wrap {
+    margin-top: 10px;
+    background: var(--ivory);
+    border: 1px solid var(--line-subtle);
+    border-radius: var(--radius-sm);
+    padding: 8px;
+  }
+
+  canvas#gammaChart {
+    display: block;
+    width: 100%;
+    height: 132px;
+  }
+
+  /* Mechanism Summary */
+  .mech-note {
+    font-size: 13px;
+    color: var(--slate-deep);
+    margin: 0;
+    line-height: 1.5;
+  }
+
+  .mech-note strong {
+    color: var(--onyx);
+  }
+
+  /* Footer Evidence Line */
+  .footer {
+    margin-top: 28px;
+    padding-top: 14px;
+    border-top: 1px solid var(--line-subtle);
+    font-size: 12px;
+    color: var(--slate-mist);
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 8px;
+  }
+
+  .mono {
+    font-family: var(--font-mono);
+    font-variant-numeric: tabular-nums;
+  }
+</style>
+</head>
+<body>
+<div class="page">
+  <header class="header">
+    <p class="kicker">Phase 7 Biophysics: Interactive Balanced-Circuit Bench</p>
+    <h1 class="title">The Phase-Space Slingshot</h1>
+    <p class="lede">
+      Looped transformers act as contractive balanced circuits: isotropic noise shrinks on every pass (0.27x to 0.73x), while a narrow task-aligned mode v_1 shears nearly 90 degrees into u_1 at up to 13.60x gain directly into the Coda readout aperture. Drag the unit vector to test directional selectivity, inject a Pass-1 foil, or sweep neuromodulatory conductance gamma.
+    </p>
+  </header>
+
+  <nav class="arch-bar" aria-label="Architecture selection">
+    <button type="button" class="arch-btn active" data-arch="inkling">
+      Inkling-2-Mini (K=3)
+      <span class="arch-sub">Hard somatic reset, Pass-2 peak 13.60x</span>
+    </button>
+    <button type="button" class="arch-btn" data-arch="varloop">
+      Varloop (K=1..7)
+      <span class="arch-sub">Distributed relay, Pass-3 peak 7.62x</span>
+    </button>
+    <button type="button" class="arch-btn" data-arch="huginn">
+      Huginn-0125 (K=1..8)
+      <span class="arch-sub">Continuous state + prelude recall tether</span>
+    </button>
+
+    <div class="depth-picker" id="depthPicker" aria-label="Loop depth K">
+      <span class="depth-label">Depth K</span>
+      <div id="depthButtons" style="display:flex;gap:4px;"></div>
+    </div>
+  </nav>
+
+  <main class="bench-grid">
+    <!-- Left: Interactive Physics Arena -->
+    <section class="arena-panel" aria-label="Phase-space slingshot arena">
+      <div class="arena-top">
+        <span class="arena-caption">Drag the orange unit vector (0 to 360 deg) or use Left/Right keys</span>
+        <div class="preset-row">
+          <button type="button" class="chip focal-chip active" data-angle="0">Align v_1 (0 deg)</button>
+          <button type="button" class="chip" data-angle="86.5">Q_msg Safety (86.5 deg)</button>
+          <button type="button" class="chip" data-angle="140">Off-axis (140 deg)</button>
+        </div>
+      </div>
+
+      <div class="canvas-wrap">
+        <canvas id="arena" tabindex="0" aria-label="Interactive 2D phase-space arena showing contractive isotropic cloud and non-normal slingshot trajectory"></canvas>
+      </div>
+
+      <div class="playback-bar">
+        <div class="btn-group">
+          <button type="button" class="btn primary" id="btnPlay">Play</button>
+          <button type="button" class="btn" id="btnStep">Step Pass</button>
+          <button type="button" class="btn" id="btnReset">Reset</button>
+        </div>
+        <div class="pass-strip" id="passStrip" aria-live="polite"></div>
+      </div>
+
+      <div class="legend-row">
+        <span class="legend-item"><span class="swatch focal"></span>Task vector x_in -> J x (v_1 -> u_1)</span>
+        <span class="legend-item"><span class="swatch noise"></span>Isotropic noise cloud (contractive)</span>
+        <span class="legend-item"><span class="swatch coda"></span>Coda readout aperture</span>
+        <span class="legend-item"><span class="swatch foil"></span>Pass-1 foil perturbation (beta)</span>
+      </div>
+    </section>
+
+    <!-- Right: Telemetry & Controls -->
+    <aside class="side-col">
+      <!-- Live Telemetry Well -->
+      <section class="well" aria-label="Live biophysical telemetry">
+        <div class="well-title">
+          <span>Live Telemetry</span>
+          <span class="mono" id="telArchTag">Inkling K=3</span>
+        </div>
+        <div class="telemetry-grid">
+          <div class="metric-card">
+            <div class="metric-label">Effective Gain</div>
+            <div class="metric-value focal-text" id="telGain">13.60x</div>
+            <div class="metric-sub" id="telGainSub">sigma_max 13.60 | iso 0.64x</div>
+          </div>
+          <div class="metric-card">
+            <div class="metric-label">I/O Shear Angle</div>
+            <div class="metric-value" id="telAngle">87.4 deg</div>
+            <div class="metric-sub" id="telAngleSub">cos(u_1, v_1) = 0.045</div>
+          </div>
+          <div class="metric-card">
+            <div class="metric-label">Coda Readout Acc</div>
+            <div class="metric-value positive-text" id="telAcc">70.0%</div>
+            <div class="metric-sub" id="telAccSub">gamma 1.00 | aligned</div>
+          </div>
+          <div class="metric-card">
+            <div class="metric-label">Foil Capture (beta)</div>
+            <div class="metric-value" id="telFoil">0.0%</div>
+            <div class="metric-sub" id="telFoilSub">beta_c = None | ERI +0.231</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Foil Poisoning & Somatic Reset Controls -->
+      <section class="well" aria-label="Foil poisoning and reset controls">
+        <div class="well-title">
+          <span>Foil Poisoning &amp; Reset</span>
+          <span class="mono" id="foilStatusTag">Clean</span>
+        </div>
+        <div class="control-block">
+          <div class="control-head">
+            <label for="betaSlider">Pass-1 Foil Strength (beta)</label>
+            <span class="control-val" id="betaVal">0.00</span>
+          </div>
+          <input type="range" id="betaSlider" min="0" max="1.25" step="0.05" value="0">
+          <div class="toggle-row">
+            <button type="button" class="btn focal" id="btnInjectFoil">Inject Pass-1 Foil (beta=1.00)</button>
+            <button type="button" class="btn" id="btnTether" title="Available on Huginn-0125">Cut Huginn Recall Tether</button>
+          </div>
+          <p class="control-note" id="foilNote">
+            Hard somatic reset on Inkling snaps Pass-1 foil injections cleanly back to 0.0% capture (Pass-2 foil 18.6% drops to 0.005% by Pass 3).
+          </p>
+        </div>
+      </section>
+
+      <!-- Neuromodulatory Gain Dial -->
+      <section class="well" aria-label="Neuromodulatory conductance dial">
+        <div class="well-title">
+          <span>Neuromodulatory Gain (gamma)</span>
+          <span class="mono" id="gammaPeakTag">Peak 70.0% @ 1.00</span>
+        </div>
+        <div class="control-block">
+          <div class="control-head">
+            <label for="gammaSlider">Loop Conductance Scale (gamma)</label>
+            <span class="control-val" id="gammaVal">1.00</span>
+          </div>
+          <input type="range" id="gammaSlider" min="0" max="1.5" step="0.05" value="1.0">
+          <div class="gamma-chart-wrap">
+            <canvas id="gammaChart" aria-label="Inverted-U accuracy curve across conductance gamma from 0.00 to 1.50"></canvas>
+          </div>
+          <p class="control-note" id="gammaNote">
+            Empirical inverted-U tuning on Inkling (3.3% at 0.00, 70.0% peak at 1.00, 63.3% at 1.50). Scaling gamma directly modulates slingshot gain in the arena.
+          </p>
+        </div>
+      </section>
+
+      <!-- Mechanism Reading -->
+      <section class="well" aria-label="Architecture biophysical summary">
+        <div class="well-title">
+          <span>Circuit Summary</span>
+          <span class="mono" id="fisherTag">Fisher cliff 87.9x</span>
+        </div>
+        <p class="mech-note" id="mechSummary">
+          <strong>Inkling-2-Mini (K=3):</strong> Concentrates non-normal transient amplification into Pass 2 (sigma_max = 13.60, 21.9x isotropic RMS 0.64x, I/O cos = 0.045). The 4D safety basis Q_msg sits nearly orthogonal to V_8 (84.8 to 88.2 deg, directional gain 0.95x to 1.23x), allowing rank-4 Nullbridge clamping at 0.0012 to 0.0017 nats held-out KL.
+        </p>
+      </section>
+    </aside>
+  </main>
+
+  <footer class="footer">
+    <span>Empirical source: Phase 6 Inkling-2-Mini (n=120) and Phase 7 Varloop / Huginn-0125 replication (0.00e+00 unrolled logit diff).</span>
+    <span class="mono">Dawn State / Warm Precision</span>
+  </footer>
+</div>
+
+<script>
+(function () {
+  "use strict";
+
+  // Empirical architecture specifications from Phase 6 & Phase 7 locked JSON results
+  const ARCHS = {
+    inkling: {
+      name: "Inkling-2-Mini",
+      shortTag: "Inkling",
+      depths: [3],
+      defaultK: 3,
+      resetType: "somatic",
+      qMsgRange: [84.8, 88.2],
+      qMsgGain: 1.08,
+      fisherLabel: "Fisher cliff 87.9x",
+      passes: [
+        { label: "P1", sigma: 2.85, iso: 0.166, cos: 0.0466, rayleigh: 33.1 },
+        { label: "P2", sigma: 13.60, iso: 0.639, cos: 0.0447, rayleigh: 28.7 },
+        { label: "P3", sigma: 8.39, iso: 0.628, cos: 0.1092, rayleigh: 11.7 }
+      ],
+      gammaCurve: [
+        { g: 0.00, acc: 3.3 },
+        { g: 0.25, acc: 21.7 },
+        { g: 0.50, acc: 61.7 },
+        { g: 0.75, acc: 66.7 },
+        { g: 1.00, acc: 70.0 },
+        { g: 1.25, acc: 65.0 },
+        { g: 1.50, acc: 63.3 }
+      ],
+      gammaPeakText: "Peak 70.0% @ 1.00",
+      gammaNote: "Empirical inverted-U tuning on Inkling (3.3% at 0.00, 70.0% peak at 1.00, 63.3% at 1.50). Scaling gamma directly modulates slingshot gain in the arena.",
+      foilAtBeta1: { 3: 0.0 },
+      eriByDepth: { 3: "+0.231" },
+      summary: "<strong>Inkling-2-Mini (K=3):</strong> Concentrates non-normal transient amplification into Pass 2 (sigma_max = 13.60, 21.9x isotropic RMS 0.64x, I/O cos = 0.045). The 4D safety basis Q_msg sits nearly orthogonal to V_8 (84.8 to 88.2 deg, directional gain 0.95x to 1.23x), allowing rank-4 Nullbridge clamping at 0.0012 to 0.0017 nats held-out KL."
+    },
+    varloop: {
+      name: "Varloop",
+      shortTag: "Varloop",
+      depths: [3, 5, 7],
+      defaultK: 5,
+      resetType: "distributed",
+      qMsgRange: [84.3, 88.5],
+      qMsgGain: 1.02,
+      fisherLabel: "Fisher cliff 141.7x (K=5)",
+      passes: [
+        { label: "P1", sigma: 5.21, iso: 0.270, cos: 0.0280, rayleigh: 108.7 },
+        { label: "P2", sigma: 4.47, iso: 0.281, cos: 0.0264, rayleigh: 142.6 },
+        { label: "P3", sigma: 7.62, iso: 0.451, cos: 0.0520, rayleigh: 40.7 },
+        { label: "P4", sigma: 6.06, iso: 0.387, cos: 0.0427, rayleigh: 38.5 },
+        { label: "P5", sigma: 5.95, iso: 0.371, cos: 0.0402, rayleigh: 43.0 },
+        { label: "P6", sigma: 6.00, iso: 0.372, cos: 0.0396, rayleigh: 85.1 },
+        { label: "P7", sigma: 6.30, iso: 0.383, cos: 0.0347, rayleigh: 59.0 }
+      ],
+      // Empirical K=3 (35.0%), K=5 (32.5%), K=7 (27.5%) at gamma=1.0; smooth model curve anchored at gamma=1.0
+      gammaCurveByDepth: {
+        3: [
+          { g: 0.00, acc: 24.2 }, { g: 0.25, acc: 26.5 }, { g: 0.50, acc: 30.8 },
+          { g: 0.75, acc: 33.9 }, { g: 1.00, acc: 35.0 }, { g: 1.25, acc: 32.1 }, { g: 1.50, acc: 28.4 }
+        ],
+        5: [
+          { g: 0.00, acc: 24.2 }, { g: 0.25, acc: 26.0 }, { g: 0.50, acc: 29.4 },
+          { g: 0.75, acc: 31.8 }, { g: 1.00, acc: 32.5 }, { g: 1.25, acc: 29.8 }, { g: 1.50, acc: 26.5 }
+        ],
+        7: [
+          { g: 0.00, acc: 24.2 }, { g: 0.25, acc: 25.2 }, { g: 0.50, acc: 26.8 },
+          { g: 0.75, acc: 27.6 }, { g: 1.00, acc: 27.5 }, { g: 1.25, acc: 25.9 }, { g: 1.50, acc: 23.4 }
+        ]
+      },
+      gammaPeakText: "Anchored @ 1.00 (K-dependent)",
+      gammaNote: "Varloop anchors at 35.0% (K=3), 32.5% (K=5), and 27.5% (K=7) at gamma=1.00 vs 24.2% unlooped (0000). Off-unity gamma values are illustrative conductance scaling.",
+      foilAtBeta1: { 3: 18.3, 5: 15.0, 7: 13.3 },
+      eriByDepth: { 3: "+0.013", 5: "+0.032", 7: "+0.049" },
+      summary: "<strong>Varloop (K=1..7):</strong> Variable-depth training distributes non-normal gain across passes (4.47x to 7.62x, peaking at Pass 3, 15.5x to 19.8x isotropic RMS 0.27x to 0.45x). Deeper loops strengthen somatic-reset elastic recovery (+0.013 to +0.049) and cut beta=1.0 foil capture from 18.3% (K=3) to 13.3% (K=7) with no bifurcation."
+    },
+    huginn: {
+      name: "Huginn-0125",
+      shortTag: "Huginn",
+      depths: [4, 8],
+      defaultK: 8,
+      resetType: "tether",
+      qMsgRange: [84.5, 88.0],
+      qMsgGain: 1.05,
+      fisherLabel: "84.8x loop climb, 0.77x Coda",
+      passes: [
+        { label: "S1", sigma: 7.63, iso: 0.729, cos: 0.0371, rayleigh: 63.8 },
+        { label: "S2", sigma: 4.60, iso: 0.592, cos: 0.0316, rayleigh: 54.2 },
+        { label: "S3", sigma: 4.52, iso: 0.599, cos: 0.0884, rayleigh: 16.0 },
+        { label: "S4", sigma: 5.25, iso: 0.634, cos: 0.1016, rayleigh: 10.2 },
+        { label: "S5", sigma: 5.39, iso: 0.643, cos: 0.1030, rayleigh: 10.9 },
+        { label: "S6", sigma: 5.53, iso: 0.652, cos: 0.1044, rayleigh: 11.6 },
+        { label: "S7", sigma: 5.59, iso: 0.651, cos: 0.1032, rayleigh: 11.0 },
+        { label: "S8", sigma: 5.64, iso: 0.650, cos: 0.1020, rayleigh: 10.4 }
+      ],
+      gammaCurve: [
+        { g: 0.00, acc: 1.7 },
+        { g: 0.25, acc: 5.0 },
+        { g: 0.50, acc: 13.3 },
+        { g: 0.75, acc: 41.7 },
+        { g: 1.00, acc: 40.0 },
+        { g: 1.25, acc: 16.7 },
+        { g: 1.50, acc: 11.7 }
+      ],
+      gammaPeakText: "Peak 41.7% @ 0.75",
+      gammaNote: "Empirical inverted-U adapter conductance curve on Huginn-0125 (1.7% at 0.00, 41.7% peak at 0.75, 40.0% at 1.00, 11.7% at 1.50). Cutting the recall tether collapses accuracy to 0.0%.",
+      foilAtBeta1: { 4: 10.0, 8: 11.7 },
+      eriByDepth: { 4: "-0.036", 8: "-0.049" },
+      summary: "<strong>Huginn-0125 (3.5B, K=1..8):</strong> Dense continuous recurrence replicates non-normal transient amplification (Step 1 sigma_max = 7.63, 10.5x isotropic RMS 0.73x, I/O cos = 0.037). Linear prelude recall prevents bifurcation (beta_c = None) yet leaves 10.0% to 11.7% foil capture; ablating recall collapses accuracy to 0.0% (Labovich 2026)."
+    }
+  };
+
+  // Seeded isotropic noise cloud on unit circle
+  const NOISE_COUNT = 84;
+  const noiseParticles = [];
+  for (let i = 0; i < NOISE_COUNT; i++) {
+    const a = (i / NOISE_COUNT) * Math.PI * 2 + Math.sin(i * 12.9898) * 0.04;
+    const r = 0.78 + 0.28 * ((Math.sin(i * 78.233) * 43758.5453) % 1 + 1) * 0.5;
+    noiseParticles.push({ angle: a, baseR: Math.min(1.06, Math.max(0.72, r)) });
+  }
+
+  // Application state
+  const state = {
+    arch: "inkling",
+    depthK: 3,
+    angleDeg: 0,
+    beta: 0.0,
+    gamma: 1.0,
+    tetherCut: false,
+    playing: true,
+    passIndex: 0,      // 0 .. depthK (depthK = Coda readout)
+    passProgress: 0.0, // 0 .. 1 interpolation within current pass
+    dragging: false,
+    lastTime: 0
+  };
+
+  // DOM references
+  const arenaCanvas = document.getElementById("arena");
+  const arenaCtx = arenaCanvas.getContext("2d");
+  const gammaCanvas = document.getElementById("gammaChart");
+  const gammaCtx = gammaCanvas.getContext("2d");
+
+  const archBtns = document.querySelectorAll(".arch-btn");
+  const depthPicker = document.getElementById("depthPicker");
+  const depthButtons = document.getElementById("depthButtons");
+  const presetChips = document.querySelectorAll(".chip[data-angle]");
+
+  const btnPlay = document.getElementById("btnPlay");
+  const btnStep = document.getElementById("btnStep");
+  const btnReset = document.getElementById("btnReset");
+  const passStrip = document.getElementById("passStrip");
+
+  const betaSlider = document.getElementById("betaSlider");
+  const betaVal = document.getElementById("betaVal");
+  const btnInjectFoil = document.getElementById("btnInjectFoil");
+  const btnTether = document.getElementById("btnTether");
+  const foilStatusTag = document.getElementById("foilStatusTag");
+  const foilNote = document.getElementById("foilNote");
+
+  const gammaSlider = document.getElementById("gammaSlider");
+  const gammaVal = document.getElementById("gammaVal");
+  const gammaPeakTag = document.getElementById("gammaPeakTag");
+  const gammaNote = document.getElementById("gammaNote");
+
+  const telArchTag = document.getElementById("telArchTag");
+  const telGain = document.getElementById("telGain");
+  const telGainSub = document.getElementById("telGainSub");
+  const telAngle = document.getElementById("telAngle");
+  const telAngleSub = document.getElementById("telAngleSub");
+  const telAcc = document.getElementById("telAcc");
+  const telAccSub = document.getElementById("telAccSub");
+  const telFoil = document.getElementById("telFoil");
+  const telFoilSub = document.getElementById("telFoilSub");
+  const fisherTag = document.getElementById("fisherTag");
+  const mechSummary = document.getElementById("mechSummary");
+
+  // Palette constants
+  const COL = {
+    ivory: "#FFFFF0",
+    parchment: "#F5EEDC",
+    onyx: "#0F0F0F",
+    blueSlate: "#2C3E50",
+    slateDeep: "#1E3447",
+    slateMist: "#808B90",
+    sageGreen: "#87A96B",
+    sageDeep: "#5F7F4A",
+    goldenOrange: "#F39C12",
+    copperDeep: "#96590A"
+  };
+
+  // Utility: interpolate empirical gamma curve
+  function getGammaCurve() {
+    const cfg = ARCHS[state.arch];
+    if (cfg.gammaCurveByDepth) {
+      return cfg.gammaCurveByDepth[state.depthK] || cfg.gammaCurveByDepth[5];
+    }
+    return cfg.gammaCurve;
+  }
+
+  function evalGammaAcc(g) {
+    if (state.arch === "huginn" && state.tetherCut) return 0.0;
+    const pts = getGammaCurve();
+    if (g <= pts[0].g) return pts[0].acc;
+    if (g >= pts[pts.length - 1].g) return pts[pts.length - 1].acc;
+    for (let i = 0; i < pts.length - 1; i++) {
+      if (g >= pts[i].g && g <= pts[i + 1].g) {
+        const t = (g - pts[i].g) / (pts[i + 1].g - pts[i].g);
+        return pts[i].acc + t * (pts[i + 1].acc - pts[i].acc);
+      }
+    }
+    return pts[pts.length - 1].acc;
+  }
+
+  // Normalized conductance gain multiplier for arena physics
+  function getGammaPhysicsScale() {
+    if (state.arch === "huginn" && state.tetherCut) return 0.14;
+    const pts = getGammaCurve();
+    const maxAcc = Math.max(...pts.map((p) => p.acc));
+    const curAcc = evalGammaAcc(state.gamma);
+    // Smooth physical coupling: low gamma collapses gain, over-drive saturates/tilts
+    const ratio = maxAcc > 0 ? curAcc / maxAcc : 0;
+    return 0.15 + 0.85 * ratio;
+  }
+
+  // Get active pass data for current pass index (clamped to 0..K-1)
+  function getPassData(idx) {
+    const cfg = ARCHS[state.arch];
+    const clamped = Math.max(0, Math.min(state.depthK - 1, idx));
+    return cfg.passes[clamped];
+  }
+
+  // Get peak pass data across current depthK
+  function getPeakPass() {
+    const cfg = ARCHS[state.arch];
+    let best = cfg.passes[0];
+    for (let i = 1; i < state.depthK; i++) {
+      if (cfg.passes[i].sigma > best.sigma) best = cfg.passes[i];
+    }
+    return best;
+  }
+
+  // Compute directional non-normal map for unit vector at angleDeg on pass idx
+  function computeVectorMap(angleDeg, passIdx) {
+    const p = getPassData(passIdx);
+    const rad = (angleDeg * Math.PI) / 180;
+    const ux = Math.cos(rad);
+    const uy = Math.sin(rad);
+
+    // Alignment with dominant input singular mode v_1 = (1, 0)
+    const align = Math.cos(rad);
+    const absAlign = Math.abs(align);
+    const ortho = Math.sin(rad);
+
+    // Output singular direction u_1 sits at arccos(cos_io) ~ 84..88.5 deg
+    const ioAngleRad = Math.acos(Math.min(0.99, Math.max(-0.99, p.cos)));
+    const u1x = Math.cos(ioAngleRad);
+    const u1y = Math.sin(ioAngleRad);
+
+    // Sharp non-normal selectivity around v_1 (power 3 captures narrow top-1 singular cone)
+    const selectivity = Math.pow(absAlign, 2.6);
+    const gammaScale = getGammaPhysicsScale();
+
+    // Effective amplification along u_1 vs isotropic contraction
+    const nonNormalAmp = align * selectivity * p.sigma * gammaScale;
+    const isoScale = p.iso * (0.75 + 0.25 * gammaScale);
+
+    // Output vector in phase space
+    let outX = nonNormalAmp * u1x + isoScale * ux;
+    let outY = nonNormalAmp * u1y + isoScale * uy;
+
+    // If tether cut on Huginn, state drifts off-aperture and damps
+    if (state.arch === "huginn" && state.tetherCut) {
+      const rot = 0.72;
+      const rx = outX * Math.cos(rot) - outY * Math.sin(rot);
+      const ry = outX * Math.sin(rot) + outY * Math.cos(rot);
+      outX = rx * 0.42;
+      outY = ry * 0.42;
+    }
+
+    const gain = Math.hypot(outX, outY);
+    const outAngleRad = Math.atan2(outY, outX);
+
+    // Check if inside Q_msg safety wedge (84..89 deg or 264..269 deg)
+    const normDeg = ((angleDeg % 180) + 180) % 180;
+    const cfg = ARCHS[state.arch];
+    const inQmsg = normDeg >= cfg.qMsgRange[0] - 2.0 && normDeg <= cfg.qMsgRange[1] + 2.0;
+
+    return {
+      inX: ux,
+      inY: uy,
+      outX: outX,
+      outY: outY,
+      gain: gain,
+      outAngleRad: outAngleRad,
+      ioAngleDeg: (ioAngleRad * 180) / Math.PI,
+      selectivity: selectivity,
+      inQmsg: inQmsg,
+      pass: p
+    };
+  }
+
+  // Compute foil capture % and residual foil amplitude at current pass
+  function computeFoilState(passIdx) {
+    const cfg = ARCHS[state.arch];
+    const b = state.beta;
+    if (b <= 0.001) {
+      return { capturePct: 0.0, residualAmp: 0.0, label: "Clean" };
+    }
+    const baseCap1 = cfg.foilAtBeta1[state.depthK] ?? 0.0;
+    const capturePct = baseCap1 * Math.min(1.25, b);
+
+    // Visual foil amplitude across passes
+    let residualAmp = 0;
+    if (state.arch === "inkling") {
+      // Pass 1: injected; Pass 2: 18.6% foil prob; Pass 3+: hard somatic reset snaps to ~0
+      if (passIdx === 0) residualAmp = b * 1.15;
+      else if (passIdx === 1) residualAmp = b * 0.65;
+      else residualAmp = 0.03;
+    } else if (state.arch === "varloop") {
+      // Deeper loops heal more strongly
+      const decay = Math.pow(0.72, passIdx);
+      residualAmp = b * (0.18 + 0.95 * decay);
+    } else {
+      // Huginn: linear prelude recall prevents bifurcation, leaves persistent ~10-12% residual
+      if (state.tetherCut) {
+        residualAmp = b * (1.2 + 0.25 * passIdx);
+      } else {
+        residualAmp = b * (0.38 + 0.55 * Math.pow(0.78, passIdx));
+      }
+    }
+
+    return {
+      capturePct: state.arch === "huginn" && state.tetherCut ? 0.0 : capturePct,
+      residualAmp: residualAmp,
+      label: "beta=" + b.toFixed(2)
+    };
+  }
+
+  // Build pass indicator pills
+  function rebuildPassStrip() {
+    const cfg = ARCHS[state.arch];
+    passStrip.innerHTML = "";
+    for (let i = 0; i < state.depthK; i++) {
+      const span = document.createElement("span");
+      span.className = "pass-pill";
+      span.textContent = cfg.passes[i].label;
+      span.dataset.idx = String(i);
+      passStrip.appendChild(span);
+    }
+    const coda = document.createElement("span");
+    coda.className = "pass-pill";
+    coda.textContent = "Coda";
+    coda.dataset.idx = String(state.depthK);
+    passStrip.appendChild(coda);
+    updatePassStripClasses();
+  }
+
+  function updatePassStripClasses() {
+    const pills = passStrip.querySelectorAll(".pass-pill");
+    pills.forEach((pill) => {
+      const idx = Number(pill.dataset.idx);
+      pill.classList.remove("done", "current", "coda-active");
+      if (idx < state.passIndex) {
+        pill.classList.add("done");
+      } else if (idx === state.passIndex) {
+        if (idx === state.depthK) pill.classList.add("coda-active");
+        else pill.classList.add("current");
+      }
+    });
+  }
+
+  // Build depth selector buttons
+  function rebuildDepthPicker() {
+    const cfg = ARCHS[state.arch];
+    if (cfg.depths.length <= 1) {
+      depthPicker.classList.remove("visible");
+      return;
+    }
+    depthPicker.classList.add("visible");
+    depthButtons.innerHTML = "";
+    cfg.depths.forEach((k) => {
+      const btn = document.createElement("button");
+      btn.type = "button";
+      btn.className = "chip" + (k === state.depthK ? " active" : "");
+      btn.textContent = "K=" + k;
+      btn.addEventListener("click", () => {
+        state.depthK = k;
+        state.passIndex = 0;
+        state.passProgress = 0;
+        rebuildDepthPicker();
+        rebuildPassStrip();
+        updateUI();
+      });
+      depthButtons.appendChild(btn);
+    });
+  }
+
+  // Update all telemetry cards and control notes
+  function updateUI() {
+    const cfg = ARCHS[state.arch];
+    const activePassIdx = Math.min(state.passIndex, state.depthK - 1);
+    const vec = computeVectorMap(state.angleDeg, activePassIdx);
+    const foil = computeFoilState(activePassIdx);
+
+    telArchTag.textContent = cfg.shortTag + " K=" + state.depthK;
+    telGain.textContent = vec.gain.toFixed(2) + "x";
+    telGainSub.textContent =
+      "sigma_max " + vec.pass.sigma.toFixed(2) + " | iso " + vec.pass.iso.toFixed(2) + "x";
+
+    telAngle.textContent = vec.ioAngleDeg.toFixed(1) + " deg";
+    telAngleSub.textContent = "cos(u_1, v_1) = " + vec.pass.cos.toFixed(3);
+
+    // Effective readout accuracy scales with alignment into Coda aperture & gamma & foil
+    const baseAcc = evalGammaAcc(state.gamma);
+    const alignFactor = 0.12 + 0.88 * vec.selectivity;
+    const foilPenalty = state.arch === "inkling" ? 0 : foil.capturePct * 0.35;
+    const effAcc =
+      state.arch === "huginn" && state.tetherCut
+        ? 0.0
+        : Math.max(0, baseAcc * alignFactor - foilPenalty);
+
+    telAcc.textContent = effAcc.toFixed(1) + "%";
+    if (state.arch === "huginn" && state.tetherCut) {
+      telAcc.className = "metric-value focal-text";
+      telAccSub.textContent = "Recall tether cut (Labovich 2026)";
+    } else if (vec.inQmsg) {
+      telAcc.className = "metric-value";
+      telAccSub.textContent = "Q_msg safety wedge: damped";
+    } else if (vec.selectivity > 0.65) {
+      telAcc.className = "metric-value positive-text";
+      telAccSub.textContent = "gamma " + state.gamma.toFixed(2) + " | Coda aperture hit";
+    } else {
+      telAcc.className = "metric-value";
+      telAccSub.textContent = "Off-axis (" + Math.round(state.angleDeg) + " deg): contractive";
+    }
+
+    // Foil card
+    if (state.arch === "huginn" && state.tetherCut) {
+      telFoil.textContent = "Collapsed";
+      telFoil.className = "metric-value focal-text";
+      telFoilSub.textContent = "Recall main effect +12.01 nats lost";
+    } else {
+      telFoil.textContent = foil.capturePct.toFixed(1) + "%";
+      telFoil.className =
+        foil.capturePct === 0 ? "metric-value positive-text" : "metric-value focal-text";
+      const eri = cfg.eriByDepth[state.depthK] || "+0.000";
+      telFoilSub.textContent = "beta_c = None | ERI " + eri;
+    }
+
+    // Controls labels
+    betaVal.textContent = state.beta.toFixed(2);
+    foilStatusTag.textContent =
+      state.arch === "huginn" && state.tetherCut
+        ? "Tether Cut"
+        : state.beta > 0
+        ? "Foil beta=" + state.beta.toFixed(2)
+        : "Clean";
+
+    if (state.arch === "inkling") {
+      foilNote.textContent =
+        "Hard somatic reset on Inkling snaps Pass-1 foil injections cleanly back to 0.0% capture (Pass-2 foil 18.6% drops to 0.005% by Pass 3).";
+    } else if (state.arch === "varloop") {
+      foilNote.textContent =
+        "Varloop heals more strongly with loop depth: beta=1.0 foil capture falls 18.3% (K=3) to 15.0% (K=5) to 13.3% (K=7) with beta_c = None.";
+    } else {
+      foilNote.textContent = state.tetherCut
+        ? "Prelude recall tether cut: Huginn accuracy collapses straight to 0.0% regardless of loop depth, confirming Labovich (2026)."
+        : "Linear prelude recall tether prevents bifurcation (beta_c = None) yet leaves 10.0% to 11.7% foil capture. Toggle Cut Recall Tether to test ablation.";
+    }
+
+    // Tether button state
+    if (state.arch === "huginn") {
+      btnTether.disabled = false;
+      btnTether.textContent = state.tetherCut
+        ? "Restore Huginn Recall Tether"
+        : "Cut Huginn Recall Tether";
+      btnTether.classList.toggle("active-danger", state.tetherCut);
+    } else {
+      btnTether.disabled = true;
+      btnTether.textContent = "Cut Huginn Recall Tether (Huginn only)";
+      btnTether.classList.remove("active-danger");
+    }
+
+    // Gamma notes
+    gammaVal.textContent = state.gamma.toFixed(2);
+    gammaPeakTag.textContent = cfg.gammaPeakText;
+    gammaNote.textContent = cfg.gammaNote;
+
+    // Summary
+    fisherTag.textContent = cfg.fisherLabel;
+    mechSummary.innerHTML = cfg.summary;
+
+    // Preset chips highlight
+    presetChips.forEach((chip) => {
+      const a = Number(chip.dataset.angle);
+      const diff = Math.abs((((state.angleDeg - a + 540) % 360) - 180));
+      chip.classList.toggle("active", diff < 3.5);
+    });
+
+    updatePassStripClasses();
+    drawGammaChart();
+  }
+
+  // Draw the inverted-U neuromodulatory conductance chart
+  function drawGammaChart() {
+    const dpr = window.devicePixelRatio || 1;
+    const rect = gammaCanvas.getBoundingClientRect();
+    if (rect.width < 10) return;
+    gammaCanvas.width = Math.round(rect.width * dpr);
+    gammaCanvas.height = Math.round(rect.height * dpr);
+
+    const ctx = gammaCtx;
+    ctx.save();
+    ctx.scale(dpr, dpr);
+
+    const W = rect.width;
+    const H = rect.height;
+    const pad = { l: 38, r: 16, t: 16, b: 26 };
+    const pw = W - pad.l - pad.r;
+    const ph = H - pad.t - pad.b;
+
+    ctx.fillStyle = COL.ivory;
+    ctx.fillRect(0, 0, W, H);
+
+    const pts = getGammaCurve();
+    const maxY = state.arch === "inkling" ? 80 : 50;
+
+    const xOf = (g) => pad.l + (g / 1.5) * pw;
+    const yOf = (acc) => pad.t + ph - (Math.min(maxY, acc) / maxY) * ph;
+
+    // Horizontal grid lines
+    ctx.strokeStyle = "rgba(44, 62, 80, 0.14)";
+    ctx.lineWidth = 1;
+    const yTicks = state.arch === "inkling" ? [0, 40, 80] : [0, 25, 50];
+    ctx.font = "11px " + getComputedStyle(document.body).fontFamily;
+    ctx.fillStyle = COL.slateMist;
+    ctx.textAlign = "right";
+    ctx.textBaseline = "middle";
+
+    yTicks.forEach((yv) => {
+      const yy = yOf(yv);
+      ctx.beginPath();
+      ctx.moveTo(pad.l, yy);
+      ctx.lineTo(W - pad.r, yy);
+      ctx.stroke();
+      ctx.fillText(yv + "%", pad.l - 6, yy);
+    });
+
+    // X ticks
+    ctx.textAlign = "center";
+    ctx.textBaseline = "top";
+    [0.0, 0.5, 0.75, 1.0, 1.5].forEach((gv) => {
+      const xx = xOf(gv);
+      ctx.fillText(gv.toFixed(gv === 0.75 ? 2 : 1), xx, H - pad.b + 6);
+    });
+
+    // Axes
+    ctx.strokeStyle = COL.blueSlate;
+    ctx.lineWidth = 1.5;
+    ctx.beginPath();
+    ctx.moveTo(pad.l, pad.t);
+    ctx.lineTo(pad.l, pad.t + ph);
+    ctx.lineTo(W - pad.r, pad.t + ph);
+    ctx.stroke();
+
+    // Curve line
+    ctx.strokeStyle = state.arch === "huginn" && state.tetherCut ? COL.slateMist : COL.blueSlate;
+    ctx.lineWidth = 2.2;
+    ctx.beginPath();
+    pts.forEach((p, idx) => {
+      const xx = xOf(p.g);
+      const yy = yOf(state.arch === "huginn" && state.tetherCut ? 0 : p.acc);
+      if (idx === 0) ctx.moveTo(xx, yy);
+      else ctx.lineTo(xx, yy);
+    });
+    ctx.stroke();
+
+    // Data dots
+    pts.forEach((p) => {
+      const xx = xOf(p.g);
+      const yy = yOf(state.arch === "huginn" && state.tetherCut ? 0 : p.acc);
+      ctx.beginPath();
+      ctx.arc(xx, yy, 3, 0, Math.PI * 2);
+      ctx.fillStyle = COL.ivory;
+      ctx.fill();
+      ctx.lineWidth = 1.6;
+      ctx.strokeStyle = COL.blueSlate;
+      ctx.stroke();
+    });
+
+    // Current gamma marker (focal Golden Orange with Blue Slate outline)
+    const curAcc = evalGammaAcc(state.gamma);
+    const cx = xOf(state.gamma);
+    const cy = yOf(curAcc);
+
+    ctx.strokeStyle = "rgba(44, 62, 80, 0.32)";
+    ctx.lineWidth = 1;
+    ctx.setLineDash([3, 3]);
+    ctx.beginPath();
+    ctx.moveTo(cx, pad.t);
+    ctx.lineTo(cx, pad.t + ph);
+    ctx.stroke();
+    ctx.setLineDash([]);
+
+    ctx.beginPath();
+    ctx.arc(cx, cy, 5.5, 0, Math.PI * 2);
+    ctx.fillStyle = COL.goldenOrange;
+    ctx.fill();
+    ctx.lineWidth = 2;
+    ctx.strokeStyle = COL.blueSlate;
+    ctx.stroke();
+
+    // Direct label for active point
+    ctx.font = "600 11px ui-monospace, SFMono-Regular, Menlo, monospace";
+    ctx.fillStyle = COL.copperDeep;
+    ctx.textAlign = cx > W * 0.72 ? "right" : "left";
+    ctx.textBaseline = "bottom";
+    ctx.fillText(curAcc.toFixed(1) + "%", cx + (cx > W * 0.72 ? -8 : 8), Math.max(pad.t + 12, cy - 5));
+
+    ctx.restore();
+  }
+
+  // Helper: map mathematical phase-space radius r to canvas pixels (log-compressed above r=1.5 so 13.6x fits cleanly)
+  function mapRadius(r, unitPx, maxPx) {
+    if (r <= 1.2) {
+      return r * unitPx;
+    }
+    // Smooth logarithmic expansion from 1.2 up to 14.5
+    const extra = Math.log(1 + (r - 1.2) * 0.85) / Math.log(1 + (14.5 - 1.2) * 0.85);
+    return 1.2 * unitPx + extra * (maxPx - 1.2 * unitPx);
+  }
+
+  // Draw arrow helper
+  function drawArrow(ctx, x1, y1, x2, y2, color, width, headLen, outlineColor) {
+    const dx = x2 - x1;
+    const dy = y2 - y1;
+    const len = Math.hypot(dx, dy);
+    if (len < 2) return;
+    const ang = Math.atan2(dy, dx);
+
+    if (outlineColor) {
+      ctx.save();
+      ctx.strokeStyle = outlineColor;
+      ctx.lineWidth = width + 3.2;
+      ctx.lineCap = "round";
+      ctx.beginPath();
+      ctx.moveTo(x1, y1);
+      ctx.lineTo(x2, y2);
+      ctx.stroke();
+      ctx.restore();
+    }
+
+    ctx.save();
+    ctx.strokeStyle = color;
+    ctx.fillStyle = color;
+    ctx.lineWidth = width;
+    ctx.lineCap = "round";
+    ctx.beginPath();
+    ctx.moveTo(x1, y1);
+    ctx.lineTo(x2, y2);
+    ctx.stroke();
+
+    // Arrowhead
+    ctx.beginPath();
+    ctx.moveTo(x2, y2);
+    ctx.lineTo(x2 - headLen * Math.cos(ang - 0.38), y2 - headLen * Math.sin(ang - 0.38));
+    ctx.lineTo(x2 - headLen * Math.cos(ang + 0.38), y2 - headLen * Math.sin(ang + 0.38));
+    ctx.closePath();
+    ctx.fill();
+    if (outlineColor) {
+      ctx.strokeStyle = outlineColor;
+      ctx.lineWidth = 1.6;
+      ctx.stroke();
+    }
+    ctx.restore();
+  }
+
+  // Main Arena Renderer
+  let arenaGeom = { cx: 0, cy: 0, unitPx: 80, maxPx: 180 };
+
+  function renderArena() {
+    const dpr = window.devicePixelRatio || 1;
+    const rect = arenaCanvas.getBoundingClientRect();
+    if (rect.width < 10) return;
+
+    const targetW = Math.round(rect.width * dpr);
+    const targetH = Math.round(rect.height * dpr);
+    if (arenaCanvas.width !== targetW || arenaCanvas.height !== targetH) {
+      arenaCanvas.width = targetW;
+      arenaCanvas.height = targetH;
+    }
+
+    const ctx = arenaCtx;
+    ctx.save();
+    ctx.scale(dpr, dpr);
+
+    const W = rect.width;
+    const H = rect.height;
+    const cx = W * 0.48;
+    const cy = H * 0.56;
+    const maxPx = Math.min(W * 0.44, H * 0.47);
+    const unitPx = maxPx * 0.39;
+    arenaGeom = { cx, cy, unitPx, maxPx };
+
+    // Canvas background (Ivory)
+    ctx.fillStyle = COL.ivory;
+    ctx.fillRect(0, 0, W, H);
+
+    const cfg = ARCHS[state.arch];
+    const activePassIdx = Math.min(state.passIndex, state.depthK - 1);
+    const inCoda = state.passIndex === state.depthK;
+    const t = inCoda ? 1.0 : state.passProgress;
+    // Ease-out cubic for crisp physical slingshot sweep
+    const easeT = 1 - Math.pow(1 - t, 3);
+
+    const vec = computeVectorMap(state.angleDeg, activePassIdx);
+    const peakPass = getPeakPass();
+    const foil = computeFoilState(activePassIdx);
+
+    // Coordinate transform: math (x right, y up) -> canvas (cx + x, cy - y)
+    const toCanvas = (mx, my) => {
+      const r = Math.hypot(mx, my);
+      if (r < 1e-6) return { x: cx, y: cy };
+      const px = mapRadius(r, unitPx, maxPx);
+      return {
+        x: cx + (mx / r) * px,
+        y: cy - (my / r) * px
+      };
+    };
+
+    // 1. Subtle non-normal shear field streamlines (background context)
+    ctx.save();
+    ctx.strokeStyle = "rgba(128, 139, 144, 0.22)";
+    ctx.lineWidth = 1;
+    for (let ring = 0; ring < 3; ring++) {
+      const rStart = 0.55 + ring * 0.32;
+      for (let k = 0; k < 16; k++) {
+        const a = (k / 16) * Math.PI * 2;
+        const p0 = toCanvas(rStart * Math.cos(a), rStart * Math.sin(a));
+        const shear = Math.cos(a) * Math.pow(Math.abs(Math.cos(a)), 2) * 0.36;
+        const p1 = toCanvas(
+          rStart * 0.88 * Math.cos(a),
+          rStart * 0.88 * Math.sin(a) + shear
+        );
+        ctx.beginPath();
+        ctx.moveTo(p0.x, p0.y);
+        ctx.lineTo(p1.x, p1.y);
+        ctx.stroke();
+      }
+    }
+    ctx.restore();
+
+    // 2. Concentric reference rings: contractive zone, unit circle ||x||=1, and sigma_max ring
+    const sigmaPx = mapRadius(vec.pass.sigma, unitPx, maxPx);
+    const isoPx = mapRadius(vec.pass.iso, unitPx, maxPx);
+
+    // Contractive interior tint
+    ctx.save();
+    ctx.beginPath();
+    ctx.arc(cx, cy, isoPx, 0, Math.PI * 2);
+    ctx.fillStyle = "rgba(128, 139, 144, 0.08)";
+    ctx.fill();
+    ctx.strokeStyle = "rgba(128, 139, 144, 0.45)";
+    ctx.lineWidth = 1;
+    ctx.setLineDash([4, 4]);
+    ctx.stroke();
+    ctx.setLineDash([]);
+    ctx.restore();
+
+    // Unit circle ||x|| = 1
+    ctx.save();
+    ctx.beginPath();
+    ctx.arc(cx, cy, unitPx, 0, Math.PI * 2);
+    ctx.strokeStyle = COL.blueSlate;
+    ctx.lineWidth = 1.6;
+    ctx.stroke();
+
+    // Outer sigma_max reference ring
+    ctx.beginPath();
+    ctx.arc(cx, cy, sigmaPx, 0, Math.PI * 2);
+    ctx.strokeStyle = "rgba(44, 62, 80, 0.22)";
+    ctx.lineWidth = 1;
+    ctx.setLineDash([3, 5]);
+    ctx.stroke();
+    ctx.setLineDash([]);
+    ctx.restore();
+
+    // Crosshairs for v_1 (0 deg) and orthogonal axis (90 deg)
+    ctx.save();
+    ctx.strokeStyle = "rgba(44, 62, 80, 0.16)";
+    ctx.lineWidth = 1;
+    ctx.beginPath();
+    ctx.moveTo(cx - maxPx * 1.04, cy);
+    ctx.lineTo(cx + maxPx * 1.04, cy);
+    ctx.moveTo(cx, cy - maxPx * 1.04);
+    ctx.lineTo(cx, cy + maxPx * 0.88);
+    ctx.stroke();
+    ctx.restore();
+
+    // 3. Q_msg Safety Subspace Wedge (84.8..88.2 deg)
+    const qStart = -(cfg.qMsgRange[1] * Math.PI) / 180;
+    const qEnd = -(cfg.qMsgRange[0] * Math.PI) / 180;
+    ctx.save();
+    ctx.beginPath();
+    ctx.moveTo(cx, cy);
+    ctx.arc(cx, cy, unitPx * 1.32, qStart - 0.05, qEnd + 0.05);
+    ctx.closePath();
+    ctx.fillStyle = "rgba(44, 62, 80, 0.11)";
+    ctx.fill();
+    ctx.strokeStyle = "rgba(44, 62, 80, 0.42)";
+    ctx.lineWidth = 1;
+    ctx.stroke();
+
+    ctx.font = "600 11px " + getComputedStyle(document.body).fontFamily;
+    ctx.fillStyle = COL.slateDeep;
+    ctx.textAlign = "right";
+    ctx.textBaseline = "bottom";
+    ctx.fillText(
+      "Q_msg safety (" + cfg.qMsgRange[0].toFixed(1) + "-" + cfg.qMsgRange[1].toFixed(1) + " deg)",
+      cx - 10,
+      cy - unitPx * 1.18
+    );
+    ctx.restore();
+
+    // 4. Coda Readout Aperture centered around u_1 direction (~87 deg)
+    const ioRad = Math.acos(Math.min(0.99, Math.max(-0.99, vec.pass.cos)));
+    const apertureR = mapRadius(Math.max(3.6, peakPass.sigma * 0.72), unitPx, maxPx);
+    const apStart = -(ioRad + 0.24);
+    const apEnd = -(ioRad - 0.24);
+
+    // Check if slingshot trajectory enters aperture
+    const outDistPx = mapRadius(vec.gain, unitPx, maxPx);
+    const angleDiffToU1 = Math.abs(Math.atan2(Math.sin(vec.outAngleRad - ioRad), Math.cos(vec.outAngleRad - ioRad)));
+    const hitsAperture =
+      !(state.arch === "huginn" && state.tetherCut) &&
+      vec.gain >= 2.2 &&
+      angleDiffToU1 < 0.34 &&
+      easeT > 0.55;
+
+    ctx.save();
+    ctx.beginPath();
+    ctx.arc(cx, cy, apertureR, apStart, apEnd);
+    ctx.strokeStyle = hitsAperture ? COL.sageGreen : "rgba(135, 169, 107, 0.55)";
+    ctx.lineWidth = hitsAperture ? 12 : 8;
+    ctx.lineCap = "round";
+    ctx.stroke();
+
+    ctx.beginPath();
+    ctx.arc(cx, cy, apertureR, apStart, apEnd);
+    ctx.strokeStyle = hitsAperture ? COL.blueSlate : COL.sageDeep;
+    ctx.lineWidth = 1.6;
+    ctx.stroke();
+
+    // Aperture label
+    const apLabelX = cx + Math.cos(ioRad - 0.32) * (apertureR + 18);
+    const apLabelY = cy - Math.sin(ioRad - 0.32) * (apertureR + 18);
+    ctx.font = "600 12px " + getComputedStyle(document.body).fontFamily;
+    ctx.fillStyle = COL.sageDeep;
+    ctx.textAlign = "left";
+    ctx.textBaseline = "middle";
+    ctx.fillText("Coda readout aperture (u_1)", apLabelX, apLabelY);
+    ctx.restore();
+
+    // 5. Huginn Prelude Recall Tether (only on Huginn)
+    if (state.arch === "huginn") {
+      const anchorX = cx - maxPx * 0.82;
+      const anchorY = cy + maxPx * 0.52;
+      const curStateX = vec.inX + (vec.outX - vec.inX) * easeT;
+      const curStateY = vec.inY + (vec.outY - vec.inY) * easeT;
+      const tipPt = toCanvas(curStateX, curStateY);
+
+      ctx.save();
+      if (state.tetherCut) {
+        ctx.strokeStyle = COL.copperDeep;
+        ctx.lineWidth = 2;
+        ctx.setLineDash([5, 5]);
+        const midX = (anchorX + tipPt.x) * 0.45;
+        const midY = (anchorY + tipPt.y) * 0.45;
+        ctx.beginPath();
+        ctx.moveTo(anchorX, anchorY);
+        ctx.lineTo(midX, midY);
+        ctx.stroke();
+        ctx.setLineDash([]);
+        ctx.font = "600 11px " + getComputedStyle(document.body).fontFamily;
+        ctx.fillStyle = COL.copperDeep;
+        ctx.textAlign = "left";
+        ctx.fillText("Recall tether CUT (0.0% acc)", anchorX, anchorY + 18);
+      } else {
+        ctx.strokeStyle = COL.sageDeep;
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        ctx.moveTo(anchorX, anchorY);
+        ctx.lineTo(tipPt.x, tipPt.y);
+        ctx.stroke();
+        ctx.font = "600 11px " + getComputedStyle(document.body).fontFamily;
+        ctx.fillStyle = COL.sageDeep;
+        ctx.textAlign = "left";
+        ctx.fillText("Prelude recall tether (active)", anchorX, anchorY + 18);
+      }
+      // Anchor node
+      ctx.beginPath();
+      ctx.arc(anchorX, anchorY, 6, 0, Math.PI * 2);
+      ctx.fillStyle = state.tetherCut ? COL.parchment : COL.sageGreen;
+      ctx.fill();
+      ctx.lineWidth = 2;
+      ctx.strokeStyle = COL.blueSlate;
+      ctx.stroke();
+      ctx.restore();
+    }
+
+    // 6. Contractive Isotropic Noise Cloud (Slate Mist)
+    // Shrinks smoothly from unit radius down to iso_rms on every pass
+    const noiseScale = 1.0 - (1.0 - vec.pass.iso) * easeT;
+    ctx.save();
+    for (let i = 0; i < noiseParticles.length; i++) {
+      const np = noiseParticles[i];
+      const rNow = np.baseR * noiseScale;
+      const pt = toCanvas(rNow * Math.cos(np.angle), rNow * Math.sin(np.angle));
+      ctx.beginPath();
+      ctx.arc(pt.x, pt.y, 2.5, 0, Math.PI * 2);
+      ctx.fillStyle = "rgba(128, 139, 144, 0.72)";
+      ctx.fill();
+    }
+    ctx.restore();
+
+    // 7. Pass-1 Foil Perturbation Vector (if beta > 0)
+    if (state.beta > 0.01) {
+      const foilAngle = (212 * Math.PI) / 180;
+      const foilR = foil.residualAmp * (0.4 + 0.6 * easeT);
+      const foilPt = toCanvas(foilR * Math.cos(foilAngle), foilR * Math.sin(foilAngle));
+
+      ctx.save();
+      ctx.strokeStyle = COL.copperDeep;
+      ctx.lineWidth = 2.2;
+      ctx.setLineDash([5, 4]);
+      ctx.beginPath();
+      ctx.moveTo(cx, cy);
+      ctx.lineTo(foilPt.x, foilPt.y);
+      ctx.stroke();
+      ctx.setLineDash([]);
+
+      ctx.beginPath();
+      ctx.arc(foilPt.x, foilPt.y, 5, 0, Math.PI * 2);
+      ctx.fillStyle = COL.ivory;
+      ctx.fill();
+      ctx.lineWidth = 2;
+      ctx.strokeStyle = COL.copperDeep;
+      ctx.stroke();
+
+      ctx.font = "600 11px ui-monospace, SFMono-Regular, Menlo, monospace";
+      ctx.fillStyle = COL.copperDeep;
+      ctx.textAlign = "right";
+      ctx.fillText(
+        state.arch === "inkling" && activePassIdx >= 2
+          ? "Foil snapped to 0.0%"
+          : "Foil (" + foil.capturePct.toFixed(1) + "% cap)",
+        foilPt.x - 8,
+        foilPt.y + 4
+      );
+      ctx.restore();
+    }
+
+    // 8. Curved Slingshot Trajectory Arc (input x_in -> amplified output J x)
+    const inPt = toCanvas(vec.inX, vec.inY);
+    const outPt = toCanvas(vec.outX, vec.outY);
+
+    // Interpolated current tip along curved slingshot path
+    const ctrlX = cx + (inPt.x - cx) * 0.55 + (outPt.x - cx) * 0.35;
+    const ctrlY = cy + (inPt.y - cy) * 0.55 + (outPt.y - cy) * 0.35;
+
+    const quadPt = (s) => {
+      const inv = 1 - s;
+      return {
+        x: inv * inv * inPt.x + 2 * inv * s * ctrlX + s * s * outPt.x,
+        y: inv * inv * inPt.y + 2 * inv * s * ctrlY + s * s * outPt.y
+      };
+    };
+
+    const curTip = quadPt(easeT);
+
+    // Draw trajectory trace
+    ctx.save();
+    ctx.strokeStyle = COL.blueSlate;
+    ctx.lineWidth = 2.2;
+    ctx.setLineDash([4, 4]);
+    ctx.beginPath();
+    ctx.moveTo(inPt.x, inPt.y);
+    for (let s = 0.04; s <= easeT; s += 0.04) {
+      const qp = quadPt(s);
+      ctx.lineTo(qp.x, qp.y);
+    }
+    ctx.lineTo(curTip.x, curTip.y);
+    ctx.stroke();
+    ctx.setLineDash([]);
+    ctx.restore();
+
+    // Draw output vector from origin to current tip (Focal Golden Orange with 2px Blue Slate outline)
+    drawArrow(ctx, cx, cy, curTip.x, curTip.y, COL.goldenOrange, 4.2, 12, COL.blueSlate);
+
+    // Draw input unit vector handle on unit circle
+    ctx.save();
+    ctx.strokeStyle = COL.blueSlate;
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    ctx.moveTo(cx, cy);
+    ctx.lineTo(inPt.x, inPt.y);
+    ctx.stroke();
+
+    // Draggable handle circle
+    ctx.beginPath();
+    ctx.arc(inPt.x, inPt.y, state.dragging ? 10 : 8.5, 0, Math.PI * 2);
+    ctx.fillStyle = COL.goldenOrange;
+    ctx.fill();
+    ctx.lineWidth = 2.2;
+    ctx.strokeStyle = COL.blueSlate;
+    ctx.stroke();
+    ctx.restore();
+
+    // 9. Direct Canvas Annotations (Warm Precision: direct labels, no clutter)
+    ctx.save();
+    ctx.font = "600 12px " + getComputedStyle(document.body).fontFamily;
+
+    // v_1 axis label
+    ctx.fillStyle = COL.blueSlate;
+    ctx.textAlign = "left";
+    ctx.textBaseline = "middle";
+    ctx.fillText("v_1 (0 deg)", cx + unitPx + 10, cy + 14);
+
+    // Unit circle label
+    ctx.font = "11px ui-monospace, SFMono-Regular, Menlo, monospace";
+    ctx.fillStyle = COL.slateMist;
+    ctx.textAlign = "center";
+    ctx.fillText("||x|| = 1", cx, cy + unitPx + 15);
+
+    // Isotropic contraction label
+    ctx.fillText("iso " + vec.pass.iso.toFixed(2) + "x", cx, cy + isoPx - 10);
+
+    // Outer sigma_max label
+    ctx.textAlign = "right";
+    ctx.fillText("sigma_max = " + vec.pass.sigma.toFixed(2) + "x", cx + sigmaPx - 4, cy + 16);
+
+    // Top-left live pass badge inside arena
+    ctx.font = "600 12px ui-monospace, SFMono-Regular, Menlo, monospace";
+    ctx.fillStyle = COL.slateDeep;
+    ctx.textAlign = "left";
+    ctx.textBaseline = "top";
+    const phaseLabel = inCoda
+      ? "Coda Readout | gain " + vec.gain.toFixed(2) + "x"
+      : cfg.passes[activePassIdx].label + " of " + state.depthK + " | theta = " + Math.round(state.angleDeg) + " deg";
+    ctx.fillText(phaseLabel, 14, 12);
+
+    ctx.restore();
+    ctx.restore();
+  }
+
+  // Pointer drag interaction for unit vector handle
+  function angleFromPointer(evt) {
+    const rect = arenaCanvas.getBoundingClientRect();
+    const px = evt.clientX - rect.left;
+    const py = evt.clientY - rect.top;
+    const dx = px - arenaGeom.cx;
+    const dy = -(py - arenaGeom.cy);
+    let deg = (Math.atan2(dy, dx) * 180) / Math.PI;
+    if (deg < 0) deg += 360;
+    return deg;
+  }
+
+  arenaCanvas.addEventListener("pointerdown", (e) => {
+    arenaCanvas.setPointerCapture(e.pointerId);
+    state.dragging = true;
+    arenaCanvas.classList.add("dragging");
+    state.angleDeg = angleFromPointer(e);
+    if (!state.playing) state.passProgress = 1.0;
+    updateUI();
+    renderArena();
+  });
+
+  arenaCanvas.addEventListener("pointermove", (e) => {
+    if (!state.dragging) return;
+    state.angleDeg = angleFromPointer(e);
+    updateUI();
+    renderArena();
+  });
+
+  function stopDrag(e) {
+    if (!state.dragging) return;
+    state.dragging = false;
+    arenaCanvas.classList.remove("dragging");
+    try {
+      arenaCanvas.releasePointerCapture(e.pointerId);
+    } catch (_) {}
+  }
+
+  arenaCanvas.addEventListener("pointerup", stopDrag);
+  arenaCanvas.addEventListener("pointercancel", stopDrag);
+
+  // Keyboard accessibility on canvas
+  arenaCanvas.addEventListener("keydown", (e) => {
+    if (e.key === "ArrowLeft" || e.key === "ArrowUp") {
+      e.preventDefault();
+      state.angleDeg = (state.angleDeg + 5) % 360;
+      updateUI();
+      renderArena();
+    } else if (e.key === "ArrowRight" || e.key === "ArrowDown") {
+      e.preventDefault();
+      state.angleDeg = (state.angleDeg + 355) % 360;
+      updateUI();
+      renderArena();
+    }
+  });
+
+  // Architecture switcher
+  archBtns.forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const arch = btn.dataset.arch;
+      if (arch === state.arch) return;
+      state.arch = arch;
+      state.depthK = ARCHS[arch].defaultK;
+      state.tetherCut = false;
+      state.passIndex = 0;
+      state.passProgress = 0;
+      archBtns.forEach((b) => b.classList.toggle("active", b.dataset.arch === arch));
+      rebuildDepthPicker();
+      rebuildPassStrip();
+      updateUI();
+    });
+  });
+
+  // Preset angle chips
+  presetChips.forEach((chip) => {
+    chip.addEventListener("click", () => {
+      state.angleDeg = Number(chip.dataset.angle);
+      if (!state.playing) state.passProgress = 1.0;
+      updateUI();
+      renderArena();
+    });
+  });
+
+  // Playback buttons
+  btnPlay.addEventListener("click", () => {
+    state.playing = !state.playing;
+    btnPlay.textContent = state.playing ? "Pause" : "Play";
+  });
+
+  btnStep.addEventListener("click", () => {
+    state.playing = false;
+    btnPlay.textContent = "Play";
+    state.passIndex = (state.passIndex + 1) % (state.depthK + 1);
+    state.passProgress = 1.0;
+    updateUI();
+    renderArena();
+  });
+
+  btnReset.addEventListener("click", () => {
+    state.angleDeg = 0;
+    state.beta = 0.0;
+    state.gamma = 1.0;
+    state.tetherCut = false;
+    state.passIndex = 0;
+    state.passProgress = 0.0;
+    betaSlider.value = "0";
+    gammaSlider.value = "1.0";
+    updateUI();
+    renderArena();
+  });
+
+  // Foil & Tether controls
+  betaSlider.addEventListener("input", () => {
+    state.beta = Number(betaSlider.value);
+    updateUI();
+    renderArena();
+  });
+
+  btnInjectFoil.addEventListener("click", () => {
+    state.beta = 1.0;
+    betaSlider.value = "1.0";
+    state.passIndex = 0;
+    state.passProgress = 0.0;
+    state.playing = true;
+    btnPlay.textContent = "Pause";
+    updateUI();
+    renderArena();
+  });
+
+  btnTether.addEventListener("click", () => {
+    if (state.arch !== "huginn") return;
+    state.tetherCut = !state.tetherCut;
+    updateUI();
+    renderArena();
+  });
+
+  // Gamma slider
+  gammaSlider.addEventListener("input", () => {
+    state.gamma = Number(gammaSlider.value);
+    updateUI();
+    renderArena();
+  });
+
+  // Animation loop (respects prefers-reduced-motion)
+  const reducedMotion = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  if (reducedMotion) {
+    state.playing = false;
+    state.passIndex = 1;
+    state.passProgress = 1.0;
+    btnPlay.textContent = "Play";
+  } else {
+    btnPlay.textContent = "Pause";
+  }
+
+  function tick(now) {
+    if (!state.lastTime) state.lastTime = now;
+    const dt = Math.min(0.05, (now - state.lastTime) / 1000);
+    state.lastTime = now;
+
+    if (state.playing && !state.dragging) {
+      const speed = state.passIndex === state.depthK ? 0.55 : 0.72;
+      state.passProgress += dt * speed;
+      if (state.passProgress >= 1.0) {
+        state.passProgress = 0.0;
+        state.passIndex = (state.passIndex + 1) % (state.depthK + 1);
+        updateUI();
+      }
+    }
+
+    renderArena();
+    requestAnimationFrame(tick);
+  }
+
+  window.addEventListener("resize", () => {
+    drawGammaChart();
+    renderArena();
+  });
+
+  // Initialize
+  rebuildDepthPicker();
+  rebuildPassStrip();
+  updateUI();
+  renderArena();
+  requestAnimationFrame(tick);
+})();
+</script>
+</body>
+</html>

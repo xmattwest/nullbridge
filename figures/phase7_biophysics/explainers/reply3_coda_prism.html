@@ -1,0 +1,1132 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>The Coda Optical Prism</title>
+  <style>
+    :root {
+      --ivory: #FFFFF0;
+      --parchment: #F5EEDC;
+      --onyx: #0F0F0F;
+      --slate: #2C3E50;
+      --mist: #808B90;
+      --sage: #87A96B;
+      --amber: #F39C12;
+      --rule: #E2DCCB;
+    }
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    html, body {
+      width: 100%;
+      height: 100%;
+      background: var(--ivory);
+      color: var(--onyx);
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      -webkit-font-smoothing: antialiased;
+    }
+    .stage-shell {
+      position: relative;
+      width: min(98vw, calc(98vh * 16 / 9));
+      height: min(98vh, calc(98vw * 9 / 16));
+      aspect-ratio: 16 / 9;
+      background: var(--ivory);
+      border: 1px solid var(--rule);
+      border-radius: 10px;
+      overflow: hidden;
+    }
+    canvas {
+      display: block;
+      width: 100%;
+      height: 100%;
+    }
+  </style>
+</head>
+<body>
+  <div class="stage-shell">
+    <canvas id="cinema" aria-label="Looping animation of the six-stage Coda Optical Prism refracting rotated out-of-phase internal loop waves into a single coherent focal output."></canvas>
+  </div>
+
+  <script>
+    (function () {
+      "use strict";
+
+      var C = {
+        ivory: "#FFFFF0",
+        parchment: "#F5EEDC",
+        parchmentSoft: "#FAF5E6",
+        chamberCenter: "#FCFBF2",
+        onyx: "#0F0F0F",
+        slate: "#2C3E50",
+        slateDeep: "#1E3447",
+        mist: "#808B90",
+        sage: "#87A96B",
+        sageDeep: "#5F7F4A",
+        amber: "#F39C12",
+        rule: "#E2DCCB",
+        borderIdle: "#D5CEBC"
+      };
+
+      var W = 1600;
+      var H = 900;
+      var CYCLE_S = 10.0;
+      var TAU = Math.PI * 2;
+      var CY = 430;
+      var FOCAL_OUT = { x: 1364, y: CY };
+
+      /* Deterministic PRNG (Mulberry32) */
+      function mulberry32(seed) {
+        var a = seed >>> 0;
+        return function () {
+          a |= 0;
+          a = (a + 0x6D2B79F5) | 0;
+          var t = Math.imul(a ^ (a >>> 15), 1 | a);
+          t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+          return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+        };
+      }
+
+      var rng = mulberry32(20261126);
+
+      function clamp(v, lo, hi) {
+        return v < lo ? lo : (v > hi ? hi : v);
+      }
+
+      function lerp(a, b, u) {
+        return a + (b - a) * u;
+      }
+
+      function smoothstep(e0, e1, x) {
+        var u = clamp((x - e0) / (e1 - e0), 0, 1);
+        return u * u * (3 - 2 * u);
+      }
+
+      function hexToRgba(hex, alpha) {
+        var h = hex.replace("#", "");
+        var r = parseInt(h.substring(0, 2), 16);
+        var g = parseInt(h.substring(2, 4), 16);
+        var b = parseInt(h.substring(4, 6), 16);
+        return "rgba(" + r + "," + g + "," + b + "," + clamp(alpha, 0, 1).toFixed(4) + ")";
+      }
+
+      function roundRectPath(ctx, x, y, w, h, r) {
+        ctx.beginPath();
+        ctx.moveTo(x + r, y);
+        ctx.lineTo(x + w - r, y);
+        ctx.quadraticCurveTo(x + w, y, x + w, y + r);
+        ctx.lineTo(x + w, y + h - r);
+        ctx.quadraticCurveTo(x + w, y + h, x + w - r, y + h);
+        ctx.lineTo(x + r, y + h);
+        ctx.quadraticCurveTo(x, y + h, x, y + h - r);
+        ctx.lineTo(x, y + r);
+        ctx.quadraticCurveTo(x, y, x + r, y);
+        ctx.closePath();
+      }
+
+      function mod1(v) {
+        return ((v % 1) + 1) % 1;
+      }
+
+      function wrapDist(a, b) {
+        var d = Math.abs(mod1(a) - mod1(b));
+        return d > 0.5 ? 1 - d : d;
+      }
+
+      function bellModular(u, center, width) {
+        var d = wrapDist(u, center) / width;
+        return Math.exp(-0.5 * d * d);
+      }
+
+      /* =========================================================================
+         6-Stage Coda Optical Prism Geometry (Center Zone: x = 648..1058, h = 480)
+         ========================================================================= */
+      var PLANE_BASE_X = [664, 738, 812, 886, 960, 1036];
+      var PLANE_TOP_Y  = [212, 192, 190, 190, 210, 254];
+      var PLANE_BOT_Y  = [648, 668, 670, 670, 650, 606];
+      var PLANE_BOW_X  = [-14, -8, -2, 5, 11, 18];
+      var BEVEL_H      = 44;
+
+      function getPlaneNodes(k) {
+        var bx = PLANE_BASE_X[k];
+        var ty = PLANE_TOP_Y[k];
+        var by = PLANE_BOT_Y[k];
+        var bow = PLANE_BOW_X[k];
+        return {
+          A: { x: bx,              y: ty },
+          B: { x: bx + bow * 0.58, y: ty + BEVEL_H },
+          C: { x: bx + bow,        y: CY },
+          D: { x: bx + bow * 0.58, y: by - BEVEL_H },
+          E: { x: bx,              y: by }
+        };
+      }
+
+      var PRISM_PLANES = [];
+      for (var pk = 0; pk < 6; pk++) {
+        PRISM_PLANES.push(getPlaneNodes(pk));
+      }
+
+      function planeXAtY(k, y) {
+        var p = PRISM_PLANES[k];
+        if (y <= p.B.y) {
+          var u0 = clamp((y - p.A.y) / (p.B.y - p.A.y), 0, 1);
+          return lerp(p.A.x, p.B.x, u0);
+        } else if (y <= p.C.y) {
+          var u1 = clamp((y - p.B.y) / (p.C.y - p.B.y), 0, 1);
+          return lerp(p.B.x, p.C.x, u1);
+        } else if (y <= p.D.y) {
+          var u2 = clamp((y - p.C.y) / (p.D.y - p.C.y), 0, 1);
+          return lerp(p.C.x, p.D.x, u2);
+        }
+        var u3 = clamp((y - p.D.y) / (p.E.y - p.D.y), 0, 1);
+        return lerp(p.D.x, p.E.x, u3);
+      }
+
+      /* 6 Ray Refraction Heights Across Planes 0..5:
+         Wide scattered entry (404px spread) bending discretely at each plane into a tight 140px coherent exit comb! */
+      var RAY_STAGE_Y = [
+        [228, 266, 298, 324, 344, 360],
+        [308, 326, 346, 363, 377, 388],
+        [372, 384, 396, 406, 412, 416],
+        [496, 480, 466, 455, 448, 444],
+        [558, 536, 515, 497, 483, 472],
+        [632, 594, 562, 536, 516, 500]
+      ];
+
+      var RAY_VERTICES = [];
+      for (var ri = 0; ri < 6; ri++) {
+        var row = [];
+        for (var rk = 0; rk < 6; rk++) {
+          var ry = RAY_STAGE_Y[ri][rk];
+          row.push({ x: planeXAtY(rk, ry), y: ry });
+        }
+        RAY_VERTICES.push(row);
+      }
+
+      /* =========================================================================
+         Left Zone: Core Exit Neuron Ensemble & 6 Rotated Wave Streams
+         ========================================================================= */
+      var STREAM_META = [
+        { color: C.slate,     exitX: 126, exitY: 262, phi: 0.00, tiltDeg: -58, braidFreq: 1.45, braidSign:  1, waveK: 3.5, tempHarm: 4 },
+        { color: C.sageDeep,  exitX: 144, exitY: 326, phi: 2.38, tiltDeg:  46, braidFreq: 1.45, braidSign: -1, waveK: 4.5, tempHarm: 6 },
+        { color: C.mist,      exitX: 156, exitY: 394, phi: 4.54, tiltDeg: -32, braidFreq: 1.65, braidSign:  1, waveK: 3.5, tempHarm: 5 },
+        { color: C.slateDeep, exitX: 156, exitY: 466, phi: 1.28, tiltDeg:  62, braidFreq: 1.65, braidSign: -1, waveK: 4.5, tempHarm: 7 },
+        { color: C.sage,      exitX: 144, exitY: 534, phi: 5.14, tiltDeg: -45, braidFreq: 1.45, braidSign:  1, waveK: 4.0, tempHarm: 5 },
+        { color: C.mist,      exitX: 126, exitY: 598, phi: 3.28, tiltDeg:  35, braidFreq: 1.45, braidSign: -1, waveK: 4.0, tempHarm: 6 }
+      ];
+
+      var coreNeurons = [];
+      var coreFeeders = [];
+
+      function buildCoreExitCluster() {
+        for (var i = 0; i < 6; i++) {
+          var sm = STREAM_META[i];
+          coreNeurons.push({
+            x: sm.exitX,
+            y: sm.exitY,
+            r: 7.8,
+            color: sm.color,
+            isPyramidal: true,
+            streamIdx: i
+          });
+        }
+
+        var upstreamCoords = [
+          { x: 90,  y: 238, c: C.slate,     pyr: false, target: 0 },
+          { x: 100, y: 292, c: C.sageDeep,  pyr: true,  target: 0 },
+          { x: 92,  y: 348, c: C.mist,      pyr: false, target: 1 },
+          { x: 110, y: 370, c: C.slate,     pyr: true,  target: 2 },
+          { x: 90,  y: 420, c: C.sage,      pyr: false, target: 2 },
+          { x: 94,  y: 454, c: C.slateDeep, pyr: true,  target: 3 },
+          { x: 110, y: 496, c: C.mist,      pyr: false, target: 3 },
+          { x: 92,  y: 526, c: C.sageDeep,  pyr: true,  target: 4 },
+          { x: 100, y: 572, c: C.sage,      pyr: false, target: 5 },
+          { x: 90,  y: 622, c: C.mist,      pyr: true,  target: 5 }
+        ];
+
+        for (var u = 0; u < upstreamCoords.length; u++) {
+          var uc = upstreamCoords[u];
+          coreNeurons.push({
+            x: uc.x,
+            y: uc.y,
+            r: 4.5 + (u % 3) * 0.9,
+            color: uc.c,
+            isPyramidal: uc.pyr,
+            streamIdx: uc.target
+          });
+
+          var dst = coreNeurons[uc.target];
+          coreFeeders.push({
+            x0: uc.x,
+            y0: uc.y,
+            cx: (uc.x + dst.x) * 0.5 + (rng() - 0.5) * 14,
+            cy: (uc.y + dst.y) * 0.5 + (rng() - 0.5) * 24,
+            x1: dst.x,
+            y1: dst.y,
+            color: uc.c
+          });
+
+          coreFeeders.push({
+            x0: 58,
+            y0: uc.y + (rng() - 0.5) * 26,
+            cx: 74,
+            cy: uc.y + (rng() - 0.5) * 16,
+            x1: uc.x,
+            y1: uc.y,
+            color: uc.c
+          });
+        }
+      }
+
+      /* Evaluate position and rotated 3D helical wave on Left Stream i at u in [0, 1] */
+      function evalLeftStream(i, u, tNorm) {
+        var sm = STREAM_META[i];
+        var pEnd = RAY_VERTICES[i][0];
+        var x = lerp(sm.exitX, pEnd.x, u);
+
+        var pairIdx = Math.floor(i / 2);
+        var pairCenterStart = (STREAM_META[pairIdx * 2].exitY + STREAM_META[pairIdx * 2 + 1].exitY) * 0.5;
+        var pairCenterEnd = (RAY_VERTICES[pairIdx * 2][0].y + RAY_VERTICES[pairIdx * 2 + 1][0].y) * 0.5;
+
+        /* Global cross-bundle swirl so the whole 6-stream bundle breathes & braids organically */
+        var globalSwirl = Math.sin(Math.PI * u) * 18 * Math.sin(u * Math.PI * 2.0 - TAU * tNorm + pairIdx * 2.1);
+        var baseCenter = lerp(pairCenterStart, pairCenterEnd, u) + globalSwirl;
+
+        var startHalf = sm.exitY - pairCenterStart;
+        var endHalf = pEnd.y - pairCenterEnd;
+
+        /* Clean sin(pi * u) braid crossover that lands exactly at startHalf (u=0) and endHalf (u=1) */
+        var envBraid = Math.sin(Math.PI * u);
+        var braidTheta = u * Math.PI * 2 * sm.braidFreq + pairIdx * 1.05 - TAU * tNorm;
+        var yMacro = baseCenter
+          + lerp(startHalf, endHalf, u)
+          + sm.braidSign * envBraid * 42 * Math.sin(braidTheta);
+
+        /* Out-of-phase helical carrier wave (exact 0 at u=0 and u=1 via sin(pi*u)^0.65, zero seam!) */
+        var carrierPhase = u * TAU * sm.waveK - TAU * sm.tempHarm * tNorm + sm.phi;
+        var envWave = Math.pow(Math.sin(Math.PI * u), 0.62);
+        var carrierAmp = (18.5 + 4.0 * Math.sin(TAU * 2 * tNorm + i)) * envWave;
+        var waveY = Math.sin(carrierPhase) * carrierAmp;
+
+        return {
+          x: x,
+          yMacro: yMacro,
+          y: yMacro + waveY,
+          yConj: yMacro - waveY * 0.72,
+          phase: carrierPhase
+        };
+      }
+
+      /* =========================================================================
+         10-Second Seamless Choreography State (2 Surges + Continuous Harmonics)
+         ========================================================================= */
+      function getChoreography(tNorm) {
+        var uSurge = mod1(tNorm * 2.0);
+
+        var leftBoost  = 0.40 + 0.60 * bellModular(uSurge, 0.16, 0.16);
+        var prismBoost = 0.38 + 0.62 * bellModular(uSurge, 0.52, 0.17);
+        var exitBloom  = 0.38 + 0.62 * bellModular(uSurge, 0.69, 0.14);
+        var rightBoost = 0.42 + 0.58 * bellModular(uSurge, 0.82, 0.16);
+
+        var planePulses = [];
+        for (var k = 0; k < 6; k++) {
+          var pCenter = 0.35 + (k / 5) * 0.34;
+          var waveCrest6 = 0.5 + 0.5 * Math.cos(TAU * (6 * tNorm - k * 0.18));
+          var pLevel = 0.24 + 0.54 * bellModular(uSurge, pCenter, 0.075) + 0.22 * Math.pow(waveCrest6, 3);
+          planePulses.push(clamp(pLevel, 0, 1));
+        }
+
+        var activeChamber = 1;
+        if (uSurge < 0.32) activeChamber = 0;
+        else if (uSurge >= 0.68) activeChamber = 2;
+
+        return {
+          tNorm: tNorm,
+          uSurge: uSurge,
+          leftBoost: clamp(leftBoost, 0, 1),
+          prismBoost: clamp(prismBoost, 0, 1),
+          exitBloom: clamp(exitBloom, 0, 1),
+          rightBoost: clamp(rightBoost, 0, 1),
+          planePulses: planePulses,
+          activeChamber: activeChamber
+        };
+      }
+
+      /* =========================================================================
+         Layer 1: Three Dawn State Architectural Chambers & Onyx Labels
+         ========================================================================= */
+      function drawChambersAndLabels(ctx, chState) {
+        var chambers = [
+          { x: 44,   y: 48, w: 556, h: 804, title: "INTERNAL SHORTHAND", barW: 178, idx: 0 },
+          { x: 616,  y: 48, w: 492, h: 804, title: "CODA OPTICAL PRISM", barW: 186, idx: 1 },
+          { x: 1124, y: 48, w: 432, h: 804, title: "DECODED ANSWER",     barW: 162, idx: 2 }
+        ];
+
+        for (var i = 0; i < chambers.length; i++) {
+          var c = chambers[i];
+          var isAct = chState.activeChamber === c.idx;
+
+          roundRectPath(ctx, c.x, c.y, c.w, c.h, 12);
+          ctx.fillStyle = i === 1 ? C.chamberCenter : C.parchmentSoft;
+          ctx.fill();
+          ctx.strokeStyle = isAct ? hexToRgba(C.slate, 0.58) : C.borderIdle;
+          ctx.lineWidth = isAct ? 1.9 : 1.25;
+          ctx.stroke();
+
+          var cx = c.x + c.w * 0.5;
+          var labelY = c.y + c.h - 36;
+
+          ctx.textAlign = "center";
+          ctx.fillStyle = C.onyx;
+          ctx.font = '800 23px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif';
+          ctx.letterSpacing = "0.05em";
+          ctx.fillText(c.title, cx, labelY);
+          ctx.letterSpacing = "0px";
+
+          roundRectPath(ctx, cx - c.barW * 0.5, labelY + 11, c.barW, 3.5, 2);
+          ctx.fillStyle = isAct ? C.amber : C.slate;
+          ctx.fill();
+        }
+
+        /* Quiet optical centerline across all three chambers */
+        ctx.beginPath();
+        ctx.moveTo(120, CY);
+        ctx.lineTo(1488, CY);
+        ctx.strokeStyle = hexToRgba(C.mist, 0.18);
+        ctx.lineWidth = 1.2;
+        ctx.setLineDash([5, 7]);
+        ctx.stroke();
+        ctx.setLineDash([]);
+      }
+
+      /* =========================================================================
+         Layer 2: Left Zone (Core Exit Neurons + Braided Out-of-Phase Shorthand)
+         ========================================================================= */
+      function drawLeftRotatedShorthand(ctx, chState) {
+        var tNorm = chState.tNorm;
+        var boost = chState.leftBoost;
+
+        /* 1. Upstream core feeder axons */
+        for (var f = 0; f < coreFeeders.length; f++) {
+          var fd = coreFeeders[f];
+          ctx.beginPath();
+          ctx.moveTo(fd.x0, fd.y0);
+          ctx.quadraticCurveTo(fd.cx, fd.cy, fd.x1, fd.y1);
+          ctx.strokeStyle = hexToRgba(fd.color, 0.25 + 0.25 * boost);
+          ctx.lineWidth = 1.4;
+          ctx.stroke();
+        }
+
+        /* 2. Six braided out-of-phase helical wave streams */
+        var steps = 92;
+        for (var i = 0; i < 6; i++) {
+          var sm = STREAM_META[i];
+          var pts = [];
+          for (var s = 0; s <= steps; s++) {
+            pts.push(evalLeftStream(i, s / steps, tNorm));
+          }
+
+          /* Conjugate 3D helix strand */
+          ctx.beginPath();
+          ctx.moveTo(pts[0].x, pts[0].yConj);
+          for (var s1 = 1; s1 <= steps; s1++) {
+            ctx.lineTo(pts[s1].x, pts[s1].yConj);
+          }
+          ctx.strokeStyle = hexToRgba(sm.color, 0.22 + 0.12 * boost);
+          ctx.lineWidth = 1.2;
+          ctx.stroke();
+
+          /* Helical cross-rungs showing 3D corkscrew rotation */
+          for (var rStep = 6; rStep < steps - 5; rStep += 7) {
+            var pr = pts[rStep];
+            ctx.beginPath();
+            ctx.moveTo(pr.x, pr.y);
+            ctx.lineTo(pr.x, pr.yConj);
+            ctx.strokeStyle = hexToRgba(sm.color, 0.17 + 0.10 * boost);
+            ctx.lineWidth = 1.05;
+            ctx.stroke();
+          }
+
+          /* Soft glow under primary rotated wave */
+          ctx.beginPath();
+          ctx.moveTo(pts[0].x, pts[0].y);
+          for (var s2 = 1; s2 <= steps; s2++) {
+            ctx.lineTo(pts[s2].x, pts[s2].y);
+          }
+          ctx.strokeStyle = hexToRgba(sm.color, 0.10 + 0.14 * boost);
+          ctx.lineWidth = 5.6;
+          ctx.stroke();
+
+          /* Crisp primary braided wave ribbon */
+          ctx.beginPath();
+          ctx.moveTo(pts[0].x, pts[0].y);
+          for (var s3 = 1; s3 <= steps; s3++) {
+            ctx.lineTo(pts[s3].x, pts[s3].y);
+          }
+          ctx.strokeStyle = hexToRgba(sm.color, 0.74 + 0.22 * boost);
+          ctx.lineWidth = 2.5 + 0.4 * boost;
+          ctx.stroke();
+        }
+
+        /* 3. Spiraling / Tilted 3D Phase Rings & Multi-Angle Wave Packets */
+        for (var m = 0; m < 6; m++) {
+          var meta = STREAM_META[m];
+          for (var pIdx = 0; pIdx < 2; pIdx++) {
+            var uRaw = mod1(tNorm * 2.0 + pIdx * 0.5 + m * 0.143);
+            var uRing = 0.08 + uRaw * 0.84;
+            var fade = smoothstep(0.08, 0.17, uRing) * smoothstep(0.92, 0.82, uRing);
+            if (fade <= 0.02) continue;
+
+            var st = evalLeftStream(m, uRing, tNorm);
+            var tiltRad = (meta.tiltDeg * Math.PI / 180)
+              + 0.36 * Math.sin(TAU * 3 * tNorm + m * 1.7 + pIdx * 2.1);
+            var spinAngle = TAU * (meta.tempHarm * tNorm) + meta.phi + pIdx * 2.4;
+
+            var rx = 10.0;
+            var ry = 23.5;
+
+            ctx.save();
+            ctx.translate(st.x, st.yMacro);
+            ctx.rotate(tiltRad);
+
+            /* Tilted phase-plane ellipse */
+            ctx.beginPath();
+            ctx.ellipse(0, 0, rx, ry, 0, 0, TAU);
+            ctx.fillStyle = hexToRgba(C.ivory, 0.52 * fade);
+            ctx.fill();
+            ctx.strokeStyle = hexToRgba(meta.color, (0.62 + 0.26 * boost) * fade);
+            ctx.lineWidth = 1.85;
+            ctx.stroke();
+
+            /* Instantaneous rotated phase vector & rim bead */
+            var bx = Math.cos(spinAngle) * rx;
+            var by = Math.sin(spinAngle) * ry;
+
+            ctx.beginPath();
+            ctx.moveTo(0, 0);
+            ctx.lineTo(bx, by);
+            ctx.strokeStyle = hexToRgba(meta.color, 0.92 * fade);
+            ctx.lineWidth = 1.9;
+            ctx.stroke();
+
+            ctx.beginPath();
+            ctx.arc(0, 0, 2.2, 0, TAU);
+            ctx.fillStyle = hexToRgba(meta.color, 0.75 * fade);
+            ctx.fill();
+
+            ctx.beginPath();
+            ctx.arc(bx, by, 4.0, 0, TAU);
+            ctx.fillStyle = meta.color;
+            ctx.globalAlpha = fade;
+            ctx.fill();
+            ctx.strokeStyle = C.ivory;
+            ctx.lineWidth = 1.25;
+            ctx.stroke();
+
+            ctx.restore();
+          }
+        }
+
+        /* 4. Core Exit Pyramidal & Interneuron Cluster on Far Left */
+        for (var nIdx = coreNeurons.length - 1; nIdx >= 0; nIdx--) {
+          var n = coreNeurons[nIdx];
+          var pulse = 0.5 + 0.5 * Math.sin(TAU * 4 * tNorm + n.streamIdx * 1.1);
+          var nGlow = (nIdx < 6 ? 0.48 : 0.24) + 0.45 * boost * pulse;
+
+          if (nIdx < 6) {
+            ctx.beginPath();
+            ctx.arc(n.x, n.y, n.r + 6 + nGlow * 6, 0, TAU);
+            ctx.fillStyle = hexToRgba(n.color, 0.18 * nGlow);
+            ctx.fill();
+          }
+
+          ctx.beginPath();
+          if (n.isPyramidal) {
+            var rr = n.r * 1.22;
+            ctx.moveTo(n.x + rr * 1.28, n.y);
+            ctx.lineTo(n.x - rr * 0.85, n.y - rr * 0.88);
+            ctx.lineTo(n.x - rr * 0.52, n.y);
+            ctx.lineTo(n.x - rr * 0.85, n.y + rr * 0.88);
+            ctx.closePath();
+          } else {
+            ctx.arc(n.x, n.y, n.r, 0, TAU);
+          }
+          ctx.fillStyle = nIdx < 6 ? n.color : hexToRgba(n.color, 0.74);
+          ctx.fill();
+          ctx.strokeStyle = nIdx < 6 ? C.ivory : hexToRgba(C.slate, 0.78);
+          ctx.lineWidth = nIdx < 6 ? 1.55 : 1.15;
+          ctx.stroke();
+        }
+      }
+
+      /* =========================================================================
+         Layer 3: Center Zone - The 6-Stage Coda Optical Prism (Planes 1..6)
+         ========================================================================= */
+      function drawPrismBackdropFacets(ctx, chState) {
+        var exitBloom = chState.exitBloom;
+        var pExit = PRISM_PLANES[5];
+
+        /* Elliptical Golden Orange aura at exit facet tucked cleanly inside Center Chamber (<= 1108) */
+        ctx.beginPath();
+        ctx.ellipse(pExit.C.x - 6, CY, 34 + exitBloom * 20, 96 + exitBloom * 30, 0, 0, TAU);
+        ctx.fillStyle = hexToRgba(C.amber, 0.09 + exitBloom * 0.14);
+        ctx.fill();
+
+        /* 5 cut-crystal prism slabs bounded by the 6 refraction planes */
+        for (var s = 0; s < 5; s++) {
+          var pL = PRISM_PLANES[s];
+          var pR = PRISM_PLANES[s + 1];
+          var slabPulse = (chState.planePulses[s] + chState.planePulses[s + 1]) * 0.5;
+
+          /* Central optical aperture facet (B -> C -> D) */
+          ctx.beginPath();
+          ctx.moveTo(pL.B.x, pL.B.y);
+          ctx.lineTo(pR.B.x, pR.B.y);
+          ctx.lineTo(pR.C.x, pR.C.y);
+          ctx.lineTo(pR.D.x, pR.D.y);
+          ctx.lineTo(pL.D.x, pL.D.y);
+          ctx.lineTo(pL.C.x, pL.C.y);
+          ctx.closePath();
+
+          if (s === 0) {
+            ctx.fillStyle = hexToRgba(C.slate, 0.036);
+          } else if (s === 1) {
+            ctx.fillStyle = C.ivory;
+          } else if (s === 2) {
+            ctx.fillStyle = hexToRgba(C.sage, 0.048);
+          } else if (s === 3) {
+            ctx.fillStyle = hexToRgba(C.amber, 0.045 + 0.045 * slabPulse);
+          } else {
+            ctx.fillStyle = hexToRgba(C.amber, 0.095 + 0.105 * slabPulse);
+          }
+          ctx.fill();
+
+          /* Upper cut-crystal crown bevel (A -> B) with jewel diagonal specular split */
+          ctx.beginPath();
+          ctx.moveTo(pL.A.x, pL.A.y);
+          ctx.lineTo(pR.A.x, pR.A.y);
+          ctx.lineTo(pR.B.x, pR.B.y);
+          ctx.lineTo(pL.B.x, pL.B.y);
+          ctx.closePath();
+          ctx.fillStyle = s >= 3
+            ? hexToRgba(C.amber, (s === 3 ? 0.09 : 0.16) + 0.08 * slabPulse)
+            : hexToRgba(C.slate, s % 2 === 0 ? 0.085 : 0.045);
+          ctx.fill();
+
+          /* Specular diagonal crystal triangle inside upper crown bevel */
+          ctx.beginPath();
+          ctx.moveTo(pL.A.x, pL.A.y);
+          ctx.lineTo(pR.A.x, pR.A.y);
+          ctx.lineTo(pL.B.x, pL.B.y);
+          ctx.closePath();
+          ctx.fillStyle = hexToRgba(C.ivory, 0.42);
+          ctx.fill();
+
+          /* Lower cut-crystal keel bevel (D -> E) */
+          ctx.beginPath();
+          ctx.moveTo(pL.D.x, pL.D.y);
+          ctx.lineTo(pR.D.x, pR.D.y);
+          ctx.lineTo(pR.E.x, pR.E.y);
+          ctx.lineTo(pL.E.x, pL.E.y);
+          ctx.closePath();
+          ctx.fillStyle = s >= 3
+            ? hexToRgba(C.amber, (s === 3 ? 0.12 : 0.20) + 0.09 * slabPulse)
+            : hexToRgba(C.slate, s % 2 === 0 ? 0.115 : 0.072);
+          ctx.fill();
+
+          /* Longitudinal bevel ridge lines */
+          ctx.beginPath();
+          ctx.moveTo(pL.B.x, pL.B.y);
+          ctx.lineTo(pR.B.x, pR.B.y);
+          ctx.moveTo(pL.D.x, pL.D.y);
+          ctx.lineTo(pR.D.x, pR.D.y);
+          ctx.strokeStyle = hexToRgba(C.slate, 0.28);
+          ctx.lineWidth = 1.15;
+          ctx.stroke();
+
+          /* Delicate center optical ridge line */
+          ctx.beginPath();
+          ctx.moveTo(pL.C.x, pL.C.y);
+          ctx.lineTo(pR.C.x, pR.C.y);
+          ctx.strokeStyle = s >= 3
+            ? hexToRgba(C.amber, 0.22 + 0.20 * slabPulse)
+            : hexToRgba(C.slate, 0.13);
+          ctx.lineWidth = 1.0;
+          ctx.stroke();
+        }
+      }
+
+      /* Pure Dawn State Stage-by-Stage Ray Bending & Phase Snap (Zero Muddy RGB Blends!) */
+      function drawPrismRefractionAndAlignment(ctx, chState) {
+        var tNorm = chState.tNorm;
+        var DISORDER = [0.76, 0.48, 0.22, 0.06, 0.00];
+        var AMP_SLAB = [12.5, 7.6, 3.6, 1.0, 0.0];
+
+        /* 1. Draw the 6 refracting rays stage-by-stage across the 5 slabs */
+        for (var s = 0; s < 5; s++) {
+          var dis = DISORDER[s];
+          var disNext = s < 4 ? DISORDER[s + 1] : 0.0;
+          var amp = AMP_SLAB[s];
+          var slabPulse = (chState.planePulses[s] + chState.planePulses[s + 1]) * 0.5;
+
+          for (var i = 0; i < 6; i++) {
+            var p0 = RAY_VERTICES[i][s];
+            var p1 = RAY_VERTICES[i][s + 1];
+            var sm = STREAM_META[i];
+            var dx = p1.x - p0.x;
+            var dy = p1.y - p0.y;
+            var segLen = Math.hypot(dx, dy) || 1;
+            var nx = -dy / segLen;
+            var ny = dx / segLen;
+
+            /* Pure Dawn State palette progression across slabs:
+               Slabs 0..1: incoming stream color (Slate / Sage / Mist)
+               Slab 2: crisp Slate & Sage alignment
+               Slab 3: Slate / Sage base + warm Golden Orange coherent core overlay
+               Slab 4: pure Golden Orange (#F39C12) coherent optical beam! */
+            var baseCol = sm.color;
+            if (s === 2) {
+              baseCol = (i === 1 || i === 4) ? C.sageDeep : C.slate;
+            } else if (s === 3) {
+              baseCol = (i === 2 || i === 3) ? C.amber : ((i === 1 || i === 4) ? C.sageDeep : C.slate);
+            } else if (s === 4) {
+              baseCol = C.amber;
+            }
+
+            /* Straight refracted optical guide line showing exact Snell-like bend at each plane */
+            ctx.beginPath();
+            ctx.moveTo(p0.x, p0.y);
+            ctx.lineTo(p1.x, p1.y);
+            ctx.strokeStyle = hexToRgba(s >= 3 ? C.amber : sm.color, 0.22 + 0.24 * (1 - dis));
+            ctx.lineWidth = 1.45;
+            ctx.stroke();
+
+            /* Superimposed wave with exact sin(pi * u) endpoint pinning (zero discontinuity at planes!) */
+            var subSteps = 32;
+            ctx.beginPath();
+            for (var q = 0; q <= subSteps; q++) {
+              var u = q / subSteps;
+              var bx = lerp(p0.x, p1.x, u);
+              var by = lerp(p0.y, p1.y, u);
+              var localDis = lerp(dis, disNext, u);
+              var localAmp = amp * Math.sin(Math.PI * u);
+              var masterPhase = ((s + u) * 1.0 - 6.0 * tNorm) * TAU;
+              var rayPhase = masterPhase + sm.phi * localDis;
+              var wOff = Math.sin(rayPhase) * localAmp;
+              var wx = bx + nx * wOff;
+              var wy = by + ny * wOff;
+              if (q === 0) ctx.moveTo(wx, wy);
+              else ctx.lineTo(wx, wy);
+            }
+
+            if (s === 4) {
+              ctx.strokeStyle = hexToRgba(C.amber, 0.24 + 0.16 * slabPulse);
+              ctx.lineWidth = 6.0;
+              ctx.stroke();
+            }
+
+            ctx.strokeStyle = hexToRgba(baseCol, 0.84 + 0.14 * slabPulse);
+            ctx.lineWidth = s === 4 ? (i === 2 || i === 3 ? 3.2 : 2.6) : 2.4;
+            ctx.stroke();
+
+            /* In Slab 3, add a delicate Golden Orange harmonic core thread warming into Slab 4 */
+            if (s === 3) {
+              ctx.strokeStyle = hexToRgba(C.amber, 0.48 + 0.28 * slabPulse);
+              ctx.lineWidth = 1.6;
+              ctx.stroke();
+            }
+          }
+        }
+
+        /* 2. Traveling Wave Packets Inside the Prism:
+              Watch 6 staggered, tilted phase packets de-rotate & snap into synchronized Golden Orange unison! */
+        for (var cIdx = 0; cIdx < 2; cIdx++) {
+          /* 2 crisp wavefront groups inside the prism at once (4 transits per 10s -> exact harmonic) */
+          var uTransit = mod1(tNorm * 2.0 + cIdx * 0.5);
+          var sFloat = uTransit * 5.0; /* 0.0 at Plane 1 -> 5.0 at Plane 6 */
+          var slabIdx = clamp(Math.floor(sFloat), 0, 4);
+          var slabFrac = clamp(sFloat - slabIdx, 0, 1);
+
+          var disStart = DISORDER[slabIdx];
+          var disEnd = slabIdx < 4 ? DISORDER[slabIdx + 1] : 0.0;
+          var curDis = lerp(disStart, disEnd, slabFrac);
+          var coherence = 1.0 - curDis;
+          var edgeFade = smoothstep(0.0, 0.22, sFloat) * smoothstep(5.0, 4.78, sFloat);
+          if (edgeFade <= 0.02) continue;
+
+          var crestPts = [];
+          for (var r = 0; r < 6; r++) {
+            var rMeta = STREAM_META[r];
+            var phaseLag = ((rMeta.phi - 2.7) / Math.PI) * 0.48 * curDis;
+            var sRay = clamp(sFloat + phaseLag, 0.02, 4.98);
+            var rSlab = clamp(Math.floor(sRay), 0, 4);
+            var rFrac = clamp(sRay - rSlab, 0, 1);
+
+            var v0 = RAY_VERTICES[r][rSlab];
+            var v1 = RAY_VERTICES[r][rSlab + 1];
+            crestPts.push({
+              x: lerp(v0.x, v1.x, rFrac),
+              y: lerp(v0.y, v1.y, rFrac),
+              tilt: (rMeta.tiltDeg * Math.PI / 180) * curDis,
+              color: rMeta.color
+            });
+          }
+
+          /* Only once packets snap into coherence (Slabs 3..4, coherence > 0.68),
+             link them with a clean, delicate Golden Orange optical wavefront curve (curved toward Focal Node!) */
+          if (coherence > 0.68) {
+            var lockAlpha = smoothstep(0.68, 0.96, coherence) * edgeFade;
+            var midX = (crestPts[2].x + crestPts[3].x) * 0.5;
+            var radToFocus = Math.max(80, FOCAL_OUT.x - midX);
+            var aTop = Math.atan2(crestPts[0].y - FOCAL_OUT.y, crestPts[0].x - FOCAL_OUT.x);
+            var aBot = Math.atan2(crestPts[5].y - FOCAL_OUT.y, crestPts[5].x - FOCAL_OUT.x);
+
+            ctx.beginPath();
+            ctx.arc(FOCAL_OUT.x, FOCAL_OUT.y, radToFocus, aBot, aTop, false);
+            ctx.strokeStyle = hexToRgba(C.amber, lockAlpha * 0.28);
+            ctx.lineWidth = 6.0;
+            ctx.stroke();
+
+            ctx.beginPath();
+            ctx.arc(FOCAL_OUT.x, FOCAL_OUT.y, radToFocus, aBot, aTop, false);
+            ctx.strokeStyle = hexToRgba(C.amber, lockAlpha * 0.90);
+            ctx.lineWidth = 2.2;
+            ctx.stroke();
+          }
+
+          /* De-rotating phase ellipses & glowing optical beads on each ray */
+          for (var b = 0; b < 6; b++) {
+            var cp = crestPts[b];
+            var beadCol = coherence > 0.72 ? C.amber : cp.color;
+
+            if (curDis > 0.08) {
+              ctx.save();
+              ctx.translate(cp.x, cp.y);
+              ctx.rotate(cp.tilt);
+              ctx.beginPath();
+              ctx.ellipse(0, 0, 4.8 + curDis * 4.0, 13.0, 0, 0, TAU);
+              ctx.fillStyle = hexToRgba(C.ivory, 0.36 * edgeFade);
+              ctx.fill();
+              ctx.strokeStyle = hexToRgba(beadCol, 0.68 * edgeFade);
+              ctx.lineWidth = 1.45;
+              ctx.stroke();
+              ctx.restore();
+            }
+
+            ctx.beginPath();
+            ctx.arc(cp.x, cp.y, (3.6 + coherence * 1.4), 0, TAU);
+            ctx.fillStyle = hexToRgba(beadCol, edgeFade);
+            ctx.fill();
+            ctx.strokeStyle = hexToRgba(coherence > 0.72 ? C.slate : C.ivory, edgeFade);
+            ctx.lineWidth = 1.3;
+            ctx.stroke();
+          }
+        }
+      }
+
+      /* Crisp Crystal Refraction Planes (1..6), Outer Jewel Frame, & Exit Optical Bloom */
+      function drawPrismCrystalFrameAndBloom(ctx, chState) {
+        var exitBloom = chState.exitBloom;
+        var pExit = PRISM_PLANES[5];
+        var bloomPulse = 0.5 + 0.5 * Math.cos(TAU * 6 * chState.tNorm - 5 * 0.18 * TAU);
+        var bStrength = clamp(0.36 + 0.46 * exitBloom + 0.22 * bloomPulse, 0, 1);
+
+        /* 1. Luminous Golden Orange Optical Bloom at Exit Facet (Plane 6, bounded inside Center Chamber) */
+        ctx.beginPath();
+        ctx.ellipse(pExit.C.x - 4, CY, 26 + bStrength * 24, 82 + bStrength * 28, 0, 0, TAU);
+        ctx.fillStyle = hexToRgba(C.amber, 0.16 + bStrength * 0.18);
+        ctx.fill();
+
+        ctx.beginPath();
+        ctx.ellipse(pExit.C.x - 2, CY, 16 + bStrength * 18, 62 + bStrength * 22, 0, 0, TAU);
+        ctx.strokeStyle = hexToRgba(C.amber, 0.44 + bStrength * 0.40);
+        ctx.lineWidth = 2.2;
+        ctx.stroke();
+
+        /* 2. Draw all 6 Crisp Crystal Refraction Planes (1..6 -> L18..L23) */
+        for (var k = 0; k < 6; k++) {
+          var pl = PRISM_PLANES[k];
+          var pulse = chState.planePulses[k];
+          var isExit = (k === 5);
+
+          /* Specular flash halo along plane when wavefront crosses */
+          if (pulse > 0.34 || isExit) {
+            ctx.beginPath();
+            ctx.moveTo(pl.A.x, pl.A.y);
+            ctx.lineTo(pl.B.x, pl.B.y);
+            ctx.lineTo(pl.C.x, pl.C.y);
+            ctx.lineTo(pl.D.x, pl.D.y);
+            ctx.lineTo(pl.E.x, pl.E.y);
+            ctx.strokeStyle = isExit
+              ? hexToRgba(C.amber, 0.42 + bStrength * 0.44)
+              : hexToRgba(k === 4 ? C.amber : C.slate, (pulse - 0.25) * 0.28);
+            ctx.lineWidth = isExit ? 9.0 : 5.0;
+            ctx.stroke();
+          }
+
+          /* Crisp Blue Slate (or Exit Golden Orange) crystal refraction plane */
+          ctx.beginPath();
+          ctx.moveTo(pl.A.x, pl.A.y);
+          ctx.lineTo(pl.B.x, pl.B.y);
+          ctx.lineTo(pl.C.x, pl.C.y);
+          ctx.lineTo(pl.D.x, pl.D.y);
+          ctx.lineTo(pl.E.x, pl.E.y);
+          ctx.strokeStyle = isExit
+            ? C.amber
+            : hexToRgba(C.slate, 0.58 + pulse * 0.36);
+          ctx.lineWidth = isExit ? 3.6 : (1.8 + pulse * 0.75);
+          ctx.stroke();
+
+          /* Refraction kink nodes where the 6 rays cross Plane k */
+          for (var r = 0; r < 6; r++) {
+            var rv = RAY_VERTICES[r][k];
+            ctx.beginPath();
+            ctx.arc(rv.x, rv.y, isExit ? 4.5 : 3.0, 0, TAU);
+            ctx.fillStyle = isExit
+              ? C.amber
+              : (k === 4 && pulse > 0.52 ? C.amber : C.ivory);
+            ctx.fill();
+            ctx.strokeStyle = C.slate;
+            ctx.lineWidth = isExit ? 1.7 : 1.35;
+            ctx.stroke();
+          }
+
+          /* Sculptural diamond facet pins at Crown (A) and Keel (E) marking the 6 planes */
+          var anchors = [pl.A, pl.E];
+          for (var a = 0; a < 2; a++) {
+            var pt = anchors[a];
+            var dr = isExit ? 5.2 : 4.0;
+            ctx.beginPath();
+            ctx.moveTo(pt.x, pt.y - dr);
+            ctx.lineTo(pt.x + dr, pt.y);
+            ctx.lineTo(pt.x, pt.y + dr);
+            ctx.lineTo(pt.x - dr, pt.y);
+            ctx.closePath();
+            ctx.fillStyle = (isExit || pulse > 0.58) ? C.amber : C.ivory;
+            ctx.fill();
+            ctx.strokeStyle = C.slate;
+            ctx.lineWidth = 1.6;
+            ctx.stroke();
+          }
+        }
+
+        /* 3. Bold Outer Architectural Cut-Crystal Silhouette Outline */
+        ctx.beginPath();
+        ctx.moveTo(PRISM_PLANES[0].A.x, PRISM_PLANES[0].A.y);
+        for (var kt = 1; kt < 6; kt++) {
+          ctx.lineTo(PRISM_PLANES[kt].A.x, PRISM_PLANES[kt].A.y);
+        }
+        ctx.lineTo(PRISM_PLANES[5].B.x, PRISM_PLANES[5].B.y);
+        ctx.lineTo(PRISM_PLANES[5].C.x, PRISM_PLANES[5].C.y);
+        ctx.lineTo(PRISM_PLANES[5].D.x, PRISM_PLANES[5].D.y);
+        ctx.lineTo(PRISM_PLANES[5].E.x, PRISM_PLANES[5].E.y);
+        for (var kb = 4; kb >= 0; kb--) {
+          ctx.lineTo(PRISM_PLANES[kb].E.x, PRISM_PLANES[kb].E.y);
+        }
+        ctx.lineTo(PRISM_PLANES[0].D.x, PRISM_PLANES[0].D.y);
+        ctx.lineTo(PRISM_PLANES[0].C.x, PRISM_PLANES[0].C.y);
+        ctx.lineTo(PRISM_PLANES[0].B.x, PRISM_PLANES[0].B.y);
+        ctx.closePath();
+        ctx.strokeStyle = C.slate;
+        ctx.lineWidth = 2.7;
+        ctx.stroke();
+      }
+
+      /* =========================================================================
+         Layer 4: Right Zone - Focused Coherent Rays & Sculptural Output Node
+         ========================================================================= */
+      function drawFocusedOutputZone(ctx, chState) {
+        var tNorm = chState.tNorm;
+        var exitBloom = chState.exitBloom;
+        var rightBoost = chState.rightBoost;
+        var pExitNose = PRISM_PLANES[5].C;
+
+        var topExit = RAY_VERTICES[0][5];
+        var botExit = RAY_VERTICES[5][5];
+
+        /* 1. Warm luminous converging optical cone */
+        ctx.beginPath();
+        ctx.moveTo(topExit.x, topExit.y);
+        ctx.lineTo(pExitNose.x, pExitNose.y);
+        ctx.lineTo(botExit.x, botExit.y);
+        ctx.lineTo(FOCAL_OUT.x, FOCAL_OUT.y);
+        ctx.closePath();
+        ctx.fillStyle = hexToRgba(C.amber, 0.055 + 0.065 * exitBloom);
+        ctx.fill();
+
+        /* 2. Coherent Spherical Wavefront Arcs Collapsing Smoothly Onto Focal Node */
+        var angTop = Math.atan2(topExit.y - FOCAL_OUT.y, topExit.x - FOCAL_OUT.x);
+        var angBot = Math.atan2(botExit.y - FOCAL_OUT.y, botExit.x - FOCAL_OUT.x);
+        var maxR = Math.hypot(topExit.x - FOCAL_OUT.x, topExit.y - FOCAL_OUT.y) - 8;
+        var minR = 25;
+
+        for (var w = 0; w < 4; w++) {
+          var uArc = mod1(tNorm * 1.5 + w * 0.25);
+          var rad = lerp(maxR, minR, uArc);
+          var arcFade = smoothstep(0.0, 0.14, uArc) * smoothstep(1.0, 0.86, uArc);
+
+          ctx.beginPath();
+          ctx.arc(FOCAL_OUT.x, FOCAL_OUT.y, rad, angBot, angTop, false);
+          ctx.strokeStyle = hexToRgba(uArc > 0.42 ? C.amber : C.slate, (0.42 + 0.36 * rightBoost) * arcFade);
+          ctx.lineWidth = 1.9 + uArc * 1.4;
+          ctx.stroke();
+        }
+
+        /* 3. Six Razor-Sharp Converging Refracted Rays + Central Principal Axis Beam */
+        for (var r = 0; r < 6; r++) {
+          var rv = RAY_VERTICES[r][5];
+          var isInner = (r === 2 || r === 3);
+          var isMid   = (r === 1 || r === 4);
+          var rCol = isInner ? C.amber : (isMid ? C.sageDeep : C.slate);
+
+          if (isInner) {
+            ctx.beginPath();
+            ctx.moveTo(rv.x, rv.y);
+            ctx.lineTo(FOCAL_OUT.x, FOCAL_OUT.y);
+            ctx.strokeStyle = hexToRgba(C.amber, 0.22 + 0.24 * rightBoost);
+            ctx.lineWidth = 5.6;
+            ctx.stroke();
+          }
+
+          ctx.beginPath();
+          ctx.moveTo(rv.x, rv.y);
+          ctx.lineTo(FOCAL_OUT.x, FOCAL_OUT.y);
+          ctx.strokeStyle = hexToRgba(rCol, isInner ? 0.95 : 0.80);
+          ctx.lineWidth = isInner ? 2.8 : 2.15;
+          ctx.stroke();
+
+          /* Synchronized phase-locked light pulses racing together into Focal Output */
+          for (var p = 0; p < 2; p++) {
+            var uPulse = mod1(tNorm * 3.0 + p * 0.5);
+            var px = lerp(rv.x, FOCAL_OUT.x, uPulse);
+            var py = lerp(rv.y, FOCAL_OUT.y, uPulse);
+            var bFade = smoothstep(0.0, 0.10, uPulse) * smoothstep(1.0, 0.90, uPulse);
+
+            ctx.beginPath();
+            ctx.arc(px, py, isInner ? 4.0 : 3.2, 0, TAU);
+            ctx.fillStyle = hexToRgba(C.amber, 0.94 * bFade);
+            ctx.fill();
+          }
+        }
+
+        /* Principal Golden Orange Optical Axis Beam */
+        ctx.beginPath();
+        ctx.moveTo(pExitNose.x, pExitNose.y);
+        ctx.lineTo(FOCAL_OUT.x, FOCAL_OUT.y);
+        ctx.strokeStyle = hexToRgba(C.amber, 0.78 + 0.22 * exitBloom);
+        ctx.lineWidth = 3.5 + exitBloom * 1.1;
+        ctx.stroke();
+
+        /* 4. Calm, Crisp Concentric Readout Rings Around Focal Output Node (x <= 1488) */
+        for (var ring = 0; ring < 4; ring++) {
+          var uOut = mod1(tNorm * 1.0 + ring * 0.25);
+          var rOut = 25 + uOut * 99; /* Max x = 1364 + 124 = 1488, cleanly inside 1490! */
+          var alphaOut = (1 - uOut) * smoothstep(0.0, 0.10, uOut) * (0.62 + 0.34 * rightBoost);
+
+          ctx.beginPath();
+          ctx.arc(FOCAL_OUT.x, FOCAL_OUT.y, rOut, 0, TAU);
+          ctx.strokeStyle = ring % 2 === 0
+            ? hexToRgba(C.amber, alphaOut * 0.94)
+            : hexToRgba(C.slate, alphaOut * 0.72);
+          ctx.lineWidth = ring % 2 === 0 ? 2.5 * (1 - uOut * 0.38) : 1.7 * (1 - uOut * 0.32);
+          ctx.stroke();
+        }
+
+        /* 5. Bold Sculptural Golden Orange Focal Output Node (2.5 px Blue Slate Outline) */
+        var lockBeat = 0.5 + 0.5 * Math.cos(TAU * 6 * tNorm);
+        var focalGlow = clamp(0.46 + 0.38 * rightBoost + 0.22 * lockBeat, 0, 1);
+
+        ctx.beginPath();
+        ctx.arc(FOCAL_OUT.x, FOCAL_OUT.y, 32 + focalGlow * 18, 0, TAU);
+        ctx.fillStyle = hexToRgba(C.amber, 0.19 + focalGlow * 0.16);
+        ctx.fill();
+
+        /* Precision outer architectural collar */
+        ctx.beginPath();
+        ctx.arc(FOCAL_OUT.x, FOCAL_OUT.y, 27.5, 0, TAU);
+        ctx.strokeStyle = hexToRgba(C.slate, 0.44);
+        ctx.lineWidth = 1.55;
+        ctx.stroke();
+
+        /* Main Golden Orange focal body with exact 2.5px Blue Slate outline */
+        ctx.beginPath();
+        ctx.arc(FOCAL_OUT.x, FOCAL_OUT.y, 19.5 + lockBeat * 1.6, 0, TAU);
+        ctx.fillStyle = C.amber;
+        ctx.fill();
+        ctx.strokeStyle = C.slate;
+        ctx.lineWidth = 2.5;
+        ctx.stroke();
+
+        /* Inner Ivory ring + solid Onyx pinpoint core */
+        ctx.beginPath();
+        ctx.arc(FOCAL_OUT.x, FOCAL_OUT.y, 7.4, 0, TAU);
+        ctx.fillStyle = C.ivory;
+        ctx.fill();
+
+        ctx.beginPath();
+        ctx.arc(FOCAL_OUT.x, FOCAL_OUT.y, 3.3, 0, TAU);
+        ctx.fillStyle = C.onyx;
+        ctx.fill();
+      }
+
+      /* =========================================================================
+         Retina 1600x900 Canvas Setup & 60fps 10-Second Seamless Loop
+         ========================================================================= */
+      var canvas = document.getElementById("cinema");
+      var ctx = canvas.getContext("2d");
+
+      function resizeCanvas() {
+        var dpr = Math.min(window.devicePixelRatio || 1, 2);
+        canvas.width = Math.round(W * dpr);
+        canvas.height = Math.round(H * dpr);
+        ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      }
+
+      buildCoreExitCluster();
+      resizeCanvas();
+      window.addEventListener("resize", resizeCanvas);
+
+      var params = new URLSearchParams(window.location.search);
+      var fixedT = params.has("t") ? parseFloat(params.get("t")) : null;
+      var INITIAL_PHASE_S = 3.45;
+      var startTime = performance.now();
+
+      function renderFrame(elapsedS) {
+        var tNorm = mod1(elapsedS / CYCLE_S);
+        var chState = getChoreography(tNorm);
+
+        ctx.fillStyle = C.ivory;
+        ctx.fillRect(0, 0, W, H);
+
+        drawChambersAndLabels(ctx, chState);
+        drawPrismBackdropFacets(ctx, chState);
+        drawLeftRotatedShorthand(ctx, chState);
+        drawPrismRefractionAndAlignment(ctx, chState);
+        drawPrismCrystalFrameAndBloom(ctx, chState);
+        drawFocusedOutputZone(ctx, chState);
+      }
+
+      /* Render initial frame synchronously so first paint is immediate */
+      renderFrame(fixedT !== null && !isNaN(fixedT) ? fixedT : INITIAL_PHASE_S);
+
+      function tick(now) {
+        var elapsedS = fixedT !== null && !isNaN(fixedT)
+          ? fixedT
+          : ((now - startTime) / 1000) + INITIAL_PHASE_S;
+        renderFrame(elapsedS);
+        if (fixedT === null || isNaN(fixedT)) {
+          requestAnimationFrame(tick);
+        }
+      }
+
+      requestAnimationFrame(tick);
+    })();
+  </script>
+</body>
+</html>

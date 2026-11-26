@@ -1,0 +1,1384 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>The Stem Soma: Somatic Reset and Gated Synaptic Trunks</title>
+  <style>
+    :root {
+      --ivory: #FFFFF0;
+      --parchment: #F5EEDC;
+      --onyx: #0F0F0F;
+      --slate: #2C3E50;
+      --mist: #808B90;
+      --sage: #87A96B;
+      --amber: #F39C12;
+      --rule: #E2DCCB;
+    }
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    html, body {
+      width: 100%;
+      height: 100%;
+      background: var(--ivory);
+      color: var(--onyx);
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      -webkit-font-smoothing: antialiased;
+    }
+    .stage-shell {
+      position: relative;
+      width: min(98vw, calc(98vh * 16 / 9));
+      height: min(98vh, calc(98vw * 9 / 16));
+      aspect-ratio: 16 / 9;
+      background: var(--ivory);
+      border: 1px solid var(--rule);
+      border-radius: 10px;
+      overflow: hidden;
+    }
+    canvas {
+      display: block;
+      width: 100%;
+      height: 100%;
+    }
+  </style>
+</head>
+<body>
+  <div class="stage-shell">
+    <canvas id="cinema" aria-label="Zoomed-in 10-second loop of the Stem Soma executing a radial Golden Orange and Blue Slate Somatic Reset wave that vaporizes incoming off-axis stray error sparks on contact and launches synchronized action-potential volleys down four gated synaptic trunks."></canvas>
+  </div>
+
+  <script>
+    (function () {
+      "use strict";
+
+      var C = {
+        ivory: "#FFFFF0",
+        parchment: "#F5EEDC",
+        parchmentSoft: "#FAF5E6",
+        chamberRight: "#FCFBF2",
+        onyx: "#0F0F0F",
+        slate: "#2C3E50",
+        slateDeep: "#1E3447",
+        mist: "#808B90",
+        sage: "#87A96B",
+        sageDeep: "#5F7F4A",
+        amber: "#F39C12",
+        rule: "#E2DCCB",
+        ruleBorder: "#D5CEBC"
+      };
+
+      var W = 1600;
+      var H = 900;
+      var CYCLE_S = 10.0;
+      var HALF_S = 5.0;
+
+      /* Deterministic PRNG (Mulberry32) */
+      function mulberry32(seed) {
+        var a = seed >>> 0;
+        return function () {
+          a |= 0;
+          a = (a + 0x6D2B79F5) | 0;
+          var t = Math.imul(a ^ (a >>> 15), 1 | a);
+          t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+          return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+        };
+      }
+
+      var rng = mulberry32(20260819);
+
+      function clamp(v, lo, hi) {
+        return v < lo ? lo : (v > hi ? hi : v);
+      }
+
+      function lerp(a, b, u) {
+        return a + (b - a) * u;
+      }
+
+      function smoothstep(e0, e1, x) {
+        var u = clamp((x - e0) / (e1 - e0), 0, 1);
+        return u * u * (3 - 2 * u);
+      }
+
+      function pulseBell(x, center, width) {
+        var d = (x - center) / width;
+        return Math.exp(-0.5 * d * d);
+      }
+
+      function cubicPt(p0, p1, p2, p3, u) {
+        var m = 1 - u;
+        var m2 = m * m;
+        var u2 = u * u;
+        return {
+          x: m2 * m * p0.x + 3 * m2 * u * p1.x + 3 * m * u2 * p2.x + u2 * u * p3.x,
+          y: m2 * m * p0.y + 3 * m2 * u * p1.y + 3 * m * u2 * p2.y + u2 * u * p3.y
+        };
+      }
+
+      function cubicTangent(p0, p1, p2, p3, u) {
+        var m = 1 - u;
+        var tx = 3 * m * m * (p1.x - p0.x) + 6 * m * u * (p2.x - p1.x) + 3 * u * u * (p3.x - p2.x);
+        var ty = 3 * m * m * (p1.y - p0.y) + 6 * m * u * (p2.y - p1.y) + 3 * u * u * (p3.y - p2.y);
+        var len = Math.hypot(tx, ty) || 1;
+        return { x: tx / len, y: ty / len };
+      }
+
+      function quadPt(x0, y0, cx, cy, x1, y1, u) {
+        var m = 1 - u;
+        return {
+          x: m * m * x0 + 2 * m * u * cx + u * u * x1,
+          y: m * m * y0 + 2 * m * u * cy + u * u * y1
+        };
+      }
+
+      function hexToRgba(hex, alpha) {
+        var h = hex.replace("#", "");
+        var r = parseInt(h.substring(0, 2), 16);
+        var g = parseInt(h.substring(2, 4), 16);
+        var b = parseInt(h.substring(4, 6), 16);
+        return "rgba(" + r + "," + g + "," + b + "," + clamp(alpha, 0, 1).toFixed(4) + ")";
+      }
+
+      function roundRectPath(ctx, x, y, w, h, r) {
+        ctx.beginPath();
+        ctx.moveTo(x + r, y);
+        ctx.lineTo(x + w - r, y);
+        ctx.quadraticCurveTo(x + w, y, x + w, y + r);
+        ctx.lineTo(x + w, y + h - r);
+        ctx.quadraticCurveTo(x + w, y + h, x + w - r, y + h);
+        ctx.lineTo(x + r, y + h);
+        ctx.quadraticCurveTo(x, y + h, x, y + h - r);
+        ctx.lineTo(x, y + r);
+        ctx.quadraticCurveTo(x, y, x + r, y);
+        ctx.closePath();
+      }
+
+      /* =========================================================================
+         Stage Chambers & Anatomical Coordinates
+         ========================================================================= */
+      var CHAMBERS = {
+        left:  { x: 44,   y: 48, w: 984, h: 804, title: "STEM SOMA \u00B7 SOMATIC RESET", barW: 244 },
+        right: { x: 1048, y: 48, w: 508, h: 804, title: "GATED SYNAPTIC TRUNKS",          barW: 204 }
+      };
+
+      var SOMA = { x: 540, y: 430 };
+      var GATE_X = 1096;
+      var TRUNK_END_X = 1496;
+
+      var TRUNK_SPECS = [
+        { idx: 0, isUpper: true,  y: 234, color: C.slate, deep: C.slateDeep, hillockY: SOMA.y - 14 },
+        { idx: 1, isUpper: true,  y: 352, color: C.slate, deep: C.slateDeep, hillockY: SOMA.y - 5  },
+        { idx: 2, isUpper: false, y: 508, color: C.sage,  deep: C.sageDeep,  hillockY: SOMA.y + 5  },
+        { idx: 3, isUpper: false, y: 626, color: C.sage,  deep: C.sageDeep,  hillockY: SOMA.y + 14 }
+      ];
+
+      var dendrites = [];
+      var spines = [];
+      var satellites = [];
+      var localAxons = [];
+      var rootTrunks = [];
+      var feederAxons = [];
+      var gatedTrunks = [];
+      var feedbackArcs = [];
+      var straySets = [[], []];
+
+      function makeCubicEdge(p0, p3, curvature) {
+        var dx = p3.x - p0.x;
+        var dy = p3.y - p0.y;
+        var len = Math.hypot(dx, dy) || 1;
+        var nx = -dy / len;
+        var ny = dx / len;
+        var bend = curvature * len;
+        return {
+          p0: { x: p0.x, y: p0.y },
+          p1: { x: p0.x + dx * 0.34 + nx * bend, y: p0.y + dy * 0.34 + ny * bend },
+          p2: { x: p0.x + dx * 0.68 - nx * bend * 0.52, y: p0.y + dy * 0.68 - ny * bend * 0.52 },
+          p3: { x: p3.x, y: p3.y }
+        };
+      }
+
+      function addDendriteSeg(x0, y0, cx, cy, x1, y1, thickness, depth) {
+        var mid = quadPt(x0, y0, cx, cy, x1, y1, 0.5);
+        var distFromSoma = Math.hypot(mid.x - SOMA.x, mid.y - SOMA.y);
+        dendrites.push({
+          x0: x0, y0: y0,
+          cx: cx, cy: cy,
+          x1: x1, y1: y1,
+          w: thickness,
+          depth: depth,
+          dist: distFromSoma
+        });
+
+        if (depth >= 1 && depth <= 3) {
+          var spineCount = depth === 1 ? 3 : 2;
+          for (var s = 1; s <= spineCount; s++) {
+            var su = s / (spineCount + 1) + (rng() - 0.5) * 0.08;
+            var bPt = quadPt(x0, y0, cx, cy, x1, y1, clamp(su, 0.14, 0.88));
+            var dx = x1 - x0;
+            var dy = y1 - y0;
+            var len = Math.hypot(dx, dy) || 1;
+            var side = (s % 2 === 0 ? 1 : -1);
+            var nx = (-dy / len) * side;
+            var ny = (dx / len) * side;
+            var sLen = 4.4 + rng() * 4.0;
+            spines.push({
+              x0: bPt.x,
+              y0: bPt.y,
+              x1: bPt.x + nx * sLen,
+              y1: bPt.y + ny * sLen,
+              r: 1.4 + rng() * 0.65,
+              dist: Math.hypot(bPt.x - SOMA.x, bPt.y - SOMA.y)
+            });
+          }
+        }
+      }
+
+      function growArbor(x0, y0, angle, spread, depth, len, thickness, maxRightX) {
+        if (depth <= 0 || len < 13) return;
+        var nBranches = depth >= 4 ? 3 : 2;
+        for (var i = 0; i < nBranches; i++) {
+          var frac = nBranches === 1 ? 0 : (i / (nBranches - 1) - 0.5);
+          var nextAng = angle + frac * spread + (rng() - 0.5) * 0.24;
+          var ex = clamp(x0 + Math.cos(nextAng) * len, 86, maxRightX || 690);
+          var ey = clamp(y0 + Math.sin(nextAng) * len, 96, 736);
+          var actualLen = Math.hypot(ex - x0, ey - y0);
+          if (actualLen < 10) continue;
+
+          var perpX = -(ey - y0) / actualLen;
+          var perpY = (ex - x0) / actualLen;
+          var bend = (rng() - 0.5) * actualLen * 0.25;
+          var cx = (x0 + ex) * 0.5 + perpX * bend;
+          var cy = (y0 + ey) * 0.5 + perpY * bend;
+
+          addDendriteSeg(x0, y0, cx, cy, ex, ey, thickness, depth);
+          growArbor(
+            ex, ey,
+            nextAng,
+            spread * 0.78,
+            depth - 1,
+            len * (0.72 + rng() * 0.10),
+            Math.max(0.8, thickness * 0.68),
+            maxRightX
+          );
+        }
+      }
+
+      function buildStemTissue() {
+        /* 1. Off-Axis Stray Error Sparks defined first so arbor & satellites leave clean negative space */
+        straySets[0] = [
+          {
+            p0: { x: 988, y: 146 },
+            p1: { x: 904, y: 192 },
+            p2: { x: 822, y: 232 },
+            p3: { x: 744, y: 274 },
+            tSpawn: 0.24,
+            tArrive: 2.02,
+            wobbleFreq: 18.5,
+            phase: 0.4
+          },
+          {
+            p0: { x: 998, y: 424 },
+            p1: { x: 924, y: 406 },
+            p2: { x: 850, y: 448 },
+            p3: { x: 778, y: 428 },
+            tSpawn: 0.30,
+            tArrive: 1.96,
+            wobbleFreq: 21.0,
+            phase: 1.9
+          },
+          {
+            p0: { x: 984, y: 706 },
+            p1: { x: 900, y: 662 },
+            p2: { x: 824, y: 620 },
+            p3: { x: 748, y: 582 },
+            tSpawn: 0.34,
+            tArrive: 2.06,
+            wobbleFreq: 17.5,
+            phase: 3.5
+          }
+        ];
+
+        straySets[1] = [
+          {
+            p0: { x: 992, y: 158 },
+            p1: { x: 908, y: 204 },
+            p2: { x: 826, y: 244 },
+            p3: { x: 750, y: 282 },
+            tSpawn: 0.24,
+            tArrive: 2.02,
+            wobbleFreq: 19.5,
+            phase: 1.2
+          },
+          {
+            p0: { x: 996, y: 438 },
+            p1: { x: 920, y: 454 },
+            p2: { x: 848, y: 412 },
+            p3: { x: 774, y: 434 },
+            tSpawn: 0.30,
+            tArrive: 1.96,
+            wobbleFreq: 20.5,
+            phase: 2.8
+          },
+          {
+            p0: { x: 980, y: 696 },
+            p1: { x: 896, y: 652 },
+            p2: { x: 820, y: 612 },
+            p3: { x: 744, y: 576 },
+            tSpawn: 0.34,
+            tArrive: 2.06,
+            wobbleFreq: 18.0,
+            phase: 4.4
+          }
+        ];
+
+        /* 2. Grand Ramon y Cajal Apical Trunk + Obliques + Apical Crown Tuft */
+        var ap0   = { x: SOMA.x - 3,  y: SOMA.y - 46 };
+        var apMid = { x: SOMA.x - 12, y: SOMA.y - 104 };
+        var apTop = { x: SOMA.x - 10, y: SOMA.y - 158 };
+        addDendriteSeg(ap0.x, ap0.y, SOMA.x - 9, SOMA.y - 74, apMid.x, apMid.y, 6.0, 5);
+        addDendriteSeg(apMid.x, apMid.y, SOMA.x - 16, SOMA.y - 132, apTop.x, apTop.y, 4.4, 5);
+
+        growArbor(apMid.x, apMid.y + 8, -Math.PI * 0.84, 0.62, 3, 64, 2.4, 680);
+        growArbor(apMid.x + 2, apMid.y + 4, -Math.PI * 0.20, 0.52, 3, 52, 2.2, 665);
+        growArbor(apTop.x, apTop.y, -Math.PI * 0.54, 1.34, 4, 70, 3.3, 690);
+
+        /* 3. Five Lush Multi-Level Basal Dendritic Arbors */
+        var basalRoots = [
+          { x: SOMA.x - 34, y: SOMA.y - 10, ang: Math.PI * 0.96, spread: 0.86, len: 82, maxR: 660 },
+          { x: SOMA.x - 36, y: SOMA.y + 18, ang: Math.PI * 1.14, spread: 0.82, len: 84, maxR: 660 },
+          { x: SOMA.x - 28, y: SOMA.y + 28, ang: Math.PI * 0.74, spread: 0.88, len: 82, maxR: 660 },
+          { x: SOMA.x + 2,  y: SOMA.y + 32, ang: Math.PI * 0.54, spread: 0.76, len: 74, maxR: 665 },
+          { x: SOMA.x + 24, y: SOMA.y + 24, ang: Math.PI * 0.34, spread: 0.58, len: 56, maxR: 665 }
+        ];
+        for (var b = 0; b < basalRoots.length; b++) {
+          var br = basalRoots[b];
+          growArbor(br.x, br.y, br.ang, br.spread, 4, br.len, 3.5, br.maxR);
+        }
+
+        /* 4. 24 Satellite Cortical Cells with pairwise spacing & zero overlap with stray sparks */
+        var allSparks = straySets[0].concat(straySets[1]);
+        function isClearOfSparks(x, y) {
+          /* Keep the right-side feedback contamination clearings wide open */
+          if (x > 685 && y > 130 && y < 715) return false;
+          for (var i = 0; i < allSparks.length; i++) {
+            var sp = allSparks[i];
+            if (Math.hypot(x - sp.p3.x, y - sp.p3.y) < 86) return false;
+            if (Math.hypot(x - sp.p2.x, y - sp.p2.y) < 76) return false;
+          }
+          return true;
+        }
+
+        var targetSatellites = 24;
+        for (var s = 0; s < targetSatellites; s++) {
+          var chosen = null;
+          var isInner = (s < 10);
+          for (var attempt = 0; attempt < 80; attempt++) {
+            /* Spread richly across top, left, and bottom Cajal halo */
+            var frac = isInner ? (s / 10) : ((s - 10) / 14);
+            var ang = lerp(Math.PI * 0.34, Math.PI * 1.66, frac) + (rng() - 0.5) * (0.28 + attempt * 0.02);
+            if (s === 0 || s === 9 || s === 10 || s === 23) {
+              ang = (s === 0 || s === 10)
+                ? (Math.PI * 0.24 + rng() * 0.14)
+                : (-Math.PI * 0.24 - rng() * 0.14);
+            }
+            var rx = isInner ? lerp(132, 198, rng()) : lerp(225, 392, rng());
+            var ry = isInner ? lerp(118, 182, rng()) : lerp(196, 304, rng());
+            var cx = clamp(SOMA.x + Math.cos(ang) * rx, 92, 682);
+            var cy = clamp(SOMA.y + Math.sin(ang) * ry, 108, 730);
+
+            var ok = Math.hypot(cx - SOMA.x, cy - SOMA.y) >= 118 && isClearOfSparks(cx, cy);
+            for (var p = 0; p < satellites.length && ok; p++) {
+              if (Math.hypot(cx - satellites[p].x, cy - satellites[p].y) < 58) {
+                ok = false;
+              }
+            }
+            if (ok || attempt === 79) {
+              chosen = { x: cx, y: cy };
+              break;
+            }
+          }
+
+          var dist = Math.hypot(chosen.x - SOMA.x, chosen.y - SOMA.y);
+          var isPyr = (s % 3 !== 1);
+          var cell = {
+            x: chosen.x,
+            y: chosen.y,
+            r: isPyr ? (7.2 + rng() * 2.4) : (5.8 + rng() * 1.8),
+            isPyramidal: isPyr,
+            orient: Math.atan2(SOMA.y - chosen.y, SOMA.x - chosen.x) + (rng() - 0.5) * 0.5,
+            dist: dist,
+            twigs: []
+          };
+
+          for (var tw = 0; tw < 3; tw++) {
+            var tang = cell.orient + Math.PI + (tw - 1) * 0.92 + (rng() - 0.5) * 0.32;
+            var tLen = 16 + rng() * 16;
+            var tx1 = cell.x + Math.cos(tang) * tLen;
+            var ty1 = cell.y + Math.sin(tang) * tLen;
+            cell.twigs.push({
+              x0: cell.x, y0: cell.y,
+              cx: (cell.x + tx1) * 0.5 + (rng() - 0.5) * 6,
+              cy: (cell.y + ty1) * 0.5 + (rng() - 0.5) * 6,
+              x1: tx1, y1: ty1
+            });
+          }
+          satellites.push(cell);
+
+          var anchorAng = Math.atan2(cell.y - SOMA.y, cell.x - SOMA.x);
+          var somaAnchor = {
+            x: SOMA.x + Math.cos(anchorAng) * 34,
+            y: SOMA.y + Math.sin(anchorAng) * 32
+          };
+          var edge = makeCubicEdge({ x: cell.x, y: cell.y }, somaAnchor, (rng() - 0.5) * 0.34);
+          edge.dist = dist * 0.65;
+          edge.seed = rng();
+          localAxons.push(edge);
+        }
+
+        /* Neighboring satellite collateral arcs */
+        for (var i = 0; i < satellites.length; i++) {
+          for (var j = i + 1; j < satellites.length; j++) {
+            var dPair = Math.hypot(satellites[i].x - satellites[j].x, satellites[i].y - satellites[j].y);
+            if (dPair > 62 && dPair < 155 && (i + j) % 2 === 0) {
+              var cEdge = makeCubicEdge(satellites[i], satellites[j], (i % 2 === 0 ? 0.20 : -0.20));
+              cEdge.dist = (satellites[i].dist + satellites[j].dist) * 0.5;
+              cEdge.seed = rng();
+              localAxons.push(cEdge);
+            }
+          }
+        }
+
+        /* 5. Four Clean Sculpted Outgoing Axonal Trunks (2 Upper Slate, 2 Lower Sage) */
+        var sortedByY = satellites.slice().sort(function (a, b) { return a.y - b.y; });
+        var chosenFeeders = [
+          sortedByY[1],
+          sortedByY[5],
+          sortedByY[sortedByY.length - 6],
+          sortedByY[sortedByY.length - 2]
+        ];
+        for (var k = 0; k < TRUNK_SPECS.length; k++) {
+          var sp = TRUNK_SPECS[k];
+          var pStart = { x: SOMA.x + 36, y: sp.hillockY };
+          var pGate = { x: GATE_X, y: sp.y };
+
+          rootTrunks.push({
+            p0: pStart,
+            p1: { x: SOMA.x + 190, y: lerp(sp.hillockY, sp.y, 0.22) + (sp.isUpper ? -12 : 12) },
+            p2: { x: GATE_X - 180, y: sp.y + (k % 2 === 0 ? -6 : 6) },
+            p3: pGate,
+            spec: sp
+          });
+
+          var satFeeder = chosenFeeders[k];
+          var fEdge = makeCubicEdge({ x: satFeeder.x, y: satFeeder.y }, pGate, sp.isUpper ? -0.10 : 0.10);
+          fEdge.spec = sp;
+          feederAxons.push(fEdge);
+
+          var waveDir = (k % 2 === 0 ? -1 : 1);
+          var pEnd = { x: TRUNK_END_X, y: sp.y };
+          var gt = {
+            p0: pGate,
+            p1: { x: GATE_X + 136, y: sp.y + waveDir * 10 },
+            p2: { x: GATE_X + 274, y: sp.y - waveDir * 10 },
+            p3: pEnd,
+            spec: sp,
+            sheaths: [],
+            collaterals: []
+          };
+
+          var sheathCount = 4;
+          for (var m = 0; m < sheathCount; m++) {
+            var u0 = 0.065 + m * 0.228;
+            var u1 = u0 + 0.168;
+            gt.sheaths.push({
+              u0: u0,
+              u1: u1,
+              uMid: (u0 + u1) * 0.5,
+              nodeAfterU: m < sheathCount - 1 ? (u1 + 0.030) : -1
+            });
+          }
+
+          for (var tf = -1; tf <= 1; tf += 2) {
+            gt.collaterals.push({
+              x0: pEnd.x,
+              y0: pEnd.y,
+              cx: pEnd.x + 18,
+              cy: pEnd.y + tf * 6,
+              x1: pEnd.x + 34,
+              y1: pEnd.y + tf * 17
+            });
+          }
+
+          gatedTrunks.push(gt);
+        }
+
+        /* 6. Sweeping Incoming Feedback Arcs (from top-right and bottom-right) */
+        feedbackArcs.push({
+          p0: { x: 1546, y: 104 },
+          p1: { x: 1210, y: 66  },
+          p2: { x: 825,  y: 68  },
+          p3: { x: SOMA.x + 6,  y: SOMA.y - 138 },
+          color: C.slate,
+          pulseColor: C.slate,
+          isUpper: true
+        });
+        feedbackArcs.push({
+          p0: { x: 1546, y: 144 },
+          p1: { x: 1195, y: 102 },
+          p2: { x: 865,  y: 112 },
+          p3: { x: SOMA.x + 24, y: SOMA.y - 54  },
+          color: C.slateDeep,
+          pulseColor: C.amber,
+          isUpper: true
+        });
+        feedbackArcs.push({
+          p0: { x: 1546, y: 706 },
+          p1: { x: 1195, y: 736 },
+          p2: { x: 865,  y: 726 },
+          p3: { x: SOMA.x + 26, y: SOMA.y + 46  },
+          color: C.sageDeep,
+          pulseColor: C.sageDeep,
+          isUpper: false
+        });
+        feedbackArcs.push({
+          p0: { x: 1546, y: 742 },
+          p1: { x: 1210, y: 762 },
+          p2: { x: 825,  y: 756 },
+          p3: { x: SOMA.x - 6,  y: SOMA.y + 92  },
+          color: C.sage,
+          pulseColor: C.sage,
+          isUpper: false
+        });
+      }
+
+      /* =========================================================================
+         10-Second Seamless Choreography (2 Somatic Resets per 10s Cycle)
+         ========================================================================= */
+      var RESET_START = 1.48;
+      var RESET_DUR   = 1.72;
+      var RESET_R_MIN = 34;
+      var RESET_R_MAX = 438;
+
+      function getResetRadius(localT) {
+        if (localT < RESET_START || localT > RESET_START + RESET_DUR) return -1;
+        var u = clamp((localT - RESET_START) / RESET_DUR, 0, 1);
+        var eased = 1 - Math.pow(1 - u, 1.60);
+        return RESET_R_MIN + (RESET_R_MAX - RESET_R_MIN) * eased;
+      }
+
+      function computeSparkContact(spark) {
+        var steps = 120;
+        var tLo = RESET_START;
+        var tHi = RESET_START + RESET_DUR;
+        for (var i = 0; i <= steps; i++) {
+          var tSample = lerp(tLo, tHi, i / steps);
+          var uMove = clamp((tSample - spark.tSpawn) / (spark.tArrive - spark.tSpawn), 0, 1);
+          var uEased = smoothstep(0, 1, uMove);
+          var pt = cubicPt(spark.p0, spark.p1, spark.p2, spark.p3, uEased);
+          var dist = Math.hypot(pt.x - SOMA.x, pt.y - SOMA.y);
+          var rWave = getResetRadius(tSample);
+          if (rWave >= dist) {
+            return { tHit: tSample, hitPt: pt, hitDist: dist };
+          }
+        }
+        return {
+          tHit: spark.tArrive,
+          hitPt: spark.p3,
+          hitDist: Math.hypot(spark.p3.x - SOMA.x, spark.p3.y - SOMA.y)
+        };
+      }
+
+      function getPhaseState(elapsedS) {
+        var passIdx = elapsedS >= HALF_S ? 1 : 0;
+        var localT = elapsedS % HALF_S;
+
+        var fbActive = (localT >= 0.06 && localT <= 1.76)
+          ? clamp((localT - 0.06) / 1.56, 0, 1)
+          : -1;
+
+        var resetU = (localT >= RESET_START && localT <= RESET_START + RESET_DUR)
+          ? clamp((localT - RESET_START) / RESET_DUR, 0, 1)
+          : -1;
+        var resetR = getResetRadius(localT);
+
+        var somaPreCharge = smoothstep(0.82, 1.48, localT) * (1 - smoothstep(1.48, 1.62, localT)) * 0.36;
+        var somaFlash = smoothstep(1.44, 1.58, localT) * (1 - smoothstep(1.85, 2.95, localT));
+        var somaClean = smoothstep(1.55, 1.85, localT) * (1 - smoothstep(4.25, 4.92, localT));
+
+        var rootVolleyU = (localT >= 1.76 && localT <= 2.62)
+          ? clamp((localT - 1.76) / 0.78, 0, 1)
+          : -1;
+
+        var gateOpen = smoothstep(2.24, 2.46, localT) * (1 - smoothstep(3.92, 4.62, localT));
+        var gateRingU = (localT >= 2.30 && localT <= 3.12)
+          ? clamp((localT - 2.30) / 0.82, 0, 1)
+          : -1;
+
+        var trunkActive = smoothstep(2.32, 2.54, localT) * (1 - smoothstep(4.42, 4.90, localT));
+        var volleyLeadU = (localT - 2.36) / 1.44;
+
+        return {
+          passIdx: passIdx,
+          localT: localT,
+          fbActive: fbActive,
+          resetU: resetU,
+          resetR: resetR,
+          somaPreCharge: somaPreCharge,
+          somaFlash: somaFlash,
+          somaClean: somaClean,
+          rootVolleyU: rootVolleyU,
+          gateOpen: gateOpen,
+          gateRingU: gateRingU,
+          trunkActive: trunkActive,
+          volleyLeadU: volleyLeadU
+        };
+      }
+
+      function getWaveHighlightAtDist(dist, st) {
+        if (st.resetR < 0) return 0;
+        var fade = 1 - st.resetU * 0.42;
+        return clamp(pulseBell(dist, st.resetR - 14, 34) * fade, 0, 1);
+      }
+
+      /* =========================================================================
+         Rendering Layers
+         ========================================================================= */
+      function drawChambersAndLabels(ctx, st) {
+        var somaAct = st.resetU >= 0 || st.somaClean > 0.35;
+        var trunkAct = st.trunkActive > 0.15;
+
+        var list = [
+          { box: CHAMBERS.left,  fill: C.parchmentSoft, active: somaAct  },
+          { box: CHAMBERS.right, fill: C.chamberRight,  active: trunkAct }
+        ];
+
+        for (var i = 0; i < list.length; i++) {
+          var item = list[i];
+          var b = item.box;
+
+          roundRectPath(ctx, b.x, b.y, b.w, b.h, 12);
+          ctx.fillStyle = item.fill;
+          ctx.fill();
+          ctx.strokeStyle = item.active ? hexToRgba(C.slate, 0.58) : C.ruleBorder;
+          ctx.lineWidth = item.active ? 1.9 : 1.3;
+          ctx.stroke();
+
+          if (i === 0) {
+            var grad = ctx.createRadialGradient(SOMA.x, SOMA.y, 20, SOMA.x, SOMA.y, 380);
+            grad.addColorStop(0, hexToRgba(C.ivory, 0.58 + st.somaFlash * 0.28));
+            grad.addColorStop(0.7, hexToRgba(C.parchmentSoft, 0.12));
+            grad.addColorStop(1, hexToRgba(C.parchment, 0.20));
+            ctx.save();
+            roundRectPath(ctx, b.x + 2, b.y + 2, b.w - 4, b.h - 76, 10);
+            ctx.clip();
+            ctx.fillStyle = grad;
+            ctx.fillRect(b.x, b.y, b.w, b.h - 76);
+            ctx.restore();
+          }
+
+          var cx = b.x + b.w * 0.5;
+          var labelY = b.y + b.h - 34;
+
+          ctx.textAlign = "center";
+          ctx.fillStyle = C.onyx;
+          ctx.font = "800 24px -apple-system, BlinkMacSystemFont, \"Segoe UI\", sans-serif";
+          ctx.letterSpacing = "0.05em";
+          ctx.fillText(b.title, cx, labelY);
+          ctx.letterSpacing = "0px";
+
+          roundRectPath(ctx, cx - b.barW * 0.5, labelY + 11, b.barW, 3.5, 2);
+          ctx.fillStyle = item.active ? C.amber : C.slate;
+          ctx.fill();
+        }
+      }
+
+      function drawFeedbackArcs(ctx, st) {
+        for (var i = 0; i < feedbackArcs.length; i++) {
+          var a = feedbackArcs[i];
+          ctx.beginPath();
+          ctx.moveTo(a.p0.x, a.p0.y);
+          ctx.bezierCurveTo(a.p1.x, a.p1.y, a.p2.x, a.p2.y, a.p3.x, a.p3.y);
+          ctx.strokeStyle = hexToRgba(a.color, 0.26);
+          ctx.lineWidth = 2.0;
+          ctx.setLineDash([7, 7]);
+          ctx.stroke();
+          ctx.setLineDash([]);
+
+          /* Subtle inward directional chevron on feedback arc */
+          var cPt = cubicPt(a.p0, a.p1, a.p2, a.p3, 0.24);
+          var cTan = cubicTangent(a.p0, a.p1, a.p2, a.p3, 0.24);
+          var nx = -cTan.y;
+          var ny = cTan.x;
+          ctx.beginPath();
+          ctx.moveTo(cPt.x + cTan.x * 7, cPt.y + cTan.y * 7);
+          ctx.lineTo(cPt.x - cTan.x * 5 + nx * 5, cPt.y - cTan.y * 5 + ny * 5);
+          ctx.lineTo(cPt.x - cTan.x * 2, cPt.y - cTan.y * 2);
+          ctx.lineTo(cPt.x - cTan.x * 5 - nx * 5, cPt.y - cTan.y * 5 - ny * 5);
+          ctx.closePath();
+          ctx.fillStyle = hexToRgba(a.color, 0.36);
+          ctx.fill();
+
+          /* Returning feedback pulses sweeping right-to-left */
+          if (st.fbActive >= 0) {
+            for (var p = 0; p < 3; p++) {
+              var u = st.fbActive - p * 0.14;
+              if (u >= 0.02 && u <= 0.98) {
+                var pt = cubicPt(a.p0, a.p1, a.p2, a.p3, u);
+                var env = Math.sin(clamp(u, 0, 1) * Math.PI);
+                ctx.beginPath();
+                ctx.arc(pt.x, pt.y, 11.5, 0, Math.PI * 2);
+                ctx.fillStyle = hexToRgba(a.pulseColor, 0.24 * env);
+                ctx.fill();
+
+                ctx.beginPath();
+                ctx.arc(pt.x, pt.y, 4.8, 0, Math.PI * 2);
+                ctx.fillStyle = a.pulseColor;
+                ctx.fill();
+                ctx.strokeStyle = C.ivory;
+                ctx.lineWidth = 1.3;
+                ctx.stroke();
+              }
+            }
+          }
+        }
+      }
+
+      function drawDendriticArbors(ctx, st) {
+        var baseTone = 0.56 + 0.24 * st.somaClean + 0.20 * st.somaFlash;
+
+        for (var s = 0; s < spines.length; s++) {
+          var sp = spines[s];
+          var wGlow = getWaveHighlightAtDist(sp.dist, st);
+          var spAlpha = clamp(0.28 + wGlow * 0.56, 0.22, 0.92);
+          ctx.beginPath();
+          ctx.moveTo(sp.x0, sp.y0);
+          ctx.lineTo(sp.x1, sp.y1);
+          ctx.strokeStyle = hexToRgba(C.slate, spAlpha * 0.85);
+          ctx.lineWidth = 0.95;
+          ctx.stroke();
+
+          ctx.beginPath();
+          ctx.arc(sp.x1, sp.y1, sp.r + wGlow * 1.0, 0, Math.PI * 2);
+          ctx.fillStyle = wGlow > 0.38 ? C.amber : hexToRgba(C.slate, spAlpha);
+          ctx.fill();
+        }
+
+        for (var i = 0; i < dendrites.length; i++) {
+          var d = dendrites[i];
+          var waveHit = getWaveHighlightAtDist(d.dist, st);
+          var depthFactor = 0.38 + d.depth * 0.13;
+          var alpha = clamp(baseTone * depthFactor + waveHit * 0.65, 0.24, 0.96);
+
+          if (waveHit > 0.24) {
+            ctx.beginPath();
+            ctx.moveTo(d.x0, d.y0);
+            ctx.quadraticCurveTo(d.cx, d.cy, d.x1, d.y1);
+            ctx.strokeStyle = hexToRgba(C.amber, waveHit * 0.38);
+            ctx.lineWidth = d.w + 4.4;
+            ctx.lineCap = "round";
+            ctx.stroke();
+          }
+
+          ctx.beginPath();
+          ctx.moveTo(d.x0, d.y0);
+          ctx.quadraticCurveTo(d.cx, d.cy, d.x1, d.y1);
+          ctx.strokeStyle = waveHit > 0.48 ? C.amber : hexToRgba(C.slate, alpha);
+          ctx.lineWidth = d.w * (1 + waveHit * 0.20);
+          ctx.lineCap = "round";
+          ctx.stroke();
+        }
+      }
+
+      function drawLocalMicrocircuit(ctx, elapsedS, st) {
+        for (var i = 0; i < localAxons.length; i++) {
+          var e = localAxons[i];
+          var wHit = getWaveHighlightAtDist(e.dist, st);
+          var act = clamp(0.18 + 0.24 * st.somaClean + wHit * 0.60, 0.14, 0.86);
+
+          ctx.beginPath();
+          ctx.moveTo(e.p0.x, e.p0.y);
+          ctx.bezierCurveTo(e.p1.x, e.p1.y, e.p2.x, e.p2.y, e.p3.x, e.p3.y);
+          ctx.strokeStyle = hexToRgba(C.slate, act * 0.50);
+          ctx.lineWidth = 1.1 + wHit * 0.75;
+          ctx.stroke();
+
+          if (st.somaClean > 0.25) {
+            var uPkt = (elapsedS * 0.60 + e.seed * 2.3) % 1.0;
+            var pt = cubicPt(e.p0, e.p1, e.p2, e.p3, uPkt);
+            ctx.beginPath();
+            ctx.arc(pt.x, pt.y, 2.3, 0, Math.PI * 2);
+            ctx.fillStyle = hexToRgba(C.slate, st.somaClean * 0.55);
+            ctx.fill();
+          }
+        }
+
+        for (var s = 0; s < satellites.length; s++) {
+          var cell = satellites[s];
+          var wGlow = getWaveHighlightAtDist(cell.dist, st);
+          var refreshed = st.resetR > cell.dist
+            ? (1 - clamp((st.resetR - cell.dist) / 260, 0, 1)) * 0.52
+            : 0;
+          var glow = clamp(0.22 + 0.28 * st.somaClean + Math.max(wGlow, refreshed), 0, 1);
+
+          for (var tw = 0; tw < cell.twigs.length; tw++) {
+            var tg = cell.twigs[tw];
+            ctx.beginPath();
+            ctx.moveTo(tg.x0, tg.y0);
+            ctx.quadraticCurveTo(tg.cx, tg.cy, tg.x1, tg.y1);
+            ctx.strokeStyle = hexToRgba(C.slate, 0.26 + glow * 0.42);
+            ctx.lineWidth = 1.2;
+            ctx.stroke();
+          }
+
+          if (glow > 0.36) {
+            ctx.beginPath();
+            ctx.arc(cell.x, cell.y, cell.r + 5 + glow * 9, 0, Math.PI * 2);
+            ctx.fillStyle = hexToRgba(wGlow > 0.38 ? C.amber : C.slate, glow * 0.25);
+            ctx.fill();
+          }
+
+          ctx.beginPath();
+          if (cell.isPyramidal) {
+            var ca = Math.cos(cell.orient);
+            var sa = Math.sin(cell.orient);
+            var rr = cell.r * 1.24;
+            ctx.moveTo(cell.x + ca * rr * 1.30, cell.y + sa * rr * 1.30);
+            ctx.lineTo(cell.x - ca * rr * 0.86 - sa * rr * 0.86, cell.y - sa * rr * 0.86 + ca * rr * 0.86);
+            ctx.lineTo(cell.x - ca * rr * 0.52, cell.y - sa * rr * 0.52);
+            ctx.lineTo(cell.x - ca * rr * 0.86 + sa * rr * 0.86, cell.y - sa * rr * 0.86 - ca * rr * 0.86);
+            ctx.closePath();
+          } else {
+            ctx.arc(cell.x, cell.y, cell.r, 0, Math.PI * 2);
+          }
+
+          var isWavePeak = wGlow > 0.42;
+          ctx.fillStyle = isWavePeak ? C.amber : hexToRgba(C.slate, 0.48 + glow * 0.44);
+          ctx.fill();
+          ctx.strokeStyle = C.slate;
+          ctx.lineWidth = isWavePeak ? 2.0 : 1.3;
+          ctx.stroke();
+
+          ctx.beginPath();
+          ctx.arc(cell.x, cell.y, Math.max(1.8, cell.r * 0.30), 0, Math.PI * 2);
+          ctx.fillStyle = C.ivory;
+          ctx.fill();
+        }
+      }
+
+      function drawOutgoingTrunksAndGates(ctx, st) {
+        for (var f = 0; f < feederAxons.length; f++) {
+          var fa = feederAxons[f];
+          var fColor = fa.spec.isUpper ? C.slate : C.sageDeep;
+          ctx.beginPath();
+          ctx.moveTo(fa.p0.x, fa.p0.y);
+          ctx.bezierCurveTo(fa.p1.x, fa.p1.y, fa.p2.x, fa.p2.y, fa.p3.x, fa.p3.y);
+          ctx.strokeStyle = hexToRgba(fColor, 0.22 + st.gateOpen * 0.34);
+          ctx.lineWidth = 1.4;
+          ctx.stroke();
+        }
+
+        /* Pre-gate root axonal trunks (Soma Hillock -> 4 Gate Boutons) */
+        for (var r = 0; r < rootTrunks.length; r++) {
+          var rt = rootTrunks[r];
+          var sp = rt.spec;
+          var strokeCol = sp.isUpper ? C.slate : C.sageDeep;
+          var rootGlow = Math.max(st.rootVolleyU >= 0 ? 0.86 : 0, st.trunkActive * 0.65);
+
+          if (rootGlow > 0.2) {
+            ctx.beginPath();
+            ctx.moveTo(rt.p0.x, rt.p0.y);
+            ctx.bezierCurveTo(rt.p1.x, rt.p1.y, rt.p2.x, rt.p2.y, rt.p3.x, rt.p3.y);
+            ctx.strokeStyle = hexToRgba(sp.color, rootGlow * 0.24);
+            ctx.lineWidth = 9.5;
+            ctx.stroke();
+          }
+
+          ctx.beginPath();
+          ctx.moveTo(rt.p0.x, rt.p0.y);
+          ctx.bezierCurveTo(rt.p1.x, rt.p1.y, rt.p2.x, rt.p2.y, rt.p3.x, rt.p3.y);
+          ctx.strokeStyle = hexToRgba(strokeCol, 0.45 + rootGlow * 0.50);
+          ctx.lineWidth = 3.1 + rootGlow * 1.1;
+          ctx.stroke();
+
+          if (st.rootVolleyU >= 0) {
+            for (var rp = 0; rp < 2; rp++) {
+              var ru = st.rootVolleyU - rp * 0.18;
+              if (ru >= 0 && ru <= 1) {
+                var rPt = cubicPt(rt.p0, rt.p1, rt.p2, rt.p3, ru);
+                ctx.beginPath();
+                ctx.arc(rPt.x, rPt.y, 12.5, 0, Math.PI * 2);
+                ctx.fillStyle = hexToRgba(C.amber, 0.28);
+                ctx.fill();
+
+                ctx.beginPath();
+                ctx.arc(rPt.x, rPt.y, 5.6, 0, Math.PI * 2);
+                ctx.fillStyle = rp === 0 ? C.amber : sp.color;
+                ctx.fill();
+                ctx.strokeStyle = C.slate;
+                ctx.lineWidth = 1.6;
+                ctx.stroke();
+              }
+            }
+          }
+        }
+
+        /* Four Sculpted Myelinated Gated Trunks inside Right Exit Zone */
+        for (var k = 0; k < gatedTrunks.length; k++) {
+          var gt = gatedTrunks[k];
+          var gsp = gt.spec;
+          var mainCol = gsp.color;
+          var deepCol = gsp.deep;
+          var act = st.trunkActive;
+
+          if (act > 0.12) {
+            ctx.beginPath();
+            ctx.moveTo(gt.p0.x, gt.p0.y);
+            ctx.bezierCurveTo(gt.p1.x, gt.p1.y, gt.p2.x, gt.p2.y, gt.p3.x, gt.p3.y);
+            ctx.strokeStyle = hexToRgba(mainCol, act * 0.24);
+            ctx.lineWidth = 15.0;
+            ctx.lineCap = "round";
+            ctx.stroke();
+          }
+
+          /* Myelinated internode capsules */
+          for (var m = 0; m < gt.sheaths.length; m++) {
+            var sh = gt.sheaths[m];
+            var pA = cubicPt(gt.p0, gt.p1, gt.p2, gt.p3, sh.u0);
+            var pB = cubicPt(gt.p0, gt.p1, gt.p2, gt.p3, sh.u1);
+            var ang = Math.atan2(pB.y - pA.y, pB.x - pA.x);
+            var segLen = Math.hypot(pB.x - pA.x, pB.y - pA.y);
+
+            var localHit = 0;
+            if (act > 0.05) {
+              for (var sv = 0; sv < 3; sv++) {
+                localHit = Math.max(localHit, pulseBell(sh.uMid, st.volleyLeadU - sv * 0.30, 0.10) * act);
+              }
+            }
+
+            ctx.save();
+            ctx.translate((pA.x + pB.x) * 0.5, (pA.y + pB.y) * 0.5);
+            ctx.rotate(ang);
+            roundRectPath(ctx, -segLen * 0.5, -6.5, segLen, 13.0, 5.5);
+            ctx.fillStyle = localHit > 0.35
+              ? hexToRgba(mainCol, 0.24 + localHit * 0.32)
+              : hexToRgba(C.ivory, 0.94);
+            ctx.fill();
+            ctx.strokeStyle = hexToRgba(deepCol, 0.52 + localHit * 0.45);
+            ctx.lineWidth = 1.65 + localHit * 0.65;
+            ctx.stroke();
+            ctx.restore();
+
+            if (sh.nodeAfterU > 0) {
+              var nPt = cubicPt(gt.p0, gt.p1, gt.p2, gt.p3, sh.nodeAfterU);
+              var nodeHit = 0;
+              if (act > 0.05) {
+                for (var nv = 0; nv < 3; nv++) {
+                  nodeHit = Math.max(nodeHit, pulseBell(sh.nodeAfterU, st.volleyLeadU - nv * 0.30, 0.08) * act);
+                }
+              }
+              ctx.beginPath();
+              ctx.arc(nPt.x, nPt.y, 3.6 + nodeHit * 2.2, 0, Math.PI * 2);
+              ctx.fillStyle = nodeHit > 0.45 ? C.amber : hexToRgba(deepCol, 0.65);
+              ctx.fill();
+            }
+          }
+
+          /* Continuous central axonal core shaft */
+          ctx.beginPath();
+          ctx.moveTo(gt.p0.x, gt.p0.y);
+          ctx.bezierCurveTo(gt.p1.x, gt.p1.y, gt.p2.x, gt.p2.y, gt.p3.x, gt.p3.y);
+          ctx.strokeStyle = hexToRgba(deepCol, 0.72 + act * 0.28);
+          ctx.lineWidth = 3.4 + act * 1.0;
+          ctx.stroke();
+
+          /* Terminal synaptic forks */
+          for (var tc = 0; tc < gt.collaterals.length; tc++) {
+            var col = gt.collaterals[tc];
+            ctx.beginPath();
+            ctx.moveTo(col.x0, col.y0);
+            ctx.quadraticCurveTo(col.cx, col.cy, col.x1, col.y1);
+            ctx.strokeStyle = hexToRgba(deepCol, 0.52 + act * 0.42);
+            ctx.lineWidth = 2.4;
+            ctx.lineCap = "round";
+            ctx.stroke();
+
+            ctx.beginPath();
+            ctx.arc(col.x1, col.y1, 3.8, 0, Math.PI * 2);
+            ctx.fillStyle = act > 0.4 ? mainCol : hexToRgba(deepCol, 0.72);
+            ctx.fill();
+          }
+
+          /* Output terminal bouton */
+          var endHit = 0;
+          if (act > 0.05) {
+            for (var ev = 0; ev < 3; ev++) {
+              endHit = Math.max(endHit, pulseBell(1.0, st.volleyLeadU - ev * 0.30, 0.12) * act);
+            }
+          }
+          ctx.beginPath();
+          ctx.arc(gt.p3.x, gt.p3.y, 8.4, 0, Math.PI * 2);
+          ctx.fillStyle = endHit > 0.35 ? (gsp.isUpper ? C.amber : C.sage) : C.ivory;
+          ctx.fill();
+          ctx.strokeStyle = deepCol;
+          ctx.lineWidth = 2.3;
+          ctx.stroke();
+
+          /* Synchronized 3-pulse action-potential volleys marching cleanly across all 4 trunks */
+          if (act > 0.04) {
+            for (var v = 0; v < 3; v++) {
+              var vu = st.volleyLeadU - v * 0.30;
+              if (vu >= 0 && vu <= 1.0) {
+                var vPt = cubicPt(gt.p0, gt.p1, gt.p2, gt.p3, vu);
+                var packetAlpha = act * (v === 0 ? 1.0 : (v === 1 ? 0.90 : 0.78));
+                var coreCol = v === 0 ? C.amber : mainCol;
+
+                ctx.beginPath();
+                ctx.arc(vPt.x, vPt.y, 15.0, 0, Math.PI * 2);
+                ctx.fillStyle = hexToRgba(coreCol, packetAlpha * 0.28);
+                ctx.fill();
+
+                ctx.beginPath();
+                ctx.arc(vPt.x, vPt.y, 6.8, 0, Math.PI * 2);
+                ctx.fillStyle = coreCol;
+                ctx.fill();
+                ctx.strokeStyle = gsp.isUpper ? C.slate : C.sageDeep;
+                ctx.lineWidth = 2.0;
+                ctx.stroke();
+
+                ctx.beginPath();
+                ctx.arc(vPt.x, vPt.y, 2.4, 0, Math.PI * 2);
+                ctx.fillStyle = C.ivory;
+                ctx.fill();
+              }
+            }
+          }
+        }
+
+        /* Four Sculptural Synaptic Gate Boutons at GATE_X */
+        for (var g = 0; g < TRUNK_SPECS.length; g++) {
+          var gs = TRUNK_SPECS[g];
+          var gx = GATE_X;
+          var gy = gs.y;
+          var gStroke = gs.isUpper ? C.slate : C.sageDeep;
+
+          if (st.gateRingU >= 0) {
+            var gr = 15 + st.gateRingU * 26;
+            ctx.beginPath();
+            ctx.arc(gx, gy, gr, 0, Math.PI * 2);
+            ctx.strokeStyle = hexToRgba(C.amber, (1 - st.gateRingU) * 0.80);
+            ctx.lineWidth = 2.5 * (1 - st.gateRingU * 0.4);
+            ctx.stroke();
+          }
+
+          ctx.beginPath();
+          ctx.arc(gx, gy, 14.5, 0, Math.PI * 2);
+          ctx.fillStyle = C.ivory;
+          ctx.fill();
+          ctx.strokeStyle = gStroke;
+          ctx.lineWidth = 2.9;
+          ctx.stroke();
+
+          ctx.beginPath();
+          ctx.arc(gx, gy, 6.2, 0, Math.PI * 2);
+          ctx.fillStyle = st.gateOpen > 0.35 ? C.amber : gStroke;
+          ctx.fill();
+        }
+      }
+
+      function drawSomaticResetWave(ctx, st) {
+        if (st.resetU < 0 || st.resetR < 0) return;
+
+        var u = st.resetU;
+        var R = st.resetR;
+        var fade = Math.pow(1 - u, 1.15);
+
+        ctx.save();
+        roundRectPath(ctx, CHAMBERS.left.x + 1, CHAMBERS.left.y + 1, CHAMBERS.left.w - 2, CHAMBERS.left.h - 2, 11);
+        ctx.clip();
+
+        /* Luminous annular band behind shockfront */
+        ctx.beginPath();
+        ctx.arc(SOMA.x, SOMA.y, Math.max(14, R - 10), 0, Math.PI * 2);
+        ctx.strokeStyle = hexToRgba(C.amber, fade * 0.20);
+        ctx.lineWidth = 22 * (1 - u * 0.35);
+        ctx.stroke();
+
+        /* Outer Blue Slate structural wavefront */
+        ctx.beginPath();
+        ctx.arc(SOMA.x, SOMA.y, R + 6, 0, Math.PI * 2);
+        ctx.strokeStyle = hexToRgba(C.slate, fade * 0.84);
+        ctx.lineWidth = 2.4 * (1 - u * 0.35);
+        ctx.stroke();
+
+        /* Primary Golden Orange shockwave */
+        ctx.beginPath();
+        ctx.arc(SOMA.x, SOMA.y, R, 0, Math.PI * 2);
+        ctx.strokeStyle = hexToRgba(C.amber, clamp(fade * 1.05, 0, 0.96));
+        ctx.lineWidth = 5.6 * (1 - u * 0.42);
+        ctx.stroke();
+
+        /* Secondary concentric Blue Slate harmonic ring */
+        ctx.beginPath();
+        ctx.arc(SOMA.x, SOMA.y, R * 0.76, 0, Math.PI * 2);
+        ctx.strokeStyle = hexToRgba(C.slate, fade * 0.80);
+        ctx.lineWidth = 2.9 * (1 - u * 0.42);
+        ctx.stroke();
+
+        /* Inner Golden Orange echo ring */
+        if (R * 0.50 > 38) {
+          ctx.beginPath();
+          ctx.arc(SOMA.x, SOMA.y, R * 0.50, 0, Math.PI * 2);
+          ctx.strokeStyle = hexToRgba(C.amber, fade * 0.48);
+          ctx.lineWidth = 1.8;
+          ctx.stroke();
+        }
+
+        ctx.restore();
+      }
+
+      function drawStraySparksAndVaporization(ctx, st) {
+        var sparks = straySets[st.passIdx];
+        var localT = st.localT;
+
+        for (var i = 0; i < sparks.length; i++) {
+          var sp = sparks[i];
+          var contact = sp.contact;
+          var vaporDur = 0.62;
+
+          if (localT < sp.tSpawn || localT > contact.tHit + vaporDur) continue;
+
+          if (localT < contact.tHit) {
+            /* Drifting off-axis stray error spark trying to contaminate Soma */
+            var uRaw = clamp((localT - sp.tSpawn) / (sp.tArrive - sp.tSpawn), 0, 1);
+            var uEased = smoothstep(0, 1, uRaw);
+            var fadeIn = smoothstep(sp.tSpawn, sp.tSpawn + 0.20, localT);
+
+            /* Erratic dotted Slate Mist contamination trail */
+            for (var tr = 6; tr >= 1; tr--) {
+              var uTrail = clamp(uEased - tr * 0.055, 0, 1);
+              var tPt = cubicPt(sp.p0, sp.p1, sp.p2, sp.p3, uTrail);
+              var tTime = localT - tr * 0.06;
+              var wX = Math.sin(tTime * sp.wobbleFreq + sp.phase) * 5.2;
+              var wY = Math.cos(tTime * sp.wobbleFreq * 1.27 + sp.phase) * 5.2;
+              var trAlpha = fadeIn * (1 - tr / 7) * 0.58;
+
+              ctx.beginPath();
+              ctx.arc(tPt.x + wX, tPt.y + wY, 4.4 - tr * 0.48, 0, Math.PI * 2);
+              ctx.fillStyle = hexToRgba(C.mist, trAlpha);
+              ctx.fill();
+            }
+
+            var basePt = cubicPt(sp.p0, sp.p1, sp.p2, sp.p3, uEased);
+            var jx = Math.sin(localT * sp.wobbleFreq + sp.phase) * 4.0;
+            var jy = Math.cos(localT * (sp.wobbleFreq * 1.31) + sp.phase) * 4.0;
+            var sx = basePt.x + jx;
+            var sy = basePt.y + jy;
+
+            /* Unstable Slate Mist outer contamination haze */
+            ctx.beginPath();
+            ctx.arc(sx, sy, 25 + Math.sin(localT * 28 + i) * 3.5, 0, Math.PI * 2);
+            ctx.fillStyle = hexToRgba(C.mist, fadeIn * 0.30);
+            ctx.fill();
+
+            ctx.beginPath();
+            ctx.arc(sx, sy, 16.5, 0, Math.PI * 2);
+            ctx.strokeStyle = hexToRgba(C.slateDeep, fadeIn * 0.52);
+            ctx.lineWidth = 1.6;
+            ctx.setLineDash([4, 4]);
+            ctx.stroke();
+            ctx.setLineDash([]);
+
+            /* Jagged 7-spike dark Slate/Onyx error shard */
+            ctx.beginPath();
+            var numSpikes = 7;
+            var rot = localT * 5.2 * (i % 2 === 0 ? 1 : -1) + sp.phase;
+            for (var v = 0; v < numSpikes * 2; v++) {
+              var rad = (v % 2 === 0) ? 12.2 : 5.2;
+              var ang = rot + (v * Math.PI) / numSpikes;
+              var vx = sx + Math.cos(ang) * rad;
+              var vy = sy + Math.sin(ang) * rad;
+              if (v === 0) ctx.moveTo(vx, vy);
+              else ctx.lineTo(vx, vy);
+            }
+            ctx.closePath();
+            ctx.fillStyle = hexToRgba(C.slateDeep, fadeIn * 0.94);
+            ctx.fill();
+            ctx.strokeStyle = hexToRgba(C.onyx, fadeIn * 0.92);
+            ctx.lineWidth = 1.7;
+            ctx.stroke();
+
+            ctx.beginPath();
+            ctx.arc(sx, sy, 3.6, 0, Math.PI * 2);
+            ctx.fillStyle = hexToRgba(C.mist, fadeIn);
+            ctx.fill();
+          } else {
+            /* CONTACT WITH SOMATIC RESET WAVE: Visible vaporization burst! */
+            var vU = clamp((localT - contact.tHit) / vaporDur, 0, 1);
+            var vFade = Math.pow(1 - vU, 1.45);
+            var outAng = Math.atan2(contact.hitPt.y - SOMA.y, contact.hitPt.x - SOMA.x);
+            var driftPush = vU * 30;
+            var bx = contact.hitPt.x + Math.cos(outAng) * driftPush;
+            var by = contact.hitPt.y + Math.sin(outAng) * driftPush;
+
+            /* Crisp Golden Orange neutralization shock ring at exact point of contact */
+            ctx.beginPath();
+            ctx.arc(bx, by, 10 + vU * 48, 0, Math.PI * 2);
+            ctx.strokeStyle = hexToRgba(C.amber, vFade * 0.95);
+            ctx.lineWidth = 3.6 * (1 - vU * 0.50);
+            ctx.stroke();
+
+            ctx.beginPath();
+            ctx.arc(bx, by, 6 + vU * 30, 0, Math.PI * 2);
+            ctx.strokeStyle = hexToRgba(C.slate, vFade * 0.78);
+            ctx.lineWidth = 2.0;
+            ctx.stroke();
+
+            if (vU < 0.45) {
+              var flashA = 1 - vU / 0.45;
+              ctx.beginPath();
+              ctx.arc(bx, by, 15 * flashA, 0, Math.PI * 2);
+              ctx.fillStyle = hexToRgba(C.amber, flashA * 0.72);
+              ctx.fill();
+            }
+
+            /* 10 shattered micro-fragments vaporizing outward away from the Soma */
+            var fragCount = 10;
+            for (var f = 0; f < fragCount; f++) {
+              var spread = ((f / (fragCount - 1)) - 0.5) * Math.PI * 1.40;
+              var fAng = outAng + spread + Math.sin(f * 3.1) * 0.14;
+              var speed = 26 + (f % 3) * 18;
+              var fx = bx + Math.cos(fAng) * vU * speed;
+              var fy = by + Math.sin(fAng) * vU * speed;
+              var fr = (1 - vU) * (4.6 - (f % 2) * 1.0);
+
+              if (fr > 0.3) {
+                ctx.beginPath();
+                ctx.arc(fx, fy, fr, 0, Math.PI * 2);
+                ctx.fillStyle = f % 2 === 0
+                  ? hexToRgba(C.amber, vFade * 0.94)
+                  : hexToRgba(C.slateDeep, vFade * 0.85);
+                ctx.fill();
+              }
+            }
+          }
+        }
+      }
+
+      function drawPyramidalSomaBody(ctx, st) {
+        var cx = SOMA.x;
+        var cy = SOMA.y;
+        var flash = st.somaFlash;
+        var clean = st.somaClean;
+        var pre = st.somaPreCharge;
+
+        var haloLevel = Math.max(flash, clean * 0.55, pre * 0.6);
+        if (haloLevel > 0.05) {
+          ctx.beginPath();
+          ctx.arc(cx, cy + 2, 56 + flash * 26, 0, Math.PI * 2);
+          ctx.fillStyle = hexToRgba(C.amber, haloLevel * 0.25);
+          ctx.fill();
+        }
+
+        /* Sculpted Ramon y Cajal Pyramidal Soma Perikaryon */
+        ctx.beginPath();
+        ctx.moveTo(cx - 3, cy - 50);
+        ctx.bezierCurveTo(cx + 14, cy - 22, cx + 32, cy - 8, cx + 40, cy + 2);
+        ctx.quadraticCurveTo(cx + 42, cy + 16, cx + 30, cy + 28);
+        ctx.bezierCurveTo(cx + 12, cy + 36, cx - 14, cy + 36, cx - 35, cy + 28);
+        ctx.quadraticCurveTo(cx - 46, cy + 16, cx - 36, cy - 2);
+        ctx.bezierCurveTo(cx - 24, cy - 20, cx - 10, cy - 30, cx - 3, cy - 50);
+        ctx.closePath();
+
+        ctx.fillStyle = flash > 0.28 ? C.amber : C.slate;
+        ctx.fill();
+        ctx.strokeStyle = flash > 0.28 ? C.slate : C.slateDeep;
+        ctx.lineWidth = 3.0;
+        ctx.lineJoin = "round";
+        ctx.stroke();
+
+        /* Crisp Somatic Nucleus & Nucleolus */
+        ctx.beginPath();
+        ctx.arc(cx - 2, cy + 4, 15.0, 0, Math.PI * 2);
+        ctx.fillStyle = C.ivory;
+        ctx.fill();
+        ctx.strokeStyle = C.slate;
+        ctx.lineWidth = 2.3;
+        ctx.stroke();
+
+        ctx.beginPath();
+        ctx.arc(cx - 2, cy + 4, 5.4, 0, Math.PI * 2);
+        ctx.fillStyle = flash > 0.28 ? C.onyx : C.amber;
+        ctx.fill();
+      }
+
+      /* =========================================================================
+         Canvas Setup & 60fps Seamless Loop
+         ========================================================================= */
+      var canvas = document.getElementById("cinema");
+      var ctx = canvas.getContext("2d");
+
+      function resizeCanvas() {
+        var dpr = Math.min(window.devicePixelRatio || 1, 2);
+        canvas.width = Math.round(W * dpr);
+        canvas.height = Math.round(H * dpr);
+        ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      }
+
+      buildStemTissue();
+      for (var p = 0; p < 2; p++) {
+        for (var s = 0; s < straySets[p].length; s++) {
+          straySets[p][s].contact = computeSparkContact(straySets[p][s]);
+        }
+      }
+
+      resizeCanvas();
+      window.addEventListener("resize", resizeCanvas);
+
+      var fixedT = null;
+      try {
+        var params = new URLSearchParams(window.location.search);
+        if (params.has("t")) {
+          var parsed = parseFloat(params.get("t"));
+          if (!isNaN(parsed)) fixedT = ((parsed % CYCLE_S) + CYCLE_S) % CYCLE_S;
+        }
+      } catch (err) {
+        fixedT = null;
+      }
+
+      var startTime = performance.now();
+
+      function renderFrame(elapsedS) {
+        var st = getPhaseState(elapsedS);
+
+        ctx.fillStyle = C.ivory;
+        ctx.fillRect(0, 0, W, H);
+
+        drawChambersAndLabels(ctx, st);
+        drawFeedbackArcs(ctx, st);
+        drawDendriticArbors(ctx, st);
+        drawLocalMicrocircuit(ctx, elapsedS, st);
+        drawOutgoingTrunksAndGates(ctx, st);
+        drawSomaticResetWave(ctx, st);
+        drawStraySparksAndVaporization(ctx, st);
+        drawPyramidalSomaBody(ctx, st);
+      }
+
+      function tick(now) {
+        var elapsedS = fixedT !== null
+          ? fixedT
+          : (((now - startTime) / 1000) % CYCLE_S);
+        renderFrame(elapsedS);
+        requestAnimationFrame(tick);
+      }
+
+      requestAnimationFrame(tick);
+    })();
+  </script>
+</body>
+</html>
