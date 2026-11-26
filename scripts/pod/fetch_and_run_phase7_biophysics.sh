@@ -24,11 +24,11 @@ export LC_ALL=C
 
 INKLING_NAME="${INKLING_NAME:-inkling-2-mini}"
 INKLING_REPO="${INKLING_REPO:-thinkingmachines/Inkling-2-Mini}"
-INKLING_REV="${INKLING_REV:-c9d028302cd0f035fdf8e7e91f089a4ce94d2195}"
+INKLING_REV="${INKLING_REV:-ed40e7da625f594fc9c4990f5f66be24873c22d7}"
 
 VARLOOP_NAME="${VARLOOP_NAME:-tml-d24-varloop-research}"
 VARLOOP_REPO="${VARLOOP_REPO:-thinkingmachines/TML-d24-varloop-research}"
-VARLOOP_REV="${VARLOOP_REV:-91a57fe2b779bbd12c0f74d1f518cbd5b84e8d0d}"
+VARLOOP_REV="${VARLOOP_REV:-657b53ba5da7baefe9ff15dca5cd25f5bd3dbaa2}"
 
 HUGINN_NAME="${HUGINN_NAME:-huginn-0125}"
 HUGINN_REPO="${HUGINN_REPO:-tomg-group-umd/huginn-0125}"
@@ -265,6 +265,12 @@ cfg = AutoConfig.from_pretrained(model_dir, local_files_only=True, trust_remote_
 # Build a tiny 1-block RavenConfig clone to verify RavenForCausalLM forward compatibility
 cfg.n_embd = 64
 cfg.n_heads = 4
+if hasattr(cfg, "num_key_value_heads"):
+    cfg.num_key_value_heads = 4
+if hasattr(cfg, "n_kv_heads"):
+    cfg.n_kv_heads = 4
+if hasattr(cfg, "head_dim"):
+    cfg.head_dim = 16
 cfg.intermediate_size = 128
 cfg.n_layers_in_prelude = 1
 cfg.n_layers_in_recurrent_block = 1
@@ -274,7 +280,7 @@ cfg.padded_vocab_size = 256
 cfg.block_size = 32
 m = AutoModelForCausalLM.from_config(cfg, trust_remote_code=True).eval()
 with torch.no_grad():
-    out = m(input_ids=torch.ones((1, 4), dtype=torch.long), num_steps=torch.tensor(2, dtype=torch.long), use_cache=False)
+    out = m(input_ids=torch.ones((1, 4), dtype=torch.long), num_steps=2, use_cache=False)
 assert out.logits.shape == (1, 4, 256), f"unexpected logits shape: {out.logits.shape}"
 print("[nb-p7] Huginn RavenForCausalLM compatibility OK under", sys.executable)
 PY
@@ -329,6 +335,7 @@ PY
   printf '[nb-p7] Running pre-flight PyTorch unit tests before any weight downloads...\n'
   (
     cd /workspace
+    OMP_NUM_THREADS=4 MKL_NUM_THREADS=4 OPENBLAS_NUM_THREADS=4 \
     PYTHONPATH=/workspace/src python3 -m pytest -q \
       tests/test_phase6_biophysical_cpu.py \
       tests/test_phase7_safety_cpu.py \
@@ -430,10 +437,10 @@ PY
       rm -rf /opt/huginn-venv
       uv venv --system-site-packages --python "$PY_BIN" /opt/huginn-venv
       HUGINN_PY="/opt/huginn-venv/bin/python"
-      if ! (uv pip install --python "$HUGINN_PY" --no-cache "transformers==4.48.3" accelerate && \
+      if ! (uv pip install --python "$HUGINN_PY" --no-cache --no-deps "transformers==4.44.2" "tokenizers==0.19.1" "huggingface-hub==0.26.5" && \
             probe_huginn_compat "$HUGINN_PY" "$HUG_DST"); then
-        printf '[nb-p7] Retrying /opt/huginn-venv with transformers==4.44.2...\n'
-        uv pip install --python "$HUGINN_PY" --no-cache "transformers==4.44.2" accelerate
+        printf '[nb-p7] Retrying /opt/huginn-venv with transformers==4.48.3...\n'
+        uv pip install --python "$HUGINN_PY" --no-cache --no-deps "transformers==4.48.3" "tokenizers==0.21.4" "huggingface-hub==0.29.3"
         probe_huginn_compat "$HUGINN_PY" "$HUG_DST"
       fi
     fi

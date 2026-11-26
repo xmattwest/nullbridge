@@ -231,6 +231,7 @@ def _run_phase7_single_stage(
             res = run_phase7_varloop_suite(
                 ctrl,
                 batch_size=eff_bsz,
+                fisher_bsz=2,
                 n_boot=n_boot,
                 checkpoint_path=stage_ckpt,
             )

@@ -310,15 +310,13 @@ class InklingLoopController:
                 proj_f = torch.eye(self.d_model, dtype=torch.float64, device=self.device) - (q_f @ q_f.t())
                 # Process in chunks to keep temporary FP64 memory tiny (`< 250 MB`)
                 w_orig = self._orig_lm_head
-                w_out = torch.empty_like(w_orig)
                 chunk = 16384
                 for s in range(0, w_orig.shape[0], chunk):
                     e = min(w_orig.shape[0], s + chunk)
-                    block64 = w_orig[s:e].to(dtype=torch.float64) @ proj_f
+                    block64 = w_orig[s:e].to(device=self.device, dtype=torch.float64) @ proj_f
                     leak_h = float(torch.linalg.norm(block64 @ q_f, ord="fro").item())
                     max_head_leak = max(max_head_leak, leak_h)
-                    w_out[s:e] = block64.to(dtype=w_orig.dtype)
-                self.lm_head.weight.copy_(w_out)
+                    self.lm_head.weight[s:e].copy_(block64.to(dtype=self.lm_head.weight.dtype))
 
         return {
             "max_query_null_leakage": max_query_leak,
