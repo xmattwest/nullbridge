@@ -3,12 +3,17 @@
 from __future__ import annotations
 
 import argparse
+import gc
+import hashlib
+import inspect
 import json
+import os
 from pathlib import Path
 import re
 import subprocess
 import sys
 import time
+from typing import Any
 
 BLOCKED_PATTERNS: tuple[tuple[str, re.Pattern[str]], ...] = (
     ("private_key_block", re.compile(r"-----BEGIN [A-Z0-9 ]*PRIVATE KEY-----")),
@@ -76,6 +81,255 @@ def run_phase0_audit(out_path: Path | None = None) -> dict[str, object]:
         out_path.parent.mkdir(parents=True, exist_ok=True)
         out_path.write_text(json.dumps(payload, indent=2), encoding="utf-8")
     return payload
+
+
+_PHASE7_STAGES: tuple[str, ...] = (
+    "inkling_block_a",
+    "varloop_block_a",
+    "varloop_block_b1",
+    "huginn_block_b2",
+)
+
+_PHASE7_DEFAULT_LABELS: dict[str, str] = {
+    "inkling_block_a": "thinkingmachines/Inkling-2-Mini",
+    "varloop_block_a": "thinkingmachines/TML-d24-varloop-research",
+    "varloop_block_b1": "thinkingmachines/TML-d24-varloop-research",
+    "huginn_block_b2": "tomg-group-umd/huginn-0125",
+}
+
+
+def _atomic_write_json(path: Path, payload: dict[str, Any]) -> None:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    tmp_path = path.with_suffix(path.suffix + ".tmp")
+    tmp_path.write_text(json.dumps(payload, indent=2), encoding="utf-8")
+    os.replace(tmp_path, path)
+
+
+def _sha256_file(path: Path) -> str:
+    h = hashlib.sha256()
+    with path.open("rb") as fh:
+        for chunk in iter(lambda: fh.read(1024 * 1024), b""):
+            h.update(chunk)
+    return h.hexdigest()
+
+
+def _seed_everything(seed: int) -> None:
+    try:
+        import numpy as np
+
+        np.random.seed(int(seed) % (2**32))
+    except ImportError:
+        pass
+    try:
+        import torch
+
+        torch.manual_seed(int(seed))
+        if torch.cuda.is_available():
+            torch.cuda.manual_seed_all(int(seed))
+    except ImportError:
+        pass
+
+
+def _cleanup_controller(ctrl: Any) -> None:
+    if hasattr(ctrl, "reset_interventions"):
+        try:
+            ctrl.reset_interventions()
+        except Exception:
+            pass
+    model = getattr(ctrl, "model", None)
+    if model is not None:
+        try:
+            model.to("cpu")
+        except Exception:
+            pass
+    del ctrl
+    gc.collect()
+    try:
+        import torch
+
+        if torch.cuda.is_available():
+            torch.cuda.empty_cache()
+    except ImportError:
+        pass
+
+
+def _stage_json_path(checkpoint_dir: Path, stage: str) -> Path:
+    return checkpoint_dir / f"{stage}_results.json"
+
+
+def _stage_already_done(path: Path) -> bool:
+    if not path.is_file():
+        return False
+    try:
+        data = json.loads(path.read_text(encoding="utf-8"))
+        return bool(data.get("completed") is True)
+    except Exception:
+        return False
+
+
+def _run_phase7_single_stage(
+    stage: str,
+    model_path: Path,
+    checkpoint_dir: Path,
+    model_label: str | None = None,
+    output_path: Path | None = None,
+    batch_size: int | None = None,
+    n_passes: int | None = None,
+    dtype: str = "auto",
+    seed: int = 20260701,
+    n_boot: int = 4000,
+) -> dict[str, Any]:
+    """Load one model, execute its Phase 7 stage with atomic checkpoints, and release GPU memory."""
+    _seed_everything(seed)
+    checkpoint_dir.mkdir(parents=True, exist_ok=True)
+    stage_ckpt = _stage_json_path(checkpoint_dir, stage)
+    label = model_label or _PHASE7_DEFAULT_LABELS[stage]
+    t0 = time.perf_counter()
+
+    if stage in ("inkling_block_a", "varloop_block_a"):
+        from .biophysical_inkling import _load_biophysical_controller
+        from .biophysical_safety import run_exp_a2_safety_wht, run_phase7_block_a
+
+        eff_passes = int(n_passes) if n_passes is not None else (3 if stage == "inkling_block_a" else 5)
+        eff_bsz = int(batch_size) if batch_size is not None else 32
+        print(f"[Phase 7 | {stage}] Loading {label} from {model_path}...", flush=True)
+        ctrl, meta = _load_biophysical_controller(model_path, label)
+        try:
+            res = run_phase7_block_a(
+                ctrl,
+                checkpoint_path=stage_ckpt,
+                n_passes=eff_passes,
+                batch_size=eff_bsz,
+                n_boot=n_boot,
+            )
+            if stage == "varloop_block_a" and eff_passes != 3 and "exp_a2_safety_wht_k3" not in res:
+                res["completed"] = False
+                res["exp_a2_safety_wht_k3"] = run_exp_a2_safety_wht(
+                    ctrl,
+                    n_passes=3,
+                    batch_size=eff_bsz,
+                    n_boot=n_boot,
+                )
+                if "exp_a2_safety_wht_k3" not in res.get("completed_stages", []):
+                    res.setdefault("completed_stages", []).append("exp_a2_safety_wht_k3")
+                res["completed"] = True
+            res["stage"] = stage
+            res["metadata"] = {**meta, "dtype_arg": dtype, "seed": int(seed)}
+            res["timestamp_utc"] = time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())
+            res["total_stage_seconds"] = round(time.perf_counter() - t0, 2)
+            _atomic_write_json(stage_ckpt, res)
+        finally:
+            _cleanup_controller(ctrl)
+
+    elif stage == "varloop_block_b1":
+        from .biophysical_inkling import _load_biophysical_controller, run_phase7_varloop_suite
+
+        eff_bsz = int(batch_size) if batch_size is not None else 32
+        print(f"[Phase 7 | {stage}] Loading {label} from {model_path}...", flush=True)
+        ctrl, meta = _load_biophysical_controller(model_path, label)
+        try:
+            res = run_phase7_varloop_suite(
+                ctrl,
+                batch_size=eff_bsz,
+                n_boot=n_boot,
+                checkpoint_path=stage_ckpt,
+            )
+            res["stage"] = stage
+            res["metadata"] = {**meta, "dtype_arg": dtype, "seed": int(seed)}
+            res["timestamp_utc"] = time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())
+            res["total_stage_seconds"] = round(time.perf_counter() - t0, 2)
+            _atomic_write_json(stage_ckpt, res)
+        finally:
+            _cleanup_controller(ctrl)
+
+    elif stage == "huginn_block_b2":
+        from .biophysical_huginn import load_huginn_controller, run_phase7_huginn_suite
+
+        eff_bsz = int(batch_size) if batch_size is not None else 16
+        print(f"[Phase 7 | {stage}] Loading {label} from {model_path}...", flush=True)
+        ctrl, meta = load_huginn_controller(model_path, label)
+        try:
+            res = run_phase7_huginn_suite(
+                ctrl,
+                batch_size=eff_bsz,
+                n_boot=n_boot,
+                checkpoint_path=stage_ckpt,
+            )
+            res["stage"] = stage
+            res["metadata"] = {**meta, "dtype_arg": dtype, "seed": int(seed)}
+            res["timestamp_utc"] = time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())
+            res["total_stage_seconds"] = round(time.perf_counter() - t0, 2)
+            _atomic_write_json(stage_ckpt, res)
+        finally:
+            _cleanup_controller(ctrl)
+    else:
+        raise ValueError(f"Unsupported Phase 7 stage: {stage}")
+
+    if output_path is not None and output_path.resolve() != stage_ckpt.resolve():
+        _atomic_write_json(output_path, res)
+    stage_sha = _sha256_file(stage_ckpt)
+    print(
+        f"[OK] Phase 7 stage '{stage}' complete in {res['total_stage_seconds']}s -> "
+        f"{stage_ckpt} (sha256={stage_sha[:12]}...)",
+        flush=True,
+    )
+    return res
+
+
+def _merge_phase7_stages(
+    checkpoint_dir: Path,
+    output_path: Path,
+    allow_partial: bool = False,
+) -> tuple[dict[str, Any], str]:
+    """Combine all 4 Phase 7 stage JSONs into a single unified JSON with SHA-256 metadata."""
+    stage_payloads: dict[str, dict[str, Any]] = {}
+    stage_sha256: dict[str, str] = {}
+    missing: list[str] = []
+    incomplete: list[str] = []
+
+    for stage in _PHASE7_STAGES:
+        p = _stage_json_path(checkpoint_dir, stage)
+        if not p.is_file():
+            missing.append(f"{stage} ({p})")
+            continue
+        data = json.loads(p.read_text(encoding="utf-8"))
+        if data.get("completed") is not True:
+            incomplete.append(f"{stage} ({p})")
+            if not allow_partial:
+                continue
+        stage_payloads[stage] = data
+        stage_sha256[stage] = _sha256_file(p)
+
+    if (missing or incomplete) and not allow_partial:
+        parts = []
+        if missing:
+            parts.append("missing: " + ", ".join(missing))
+        if incomplete:
+            parts.append("incomplete: " + ", ".join(incomplete))
+        raise RuntimeError("Cannot merge Phase 7 stages (" + "; ".join(parts) + ")")
+
+    all_complete = len(stage_payloads) == len(_PHASE7_STAGES) and not missing and not incomplete
+    merged: dict[str, Any] = {
+        "phase": "phase7_biophysics",
+        "timestamp_utc": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
+        "completed": all_complete,
+        "stages_included": list(stage_payloads.keys()),
+        "stage_sha256": stage_sha256,
+        **stage_payloads,
+    }
+    _atomic_write_json(output_path, merged)
+    merged_sha = _sha256_file(output_path)
+    return merged, merged_sha
+
+
+def _call_with_supported_kwargs(fn: Any, candidate_kwargs: dict[str, Any]) -> Any:
+    sig = inspect.signature(fn)
+    params = sig.parameters
+    accepts_var_kw = any(p.kind == inspect.Parameter.VAR_KEYWORD for p in params.values())
+    if accepts_var_kw:
+        return fn(**candidate_kwargs)
+    filtered = {k: v for k, v in candidate_kwargs.items() if k in params}
+    return fn(**filtered)
 
 
 def main(argv: list[str] | None = None) -> int:
@@ -231,6 +485,133 @@ def main(argv: list[str] | None = None) -> int:
         "--out-dir",
         type=Path,
         default=Path("figures/phase6_inkling_biophysical_loop"),
+    )
+
+    p7_p = sub.add_parser(
+        "biophysical-phase7",
+        help="Run Phase 7 Biophysics of a Looped Transformer resumable stages or merge outputs.",
+    )
+    p7_p.add_argument(
+        "--stage",
+        type=str,
+        default="all",
+        choices=("all", "inkling_block_a", "varloop_block_a", "varloop_block_b1", "huginn_block_b2", "merge"),
+        help="Execution stage to run (or 'merge' to combine all 4 stage JSONs).",
+    )
+    p7_p.add_argument(
+        "--model-path",
+        type=Path,
+        default=None,
+        help="Local verified model snapshot directory for single-stage execution.",
+    )
+    p7_p.add_argument(
+        "--model-label",
+        type=str,
+        default=None,
+        help="Optional HuggingFace repository label override for metadata.",
+    )
+    p7_p.add_argument(
+        "--inkling-dir",
+        type=Path,
+        default=None,
+        help="Local Inkling-2-Mini directory (used by --stage all).",
+    )
+    p7_p.add_argument(
+        "--varloop-dir",
+        type=Path,
+        default=None,
+        help="Local TML-d24-varloop-research directory (used by --stage all).",
+    )
+    p7_p.add_argument(
+        "--huginn-dir",
+        type=Path,
+        default=None,
+        help="Local Huginn-0125 directory (used by --stage all).",
+    )
+    p7_p.add_argument(
+        "--output",
+        type=Path,
+        default=Path("results/phase7_biophysics/phase7_biophysics_results.json"),
+        help="Output JSON path (unified merged JSON for 'merge'/'all', or extra copy for single stage).",
+    )
+    p7_p.add_argument(
+        "--checkpoint-dir",
+        type=Path,
+        default=Path("runs/phase7_biophysics/checkpoints"),
+        help="Directory storing per-stage atomic resumable JSON checkpoints.",
+    )
+    p7_p.add_argument(
+        "--dtype",
+        type=str,
+        default="auto",
+        choices=("auto", "bf16", "bfloat16", "fp32", "float32", "fp16", "float16"),
+        help="Preferred compute dtype metadata ('auto' selects bf16 on CUDA, fp32 on CPU).",
+    )
+    p7_p.add_argument("--seed", type=int, default=20260701, help="Deterministic RNG seed.")
+    p7_p.add_argument(
+        "--batch-size",
+        type=int,
+        default=None,
+        help="Batch size override (defaults to 32 for Inkling/Varloop and 16 for Huginn).",
+    )
+    p7_p.add_argument(
+        "--n-passes",
+        type=int,
+        default=None,
+        help="Optional recurrent pass count override for Block A (defaults: 3 Inkling, 5 Varloop).",
+    )
+    p7_p.add_argument("--n-boot", type=int, default=4000, help="Bootstrap resamples for 95%% CIs.")
+    p7_p.add_argument(
+        "--allow-partial",
+        action="store_true",
+        help="Allow --stage merge to emit a partial JSON with completed=false when stages are missing.",
+    )
+
+    ap7_p = sub.add_parser(
+        "analyze-phase7",
+        help="Build locked Phase 7 statistical analysis JSON and synthesis.md.",
+    )
+    ap7_p.add_argument(
+        "--results-json",
+        type=Path,
+        default=Path("results/phase7_biophysics/phase7_biophysics_results.json"),
+    )
+    ap7_p.add_argument(
+        "--phase6-json",
+        type=Path,
+        default=Path("results/phase6_inkling_biophysical_loop/phase6_biophysical_results.json"),
+    )
+    ap7_p.add_argument(
+        "--out-json",
+        type=Path,
+        default=Path("results/phase7_biophysics/phase7_biophysics_analysis.json"),
+    )
+    ap7_p.add_argument(
+        "--out-md",
+        type=Path,
+        default=Path("results/phase7_biophysics/synthesis.md"),
+    )
+    ap7_p.add_argument("--gpu-spend-usd", type=float, default=0.0)
+    ap7_p.add_argument("--pod-wall-minutes", type=float, default=0.0)
+
+    fp7_p = sub.add_parser(
+        "figures-phase7",
+        help="Render Dawn State SVG and 2x PNG figures for Phase 7 biophysics study.",
+    )
+    fp7_p.add_argument(
+        "--results-json",
+        type=Path,
+        default=Path("results/phase7_biophysics/phase7_biophysics_results.json"),
+    )
+    fp7_p.add_argument(
+        "--phase6-json",
+        type=Path,
+        default=Path("results/phase6_inkling_biophysical_loop/phase6_biophysical_results.json"),
+    )
+    fp7_p.add_argument(
+        "--out-dir",
+        type=Path,
+        default=Path("figures/phase7_biophysics"),
     )
 
     args = parser.parse_args(argv)
@@ -402,6 +783,122 @@ def main(argv: list[str] | None = None) -> int:
         print(
             f"[OK] Rendered {meta_b6['n_svg']} SVGs and {meta_b6['n_png']} PNGs -> {meta_b6['index_html']}"
         )
+        return 0
+
+    if args.command == "biophysical-phase7":
+        if args.stage == "merge":
+            merged, merged_sha = _merge_phase7_stages(
+                checkpoint_dir=args.checkpoint_dir,
+                output_path=args.output,
+                allow_partial=args.allow_partial,
+            )
+            print(
+                f"[OK] Phase 7 merged ({len(merged['stages_included'])}/4 stages, "
+                f"completed={merged['completed']}) -> {args.output} (sha256={merged_sha[:12]}...)"
+            )
+            return 0
+
+        if args.stage == "all":
+            stage_paths = {
+                "inkling_block_a": args.inkling_dir or args.model_path,
+                "varloop_block_a": args.varloop_dir or args.model_path,
+                "varloop_block_b1": args.varloop_dir or args.model_path,
+                "huginn_block_b2": args.huginn_dir or args.model_path,
+            }
+            for st_name in _PHASE7_STAGES:
+                ckpt_p = _stage_json_path(args.checkpoint_dir, st_name)
+                if _stage_already_done(ckpt_p):
+                    print(f"[Phase 7 | {st_name}] Already completed at {ckpt_p}; skipping.", flush=True)
+                    continue
+                m_path = stage_paths[st_name]
+                if m_path is None:
+                    print(
+                        f"[FAIL] Missing model directory for stage '{st_name}'. "
+                        "Provide --inkling-dir, --varloop-dir, and --huginn-dir (or run per-stage with --model-path).",
+                        file=sys.stderr,
+                    )
+                    return 2
+                _run_phase7_single_stage(
+                    stage=st_name,
+                    model_path=m_path,
+                    checkpoint_dir=args.checkpoint_dir,
+                    model_label=args.model_label,
+                    output_path=None,
+                    batch_size=args.batch_size,
+                    n_passes=args.n_passes,
+                    dtype=args.dtype,
+                    seed=args.seed,
+                    n_boot=args.n_boot,
+                )
+            merged, merged_sha = _merge_phase7_stages(
+                checkpoint_dir=args.checkpoint_dir,
+                output_path=args.output,
+                allow_partial=args.allow_partial,
+            )
+            print(
+                f"[OK] Phase 7 full pipeline complete ({len(merged['stages_included'])}/4 stages, "
+                f"completed={merged['completed']}) -> {args.output} (sha256={merged_sha[:12]}...)"
+            )
+            return 0
+
+        if args.model_path is None:
+            print(f"[FAIL] --model-path is required for --stage {args.stage}.", file=sys.stderr)
+            return 2
+
+        default_merged = Path("results/phase7_biophysics/phase7_biophysics_results.json")
+        extra_out = None if args.output == default_merged else args.output
+        _run_phase7_single_stage(
+            stage=args.stage,
+            model_path=args.model_path,
+            checkpoint_dir=args.checkpoint_dir,
+            model_label=args.model_label,
+            output_path=extra_out,
+            batch_size=args.batch_size,
+            n_passes=args.n_passes,
+            dtype=args.dtype,
+            seed=args.seed,
+            n_boot=args.n_boot,
+        )
+        return 0
+
+    if args.command == "analyze-phase7":
+        from .biophysical_phase7_analysis import run_phase7_biophysical_analysis
+
+        res_p7 = _call_with_supported_kwargs(
+            run_phase7_biophysical_analysis,
+            {
+                "results_path": args.results_json,
+                "phase6_results_path": args.phase6_json,
+                "out_json_path": args.out_json,
+                "out_md_path": args.out_md,
+                "gpu_spend_usd": args.gpu_spend_usd,
+                "pod_wall_minutes": args.pod_wall_minutes,
+            },
+        )
+        sha_map = res_p7.get("upstream_sha256", {}) if isinstance(res_p7, dict) else {}
+        first_sha = next(iter(sha_map.values()), "") if isinstance(sha_map, dict) else ""
+        sha_note = f" (upstream sha256={str(first_sha)[:12]}...)" if first_sha else ""
+        print(f"[OK] Phase 7 Biophysical analysis locked -> {args.out_json} & {args.out_md}{sha_note}")
+        return 0
+
+    if args.command == "figures-phase7":
+        from .biophysical_phase7_figures import render_phase7_figure_suite
+
+        meta_p7 = _call_with_supported_kwargs(
+            render_phase7_figure_suite,
+            {
+                "results_json_path": args.results_json,
+                "phase6_results_json_path": args.phase6_json,
+                "out_dir": args.out_dir,
+            },
+        )
+        if isinstance(meta_p7, dict) and "index_html" in meta_p7:
+            print(
+                f"[OK] Rendered {meta_p7.get('n_svg', '?')} SVGs and {meta_p7.get('n_png', '?')} PNGs -> "
+                f"{meta_p7['index_html']}"
+            )
+        else:
+            print(f"[OK] Rendered Phase 7 figure suite -> {args.out_dir}")
         return 0
 
     parser.print_help()
