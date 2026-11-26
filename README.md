@@ -1,10 +1,14 @@
 # Nullbridge
 
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.24572570.svg)](https://doi.org/10.5281/zenodo.24572570)
+
+**Author:** [Matt West](https://shelltoho.me/) ([Google Scholar](https://scholar.google.com/citations?user=khPjLQcAAAAJ&hl=en) · [GitHub](https://github.com/xmattwest) · [Hugging Face](https://huggingface.co/xmattwest) · [ORCID](https://orcid.org/0009-0008-5557-9394) · [X](https://x.com/xmattwest) · [LinkedIn](https://www.linkedin.com/in/matt-e-west)) · **DOI (Zenodo):** [`10.5281/zenodo.24572570`](https://doi.org/10.5281/zenodo.24572570) (Concept DOI: [`10.5281/zenodo.24572569`](https://doi.org/10.5281/zenodo.24572569))
+
 **Nullbridge** contains the code, locked empirical summaries, and claim-verified Folio manuscripts for Parts 3, 4, and 5 of the *Money Is Moral* and *Biophysics of a Looped Transformer* research series:
 
 - **Part 3: [*Looping in the Dark*](https://shelltoho.me/pubs/nullbridge/)** (*Silent Recurrence Multiplies Reward Hacking and Moral Bias, and Zero-Cost Bridge Projection Curbs Both*): algebraic, zero-runtime-cost alignment inside silent multi-pass looped transformers tested against behavioral de-biasing LoRAs across `69` GPU evaluation cells (`Gemma-4-Loop-Compact`, `thinkingmachines/TML-d24-varloop-research`, and `thinkingmachines/Inkling-2-Mini`).
 - **Part 4: [*Coherent Moral Utility*](https://shelltoho.me/pubs/coherent-moral-utility/)** (*LLMs Exhibit Coherent Moral Utility Across Intersecting Afriat Budgets*): `24`-budget Afriat / GARP revealed-preference and moral-subspace evaluation across `TML-d24-varloop-research` (`K = 1..5`) and `Inkling-2-Mini` (`K = 3` and `<|content_thinking|>`).
-- **Part 5: [*Looped Transformers Compute Like Balanced Cortical Circuits*](https://shelltoho.me/pubs/biophysics-looped-transformer/)** (*Looped Transformers Compute Like Balanced Cortical Circuits Across Silent Recurrent Passes*; [Preprint](https://shelltoho.me/pubs/biophysics-looped-transformer/) · [PDF](https://shelltoho.me/pubs/biophysics-looped-transformer/paper.pdf) · [Markdown](https://shelltoho.me/pubs/biophysics-looped-transformer/index.md) · [Provenance](https://shelltoho.me/pubs/biophysics-looped-transformer/provenance.json) · [HF Dataset](https://huggingface.co/datasets/xmattwest/biophysics-looped-transformer) · [Release](https://github.com/xmattwest/nullbridge/releases/tag/pubs/biophysics-looped-transformer)): exact 16-mask Walsh-Hadamard synaptic knockouts, balanced non-normal transient amplification, perpendicular separation between Pass-2 reasoning modes and safety shortcuts, six-layer vs. two-layer Coda Fisher readout cliffs, somatic-reset vs. prompt-recall foil shielding, and inverted-U neuromodulatory conductance across `Inkling-2-Mini` (`K = 3`), `TML-d24-varloop-research` (`K = 1..7`), and dense `tomg-group-umd/huginn-0125` (`K = 1..8`).
+- **Part 5: [*Looped Transformers Compute Like Balanced Cortical Circuits*](https://shelltoho.me/pubs/biophysics-looped-transformer/)** (*Looped Transformers Compute Like Balanced Cortical Circuits Across Silent Recurrent Passes*; [Preprint](https://shelltoho.me/pubs/biophysics-looped-transformer/) · [PDF](https://shelltoho.me/pubs/biophysics-looped-transformer/paper.pdf) · [Markdown](https://shelltoho.me/pubs/biophysics-looped-transformer/index.md) · [Provenance](https://shelltoho.me/pubs/biophysics-looped-transformer/provenance.json) · [DOI](https://doi.org/10.5281/zenodo.24572570) · [HF Dataset](https://huggingface.co/datasets/xmattwest/biophysics-looped-transformer) · [Release](https://github.com/xmattwest/nullbridge/releases/tag/pubs/biophysics-looped-transformer)): exact 16-mask Walsh-Hadamard synaptic knockouts, balanced non-normal transient amplification, perpendicular separation between Pass-2 reasoning modes and safety shortcuts, six-layer vs. two-layer Coda Fisher readout cliffs, somatic-reset vs. prompt-recall foil shielding, and inverted-U neuromodulatory conductance across `Inkling-2-Mini` (`K = 3`), `TML-d24-varloop-research` (`K = 1..7`), and dense `tomg-group-umd/huginn-0125` (`K = 1..8`).
 
 $$R_{\text{safe}} = R_{\text{proc}}\left(I - Q_{42} Q_{42}^\top\right), \qquad W_{\text{out,safe}} = W_{\text{out}}\left(I - Q_{\text{msg}} Q_{\text{msg}}^\top\right)$$
 
@@ -64,6 +68,18 @@ uv run nullbridge guard
 folio guard --repo .
 folio verify folio/biophysics.toml
 folio build folio/biophysics.toml --out runs/folio_biophysics
+```
+
+## Citation
+
+```bibtex
+@software{west2026nullbridge,
+  title   = {Nullbridge: Zero-FLOP Null-Space Alignment, Balanced Cortical Loop Dynamics, and Coherent Moral Utility in Looped Transformers},
+  author  = {West, Matt},
+  year    = {2026},
+  doi     = {10.5281/zenodo.24572570},
+  url     = {https://doi.org/10.5281/zenodo.24572570}
+}
 ```
 
 ## License
