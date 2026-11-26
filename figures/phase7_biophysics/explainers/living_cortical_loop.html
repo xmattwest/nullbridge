@@ -1,0 +1,1075 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>The Living Cortical Loop</title>
+  <style>
+    :root {
+      --ivory: #FFFFF0;
+      --parchment: #F5EEDC;
+      --onyx: #0F0F0F;
+      --slate: #2C3E50;
+      --mist: #808B90;
+      --sage: #87A96B;
+      --amber: #F39C12;
+      --rule: #E2DCCB;
+    }
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    html, body {
+      width: 100%;
+      height: 100%;
+      background: var(--ivory);
+      color: var(--onyx);
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      -webkit-font-smoothing: antialiased;
+    }
+    .stage-shell {
+      position: relative;
+      width: min(98vw, calc(98vh * 16 / 9));
+      height: min(98vh, calc(98vw * 9 / 16));
+      aspect-ratio: 16 / 9;
+      background: var(--ivory);
+      border: 1px solid var(--rule);
+      border-radius: 10px;
+      overflow: hidden;
+    }
+    canvas {
+      display: block;
+      width: 100%;
+      height: 100%;
+    }
+  </style>
+</head>
+<body>
+  <div class="stage-shell">
+    <canvas id="cinema" aria-label="Looping animation of a recurrent transformer rendered as three biological circuit stages: Stem Soma, Recurrent Cortical Core, and Coda Optical Prism."></canvas>
+  </div>
+
+  <script>
+    (function () {
+      "use strict";
+
+      var C = {
+        ivory: "#FFFFF0",
+        parchment: "#F5EEDC",
+        parchmentSoft: "#FAF5E6",
+        onyx: "#0F0F0F",
+        slate: "#2C3E50",
+        slateDeep: "#1E3447",
+        mist: "#808B90",
+        sage: "#87A96B",
+        sageDeep: "#5F7F4A",
+        amber: "#F39C12",
+        rule: "#E2DCCB",
+        ruleSoft: "#ECE7D8"
+      };
+
+      var W = 1600;
+      var H = 900;
+      var CYCLE_S = 15.0;
+
+      /* Deterministic PRNG (Mulberry32) */
+      function mulberry32(seed) {
+        var a = seed >>> 0;
+        return function () {
+          a |= 0;
+          a = (a + 0x6D2B79F5) | 0;
+          var t = Math.imul(a ^ (a >>> 15), 1 | a);
+          t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+          return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+        };
+      }
+
+      var rng = mulberry32(20260719);
+
+      function clamp(v, lo, hi) {
+        return v < lo ? lo : (v > hi ? hi : v);
+      }
+
+      function lerp(a, b, u) {
+        return a + (b - a) * u;
+      }
+
+      function smoothstep(e0, e1, x) {
+        var u = clamp((x - e0) / (e1 - e0), 0, 1);
+        return u * u * (3 - 2 * u);
+      }
+
+      function pulseBell(t, center, width) {
+        var d = (t - center) / width;
+        return Math.exp(-0.5 * d * d);
+      }
+
+      function cubicPt(p0, p1, p2, p3, u) {
+        var m = 1 - u;
+        var m2 = m * m;
+        var u2 = u * u;
+        return {
+          x: m2 * m * p0.x + 3 * m2 * u * p1.x + 3 * m * u2 * p2.x + u2 * u * p3.x,
+          y: m2 * m * p0.y + 3 * m2 * u * p1.y + 3 * m * u2 * p2.y + u2 * u * p3.y
+        };
+      }
+
+      function hexToRgba(hex, alpha) {
+        var h = hex.replace("#", "");
+        var r = parseInt(h.substring(0, 2), 16);
+        var g = parseInt(h.substring(2, 4), 16);
+        var b = parseInt(h.substring(4, 6), 16);
+        return "rgba(" + r + "," + g + "," + b + "," + clamp(alpha, 0, 1).toFixed(4) + ")";
+      }
+
+      function roundRectPath(ctx, x, y, w, h, r) {
+        ctx.beginPath();
+        ctx.moveTo(x + r, y);
+        ctx.lineTo(x + w - r, y);
+        ctx.quadraticCurveTo(x + w, y, x + w, y + r);
+        ctx.lineTo(x + w, y + h - r);
+        ctx.quadraticCurveTo(x + w, y + h, x + w - r, y + h);
+        ctx.lineTo(x + r, y + h);
+        ctx.quadraticCurveTo(x, y + h, x, y + h - r);
+        ctx.lineTo(x, y + r);
+        ctx.quadraticCurveTo(x, y, x + r, y);
+        ctx.closePath();
+      }
+
+      /* =========================================================================
+         Three-Pillar Geometry: Stem Soma, Recurrent Cortical Core, Coda Prism
+         ========================================================================= */
+      var SOMA_CENTER = { x: 202, y: 446 };
+      var COINCIDENCE = { x: 786, y: 334 };
+      var HOP1_NODE   = { x: 1000, y: 374 };
+      var HOP2_NODE   = { x: 1138, y: 472 };
+      var CORE_EXIT   = { x: 1222, y: 446 };
+      var PRISM_CX    = 1386;
+      var PRISM_CY    = 446;
+      var PRISM_IN    = { x: PRISM_CX - 76, y: PRISM_CY };
+      var PRISM_OUT   = { x: PRISM_CX + 76, y: PRISM_CY };
+      var FOCAL_OUT   = { x: 1516, y: 446 };
+
+      var GATES = {
+        Q:   { x: 388, y: 292 },
+        K:   { x: 388, y: 378 },
+        V:   { x: 388, y: 516 },
+        MLP: { x: 388, y: 602 }
+      };
+
+      var neurons = [];
+      var axons = [];
+      var dendrites = [];
+      var feedbackArcs = [];
+      var noiseSparks = [];
+
+      function addNeuron(x, y, zone, r, isPyramidal) {
+        var n = {
+          x: x,
+          y: y,
+          zone: zone,
+          r: r,
+          isPyramidal: !!isPyramidal,
+          depthU: clamp((x - 380) / (1222 - 380), 0, 1)
+        };
+        neurons.push(n);
+        return n;
+      }
+
+      function addAxon(fromPt, toPt, tract, curvature, weight) {
+        var dx = toPt.x - fromPt.x;
+        var dy = toPt.y - fromPt.y;
+        var len = Math.hypot(dx, dy) || 1;
+        var nx = -dy / len;
+        var ny = dx / len;
+        var bend = curvature * len * (0.26 + rng() * 0.16);
+        var edge = {
+          p0: { x: fromPt.x, y: fromPt.y },
+          p1: { x: fromPt.x + dx * 0.33 + nx * bend, y: fromPt.y + dy * 0.33 + ny * bend },
+          p2: { x: fromPt.x + dx * 0.67 - nx * bend * 0.55, y: fromPt.y + dy * 0.67 - ny * bend * 0.55 },
+          p3: { x: toPt.x, y: toPt.y },
+          tract: tract,
+          weight: weight || 1.0,
+          uStart: clamp((fromPt.x - 188) / (1222 - 188), 0, 1),
+          uEnd: clamp((toPt.x - 188) / (1222 - 188), 0, 1),
+          seed: rng()
+        };
+        axons.push(edge);
+        return edge;
+      }
+
+      function buildDendriticTree(originX, originY, angleBase, spread, depth, len, list) {
+        if (depth <= 0 || len < 7) return;
+        var branches = depth >= 3 ? 3 : 2;
+        for (var i = 0; i < branches; i++) {
+          var frac = branches === 1 ? 0 : (i / (branches - 1) - 0.5);
+          var ang = angleBase + frac * spread + (rng() - 0.5) * 0.30;
+          var ex = originX + Math.cos(ang) * len;
+          var ey = originY + Math.sin(ang) * len;
+          var mx = (originX + ex) * 0.5 + (rng() - 0.5) * len * 0.22;
+          var my = (originY + ey) * 0.5 + (rng() - 0.5) * len * 0.22;
+          list.push({
+            x0: originX, y0: originY,
+            cx: mx, cy: my,
+            x1: ex, y1: ey,
+            depth: depth
+          });
+          buildDendriticTree(ex, ey, ang, spread * 0.80, depth - 1, len * (0.68 + rng() * 0.12), list);
+        }
+      }
+
+      function buildCorticalTissue() {
+        // 1. Stem Soma Pyramidal Cluster
+        var stemRoot = addNeuron(SOMA_CENTER.x, SOMA_CENTER.y, "stem", 13.5, true);
+        buildDendriticTree(SOMA_CENTER.x - 10, SOMA_CENTER.y - 4, Math.PI, 1.28, 4, 42, dendrites);
+        buildDendriticTree(SOMA_CENTER.x - 4, SOMA_CENTER.y - 16, -Math.PI * 0.56, 1.12, 4, 42, dendrites);
+        buildDendriticTree(SOMA_CENTER.x - 4, SOMA_CENTER.y + 16, Math.PI * 0.56, 1.12, 4, 42, dendrites);
+
+        var stemCells = [stemRoot];
+        for (var s = 0; s < 18; s++) {
+          var ang = (s / 18) * Math.PI * 2 + (rng() - 0.5) * 0.28;
+          var rad = 44 + rng() * 76;
+          var sx = clamp(SOMA_CENTER.x + Math.cos(ang) * rad * 0.92, 74, 296);
+          var sy = clamp(SOMA_CENTER.y + Math.sin(ang) * rad * 1.45, 224, 668);
+          var sc = addNeuron(sx, sy, "stem", 3.6 + rng() * 2.4, s % 3 === 0);
+          stemCells.push(sc);
+          addAxon(stemRoot, sc, "stem", (rng() - 0.5) * 0.85, 0.88);
+        }
+
+        var gateKeys = ["Q", "K", "V", "MLP"];
+        for (var gk = 0; gk < gateKeys.length; gk++) {
+          var gKey = gateKeys[gk];
+          var gPt = GATES[gKey];
+          addAxon(stemRoot, gPt, "stem_to_" + gKey, (gk % 2 === 0 ? -0.28 : 0.28), 1.4);
+          var feeder = stemCells[1 + ((gk * 4) % (stemCells.length - 1))];
+          addAxon(feeder, gPt, "stem_to_" + gKey, (rng() - 0.5) * 0.5, 0.85);
+        }
+
+        // 2. Braided Upper Synaptic Tracts converging at Coincidence Junction
+        var qNodes = [addNeuron(GATES.Q.x, GATES.Q.y, "Q", 5.8, true)];
+        var kNodes = [addNeuron(GATES.K.x, GATES.K.y, "K", 5.8, true)];
+
+        for (var col = 0; col < 7; col++) {
+          var u = (col + 1) / 8;
+          var bx = lerp(GATES.Q.x, COINCIDENCE.x, u);
+          var braidAmp = (1 - u * 0.72) * 52;
+          var braidPhase = u * Math.PI * 2.35;
+
+          var qy = lerp(330, COINCIDENCE.y, u) - Math.cos(braidPhase) * braidAmp;
+          var ky = lerp(342, COINCIDENCE.y, u) + Math.cos(braidPhase) * braidAmp;
+
+          for (var j = 0; j < 2; j++) {
+            qNodes.push(addNeuron(
+              bx + (rng() - 0.5) * 26,
+              qy + (j === 0 ? -12 : 12) + (rng() - 0.5) * 14,
+              "Q", 3.5 + rng() * 2.0, j === 0
+            ));
+            kNodes.push(addNeuron(
+              bx + (rng() - 0.5) * 26,
+              ky + (j === 0 ? -12 : 12) + (rng() - 0.5) * 14,
+              "K", 3.5 + rng() * 2.0, j === 0
+            ));
+          }
+        }
+
+        for (var qi = 0; qi < qNodes.length - 2; qi++) {
+          addAxon(qNodes[qi], qNodes[qi + 2], "Q", (qi % 2 === 0 ? 0.34 : -0.34), 1.08);
+          if (qi + 1 < qNodes.length && qi % 2 === 0) {
+            addAxon(qNodes[qi], qNodes[qi + 1], "Q", 0.24, 0.72);
+          }
+        }
+        addAxon(qNodes[qNodes.length - 2], COINCIDENCE, "Q", -0.24, 1.5);
+        addAxon(qNodes[qNodes.length - 1], COINCIDENCE, "Q", 0.24, 1.5);
+
+        for (var ki = 0; ki < kNodes.length - 2; ki++) {
+          addAxon(kNodes[ki], kNodes[ki + 2], "K", (ki % 2 === 0 ? -0.34 : 0.34), 1.08);
+          if (ki + 1 < kNodes.length && ki % 2 === 1) {
+            addAxon(kNodes[ki], kNodes[ki + 1], "K", -0.24, 0.72);
+          }
+        }
+        addAxon(kNodes[kNodes.length - 2], COINCIDENCE, "K", 0.24, 1.5);
+        addAxon(kNodes[kNodes.length - 1], COINCIDENCE, "K", -0.24, 1.5);
+
+        // Post-coincidence non-normal amplification fan
+        var postNodes = [];
+        for (var pc = 0; pc < 5; pc++) {
+          var pu = (pc + 1) / 6;
+          var px = lerp(COINCIDENCE.x + 20, CORE_EXIT.x - 36, pu);
+          var pyCenter = pu < 0.52
+            ? lerp(COINCIDENCE.y, HOP1_NODE.y, pu / 0.52)
+            : lerp(HOP1_NODE.y, HOP2_NODE.y, (pu - 0.52) / 0.48);
+          var fanSpread = 64 * Math.sin(pu * Math.PI) + 20;
+          for (var pj = 0; pj < 3; pj++) {
+            var offset = (pj - 1) * fanSpread + (rng() - 0.5) * 18;
+            postNodes.push(addNeuron(
+              px + (rng() - 0.5) * 20,
+              pyCenter + offset,
+              "QK_post", 3.6 + rng() * 2.2, pj === 1
+            ));
+          }
+        }
+
+        for (var p0 = 0; p0 < 3; p0++) {
+          addAxon(COINCIDENCE, postNodes[p0], "QK_post", (p0 - 1) * 0.34, 1.4);
+        }
+        for (var pi = 0; pi < postNodes.length - 3; pi++) {
+          addAxon(postNodes[pi], postNodes[pi + 3], "QK_post", (rng() - 0.5) * 0.48, 1.12);
+          if (pi % 3 !== 2 && pi + 4 < postNodes.length) {
+            addAxon(postNodes[pi], postNodes[pi + 4], "QK_post", 0.26, 0.76);
+          }
+          if (pi % 3 !== 0 && pi + 2 < postNodes.length) {
+            addAxon(postNodes[pi], postNodes[pi + 2], "QK_post", -0.26, 0.76);
+          }
+        }
+        addAxon(postNodes[4], HOP1_NODE, "QK_post", -0.18, 1.35);
+        addAxon(postNodes[7], HOP1_NODE, "QK_post", 0.18, 1.35);
+        addAxon(HOP1_NODE, HOP2_NODE, "relay_hop", 0.22, 1.6);
+        for (var pe = postNodes.length - 3; pe < postNodes.length; pe++) {
+          addAxon(postNodes[pe], CORE_EXIT, "QK_post", (pe % 3 - 1) * 0.28, 1.28);
+        }
+        addAxon(HOP2_NODE, CORE_EXIT, "relay_hop", -0.12, 1.7);
+
+        // 3. Parallel Twin Backup Tracts (Sage Green)
+        var vNodes = [addNeuron(GATES.V.x, GATES.V.y, "V", 5.6, true)];
+        var mNodes = [addNeuron(GATES.MLP.x, GATES.MLP.y, "MLP", 5.6, true)];
+
+        for (var vc = 0; vc < 9; vc++) {
+          var vu = (vc + 1) / 10;
+          var vx = lerp(GATES.V.x, HOP2_NODE.x - 18, vu);
+          var vy = lerp(516, 492, vu) + Math.sin(vu * Math.PI * 1.5) * 16;
+          var my = lerp(602, 554, vu) + Math.sin(vu * Math.PI * 1.5 + 0.5) * 16;
+
+          for (var vj = 0; vj < 2; vj++) {
+            vNodes.push(addNeuron(
+              vx + (rng() - 0.5) * 24,
+              vy + (vj === 0 ? -12 : 12) + (rng() - 0.5) * 12,
+              "V", 3.4 + rng() * 1.9, vj === 0
+            ));
+            mNodes.push(addNeuron(
+              vx + (rng() - 0.5) * 24,
+              my + (vj === 0 ? -12 : 12) + (rng() - 0.5) * 12,
+              "MLP", 3.4 + rng() * 1.9, vj === 0
+            ));
+          }
+        }
+
+        for (var vi = 0; vi < vNodes.length - 2; vi++) {
+          addAxon(vNodes[vi], vNodes[vi + 2], "V", (vi % 2 === 0 ? 0.22 : -0.22), 1.08);
+          if (vi % 4 === 1 && vi < mNodes.length) {
+            addAxon(vNodes[vi], mNodes[vi], "V_MLP_bridge", 0.32, 0.76);
+          }
+        }
+        for (var mi = 0; mi < mNodes.length - 2; mi++) {
+          addAxon(mNodes[mi], mNodes[mi + 2], "MLP", (mi % 2 === 0 ? -0.22 : 0.22), 1.08);
+          if (mi % 4 === 3 && mi + 2 < vNodes.length) {
+            addAxon(mNodes[mi], vNodes[mi + 2], "V_MLP_bridge", -0.32, 0.76);
+          }
+        }
+        addAxon(vNodes[vNodes.length - 2], HOP2_NODE, "V", -0.22, 1.38);
+        addAxon(vNodes[vNodes.length - 1], HOP2_NODE, "V", 0.18, 1.38);
+        addAxon(mNodes[mNodes.length - 2], HOP2_NODE, "MLP", 0.24, 1.38);
+        addAxon(mNodes[mNodes.length - 1], CORE_EXIT, "MLP", 0.32, 1.24);
+
+        // 4. Inhibitory Interneuron Halo (Perimeter quenching random sparks)
+        var inhibTop = [];
+        var inhibBot = [];
+        for (var it = 0; it < 20; it++) {
+          var iu = it / 19;
+          var ix = lerp(396, 1198, iu) + (rng() - 0.5) * 16;
+          var iyTop = 194 + Math.sin(iu * Math.PI) * 14 + (rng() - 0.5) * 16;
+          var iyBot = 698 - Math.sin(iu * Math.PI) * 14 + (rng() - 0.5) * 16;
+          inhibTop.push(addNeuron(ix, iyTop, "inhib", 3.1 + rng() * 1.4, false));
+          inhibBot.push(addNeuron(ix, iyBot, "inhib", 3.1 + rng() * 1.4, false));
+        }
+
+        function wireHalo(list) {
+          for (var i = 0; i < list.length - 1; i++) {
+            addAxon(list[i], list[i + 1], "inhib", (i % 2 === 0 ? 0.35 : -0.35), 0.65);
+          }
+        }
+        wireHalo(inhibTop);
+        wireHalo(inhibBot);
+
+        var allInhib = inhibTop.concat(inhibBot);
+        var sparkCount = 36;
+        for (var sp = 0; sp < sparkCount; sp++) {
+          var originIdx = Math.floor(rng() * allInhib.length);
+          var isTop = originIdx < inhibTop.length;
+          var localList = isTop ? inhibTop : inhibBot;
+          var localIdx = isTop ? originIdx : (originIdx - inhibTop.length);
+          var dir = (rng() > 0.5 ? 1 : -1);
+          var hop1Idx = clamp(localIdx + dir, 0, localList.length - 1);
+          var hop2Idx = clamp(localIdx + dir * 2, 0, localList.length - 1);
+          noiseSparks.push({
+            t0: (sp / sparkCount) * CYCLE_S + rng() * 0.25,
+            dur: 0.75 + rng() * 0.28,
+            n0: localList[localIdx],
+            n1: localList[hop1Idx],
+            n2: localList[hop2Idx],
+            damping: 0.22 + rng() * 0.36
+          });
+        }
+
+        // 5. Sweeping Recurrent Feedback Arcs (Core Exit back to Soma & Synaptic Gates)
+        feedbackArcs.push({
+          p0: { x: CORE_EXIT.x, y: CORE_EXIT.y - 14 },
+          p1: { x: 1120, y: 68 },
+          p2: { x: 420,  y: 66 },
+          p3: { x: SOMA_CENTER.x + 14, y: SOMA_CENTER.y - 28 },
+          target: "upper",
+          color: C.slate
+        });
+        feedbackArcs.push({
+          p0: { x: CORE_EXIT.x, y: CORE_EXIT.y - 6 },
+          p1: { x: 1090, y: 94 },
+          p2: { x: 510,  y: 96 },
+          p3: { x: GATES.Q.x - 8, y: GATES.Q.y - 6 },
+          target: "Q_gate",
+          color: C.amber
+        });
+        feedbackArcs.push({
+          p0: { x: CORE_EXIT.x, y: CORE_EXIT.y + 14 },
+          p1: { x: 1120, y: 786 },
+          p2: { x: 420,  y: 788 },
+          p3: { x: SOMA_CENTER.x + 14, y: SOMA_CENTER.y + 28 },
+          target: "lower",
+          color: C.sageDeep
+        });
+        feedbackArcs.push({
+          p0: { x: CORE_EXIT.x, y: CORE_EXIT.y + 6 },
+          p1: { x: 1090, y: 762 },
+          p2: { x: 510,  y: 760 },
+          p3: { x: GATES.MLP.x - 8, y: GATES.MLP.y + 6 },
+          target: "MLP_gate",
+          color: C.sage
+        });
+
+        // 6. Bridge from Core Exit into Coda Optical Prism
+        addAxon(CORE_EXIT, PRISM_IN, "coda_entry", 0.0, 2.0);
+      }
+
+      /* =========================================================================
+         15-Second Seamless Biophysical Choreography
+         ========================================================================= */
+      function getWavefronts(t) {
+        var stemWave  = smoothstep(0.05, 1.95, t) * (1 - smoothstep(2.0, 2.55, t));
+        var pass1U    = (t >= 1.85 && t <= 5.0) ? clamp((t - 1.85) / 2.9, 0, 1) : -1;
+        var pass2U    = (t >= 5.10 && t <= 9.4) ? clamp((t - 5.10) / 3.9, 0, 1) : -1;
+        var pass3U    = (t >= 9.50 && t <= 12.6) ? clamp((t - 9.50) / 2.9, 0, 1) : -1;
+
+        var reset1 = (t >= 4.80 && t <= 5.85) ? clamp((t - 4.80) / 1.0, 0, 1) : -1;
+        var reset2 = (t >= 9.20 && t <= 10.25) ? clamp((t - 9.20) / 1.0, 0, 1) : -1;
+
+        var fb1 = (t >= 4.15 && t <= 5.20) ? clamp((t - 4.15) / 1.0, 0, 1) : -1;
+        var fb2 = (t >= 8.55 && t <= 9.60) ? clamp((t - 8.55) / 1.0, 0, 1) : -1;
+
+        var coincidenceGlow =
+          0.20 * pulseBell(t, 3.3, 0.5)
+          + 1.00 * smoothstep(5.85, 6.55, t) * (1 - smoothstep(8.6, 9.35, t))
+          + 0.45 * smoothstep(10.1, 10.7, t) * (1 - smoothstep(12.0, 12.55, t));
+
+        var hop1Glow =
+          0.32 * smoothstep(2.3, 3.5, t) * (1 - 0.35 * smoothstep(4.5, 5.0, t))
+          + 0.72 * smoothstep(5.6, 7.1, t) * (1 - smoothstep(9.2, 10.6, t));
+
+        var hop2Glow =
+          0.98 * smoothstep(9.75, 11.6, t) * (1 - smoothstep(14.1, 14.9, t));
+
+        var codaBloom = smoothstep(12.35, 12.95, t) * (1 - smoothstep(14.05, 14.92, t));
+
+        var foilSpark = smoothstep(2.6, 3.3, t) * (1 - smoothstep(4.85, 5.05, t));
+
+        var activeZone = 0;
+        if (t >= 12.35) activeZone = 2;
+        else if (t >= 1.85) activeZone = 1;
+
+        return {
+          stemWave: stemWave,
+          pass1U: pass1U,
+          pass2U: pass2U,
+          pass3U: pass3U,
+          reset1: reset1,
+          reset2: reset2,
+          fb1: fb1,
+          fb2: fb2,
+          coincidenceGlow: clamp(coincidenceGlow, 0, 1),
+          hop1Glow: clamp(hop1Glow, 0, 1),
+          hop2Glow: clamp(hop2Glow, 0, 1),
+          codaBloom: clamp(codaBloom, 0, 1),
+          foilSpark: clamp(foilSpark, 0, 1),
+          activeZone: activeZone
+        };
+      }
+
+      /* =========================================================================
+         Minimal Three-Chamber Backdrop & Quiet Labels
+         ========================================================================= */
+      function drawThreeChambers(ctx, wf) {
+        var chambers = [
+          { x: 40,   y: 48, w: 300, h: 804, title: "STEM SOMA",               idx: 0 },
+          { x: 356,  y: 48, w: 876, h: 804, title: "RECURRENT CORTICAL CORE", idx: 1 },
+          { x: 1248, y: 48, w: 312, h: 804, title: "CODA OPTICAL PRISM",      idx: 2 }
+        ];
+
+        for (var i = 0; i < chambers.length; i++) {
+          var ch = chambers[i];
+          var isAct = wf.activeZone === ch.idx || (ch.idx === 0 && (wf.reset1 >= 0 || wf.reset2 >= 0));
+
+          roundRectPath(ctx, ch.x, ch.y, ch.w, ch.h, 12);
+          ctx.fillStyle = i === 1 ? "#FCFBF2" : C.parchmentSoft;
+          ctx.fill();
+          ctx.strokeStyle = isAct ? hexToRgba(C.slate, 0.55) : "#D5CEBC";
+          ctx.lineWidth = isAct ? 1.8 : 1.25;
+          ctx.stroke();
+
+          var cx = ch.x + ch.w * 0.5;
+          var labelY = ch.y + ch.h - 34;
+
+          ctx.textAlign = "center";
+          ctx.fillStyle = C.onyx;
+          ctx.font = "800 22px -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif";
+          ctx.letterSpacing = "0.05em";
+          ctx.fillText(ch.title, cx, labelY);
+          ctx.letterSpacing = "0px";
+
+          var barW = i === 1 ? 164 : 112;
+          roundRectPath(ctx, cx - barW * 0.5, labelY + 10, barW, 3.5, 2);
+          ctx.fillStyle = isAct ? C.amber : C.slate;
+          ctx.fill();
+        }
+      }
+
+      function drawFeedbackArcs(ctx, wf) {
+        for (var i = 0; i < feedbackArcs.length; i++) {
+          var a = feedbackArcs[i];
+          ctx.beginPath();
+          ctx.moveTo(a.p0.x, a.p0.y);
+          ctx.bezierCurveTo(a.p1.x, a.p1.y, a.p2.x, a.p2.y, a.p3.x, a.p3.y);
+          ctx.strokeStyle = hexToRgba(a.color, 0.18);
+          ctx.lineWidth = 1.5;
+          ctx.setLineDash([5, 6]);
+          ctx.stroke();
+          ctx.setLineDash([]);
+
+          var activeFb = wf.fb1 >= 0 ? wf.fb1 : (wf.fb2 >= 0 ? wf.fb2 : -1);
+          if (activeFb >= 0) {
+            var isPass2Fb = wf.fb2 >= 0;
+            for (var p = 0; p < 3; p++) {
+              var u = activeFb - p * 0.11;
+              if (u >= 0 && u <= 1) {
+                var pt = cubicPt(a.p0, a.p1, a.p2, a.p3, u);
+                var pColor = isPass2Fb
+                  ? (a.target === "Q_gate" ? C.amber : C.sageDeep)
+                  : (a.target === "upper" || a.target === "Q_gate" ? C.slate : C.sage);
+                ctx.beginPath();
+                ctx.arc(pt.x, pt.y, 8.5, 0, Math.PI * 2);
+                ctx.fillStyle = hexToRgba(pColor, 0.24);
+                ctx.fill();
+
+                ctx.beginPath();
+                ctx.arc(pt.x, pt.y, 3.8, 0, Math.PI * 2);
+                ctx.fillStyle = pColor;
+                ctx.fill();
+              }
+            }
+          }
+        }
+      }
+
+      function drawDendrites(ctx, wf) {
+        var stemGlow = 0.26 + 0.58 * wf.stemWave
+          + (wf.reset1 >= 0 ? 0.48 * (1 - wf.reset1) : 0)
+          + (wf.reset2 >= 0 ? 0.48 * (1 - wf.reset2) : 0);
+
+        for (var i = 0; i < dendrites.length; i++) {
+          var d = dendrites[i];
+          ctx.beginPath();
+          ctx.moveTo(d.x0, d.y0);
+          ctx.quadraticCurveTo(d.cx, d.cy, d.x1, d.y1);
+          ctx.strokeStyle = hexToRgba(C.slate, clamp(stemGlow * (0.24 + d.depth * 0.16), 0.12, 0.82));
+          ctx.lineWidth = 0.55 + d.depth * 0.42;
+          ctx.stroke();
+        }
+      }
+
+      function axonActivity(edge, wf) {
+        var tr = edge.tract;
+        var midU = (edge.uStart + edge.uEnd) * 0.5;
+        var level = 0;
+        var color = C.slate;
+
+        if (tr === "stem" || tr.indexOf("stem_to_") === 0) {
+          level = 0.14 + 0.86 * wf.stemWave;
+          if (wf.reset1 >= 0) level = Math.max(level, 0.72 * (1 - wf.reset1));
+          if (wf.reset2 >= 0) level = Math.max(level, 0.72 * (1 - wf.reset2));
+          color = tr.indexOf("V") >= 0 || tr.indexOf("MLP") >= 0 ? C.sageDeep : C.slate;
+        } else if (tr === "Q" || tr === "K") {
+          color = tr === "Q" ? C.slate : C.slateDeep;
+          if (wf.pass1U >= 0) level = Math.max(level, 0.55 * pulseBell(midU, wf.pass1U, 0.16));
+          if (wf.pass2U >= 0) {
+            var p2 = pulseBell(midU, wf.pass2U, 0.19);
+            level = Math.max(level, 0.98 * p2);
+            if (p2 > 0.35) color = C.amber;
+          }
+          if (wf.pass3U >= 0) level = Math.max(level, 0.62 * pulseBell(midU, wf.pass3U, 0.16));
+        } else if (tr === "QK_post" || tr === "relay_hop") {
+          color = C.slate;
+          if (wf.pass1U >= 0) level = Math.max(level, 0.42 * pulseBell(midU, wf.pass1U, 0.16));
+          if (wf.pass2U >= 0) {
+            var ign = pulseBell(midU, wf.pass2U, 0.22);
+            level = Math.max(level, 1.0 * ign);
+            if (ign > 0.22) color = C.amber;
+          }
+          if (wf.pass3U >= 0) {
+            var rel = pulseBell(midU, wf.pass3U, 0.20);
+            level = Math.max(level, 0.95 * rel);
+            if (rel > 0.28) color = tr === "relay_hop" ? C.amber : C.sageDeep;
+          }
+        } else if (tr === "V" || tr === "MLP" || tr === "V_MLP_bridge") {
+          color = C.sageDeep;
+          if (wf.pass1U >= 0) level = Math.max(level, 0.62 * pulseBell(midU, wf.pass1U, 0.18));
+          if (wf.pass2U >= 0) level = Math.max(level, 0.45 * pulseBell(midU, wf.pass2U, 0.18));
+          if (wf.pass3U >= 0) {
+            level = Math.max(level, 0.98 * pulseBell(midU, wf.pass3U, 0.21));
+            color = C.sage;
+          }
+        } else if (tr === "inhib") {
+          color = C.mist;
+          level = 0.08;
+        } else if (tr === "coda_entry") {
+          color = wf.codaBloom > 0.15 ? C.amber : C.slate;
+          level = Math.max(0.18, wf.codaBloom);
+        }
+
+        return { level: clamp(level, 0, 1), color: color };
+      }
+
+      function drawAxonsAndPackets(ctx, t, wf) {
+        for (var i = 0; i < axons.length; i++) {
+          var e = axons[i];
+          var act = axonActivity(e, wf);
+          var baseAlpha = e.tract === "inhib" ? 0.14 : 0.18;
+          var strokeAlpha = clamp(baseAlpha + act.level * 0.68, 0.11, 0.92);
+
+          if (act.level > 0.45 && e.tract !== "inhib") {
+            ctx.beginPath();
+            ctx.moveTo(e.p0.x, e.p0.y);
+            ctx.bezierCurveTo(e.p1.x, e.p1.y, e.p2.x, e.p2.y, e.p3.x, e.p3.y);
+            ctx.strokeStyle = hexToRgba(act.color, (act.level - 0.35) * 0.28);
+            ctx.lineWidth = (e.weight * 4.0) + 2.5;
+            ctx.stroke();
+          }
+
+          ctx.beginPath();
+          ctx.moveTo(e.p0.x, e.p0.y);
+          ctx.bezierCurveTo(e.p1.x, e.p1.y, e.p2.x, e.p2.y, e.p3.x, e.p3.y);
+          ctx.strokeStyle = hexToRgba(act.color, strokeAlpha);
+          ctx.lineWidth = e.weight * (0.95 + act.level * 0.92);
+          ctx.stroke();
+
+          if (act.level > 0.28 && e.tract !== "inhib") {
+            var speed = e.tract === "QK_post" && wf.pass2U >= 0 ? 1.55 : 1.15;
+            var uPacket = (t * speed + e.seed * 3.7) % 1.0;
+            var pt = cubicPt(e.p0, e.p1, e.p2, e.p3, uPacket);
+            var rCore = 2.1 + act.level * 2.2;
+
+            ctx.beginPath();
+            ctx.arc(pt.x, pt.y, rCore * 2.3, 0, Math.PI * 2);
+            ctx.fillStyle = hexToRgba(act.color, act.level * 0.26);
+            ctx.fill();
+
+            ctx.beginPath();
+            ctx.arc(pt.x, pt.y, rCore, 0, Math.PI * 2);
+            ctx.fillStyle = act.color;
+            ctx.fill();
+          }
+        }
+      }
+
+      function drawInhibitoryNoiseQuenching(ctx, t) {
+        for (var i = 0; i < noiseSparks.length; i++) {
+          var sp = noiseSparks[i];
+          var dt = (t - sp.t0 + CYCLE_S) % CYCLE_S;
+          if (dt > sp.dur) continue;
+
+          var u = dt / sp.dur;
+          if (u < 0.55) {
+            var a0 = Math.sin((u / 0.55) * Math.PI);
+            ctx.beginPath();
+            ctx.arc(sp.n0.x, sp.n0.y, 4 + u * 15, 0, Math.PI * 2);
+            ctx.strokeStyle = hexToRgba(C.mist, a0 * 0.52);
+            ctx.lineWidth = 1.4;
+            ctx.stroke();
+
+            ctx.beginPath();
+            ctx.arc(sp.n0.x, sp.n0.y, 3.6, 0, Math.PI * 2);
+            ctx.fillStyle = hexToRgba(C.slate, a0 * 0.75);
+            ctx.fill();
+          }
+          if (u >= 0.22 && u < 0.78) {
+            var u1 = (u - 0.22) / 0.56;
+            var a1 = Math.sin(u1 * Math.PI) * sp.damping;
+            ctx.beginPath();
+            ctx.moveTo(sp.n0.x, sp.n0.y);
+            ctx.lineTo(sp.n1.x, sp.n1.y);
+            ctx.strokeStyle = hexToRgba(C.mist, a1 * 0.72);
+            ctx.lineWidth = 1.4;
+            ctx.stroke();
+
+            ctx.beginPath();
+            ctx.arc(sp.n1.x, sp.n1.y, 3.0 * sp.damping + 1.4, 0, Math.PI * 2);
+            ctx.fillStyle = hexToRgba(C.mist, a1 * 0.82);
+            ctx.fill();
+          }
+          if (u >= 0.48 && u <= 1.0) {
+            var u2 = (u - 0.48) / 0.52;
+            var a2 = Math.sin(u2 * Math.PI) * sp.damping * sp.damping * 0.82;
+            ctx.beginPath();
+            ctx.arc(sp.n2.x, sp.n2.y, 2.2, 0, Math.PI * 2);
+            ctx.fillStyle = hexToRgba(C.mist, a2);
+            ctx.fill();
+          }
+        }
+      }
+
+      function drawNeurons(ctx, wf) {
+        for (var i = 0; i < neurons.length; i++) {
+          var n = neurons[i];
+          var glow = 0;
+          var fill = C.slate;
+          var stroke = C.slate;
+
+          if (n.zone === "stem") {
+            glow = 0.22 + 0.78 * wf.stemWave;
+            if (wf.reset1 >= 0) glow = Math.max(glow, 0.88 * (1 - wf.reset1));
+            if (wf.reset2 >= 0) glow = Math.max(glow, 0.88 * (1 - wf.reset2));
+            fill = C.slate;
+          } else if (n.zone === "Q" || n.zone === "K") {
+            fill = n.zone === "Q" ? C.slate : C.slateDeep;
+            if (wf.pass1U >= 0) glow = Math.max(glow, 0.52 * pulseBell(n.depthU, wf.pass1U, 0.14));
+            if (wf.pass2U >= 0) {
+              var p2 = pulseBell(n.depthU, wf.pass2U, 0.18);
+              glow = Math.max(glow, p2);
+              if (p2 > 0.35) fill = C.amber;
+            }
+            if (wf.pass3U >= 0) glow = Math.max(glow, 0.55 * pulseBell(n.depthU, wf.pass3U, 0.15));
+          } else if (n.zone === "QK_post") {
+            fill = C.slate;
+            if (wf.pass1U >= 0) glow = Math.max(glow, 0.40 * pulseBell(n.depthU, wf.pass1U, 0.15));
+            if (wf.pass2U >= 0) {
+              var ig = pulseBell(n.depthU, wf.pass2U, 0.20);
+              glow = Math.max(glow, ig);
+              if (ig > 0.22) fill = C.amber;
+            }
+            if (wf.pass3U >= 0) {
+              var rl = pulseBell(n.depthU, wf.pass3U, 0.18);
+              glow = Math.max(glow, rl);
+              if (rl > 0.30) fill = C.sageDeep;
+            }
+          } else if (n.zone === "V" || n.zone === "MLP") {
+            fill = C.sageDeep;
+            stroke = C.sageDeep;
+            if (wf.pass1U >= 0) glow = Math.max(glow, 0.58 * pulseBell(n.depthU, wf.pass1U, 0.16));
+            if (wf.pass2U >= 0) glow = Math.max(glow, 0.38 * pulseBell(n.depthU, wf.pass2U, 0.16));
+            if (wf.pass3U >= 0) {
+              glow = Math.max(glow, 0.95 * pulseBell(n.depthU, wf.pass3U, 0.19));
+              fill = C.sage;
+            }
+          } else if (n.zone === "inhib") {
+            fill = C.mist;
+            stroke = C.mist;
+            glow = 0.08;
+          }
+
+          if (glow > 0.2) {
+            ctx.beginPath();
+            ctx.arc(n.x, n.y, n.r + 4 + glow * 9, 0, Math.PI * 2);
+            ctx.fillStyle = hexToRgba(fill, glow * 0.25);
+            ctx.fill();
+          }
+
+          ctx.beginPath();
+          if (n.isPyramidal) {
+            var rr = n.r * 1.18;
+            ctx.moveTo(n.x + rr * 1.25, n.y);
+            ctx.lineTo(n.x - rr * 0.85, n.y - rr * 0.85);
+            ctx.lineTo(n.x - rr * 0.55, n.y);
+            ctx.lineTo(n.x - rr * 0.85, n.y + rr * 0.85);
+            ctx.closePath();
+          } else {
+            ctx.arc(n.x, n.y, n.r, 0, Math.PI * 2);
+          }
+
+          ctx.fillStyle = glow > 0.45 ? fill : hexToRgba(fill, 0.36 + glow * 0.55);
+          ctx.fill();
+          ctx.strokeStyle = fill === C.amber ? C.slate : hexToRgba(stroke, 0.85);
+          ctx.lineWidth = fill === C.amber ? 1.8 : 1.05;
+          ctx.stroke();
+        }
+      }
+
+      function drawSculpturalHubs(ctx, wf) {
+        // 1. Somatic Reset Concentric Rings around Stem Soma
+        var resets = [wf.reset1, wf.reset2];
+        for (var i = 0; i < resets.length; i++) {
+          var rU = resets[i];
+          if (rU >= 0) {
+            var rad = 20 + rU * 116;
+            var alpha = (1 - rU) * 0.88;
+            ctx.beginPath();
+            ctx.arc(SOMA_CENTER.x, SOMA_CENTER.y, rad, 0, Math.PI * 2);
+            ctx.strokeStyle = hexToRgba(C.amber, alpha);
+            ctx.lineWidth = 3.2 * (1 - rU * 0.5);
+            ctx.stroke();
+
+            ctx.beginPath();
+            ctx.arc(SOMA_CENTER.x, SOMA_CENTER.y, rad * 0.72, 0, Math.PI * 2);
+            ctx.strokeStyle = hexToRgba(C.slate, alpha * 0.82);
+            ctx.lineWidth = 1.8;
+            ctx.stroke();
+          }
+        }
+
+        // Stray off-axis spark extinguished by Somatic Reset #1 (pure visual, zero text)
+        if (wf.foilSpark > 0.02) {
+          var fx = SOMA_CENTER.x + 68;
+          var fy = SOMA_CENTER.y - 88;
+          ctx.beginPath();
+          ctx.arc(fx, fy, 12 * wf.foilSpark, 0, Math.PI * 2);
+          ctx.fillStyle = hexToRgba(C.mist, wf.foilSpark * 0.26);
+          ctx.fill();
+
+          ctx.beginPath();
+          ctx.arc(fx, fy, 4.2, 0, Math.PI * 2);
+          ctx.fillStyle = hexToRgba(C.mist, wf.foilSpark * 0.88);
+          ctx.fill();
+        }
+
+        // 2. Four Sculptural Synaptic Entry Boutons at Left Edge of Core
+        var gateKeys = ["Q", "K", "V", "MLP"];
+        for (var g = 0; g < gateKeys.length; g++) {
+          var gk = gateKeys[g];
+          var gp = GATES[gk];
+          var isUpper = (gk === "Q" || gk === "K");
+          ctx.beginPath();
+          ctx.arc(gp.x, gp.y, 7.5, 0, Math.PI * 2);
+          ctx.fillStyle = C.ivory;
+          ctx.fill();
+          ctx.strokeStyle = isUpper ? C.slate : C.sageDeep;
+          ctx.lineWidth = 2.0;
+          ctx.stroke();
+
+          ctx.beginPath();
+          ctx.arc(gp.x, gp.y, 3.2, 0, Math.PI * 2);
+          ctx.fillStyle = isUpper ? C.slate : C.sageDeep;
+          ctx.fill();
+        }
+
+        // 3. Focal Golden Orange Coincidence Synapse (2 px Blue Slate outline)
+        var cg = wf.coincidenceGlow;
+        if (cg > 0.1) {
+          if (wf.pass2U >= 0.35 && wf.pass2U <= 0.96) {
+            var wu = (wf.pass2U - 0.35) / 0.61;
+            ctx.beginPath();
+            ctx.arc(COINCIDENCE.x, COINCIDENCE.y, 22 + wu * 168, 0, Math.PI * 2);
+            ctx.strokeStyle = hexToRgba(C.amber, (1 - wu) * 0.62);
+            ctx.lineWidth = 2.8 * (1 - wu * 0.5);
+            ctx.stroke();
+          }
+          ctx.beginPath();
+          ctx.arc(COINCIDENCE.x, COINCIDENCE.y, 20 + cg * 24, 0, Math.PI * 2);
+          ctx.fillStyle = hexToRgba(C.amber, cg * 0.28);
+          ctx.fill();
+        }
+
+        ctx.beginPath();
+        ctx.arc(COINCIDENCE.x, COINCIDENCE.y, 13 + cg * 3.5, 0, Math.PI * 2);
+        ctx.fillStyle = C.amber;
+        ctx.fill();
+        ctx.strokeStyle = C.slate;
+        ctx.lineWidth = 2.2;
+        ctx.stroke();
+
+        ctx.beginPath();
+        ctx.arc(COINCIDENCE.x, COINCIDENCE.y, 4.2, 0, Math.PI * 2);
+        ctx.fillStyle = C.ivory;
+        ctx.fill();
+
+        // 4. Sculptural Relay Hubs (Hop-1 and Hop-2 neural ensembles, zero text)
+        var h1 = wf.hop1Glow;
+        if (h1 > 0.12) {
+          ctx.beginPath();
+          ctx.arc(HOP1_NODE.x, HOP1_NODE.y, 16 + h1 * 18, 0, Math.PI * 2);
+          ctx.fillStyle = hexToRgba(C.sage, h1 * 0.30);
+          ctx.fill();
+        }
+        ctx.beginPath();
+        ctx.arc(HOP1_NODE.x, HOP1_NODE.y, 11.5, 0, Math.PI * 2);
+        ctx.fillStyle = h1 > 0.5 ? C.sage : C.ivory;
+        ctx.fill();
+        ctx.strokeStyle = C.sageDeep;
+        ctx.lineWidth = 2.0;
+        ctx.stroke();
+
+        var h2 = wf.hop2Glow;
+        if (h2 > 0.12) {
+          ctx.beginPath();
+          ctx.arc(HOP2_NODE.x, HOP2_NODE.y, 18 + h2 * 22, 0, Math.PI * 2);
+          ctx.fillStyle = hexToRgba(C.amber, h2 * 0.30);
+          ctx.fill();
+        }
+        ctx.beginPath();
+        ctx.arc(HOP2_NODE.x, HOP2_NODE.y, 12.5, 0, Math.PI * 2);
+        ctx.fillStyle = h2 > 0.45 ? C.amber : C.ivory;
+        ctx.fill();
+        ctx.strokeStyle = C.slate;
+        ctx.lineWidth = 2.0;
+        ctx.stroke();
+
+        // Core Exit convergence node
+        ctx.beginPath();
+        ctx.arc(CORE_EXIT.x, CORE_EXIT.y, 6.5, 0, Math.PI * 2);
+        ctx.fillStyle = wf.codaBloom > 0.15 ? C.amber : C.slate;
+        ctx.fill();
+        ctx.strokeStyle = C.ivory;
+        ctx.lineWidth = 1.5;
+        ctx.stroke();
+      }
+
+      function drawCodaPrism(ctx, wf) {
+        var b = wf.codaBloom;
+
+        var cx = PRISM_CX;
+        var cy = PRISM_CY;
+        var pTop   = { x: cx,      y: cy - 142 };
+        var pLeft  = { x: cx - 76, y: cy };
+        var pBot   = { x: cx,      y: cy + 142 };
+        var pRight = { x: cx + 76, y: cy };
+        var pMidL  = { x: cx - 20, y: cy - 22 };
+        var pMidR  = { x: cx + 22, y: cy + 18 };
+
+        // Luminous optical refraction rays & concentric bloom when wavefront arrives
+        if (b > 0.02) {
+          ctx.beginPath();
+          ctx.arc(cx + 18, cy, 56 + b * 112, 0, Math.PI * 2);
+          ctx.fillStyle = hexToRgba(C.amber, b * 0.15);
+          ctx.fill();
+
+          ctx.beginPath();
+          ctx.arc(cx + 18, cy, 36 + b * 74, 0, Math.PI * 2);
+          ctx.strokeStyle = hexToRgba(C.amber, b * 0.52);
+          ctx.lineWidth = 2.2;
+          ctx.stroke();
+
+          var rayOffsets = [-68, -34, 0, 34, 68];
+          for (var r = 0; r < rayOffsets.length; r++) {
+            var ry = cy + rayOffsets[r];
+            var rayColor = r === 2 ? C.amber : (r % 2 === 0 ? C.slate : C.sage);
+            ctx.beginPath();
+            ctx.moveTo(pRight.x - 10, cy + rayOffsets[r] * 0.24);
+            ctx.lineTo(FOCAL_OUT.x, cy + rayOffsets[r] * 0.06);
+            ctx.strokeStyle = hexToRgba(rayColor, b * (r === 2 ? 0.94 : 0.58));
+            ctx.lineWidth = r === 2 ? 4.2 : 2.0;
+            ctx.stroke();
+          }
+        }
+
+        // Faceted optical crystal body
+        ctx.beginPath();
+        ctx.moveTo(pTop.x, pTop.y);
+        ctx.lineTo(pRight.x, pRight.y);
+        ctx.lineTo(pBot.x, pBot.y);
+        ctx.lineTo(pLeft.x, pLeft.y);
+        ctx.closePath();
+        ctx.fillStyle = b > 0.12 ? hexToRgba(C.amber, 0.10 + b * 0.22) : C.ivory;
+        ctx.fill();
+        ctx.strokeStyle = C.slate;
+        ctx.lineWidth = 2.4;
+        ctx.stroke();
+
+        // Internal crystal facet planes
+        ctx.beginPath();
+        ctx.moveTo(pTop.x, pTop.y);
+        ctx.lineTo(pMidL.x, pMidL.y);
+        ctx.lineTo(pBot.x, pBot.y);
+        ctx.moveTo(pTop.x, pTop.y);
+        ctx.lineTo(pMidR.x, pMidR.y);
+        ctx.lineTo(pBot.x, pBot.y);
+        ctx.moveTo(pLeft.x, pLeft.y);
+        ctx.lineTo(pMidL.x, pMidL.y);
+        ctx.lineTo(pMidR.x, pMidR.y);
+        ctx.lineTo(pRight.x, pRight.y);
+        ctx.strokeStyle = hexToRgba(C.slate, 0.42 + b * 0.45);
+        ctx.lineWidth = 1.3;
+        ctx.stroke();
+
+        // Coherent Refracted Output Focal Node (pure sculptural light, zero text)
+        if (b > 0.08) {
+          ctx.beginPath();
+          ctx.arc(FOCAL_OUT.x, FOCAL_OUT.y, 18 + b * 24, 0, Math.PI * 2);
+          ctx.fillStyle = hexToRgba(C.amber, b * 0.30);
+          ctx.fill();
+        }
+
+        ctx.beginPath();
+        ctx.arc(FOCAL_OUT.x, FOCAL_OUT.y, 14, 0, Math.PI * 2);
+        ctx.fillStyle = b > 0.25 ? C.amber : C.ivory;
+        ctx.fill();
+        ctx.strokeStyle = C.slate;
+        ctx.lineWidth = 2.2;
+        ctx.stroke();
+
+        ctx.beginPath();
+        ctx.arc(FOCAL_OUT.x, FOCAL_OUT.y, 4.5, 0, Math.PI * 2);
+        ctx.fillStyle = b > 0.25 ? C.onyx : C.mist;
+        ctx.fill();
+      }
+
+      /* =========================================================================
+         Canvas Setup & 60fps Seamless Loop
+         ========================================================================= */
+      var canvas = document.getElementById("cinema");
+      var ctx = canvas.getContext("2d");
+
+      function resizeCanvas() {
+        var dpr = Math.min(window.devicePixelRatio || 1, 2);
+        canvas.width = Math.round(W * dpr);
+        canvas.height = Math.round(H * dpr);
+        ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      }
+
+      buildCorticalTissue();
+      resizeCanvas();
+      window.addEventListener("resize", resizeCanvas);
+
+      var startTime = performance.now();
+
+      function render(now) {
+        var elapsedS = ((now - startTime) / 1000) % CYCLE_S;
+        var wf = getWavefronts(elapsedS);
+
+        ctx.fillStyle = C.ivory;
+        ctx.fillRect(0, 0, W, H);
+
+        drawThreeChambers(ctx, wf);
+        drawFeedbackArcs(ctx, wf);
+        drawDendrites(ctx, wf);
+        drawAxonsAndPackets(ctx, elapsedS, wf);
+        drawInhibitoryNoiseQuenching(ctx, elapsedS);
+        drawNeurons(ctx, wf);
+        drawSculpturalHubs(ctx, wf);
+        drawCodaPrism(ctx, wf);
+
+        requestAnimationFrame(render);
+      }
+
+      requestAnimationFrame(render);
+    })();
+  </script>
+</body>
+</html>

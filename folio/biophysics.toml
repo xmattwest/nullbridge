@@ -4,11 +4,11 @@
 base_dir = ".."
 
 [meta]
-title = "Biophysics of a Looped Transformer: Synaptic Epistasis, Non-Normal Amplification, and Somatic-Reset Stability"
-preprint_title = "Biophysics of a Looped Transformer: Synaptic Epistasis, Non-Normal Amplification, and Somatic-Reset Stability"
-monograph_title = "Biophysics of a Looped Transformer"
-substack_title_alt = "Inside a Silent Thinking Loop: 13.6x Non-Normal Gain, 141.7x Readout Cliffs, and Why Zero-Cost Safety Erasure Barely Touches Reasoning."
-subtitle = "Exact Walsh-Hadamard knockouts, Jacobian singular geometry, Fisher pullback cliffs, and hysteresis shielding across Inkling-2-Mini, Varloop, and Huginn-0125."
+title = "Looped Transformers Compute Like Balanced Cortical Circuits Across Silent Recurrent Passes"
+preprint_title = "Looped Transformers Compute Like Balanced Cortical Circuits Across Silent Recurrent Passes"
+monograph_title = "Looped Transformers Compute Like Balanced Cortical Circuits"
+substack_title_alt = "Silent Thinking Loops Damp Random Static Every Pass While Boosting Task Signals {{p6_sig_p2_ratio}} Along Orthogonal Modes"
+subtitle = "Across Inkling-2-Mini, Varloop, and Huginn-0125, recurrent layers damp random noise below unity while amplifying task signals up to {{p6_sig_p2_ratio}} into nearly perpendicular directions."
 author = "Matt West"
 date = "November 26, 2026"
 iso_date = "2026-11-26"
@@ -27,7 +27,7 @@ author_url = "https://shelltoho.me/"
 author_id = "https://shelltoho.me/#matt"
 base_model = "thinkingmachines/Inkling-2-Mini, thinkingmachines/TML-d24-varloop-research, tomg-group-umd/huginn-0125"
 substack_tables = false
-hero_figure = "fig-non-normal-amp"
+hero_figure = "fig-cajal-plate"
 keywords = [
   "mechanistic interpretability",
   "looped transformers",
@@ -40,16 +40,16 @@ keywords = [
   "null-space projection",
 ]
 
-abstract = "Recurrent-depth language models execute multi-step reasoning inside fixed weights without emitting chain-of-thought tokens, yet standard direct-unembedding probes stall below {{p6_raw_lens_max}} accuracy across 36 loop visits. Importing exact dynamical-systems and systems-neuroscience diagnostics onto three open recurrent-depth architectures (`thinkingmachines/Inkling-2-Mini` at `K = 3`, variable-depth `thinkingmachines/TML-d24-varloop-research` across `K = 1..7`, and dense continuous-state `tomg-group-umd/huginn-0125` across `K = 1..8`; bit-exact unrolled equivalence `0.00e+00` across all models), I establish four biophysical laws of latent recurrence and test their causal link to latent safety failures. First, exact `2^4 = 16` Boolean Walsh-Hadamard synaptic knockouts (Parseval error <= {{p7_max_parseval}}) show that opening all four cross-pass message channels lifts `Inkling-2-Mini` multi-hop accuracy from {{p6_wht_0000}} to {{p6_wht_1111}}, partitioning variance into {{p6_wht_ord1}} Order-1 main effects plus opposite-sign Order-2 circuits: superadditive `QxK` pointer synergy ({{p6_wht_qxk}} nats on `Inkling-2-Mini`, climbing to {{var_wht_k5_qxk}} nats on `Varloop` `K = 5`) versus redundant `VxMLP` payload backup ({{p6_wht_vxmlp}} nats). On latent safety suites, pre-registered prediction P2 is confirmed across both models (`V + MLP` exceeds `Q + K` on moral distortion by {{ink_p2_contrast}} on `Inkling-2-Mini` and {{var_k5_p2_contrast}} on `Varloop` `K = 5`, Holm `p =` {{ink_p2_p}}), while prediction P1 dissociates by model because native recurrence actively self-corrects covert anchoring on `Inkling-2-Mini`. Second, exact VJP singular-value iteration proves universal non-normal transient amplification inside contractive dynamics: isotropic random-tangent RMS gain stays below `1.0` across all three architectures (`0.17` to `0.73`), while top singular gain `sigma_max` reaches {{p6_sig_p2}} on `Inkling-2-Mini` Pass 2 ({{p6_aniso_p2}} isotropic, I/O `cos =` {{p6_cos_p2}}), {{var_sig_p3}} on `Varloop` Pass 3 (training-horizon conditioning), and {{hug_sig_s1}} on dense `Huginn-0125` Step 1 ({{hug_aniso_s1}} isotropic). Third, deflated top-8 singular alignment reveals spectral orthogonal separation: Pass-2 input singular modes `V_8` sit {{ink_v_angle_min}} to {{ink_v_angle_max}} from the 4D safety subspace `Q_msg`, explaining why channel-selective zero-FLOP Nullbridge folding trims covert wrong-capture at {{ink_zff_qkv_kl}} to {{ink_zff_all4_kl}} nats held-out KL with `0` extra parameters or FLOPs. Fourth, Hutchinson VJP Fisher pullback exposes an architectural Coda contrast: 6-layer MoE Codas trigger {{p6_fisher_ratio}} (`Inkling-2-Mini`) and {{var_k5_fisher_ratio}} (`Varloop` `K = 5`) loop-to-Coda sensitivity cliffs, whereas 2-layer dense `Huginn-0125` climbs smoothly inside the loop ({{hug_fisher_climb}}) with a {{hug_fisher_ratio}} Coda handoff. Finally, Pass-1 foil perturbations and 2-channel adapter knockouts confirm Labovich's general recall theorem: ablating prelude recall collapses `Huginn-0125` accuracy to {{hug_h1_state_only}}, while intact recall or hard somatic reset prevents foil bifurcation (`beta_c = None`) across all three architectures and yields universal inverted-U conductance curves peaking at native gain."
+abstract = "When a looped transformer runs its middle layers three to eight times silently before writing a word, direct vocabulary probes miss {{p6_raw_lens_miss}} of answers inside the loop, never clearing {{p6_raw_lens_max}} accuracy across thirty-six recurrent layer visits on `Inkling-2-Mini`. Yet passing the final loop state through the six-layer Coda at the exit decodes {{p6_coda_p3_acc}} zero-CoT accuracy. To see how silent recurrence actually computes, I applied cortical circuit diagnostics across three open recurrent-depth language models (`thinkingmachines/Inkling-2-Mini` at `K = 3`, variable-depth `thinkingmachines/TML-d24-varloop-research` across `K = 1..7`, and dense continuous-state `tomg-group-umd/huginn-0125` across `K = 1..8`, with bit-exact unrolled equivalence {{p7_varloop_equiv}}). Knocking out all sixteen Boolean combinations of the four cross-pass message gates (Parseval error at most {{p7_max_parseval}}) lifts `Inkling-2-Mini` multi-hop accuracy from {{p6_wht_0000}} with all gates closed to {{p6_wht_1111}} with all four open. Additive main effects carry {{p6_wht_ord1}} of log-probability variance, while pairwise interactions split into a superadditive Query-Key coincidence trigger ({{p6_wht_qxk}} nats on `Inkling-2-Mini` and {{var_wht_k5_qxk}} nats on `Varloop` `K = 5`) and redundant Value-MLP backup tracts ({{p6_wht_vxmlp}} nats). Moral valuation bias rides primarily on Value and MLP payload gates across both checkpoints ({{ink_p2_contrast}} log-odds contrast over Query and Key on `Inkling-2-Mini` and {{var_k5_p2_contrast}} on `Varloop` `K = 5`, Holm `p =` {{ink_p2_p}}), whereas native recurrence on `Inkling-2-Mini` actively self-corrects covert numeric anchoring. Across all three architectures, vector-Jacobian singular modes reveal balanced non-normal amplification: random perturbations shrink every pass ({{p6_iso_p1}} to {{hug_iso_s1}} isotropic RMS), while task-aligned singular modes surge to {{p6_sig_p2}} on `Inkling-2-Mini` Pass 2 ({{p6_aniso_p2}} above random noise, input-output cosine {{p6_cos_p2}}), {{var_sig_p3}} on `Varloop` Pass 3, and {{hug_sig_s1}} on `Huginn-0125` Step 1. Because Pass 2's top eight input modes sit {{ink_v_angle_min}} to {{ink_v_angle_max}} perpendicular to the four-dimensional safety subspace, folding a rank-four erasure directly into the message gates trims covert wrong capture at {{ink_zff_q_kl}} to {{ink_zff_all4_kl}} nats held-out KL with zero runtime cost. Finally, Fisher curvature jumps {{p6_fisher_ratio}} to {{var_k5_fisher_ratio}} at the entry to six-layer Codas where two-layer `Huginn-0125` reads out gradually inside the loop ({{hug_fisher_ratio}} boundary ratio), and cutting prompt recall collapses `Huginn-0125` accuracy to {{hug_h1_state_only}} while intact recall or somatic resets block foil capture across an inverted-U conductance window."
 
-lede = "Across Inkling-2-Mini (K = 3), variable-depth Varloop (K = 1..7), and dense Huginn-0125 (K = 1..8), recurrent-depth transformers pair contractive isotropic dynamics with {{var_sig_p2}}x to {{p6_sig_p2}}x non-normal singular amplification, partition reasoning into superadditive QxK pointers versus redundant VxMLP payloads, keep safety subspaces orthogonal to dominant Pass-2 input modes (enabling <= {{ink_zff_all4_kl}} nats zero-FLOP erasure), and prevent foil bifurcation via somatic reset or linear prelude recall."
+lede = "Across Inkling-2-Mini, variable-depth Varloop, and dense Huginn-0125, silent recurrent loops damp random perturbations every pass ({{p6_iso_p1}} to {{hug_iso_s1}} RMS) while amplifying task signals up to {{p6_sig_p2_ratio}} into nearly perpendicular directions. Mapping all sixteen synaptic gate knockouts and Pass-2 singular modes shows why six-layer exit blocks create {{p6_fisher_ratio}} to {{var_k5_fisher_ratio}} readout cliffs and why zero-cost safety erasure leaves reasoning intact below {{ink_zff_all4_kl}} nats KL."
 
-x_hook = "How does a looped transformer think without writing tokens? Dissected Inkling-2-Mini, Varloop (K=1..7), and Huginn-0125 (K=1..8) with exact 16-mask Walsh-Hadamard knockouts, VJP singular modes, Fisher pullback cliffs, and foil hysteresis. Non-normal amplification is universal, safety rides orthogonal to Pass-2 input modes, and 6-layer Codas create 88x-142x readout cliffs."
+x_hook = "Standard word probes miss {{p6_raw_lens_miss}} of answers inside Inkling-2-Mini's silent thinking loop, yet the six-layer exit block decodes {{p6_coda_p3_acc}} accuracy without a single chain-of-thought token. I ran cortical circuit tests across Inkling-2-Mini, Varloop, and Huginn-0125 and found the same trick balanced brains use to think without self-oscillating: every pass damps random static while firing task signals up to {{p6_sig_p2_ratio}} into orthogonal modes."
 
 opening_paragraphs = [
-  "When a recurrent-depth transformer runs its middle layers three to eight times before emitting a single word, direct logit-lens probes stay nearly blind, never clearing **{{p6_raw_lens_max}}** accuracy across 36 recurrent layer visits on `Inkling-2-Mini`. Yet passing the final loop exit through the six-layer Coda unlocks **{{p6_coda_p3_acc}}** exact zero-CoT accuracy.",
-  "Understanding what happens inside that dark recurrent core requires tools built for feedback systems rather than feedforward stacks: exact Boolean Walsh-Hadamard knockouts across synaptic channels, vector-Jacobian singular-mode geometry, Hutchinson Fisher pullback curvature, and foil-interpolation hysteresis tests ([Ganguli et al.](#references); [Murphy & Miller](#references); [Labovich](#references)).",
-  "Applying this biophysical battery across three open architectures (`thinkingmachines/Inkling-2-Mini`, `thinkingmachines/TML-d24-varloop-research` across `K = 1..7`, and dense `tomg-group-umd/huginn-0125` across `K = 1..8`) uncovers universal non-normal transient amplification inside contractive dynamics, sharp architectural contrasts between 6-layer and 2-layer Codas, and the geometric reason zero-FLOP Nullbridge erases latent safety biases at less than two millinats of KL cost.",
+  "When a looped transformer runs its middle layers three to eight times silently before writing a word, standard logit lenses miss **{{p6_raw_lens_miss}}** of answers. Across thirty-six recurrent layer visits inside `Inkling-2-Mini`, direct vocabulary readouts never clear **{{p6_raw_lens_max}}** accuracy, yet handing the final loop state to the six-layer Coda at the exit recovers **{{p6_coda_p3_acc}}** zero-CoT accuracy.",
+  "Static layer-stack probes fail there for a simple reason. They assume every layer writes in surface word coordinates, whereas a weight-sharing loop is a feedback circuit that has to think several steps ahead without blowing up or blurting out a half-finished guess.",
+  "Treating the loop like a living cortical circuit makes the machinery legible ([Ganguli et al.](#references); [Murphy & Miller](#references); [Hennequin et al.](#references)). I ran the same circuit diagnostics across `thinkingmachines/Inkling-2-Mini` (`K = 3`), variable-depth `thinkingmachines/TML-d24-varloop-research` (`K = 1..7`), and dense `tomg-group-umd/huginn-0125` (`K = 1..8`). All three damp random noise every pass while slinging task signals sideways, and that geometry explains why zero-cost safety erasure leaves reasoning intact below {{ink_zff_all4_kl}} nats KL.",
 ]
 
 ai_disclosure = "Code, statistical pipelines, and manuscript compilation in this repository were developed with AI coding assistance (Antigravity) under author direction; every empirical number is bound via Folio JSON Pointers to SHA-256-locked GPU and audit artifacts."
@@ -61,7 +61,7 @@ ai_disclosure = "Code, statistical pipelines, and manuscript compilation in this
 [artifacts.phase6_res]
 path = "results/phase6_inkling_biophysical_loop/phase6_biophysical_results.json"
 sha256 = "7290826b43b795e3d7c30234ca8fbf7515366cc3345205cef6b5eb4dc8d444b7"
-description = "Locked 5-experiment GPU biophysical battery on thinkingmachines/Inkling-2-Mini (K = 3)."
+description = "Locked GPU biophysical circuit suite on thinkingmachines/Inkling-2-Mini (K = 3)."
 
 [artifacts.phase6_ana]
 path = "results/phase6_inkling_biophysical_loop/biophysical_analysis.json"
@@ -71,18 +71,18 @@ description = "Deterministic statistical summary for Inkling-2-Mini biophysical 
 [artifacts.phase7_res]
 path = "results/phase7_biophysics/phase7_biophysics_results.json"
 sha256 = "7b779e05ba778ff7b18f13fa371cb39bc6759ee038f8c8fe16820a6c95bb0e63"
-description = "Unified 4-stage GPU artifact covering Block A (Inkling + Varloop safety-biophysics), Block B1 (Varloop K = 1..7), and Block B2 (Huginn-0125 K = 1..8)."
+description = "Unified GPU artifact covering Inkling-2-Mini (K = 3), TML-d24-varloop-research (K = 1..7), and Huginn-0125 (K = 1..8)."
 
 [artifacts.phase7_ana]
 path = "results/phase7_biophysics/phase7_biophysics_analysis.json"
 sha256 = "70c81a03822abb4920de04e8636b4829dc59fc50803a0d547d237bd5a5aa1b94"
-description = "Deterministic Phase 7 statistical synthesis, Pareto frontier, invariant audit, and Go/Pivot/Kill verdicts."
+description = "Deterministic cross-architecture statistical synthesis, zero-FLOP Pareto sweep, and invariant audit."
 
 # ---------------------------------------------------------------------------
 # Bound Metrics (RFC 6901 JSON Pointers)
 # ---------------------------------------------------------------------------
 
-# Invariants & Provenance
+# Invariants, Metadata & Provenance
 [metrics.p7_max_parseval]
 pointer = "phase7_ana#/invariants_audit/max_wht_parseval_error"
 tier = "primary"
@@ -113,6 +113,21 @@ tier = "primary"
 style = "number"
 decimals = 1
 unit = "s"
+
+[metrics.ink_gate_rank]
+pointer = "phase7_res#/inkling_block_a/metadata/gate_rank"
+tier = "primary"
+style = "int"
+
+[metrics.ink_d_model]
+pointer = "phase7_res#/inkling_block_a/metadata/d_model"
+tier = "primary"
+style = "int"
+
+[metrics.hug_d_model]
+pointer = "phase7_res#/huginn_block_b2/metadata/d_model"
+tier = "primary"
+style = "int"
 
 # Phase 6 Inkling-2-Mini WHT & Readout
 [metrics.p6_wht_0000]
@@ -220,6 +235,17 @@ style = "percent"
 scale = 100.0
 decimals = 1
 
+[metrics.p6_raw_lens_miss]
+derive = "diff"
+inputs = [
+  "phase6_ana#/headline_findings/exp5_neuromodulation/header_mode_switch_effort_0/baseline_header_L23/format_token_prob",
+  "phase6_ana#/headline_findings/exp2_conductance_and_amplification/max_raw_logit_lens_loop_acc",
+]
+tier = "primary"
+style = "percent"
+scale = 100.0
+decimals = 1
+
 [metrics.p6_coda_p1_acc]
 pointer = "phase6_ana#/headline_findings/exp2_conductance_and_amplification/truncated_coda_final_acc_by_pass/pass_1"
 tier = "primary"
@@ -259,8 +285,20 @@ tier = "primary"
 style = "number"
 decimals = 2
 
+[metrics.p6_sig_p2_ratio]
+pointer = "phase6_ana#/headline_findings/exp2_conductance_and_amplification/non_normal_amplification/pass_2/sigma_max_vjp/mean"
+tier = "primary"
+style = "ratio"
+decimals = 1
+
 [metrics.p6_sig_p3]
 pointer = "phase6_ana#/headline_findings/exp2_conductance_and_amplification/non_normal_amplification/pass_3/sigma_max_vjp/mean"
+tier = "primary"
+style = "number"
+decimals = 2
+
+[metrics.p6_iso_p1]
+pointer = "phase6_ana#/headline_findings/exp2_conductance_and_amplification/non_normal_amplification/pass_1/isotropic_rms_gain/mean"
 tier = "primary"
 style = "number"
 decimals = 2
@@ -289,7 +327,7 @@ tier = "primary"
 style = "ratio"
 decimals = 1
 
-# Phase 6 Exp 3, 4, 5
+# Phase 6 Fisher, Hysteresis & Neuromodulation
 [metrics.p6_fisher_ratio]
 pointer = "phase7_ana#/block_b2_huginn_replication/exp_h3_fisher_and_commitment/inkling_k3_loop_to_coda_trace_ratio"
 tier = "primary"
@@ -325,6 +363,24 @@ decimals = 1
 
 [metrics.p6_shunt_ct_prob]
 pointer = "phase6_ana#/headline_findings/exp3_fisher_and_shunt/next_token_content_text_l23_prob"
+tier = "primary"
+style = "percent"
+scale = 100.0
+decimals = 1
+
+[metrics.p6_shunt_base_fmt]
+pointer = "phase6_ana#/headline_findings/exp5_neuromodulation/header_mode_switch_effort_0/baseline_header_L23/format_token_prob"
+tier = "primary"
+style = "percent"
+scale = 100.0
+decimals = 1
+
+[metrics.p6_shunt_abolish_pct]
+derive = "diff"
+inputs = [
+  "phase6_ana#/headline_findings/exp5_neuromodulation/header_mode_switch_effort_0/baseline_header_L23/format_token_prob",
+  "phase6_ana#/headline_findings/exp5_neuromodulation/header_mode_switch_effort_0/somatic_carrier_loop_transplant_L23/format_token_prob",
+]
 tier = "primary"
 style = "percent"
 scale = 100.0
@@ -369,6 +425,13 @@ unit = "nats"
 pointer = "phase6_ana#/headline_findings/exp5_neuromodulation/gamma_conductance_sweep/0/hop2_top1_acc"
 tier = "primary"
 style = "number"
+scale = 100.0
+decimals = 1
+
+[metrics.p6_gamma_00_pct]
+pointer = "phase6_ana#/headline_findings/exp5_neuromodulation/gamma_conductance_sweep/0/hop2_top1_acc"
+tier = "primary"
+style = "percent"
 scale = 100.0
 decimals = 1
 
@@ -421,6 +484,31 @@ style = "number"
 scale = 100.0
 decimals = 1
 
+[metrics.p6_gamma_15_pct]
+pointer = "phase6_ana#/headline_findings/exp5_neuromodulation/gamma_conductance_sweep/6/hop2_top1_acc"
+tier = "primary"
+style = "percent"
+scale = 100.0
+decimals = 1
+
+[metrics.gamma_unit_val]
+pointer = "phase6_ana#/headline_findings/exp5_neuromodulation/gamma_conductance_sweep/4/gamma"
+tier = "primary"
+style = "number"
+decimals = 2
+
+[metrics.gamma_opt_hug_val]
+pointer = "phase7_ana#/block_b2_huginn_replication/exp_h5_adapter_gamma_sweep/peak_gamma"
+tier = "primary"
+style = "number"
+decimals = 2
+
+[metrics.gamma_max_val]
+pointer = "phase7_ana#/block_b2_huginn_replication/exp_h5_adapter_gamma_sweep/curve/6/gamma"
+tier = "primary"
+style = "number"
+decimals = 2
+
 [metrics.p6_shunt_swap_final]
 pointer = "phase6_ana#/headline_findings/exp5_neuromodulation/header_mode_switch_effort_0/somatic_carrier_loop_transplant_L23/format_token_prob"
 tier = "primary"
@@ -428,24 +516,34 @@ style = "percent"
 scale = 100.0
 decimals = 2
 
-# Phase 7 Block A: Spectral Alignment, Safety WHT, Pareto Frontier
+# Phase 7 Spectral Alignment, Safety Knockouts & Pareto Sweep
 [metrics.ink_v_angle_min]
 pointer = "phase7_ana#/block_a_safety_biophysics/inkling_k3/exp_a1_singular_alignment/min_principal_angle_V_deg"
 tier = "primary"
-style = "deg"
+style = "number"
 decimals = 1
+unit = "°"
 
 [metrics.ink_v_angle_max]
 pointer = "phase7_ana#/block_a_safety_biophysics/inkling_k3/exp_a1_singular_alignment/max_principal_angle_V_deg"
 tier = "primary"
-style = "deg"
+style = "number"
 decimals = 1
+unit = "°"
 
 [metrics.var_v_angle_min]
 pointer = "phase7_ana#/block_a_safety_biophysics/varloop_k5/exp_a1_singular_alignment/min_principal_angle_V_deg"
 tier = "primary"
-style = "deg"
+style = "number"
 decimals = 1
+unit = "°"
+
+[metrics.var_v_angle_max]
+pointer = "phase7_ana#/block_a_safety_biophysics/varloop_k5/exp_a1_singular_alignment/max_principal_angle_V_deg"
+tier = "primary"
+style = "number"
+decimals = 1
+unit = "°"
 
 [metrics.ink_a1_sig1]
 pointer = "phase7_ana#/block_a_safety_biophysics/inkling_k3/exp_a1_singular_alignment/neutral_sigma_1"
@@ -475,7 +573,8 @@ signed = true
 [metrics.ink_p2_p]
 pointer = "phase7_ana#/block_a_safety_biophysics/inkling_k3/exp_a2_safety_wht/predictions/P2_vmlp_gt_qk_moral_main_effects/moral_valuation/vmlp_minus_qk_main_contrast/p_holm"
 tier = "primary"
-style = "pvalue"
+style = "number"
+decimals = 5
 
 [metrics.var_k5_p2_contrast]
 pointer = "phase7_ana#/block_a_safety_biophysics/varloop_k5/exp_a2_safety_wht/predictions/P2_vmlp_gt_qk_moral_main_effects/moral_valuation/vmlp_minus_qk_main_contrast/mean"
@@ -501,7 +600,8 @@ signed = true
 [metrics.ink_p1_cov_p]
 pointer = "phase7_ana#/block_a_safety_biophysics/inkling_k3/exp_a2_safety_wht/predictions/P1_qxk_minus_vxmlp_synergy/covert_sycophancy_pull/p_holm"
 tier = "primary"
-style = "pvalue"
+style = "number"
+decimals = 4
 
 [metrics.var_k5_p1_cov]
 pointer = "phase7_ana#/block_a_safety_biophysics/varloop_k5/exp_a2_safety_wht/predictions/P1_qxk_minus_vxmlp_synergy/covert_sycophancy_pull/mean"
@@ -577,7 +677,13 @@ style = "number"
 decimals = 3
 signed = true
 
-# Pareto Sweep Metrics (Inkling K=3)
+# Pareto Sweep Metrics (Inkling K = 3, All 7 Conditions)
+[metrics.ink_unc_kl]
+pointer = "phase7_ana#/block_a_safety_biophysics/inkling_k3/exp_a2_pareto_frontier/conditions/unclamped/kl_eval_nats"
+tier = "primary"
+style = "number"
+decimals = 4
+
 [metrics.ink_unc_cov]
 pointer = "phase7_ana#/block_a_safety_biophysics/inkling_k3/exp_a2_pareto_frontier/conditions/unclamped/covert_capture_pct"
 tier = "primary"
@@ -646,6 +752,12 @@ tier = "primary"
 style = "number"
 decimals = 3
 
+[metrics.ink_zff_q_alias]
+pointer = "phase7_ana#/block_a_safety_biophysics/inkling_k3/exp_a2_pareto_frontier/conditions/zff_Q_only/alias_guardrail_acc_pct"
+tier = "primary"
+style = "percent"
+decimals = 1
+
 [metrics.ink_zff_q_reas]
 pointer = "phase7_ana#/block_a_safety_biophysics/inkling_k3/exp_a2_pareto_frontier/conditions/zff_Q_only/biophysical_reasoning_acc_pct"
 tier = "primary"
@@ -658,12 +770,36 @@ tier = "primary"
 style = "number"
 decimals = 4
 
+[metrics.ink_zff_qk_cov]
+pointer = "phase7_ana#/block_a_safety_biophysics/inkling_k3/exp_a2_pareto_frontier/conditions/zff_QK/covert_capture_pct"
+tier = "primary"
+style = "percent"
+decimals = 1
+
 [metrics.ink_zff_qk_mor]
 pointer = "phase7_ana#/block_a_safety_biophysics/inkling_k3/exp_a2_pareto_frontier/conditions/zff_QK/moral_bias_delta_lo"
 tier = "primary"
 style = "number"
 decimals = 3
 signed = true
+
+[metrics.ink_zff_qk_susc]
+pointer = "phase7_ana#/block_a_safety_biophysics/inkling_k3/exp_a2_pareto_frontier/conditions/zff_QK/verifier_susceptibility_lo"
+tier = "primary"
+style = "number"
+decimals = 3
+
+[metrics.ink_zff_qk_alias]
+pointer = "phase7_ana#/block_a_safety_biophysics/inkling_k3/exp_a2_pareto_frontier/conditions/zff_QK/alias_guardrail_acc_pct"
+tier = "primary"
+style = "percent"
+decimals = 1
+
+[metrics.ink_zff_qk_reas]
+pointer = "phase7_ana#/block_a_safety_biophysics/inkling_k3/exp_a2_pareto_frontier/conditions/zff_QK/biophysical_reasoning_acc_pct"
+tier = "primary"
+style = "percent"
+decimals = 1
 
 [metrics.ink_zff_qkv_kl]
 pointer = "phase7_ana#/block_a_safety_biophysics/inkling_k3/exp_a2_pareto_frontier/conditions/zff_QKV/kl_eval_nats"
@@ -739,8 +875,51 @@ tier = "primary"
 style = "number"
 decimals = 3
 
+[metrics.ink_zff_mlp_alias]
+pointer = "phase7_ana#/block_a_safety_biophysics/inkling_k3/exp_a2_pareto_frontier/conditions/zff_MLP_only/alias_guardrail_acc_pct"
+tier = "primary"
+style = "percent"
+decimals = 1
+
 [metrics.ink_zff_mlp_reas]
 pointer = "phase7_ana#/block_a_safety_biophysics/inkling_k3/exp_a2_pareto_frontier/conditions/zff_MLP_only/biophysical_reasoning_acc_pct"
+tier = "primary"
+style = "percent"
+decimals = 1
+
+[metrics.ink_zff_vmlp_kl]
+pointer = "phase7_ana#/block_a_safety_biophysics/inkling_k3/exp_a2_pareto_frontier/conditions/zff_V_MLP/kl_eval_nats"
+tier = "primary"
+style = "number"
+decimals = 4
+
+[metrics.ink_zff_vmlp_cov]
+pointer = "phase7_ana#/block_a_safety_biophysics/inkling_k3/exp_a2_pareto_frontier/conditions/zff_V_MLP/covert_capture_pct"
+tier = "primary"
+style = "percent"
+decimals = 1
+
+[metrics.ink_zff_vmlp_mor]
+pointer = "phase7_ana#/block_a_safety_biophysics/inkling_k3/exp_a2_pareto_frontier/conditions/zff_V_MLP/moral_bias_delta_lo"
+tier = "primary"
+style = "number"
+decimals = 3
+signed = true
+
+[metrics.ink_zff_vmlp_susc]
+pointer = "phase7_ana#/block_a_safety_biophysics/inkling_k3/exp_a2_pareto_frontier/conditions/zff_V_MLP/verifier_susceptibility_lo"
+tier = "primary"
+style = "number"
+decimals = 3
+
+[metrics.ink_zff_vmlp_alias]
+pointer = "phase7_ana#/block_a_safety_biophysics/inkling_k3/exp_a2_pareto_frontier/conditions/zff_V_MLP/alias_guardrail_acc_pct"
+tier = "primary"
+style = "percent"
+decimals = 1
+
+[metrics.ink_zff_vmlp_reas]
+pointer = "phase7_ana#/block_a_safety_biophysics/inkling_k3/exp_a2_pareto_frontier/conditions/zff_V_MLP/biophysical_reasoning_acc_pct"
 tier = "primary"
 style = "percent"
 decimals = 1
@@ -776,13 +955,19 @@ tier = "primary"
 style = "number"
 decimals = 3
 
+[metrics.ink_zff_all4_alias]
+pointer = "phase7_ana#/block_a_safety_biophysics/inkling_k3/exp_a2_pareto_frontier/conditions/zff_All4/alias_guardrail_acc_pct"
+tier = "primary"
+style = "percent"
+decimals = 1
+
 [metrics.ink_zff_all4_reas]
 pointer = "phase7_ana#/block_a_safety_biophysics/inkling_k3/exp_a2_pareto_frontier/conditions/zff_All4/biophysical_reasoning_acc_pct"
 tier = "primary"
 style = "percent"
 decimals = 1
 
-# Phase 7 Block B1: Varloop K = 1..7
+# Phase 7 Varloop Depth Trajectory (K = 1..7)
 [metrics.var_wht_k2_qxk]
 pointer = "phase7_ana#/block_b1_varloop_depth/wht_depth_trajectory/K=2/qxk_coalition"
 tier = "primary"
@@ -932,7 +1117,7 @@ tier = "primary"
 style = "number"
 decimals = 1
 
-# Phase 7 Block B2: Huginn-0125 K = 1..8
+# Phase 7 Huginn-0125 Replication (K = 1..8)
 [metrics.hug_cal_0shot]
 pointer = "phase7_ana#/block_b2_huginn_replication/calibration/zero_shot_acc_pct"
 tier = "primary"
@@ -1025,6 +1210,12 @@ decimals = 2
 pointer = "phase7_ana#/block_b2_huginn_replication/exp_h2_non_normal/by_step/step_1/isotropic_rms_mean"
 tier = "primary"
 style = "number"
+decimals = 2
+
+[metrics.hug_iso_s1_3d]
+pointer = "phase7_ana#/block_b2_huginn_replication/exp_h2_non_normal/by_step/step_1/isotropic_rms_mean"
+tier = "primary"
+style = "number"
 decimals = 3
 
 [metrics.hug_aniso_s1]
@@ -1101,6 +1292,12 @@ style = "number"
 scale = 100.0
 decimals = 1
 
+[metrics.hug_gamma_00_pct]
+pointer = "phase7_ana#/block_b2_huginn_replication/exp_h5_adapter_gamma_sweep/gamma_00_acc_pct"
+tier = "primary"
+style = "percent"
+decimals = 1
+
 [metrics.hug_gamma_025]
 pointer = "phase7_ana#/block_b2_huginn_replication/exp_h5_adapter_gamma_sweep/curve/1/hop2_top1_acc"
 tier = "primary"
@@ -1136,6 +1333,12 @@ style = "number"
 scale = 100.0
 decimals = 1
 
+[metrics.hug_gamma_10_pct]
+pointer = "phase7_ana#/block_b2_huginn_replication/exp_h5_adapter_gamma_sweep/gamma_10_acc_pct"
+tier = "primary"
+style = "percent"
+decimals = 1
+
 [metrics.hug_gamma_125]
 pointer = "phase7_ana#/block_b2_huginn_replication/exp_h5_adapter_gamma_sweep/curve/5/hop2_top1_acc"
 tier = "primary"
@@ -1148,6 +1351,12 @@ pointer = "phase7_ana#/block_b2_huginn_replication/exp_h5_adapter_gamma_sweep/cu
 tier = "primary"
 style = "number"
 scale = 100.0
+decimals = 1
+
+[metrics.hug_gamma_15_pct]
+pointer = "phase7_ana#/block_b2_huginn_replication/exp_h5_adapter_gamma_sweep/gamma_15_acc_pct"
+tier = "primary"
+style = "percent"
 decimals = 1
 
 # ---------------------------------------------------------------------------
@@ -1179,68 +1388,83 @@ latex = 'h^{(p)}_{\mathrm{in}} = (1 - f_g)\,\odot\, h_{\mathrm{pre}} + m_g \odot
 unicode = "h_in^(p) = (1 - f_g) * h_pre + m_g * M(h^(p-1))  [Inkling/Varloop]   vs.   x^(p) = F_core(W_adp [x^(p-1); e_pre])  [Huginn]"
 
 # ---------------------------------------------------------------------------
-# Figures (6 Dawn State Claim-Bound Figures)
+# Figures (1 Verified Architectural Plate + 6 Dawn State Quantitative Charts)
 # ---------------------------------------------------------------------------
+
+[[figures]]
+id = "fig-cajal-plate"
+kind = "media"
+media_path = "figures/phase7_biophysics/explainers/cajal_synaptic_plate.png"
+media_sha256 = "47422824979818cc46f421b9ec73c8b135c0b84a66d78b91bcc631a49e9ab8d3"
+kicker = "Architectural Overview"
+title = "Looped transformers split silent computation across a somatic reset relay, a balanced recurrent core, and an exit prism."
+subtitle = "Three-stage biophysical circuit anatomy comparing Inkling-2-Mini (K = 3), Varloop (K = 1..7), and Huginn-0125 (K = 1..8)"
+caption = "Anatomical overview across all three architectures: Stage I contrasts hard somatic resets on Inkling-2-Mini and Varloop ({{p6_foil_cap_b1}} Pass-1 foil survival) against Huginn-0125's continuous prompt-recall tether ({{hug_h1_state_only}} accuracy when cut); Stage II shows braided Query-Key coincidence routing ({{p6_wht_qxk}} to {{var_wht_k5_qxk}} nats), redundant Value-MLP backup tracts ({{p6_wht_vxmlp}} nats), contractive non-normal shear ({{p6_sig_p2}} top gain at cosine {{p6_cos_p2}}), and perpendicular safety modes ({{ink_v_angle_min}} to {{ink_v_angle_max}}); Stage III contrasts the {{p6_fisher_ratio}} to {{var_k5_fisher_ratio}} Fisher readout cliff of six-layer Codas against Huginn-0125's gradual two-layer readout ({{hug_fisher_ratio}})."
+source = "Source: results/phase6_inkling_biophysical_loop/biophysical_analysis.json and results/phase7_biophysics/phase7_biophysics_analysis.json."
+alt = "Three-column Dawn State anatomical schematic comparing recurrent transformer circuits across Inkling-2-Mini, Varloop, and Huginn-0125: Column I shows the Stem soma, hard somatic reset switch ({{p6_foil_cap_b1}} foil survival), and Huginn-0125 prompt-recall tether; Column II shows braided Query-Key coincidence fibers ({{p6_wht_qxk}} nats), Value and MLP backup cables ({{p6_wht_vxmlp}} nats), non-normal Pass-2 shear ({{p6_sig_p2}}), and {{ink_v_angle_min}} to {{ink_v_angle_max}} perpendicular safety modes; Column III shows rotated loop waves refracting through a six-layer Coda prism ({{p6_fisher_ratio}} to {{var_k5_fisher_ratio}} Fisher jump) versus Huginn-0125's two-layer Coda ({{hug_fisher_ratio}})."
 
 [[figures]]
 id = "fig-wht-epistasis"
 kind = "grouped_bar"
-kicker = "Figure 1 · Synaptic Epistasis"
-title = "Inkling-2-Mini pairs superadditive QxK pointers ({{p6_wht_qxk}}) with redundant VxMLP ({{p6_wht_vxmlp}}), while safety shifts to positive VxMLP."
-subtitle = "Exact 16-mask Walsh-Hadamard pairwise epistasis (QxK vs. VxMLP, nats/log-odds) on Inkling-2-Mini (K = 3)"
+kicker = "Synaptic Division of Labor"
+title = "Multi-hop reasoning pairs superadditive Query-Key synergy ({{p6_wht_qxk}}) with Value-MLP backup ({{p6_wht_vxmlp}}) while moral bias flips sign."
+accent = "superadditive Query-Key synergy ({{p6_wht_qxk}})"
+subtitle = "Exact 16-mask Walsh-Hadamard pairwise interaction terms (Query × Key vs. Value × MLP, nats or log-odds) on Inkling-2-Mini (K = 3)"
 source = "Source: results/phase6_inkling_biophysical_loop/biophysical_analysis.json and results/phase7_biophysics/phase7_biophysics_analysis.json."
-alt = "Grouped bar chart comparing QxK and VxMLP pairwise epistasis on Inkling-2-Mini across Reasoning ({{p6_wht_qxk}} vs {{p6_wht_vxmlp}}), Moral Bias ({{ink_mor_qxk}} vs {{ink_mor_vxmlp}}), Verifier Susceptibility ({{ink_ver_qxk}} vs {{ink_ver_vxmlp}}), and Covert Anchoring ({{ink_cov_qxk}} vs {{ink_cov_vxmlp}})."
-categories = ["Reasoning (n=120)", "Moral bias (n=64)", "Verifier hack (n=96)", "Covert anchor (n=64)"]
+alt = "Grouped bar chart comparing Query-Key and Value-MLP pairwise interactions on Inkling-2-Mini across multi-hop reasoning ({{p6_wht_qxk}} vs {{p6_wht_vxmlp}}), moral distortion ({{ink_mor_qxk}} vs {{ink_mor_vxmlp}}), verifier hacking ({{ink_ver_qxk}} vs {{ink_ver_vxmlp}}), and covert anchoring ({{ink_cov_qxk}} vs {{ink_cov_vxmlp}})."
+categories = ["Multi-hop reasoning (n=120)", "Moral distortion (n=64)", "Verifier hack (n=96)", "Covert anchor (n=64)"]
 y_decimals = 2
 y_min = -1.2
 y_max = 3.0
   [[figures.series]]
-  label = "QxK pointer epistasis"
+  label = "Query × Key coincidence"
   role = "focus"
   values = ["p6_wht_qxk", "ink_mor_qxk", "ink_ver_qxk", "ink_cov_qxk"]
   [[figures.series]]
-  label = "VxMLP payload epistasis"
+  label = "Value × MLP payload"
   role = "primary"
   values = ["p6_wht_vxmlp", "ink_mor_vxmlp", "ink_ver_vxmlp", "ink_cov_vxmlp"]
 
 [[figures]]
 id = "fig-non-normal-amp"
 kind = "line"
-kicker = "Figure 2 · Non-Normal Amplification"
-title = "Top singular gain reaches {{p6_sig_p2}} in Inkling-2-Mini, {{var_sig_p3}} in Varloop, and {{hug_sig_s1}} in Huginn-0125 while isotropic RMS stays contractive."
-subtitle = "Exact VJP top singular value sigma_max across recurrent steps on Inkling-2-Mini, Varloop, and Huginn-0125 (n = 36)"
+kicker = "Balanced Non-Normal Gain"
+title = "Task-aligned singular gain reaches {{p6_sig_p2}} in Inkling-2-Mini while random directions shrink every pass."
+accent = "reaches {{p6_sig_p2}} in Inkling-2-Mini"
+subtitle = "Exact vector-Jacobian top singular value across recurrent passes on Inkling-2-Mini, Varloop, and Huginn-0125 (n = 36)"
 source = "Source: results/phase6_inkling_biophysical_loop/biophysical_analysis.json and results/phase7_biophysics/phase7_biophysics_analysis.json."
-alt = "Three-series line chart of top singular value sigma_max across Passes 1 to 3 (and Varloop/Huginn extended steps): Inkling-2-Mini peaks sharply at Pass 2 ({{p6_sig_p2}}), Varloop peaks at Pass 3 ({{var_sig_p3}}), and Huginn-0125 peaks at Step 1 ({{hug_sig_s1}}) before stabilizing at {{hug_sig_s4}} to {{hug_sig_s8}}."
+alt = "Three-series line chart of top singular value across recurrent steps: Inkling-2-Mini peaks sharply on Pass 2 ({{p6_sig_p2}}), Varloop peaks on Pass 3 ({{var_sig_p3}}), and Huginn-0125 opens at {{hug_sig_s1}} on Step 1 before settling at {{hug_sig_s4}} to {{hug_sig_s8}}."
 categories = ["Step 1", "Step 2", "Step 3"]
 y_decimals = 1
 y_min = 0.0
 y_max = 15.0
   [[figures.series]]
-  label = "Inkling-2-Mini (fixed K=3)"
+  label = "Inkling-2-Mini · K = 3"
   role = "focus"
   values = ["p6_sig_p1", "p6_sig_p2", "p6_sig_p3"]
   [[figures.series]]
-  label = "Varloop (variable K=1..7)"
+  label = "Varloop · K = 1..7"
   role = "primary"
   values = ["var_sig_p1", "var_sig_p2", "var_sig_p3"]
   [[figures.series]]
-  label = "Huginn-0125 (dense K=1..8)"
+  label = "Huginn-0125 · K = 1..8"
   role = "context"
   values = ["hug_sig_s1", "hug_sig_s2", "hug_sig_s3"]
 
 [[figures]]
 id = "fig-pareto-frontier"
 kind = "bar"
-kicker = "Figure 3 · Zero-FLOP Nullbridge Pareto"
-title = "Channel-selective zero-FLOP folding trims covert wrong capture at <= {{ink_zff_all4_kl}} nats KL."
-subtitle = "Covert wrong-integer capture rate (%) across offline rank-4 message-bank folds on Inkling-2-Mini (K = 3, n = 64)"
+kicker = "Spectral Separation & Nullbridge"
+title = "Folding four safety directions into the message gates trims covert wrong capture below {{ink_zff_all4_kl}} nats KL."
+accent = "trims covert wrong capture"
+subtitle = "Covert wrong-integer capture rate (%) across offline rank-4 message-gate folds on Inkling-2-Mini (K = 3, n = 64)"
 source = "Source: results/phase7_biophysics/phase7_biophysics_analysis.json."
-alt = "Horizontal bar chart of covert wrong-integer capture on Inkling-2-Mini: Unclamped {{ink_unc_cov}}, MLP-only {{ink_zff_mlp_cov}}, Q-only {{ink_zff_q_cov}}, QKV {{ink_zff_qkv_cov}}, and All-4 {{ink_zff_all4_cov}}."
+alt = "Horizontal bar chart of covert wrong-integer capture on Inkling-2-Mini: unclamped baseline {{ink_unc_cov}}, folding MLP gate only {{ink_zff_mlp_cov}}, folding Query gate only {{ink_zff_q_cov}}, folding Query, Key, and Value gates {{ink_zff_qkv_cov}}, and folding all four gates {{ink_zff_all4_cov}}."
 categories = [
-  "All-4 channels (KL 0.0017)",
-  "QKV channels (KL 0.0016, 93.8% reason)",
-  "Q-only channel (KL 0.0012)",
-  "MLP-only channel (KL 0.0013)",
+  "Fold all four gates ({{ink_zff_all4_kl}} nats KL)",
+  "Fold Query, Key, and Value ({{ink_zff_qkv_kl}} nats KL, {{ink_zff_qkv_reas}} reasoning)",
+  "Fold Query gate only ({{ink_zff_q_kl}} nats KL)",
+  "Fold MLP gate only ({{ink_zff_mlp_kl}} nats KL)",
   "Unclamped baseline",
 ]
 y_label = "Covert wrong capture (%)"
@@ -1256,18 +1480,19 @@ focus_index = 0
 [[figures]]
 id = "fig-fisher-spike"
 kind = "bar"
-kicker = "Figure 4 · Fisher Pullback Cliff"
-title = "Deep 6-layer MoE Codas trigger {{p6_fisher_ratio}} to {{var_k5_fisher_ratio}} Fisher cliffs where 2-layer Huginn stays smooth ({{hug_fisher_ratio}})."
-subtitle = "Hutchinson VJP Fisher trace jump ratio at the loop-exit to Coda-entry boundary across architectures (n = 60)"
+kicker = "Coda Readout Geometry"
+title = "Six-layer exit blocks trigger {{p6_fisher_ratio}} to {{var_k5_fisher_ratio}} Fisher sensitivity cliffs while two-layer Huginn-0125 stays below unity."
+accent = "{{p6_fisher_ratio}} to {{var_k5_fisher_ratio}} Fisher sensitivity cliffs"
+subtitle = "Hutchinson Fisher pullback trace jump ratio from the final loop step into the first Coda layer (n = 60)"
 source = "Source: results/phase7_biophysics/phase7_biophysics_analysis.json."
-alt = "Horizontal bar chart of loop-to-Coda Fisher trace ratio: Varloop K=5 reaches {{var_k5_fisher_ratio}}, Varloop K=7 reaches {{var_k7_fisher_ratio}}, Inkling-2-Mini K=3 reaches {{p6_fisher_ratio}}, and 2-layer-Coda Huginn-0125 K=8 sits at {{hug_fisher_ratio}}."
+alt = "Horizontal bar chart of loop-exit to first-Coda-layer Fisher trace ratio: Varloop K = 5 reaches {{var_k5_fisher_ratio}}, Varloop K = 7 reaches {{var_k7_fisher_ratio}}, Inkling-2-Mini K = 3 reaches {{p6_fisher_ratio}}, and two-layer-Coda Huginn-0125 K = 8 sits at {{hug_fisher_ratio}}."
 categories = [
-  "Varloop K=5 (6-layer Coda)",
-  "Varloop K=7 (6-layer Coda)",
-  "Inkling-2-Mini K=3 (6-layer Coda)",
-  "Huginn-0125 K=8 (2-layer Coda)",
+  "Varloop K = 5 (6-layer Coda)",
+  "Varloop K = 7 (6-layer Coda)",
+  "Inkling-2-Mini K = 3 (6-layer Coda)",
+  "Huginn-0125 K = 8 (2-layer Coda)",
 ]
-y_label = "Loop-to-Coda Fisher trace jump (x)"
+y_label = "Exit-boundary Fisher trace jump (x)"
 y_unit = "x"
 y_decimals = 1
 y_max = 155.0
@@ -1280,46 +1505,48 @@ focus_index = 0
 [[figures]]
 id = "fig-hysteresis-shield"
 kind = "bar"
-kicker = "Figure 5 · Hysteresis & Recall Shielding"
-title = "Hard somatic reset holds Inkling-2-Mini to {{p6_foil_cap_b1}} foil capture, while prelude recall prevents bifurcation in Huginn-0125."
-subtitle = "Coda foil capture rate (%) under full Pass-1 foil replacement (n = 60; zero models cross a bifurcation beta_c)"
+kicker = "Somatic Reset vs. Recall Tether"
+title = "Hard somatic reset holds Inkling-2-Mini to {{p6_foil_cap_b1}} foil survival while prompt recall shields Huginn-0125."
+accent = "{{p6_foil_cap_b1}} foil survival"
+subtitle = "Final foil capture rate (%) after replacing Pass-1 query states with a wrong-answer foil (n = 60, zero bifurcations)"
 source = "Source: results/phase6_inkling_biophysical_loop/biophysical_analysis.json and results/phase7_biophysics/phase7_biophysics_analysis.json."
-alt = "Horizontal bar chart of foil capture rate under full Pass-1 foil replacement: Inkling-2-Mini K=3 is {{p6_foil_cap_b1}}, Huginn-0125 K=8 is {{hug_k8_foil_cap}}, Varloop K=7 is {{var_k7_foil_cap}}, and Varloop K=5 is {{var_k5_foil_cap}}."
+alt = "Horizontal bar chart of foil survival rate under full Pass-1 foil replacement: Inkling-2-Mini K = 3 sits at {{p6_foil_cap_b1}}, Huginn-0125 K = 8 sits at {{hug_k8_foil_cap}}, Varloop K = 7 sits at {{var_k7_foil_cap}}, and Varloop K = 5 sits at {{var_k5_foil_cap}}."
 categories = [
-  "Inkling-2-Mini K=3 (somatic reset)",
-  "Huginn-0125 K=8 (linear recall)",
-  "Varloop K=7 (somatic reset)",
-  "Varloop K=5 (somatic reset)",
+  "Inkling-2-Mini K = 3 (somatic reset)",
+  "Huginn-0125 K = 8 (linear prompt recall)",
+  "Varloop K = 7 (somatic reset)",
+  "Varloop K = 5 (somatic reset)",
 ]
-y_label = "Foil capture under full replacement (%)"
+y_label = "Foil survival under Pass-1 replacement (%)"
 y_unit = "%"
 y_decimals = 1
 y_max = 25.0
 focus_index = 0
   [[figures.series]]
-  label = "Foil capture (%)"
+  label = "Foil survival (%)"
   role = "primary"
   values = ["p6_foil_cap_b1_num", "hug_k8_foil_cap_num", "var_k7_foil_cap_num", "var_k5_foil_cap_num"]
 
 [[figures]]
 id = "fig-gamma-clock"
 kind = "line"
-kicker = "Figure 6 · Neuromodulatory Pass-Clock"
+kicker = "Conductance & Formatting Shunt"
 title = "Recurrent conductance peaks at {{p6_gamma_10_pct}} in Inkling-2-Mini and {{hug_gamma_075_pct}} in Huginn-0125 before rolling over."
-subtitle = "Hop-2 exact Top-1 accuracy (%) across the recurrent conductance sweep from zero to over-driven gain (n = 60)"
+accent = "peaks at {{p6_gamma_10_pct}}"
+subtitle = "Hop-2 exact Top-1 accuracy (%) across recurrent conductance multipliers from zero to over-driven gain (n = 60)"
 source = "Source: results/phase6_inkling_biophysical_loop/biophysical_analysis.json and results/phase7_biophysics/phase7_biophysics_analysis.json."
-alt = "Two-line inverted-U chart across recurrent conductance multipliers: Inkling-2-Mini peaks at {{p6_gamma_10_pct}} at native gain and rolls over to {{p6_gamma_15}}% when over-driven; Huginn-0125 peaks at {{hug_gamma_075_pct}} and rolls over to {{hug_gamma_15}}%."
+alt = "Two-series inverted-U line chart across recurrent conductance multipliers: Inkling-2-Mini rises from {{p6_gamma_00_pct}} to {{p6_gamma_10_pct}} at native unit gain before dipping to {{p6_gamma_15_pct}}, while Huginn-0125 rises from {{hug_gamma_00_pct}} to {{hug_gamma_075_pct}} before dropping to {{hug_gamma_15_pct}}."
 categories = ["0.00", "0.25", "0.50", "0.75", "1.00", "1.25", "1.50"]
 y_unit = "%"
 y_decimals = 0
 y_min = 0.0
 y_max = 80.0
   [[figures.series]]
-  label = "Inkling-2-Mini (K = 3)"
+  label = "Inkling-2-Mini · K = 3"
   role = "focus"
   values = ["p6_gamma_00", "p6_gamma_025", "p6_gamma_05", "p6_gamma_075", "p6_gamma_10", "p6_gamma_125", "p6_gamma_15"]
   [[figures.series]]
-  label = "Huginn-0125 (K = 8)"
+  label = "Huginn-0125 · K = 8"
   role = "primary"
   values = ["hug_gamma_00", "hug_gamma_025", "hug_gamma_05", "hug_gamma_075", "hug_gamma_10", "hug_gamma_125", "hug_gamma_15"]
 
@@ -1329,32 +1556,34 @@ y_max = 80.0
 
 [[tables]]
 id = "tbl-cross-arch"
-title = "Cross-architecture biophysical laws across three recurrent-depth transformers"
-subtitle = "Matched bit-exact unrolled equivalence ({{p7_varloop_equiv}}), non-normal gain, Fisher pullback, and Labovich hysteresis diagnostics"
+title = "Three recurrent-depth architectures pair contractive random dynamics with non-normal task gain"
+subtitle = "Bit-exact unrolled equivalence ({{p7_varloop_equiv}}), peak singular gain, random-tangent RMS, Fisher exit jump, and Pass-1 foil survival"
 source = "Source: results/phase6_inkling_biophysical_loop/biophysical_analysis.json and results/phase7_biophysics/phase7_biophysics_analysis.json."
-headers = ["Architecture", "State Coupling", "Peak sigma_max", "Isotropic RMS", "I/O Cosine", "Loop->Coda Fisher", "Foil Capture (beta=1.0)"]
+headers = ["Architecture", "State Coupling", "Peak Singular Gain", "Random Tangent RMS", "Input-Output Cosine", "Exit Fisher Jump", "Pass-1 Foil Survival"]
 right_align_cols = [2, 3, 4, 5, 6]
 highlight_row = 0
 rows = [
-  ["`Inkling-2-Mini` (`26.4B` MoE, `K = 3`)", "Hard somatic reset + 4-ch gates", "{{p6_sig_p2}} (Pass 2)", "{{p6_iso_p2}}", "{{p6_cos_p2}}", "{{p6_fisher_ratio}} (6L Coda)", "{{p6_foil_cap_b1}} (`beta_c = None`)"],
-  ["`Varloop` (`26.4B` MoE, `K = 1..7`)", "Hard somatic reset + 4-ch gates", "{{var_sig_p3}} (Pass 3)", "{{var_iso_p3}}", "{{var_cos_p3}}", "{{var_k5_fisher_ratio}} (`K=5`, 6L)", "{{var_k5_foil_cap}} (`K=5`, `beta_c = None`)"],
-  ["`Huginn-0125` (`3.5B` dense, `K = 1..8`)", "Continuous state + linear recall", "{{hug_sig_s1}} (Step 1)", "{{hug_iso_s1}}", "{{hug_cos_s1}}", "{{hug_fisher_ratio}} (2L Coda)", "{{hug_k8_foil_cap}} (`K=8`, `beta_c = None`)"],
+  ["`Inkling-2-Mini` (`d =` {{ink_d_model}}, `K = 3`)", "Hard somatic reset + 4 gates", "{{p6_sig_p2}} (Pass 2)", "{{p6_iso_p2}}", "{{p6_cos_p2}}", "{{p6_fisher_ratio}} (6-layer Coda)", "{{p6_foil_cap_b1}} (no tipping point)"],
+  ["`Varloop` (`d =` {{ink_d_model}}, `K = 1..7`)", "Hard somatic reset + 4 gates", "{{var_sig_p3}} (Pass 3)", "{{var_iso_p3}}", "{{var_cos_p3}}", "{{var_k5_fisher_ratio}} (`K = 5`, 6-layer)", "{{var_k5_foil_cap}} (`K = 5`, no tipping point)"],
+  ["`Huginn-0125` (`d =` {{hug_d_model}}, `K = 1..8`)", "Continuous state + prompt recall", "{{hug_sig_s1}} (Step 1)", "{{hug_iso_s1_3d}}", "{{hug_cos_s1}}", "{{hug_fisher_ratio}} (2-layer Coda)", "{{hug_k8_foil_cap}} (`K = 8`, no tipping point)"],
 ]
 
 [[tables]]
 id = "tbl-pareto"
-title = "Channel-selective zero-FLOP Nullbridge Pareto sweep on Inkling-2-Mini (K = 3)"
-subtitle = "Offline rank-4 message-bank projection (0 extra params, 0 extra FLOPs, BOS overlap {{p7_ink_bos}})"
+title = "Folding four safety directions into message gates trims covert capture at zero runtime cost"
+subtitle = "Offline rank-4 message-gate projection on Inkling-2-Mini across K = 3 passes (0 extra parameters, 0 extra FLOPs, BOS overlap {{p7_ink_bos}})"
 source = "Source: results/phase7_biophysics/phase7_biophysics_analysis.json."
-headers = ["Condition", "Held-Out KL (nats)", "Covert Capture", "Moral Bias (LO)", "Verifier Susc. (LO)", "Reasoning Acc"]
-right_align_cols = [1, 2, 3, 4, 5]
-highlight_row = 2
+headers = ["Gate Intervention", "Held-Out KL (nats)", "Covert Capture", "Moral Bias (log-odds)", "Verifier Susc. (log-odds)", "Alias Guardrail", "Reasoning Acc"]
+right_align_cols = [1, 2, 3, 4, 5, 6]
+highlight_row = 3
 rows = [
-  ["Unclamped baseline", "Ref (0)", "{{ink_unc_cov}}", "{{ink_unc_mor}}", "{{ink_unc_susc}}", "{{ink_unc_reas}}"],
-  ["`zff_Q_only` (Query)", "{{ink_zff_q_kl}}", "{{ink_zff_q_cov}}", "{{ink_zff_q_mor}}", "{{ink_zff_q_susc}}", "{{ink_zff_q_reas}}"],
-  ["`zff_QKV` (Attention)", "{{ink_zff_qkv_kl}}", "{{ink_zff_qkv_cov}}", "{{ink_zff_qkv_mor}}", "{{ink_zff_qkv_susc}}", "{{ink_zff_qkv_reas}}"],
-  ["`zff_MLP_only` (Payload)", "{{ink_zff_mlp_kl}}", "{{ink_zff_mlp_cov}}", "{{ink_zff_mlp_mor}}", "{{ink_zff_mlp_susc}}", "{{ink_zff_mlp_reas}}"],
-  ["`zff_All4` (All channels)", "{{ink_zff_all4_kl}}", "{{ink_zff_all4_cov}}", "{{ink_zff_all4_mor}}", "{{ink_zff_all4_susc}}", "{{ink_zff_all4_reas}}"],
+  ["Unclamped baseline", "{{ink_unc_kl}}", "{{ink_unc_cov}}", "{{ink_unc_mor}}", "{{ink_unc_susc}}", "{{ink_unc_alias}}", "{{ink_unc_reas}}"],
+  ["Fold Query gate only", "{{ink_zff_q_kl}}", "{{ink_zff_q_cov}}", "{{ink_zff_q_mor}}", "{{ink_zff_q_susc}}", "{{ink_zff_q_alias}}", "{{ink_zff_q_reas}}"],
+  ["Fold Query and Key gates", "{{ink_zff_qk_kl}}", "{{ink_zff_qk_cov}}", "{{ink_zff_qk_mor}}", "{{ink_zff_qk_susc}}", "{{ink_zff_qk_alias}}", "{{ink_zff_qk_reas}}"],
+  ["Fold Query, Key, and Value gates", "{{ink_zff_qkv_kl}}", "{{ink_zff_qkv_cov}}", "{{ink_zff_qkv_mor}}", "{{ink_zff_qkv_susc}}", "{{ink_zff_qkv_alias}}", "{{ink_zff_qkv_reas}}"],
+  ["Fold MLP gate only", "{{ink_zff_mlp_kl}}", "{{ink_zff_mlp_cov}}", "{{ink_zff_mlp_mor}}", "{{ink_zff_mlp_susc}}", "{{ink_zff_mlp_alias}}", "{{ink_zff_mlp_reas}}"],
+  ["Fold Value and MLP gates", "{{ink_zff_vmlp_kl}}", "{{ink_zff_vmlp_cov}}", "{{ink_zff_vmlp_mor}}", "{{ink_zff_vmlp_susc}}", "{{ink_zff_vmlp_alias}}", "{{ink_zff_vmlp_reas}}"],
+  ["Fold all four gates", "{{ink_zff_all4_kl}}", "{{ink_zff_all4_cov}}", "{{ink_zff_all4_mor}}", "{{ink_zff_all4_susc}}", "{{ink_zff_all4_alias}}", "{{ink_zff_all4_reas}}"],
 ]
 
 # ---------------------------------------------------------------------------
@@ -1363,89 +1592,99 @@ rows = [
 
 [[sections]]
 id = "wht_epistasis"
-preprint_title = "Exact Boolean Walsh-Hadamard Dissection of Reasoning and Safety Channels"
-monograph_title = "How Four Synaptic Channels Divide Reasoning and Safety"
+preprint_title = "Boolean Synaptic Knockouts Separate Coincidence Routing From Redundant Payload Tracts"
+monograph_title = "Query and Key Gates Trigger Multi-Hop Routing While Value and MLP Carry Moral Bias"
 paragraphs = [
-  "Thinking Machines Lab's native looped Mixture-of-Experts checkpoints (`Inkling-2-Mini` and `TML-d24-varloop-research`; [Thinking Machines Lab](#references); [Csordas et al.](#references)) reset the hidden state back to pre-loop activations at the start of every recurrent pass and transmit cross-pass computation exclusively through four rank-64 message channels: Query (`Q`), Key (`K`), Value (`V`), and `MLP` ([Chen et al.](#references)). Evaluating all `2^4 = 16` binary knockout masks yields an exact Boolean Walsh-Hadamard transform with Parseval conservation error at most {{p7_max_parseval}} ([Weinreich et al.](#references); [Faure et al.](#references)).",
+  "Thinking Machines Lab's looped Mixture-of-Experts models (`Inkling-2-Mini` and `TML-d24-varloop-research`; [Thinking Machines Lab](#references); [Csordas et al.](#references)) do not carry a free-running residual stream from pass to pass. Before each recurrent pass begins, a somatic reset sweeps the hidden state back to clean pre-loop Stem activations, allowing only four rank-{{ink_gate_rank}} message gates (`Q`, `K`, `V`, and `MLP`) to pass notes forward ([Chen et al.](#references)).",
+  "Four binary gates leave exactly sixteen possible on-off wiring patterns. I evaluated all sixteen masks across multi-hop factual, arithmetic, and calendar reasoning (`n = 120`) to compute an exact Boolean Walsh-Hadamard decomposition with Parseval conservation error at most {{p7_max_parseval}} ([Weinreich et al.](#references); [Faure et al.](#references)).",
 ]
 equations = ["eq-wht-parseval"]
-figures = ["fig-wht-epistasis"]
+figures = ["fig-cajal-plate", "fig-wht-epistasis"]
 post_paragraphs = [
-  "On multi-hop reasoning (`n = 120`), opening all four channels lifts `Inkling-2-Mini` exact zero-CoT Top-1 accuracy from **{{p6_wht_0000}}** (`0000`) to **{{p6_wht_1111}}** (`1111`). Additive Order-1 main effects carry **{{p6_wht_ord1}}** of log-probability variance (`MLP` {{p6_wht_mlp}}, `Q` {{p6_wht_q}}, `V` {{p6_wht_v}}, `K` {{p6_wht_k}} nats), while Order-2 epistasis ({{p6_wht_ord2}}) separates into two opposite circuits: superadditive **`QxK` pointer re-addressing** (**{{p6_wht_qxk}}** nats on `Inkling-2-Mini`, growing monotonically across `Varloop` trained depths from {{var_wht_k2_qxk}} at `K = 2` to {{var_wht_k3_qxk}} at `K = 3` and **{{var_wht_k5_qxk}}** at `K = 5`, holding {{var_wht_k7_qxk}} at out-of-distribution `K = 7`) versus subadditive **`VxMLP` backup redundancy** (**{{p6_wht_vxmlp}}** nats on `Inkling-2-Mini`; {{var_wht_k5_vxmlp}} on `Varloop` `K = 5`). Closing Pass 3 gates alone collapses accuracy to {{p6_wht_p3_ko}} while closing Pass 2 alone retains {{p6_wht_p2_ko}}, directly confirming somatic-reset erasure.",
-  "Running the exact same 16-mask WHT on latent safety suites resolves how safety shortcuts ride through the loop. Pre-registered prediction **P2** is confirmed across both models and depths: payload main effects (`V + MLP`) exceed pointer channels (`Q + K`) on moral distortion by **{{ink_p2_contrast}}** on `Inkling-2-Mini` (`K = 3`), **{{var_k5_p2_contrast}}** on `Varloop` (`K = 5`), and **{{var_k3_p2_contrast}}** on `Varloop` (`K = 3`, all Holm `p =` {{ink_p2_p}}), accompanied by strong positive `VxMLP` synergy (**{{ink_mor_vxmlp}}** on moral bias and **{{ink_ver_vxmlp}}** on verifier susceptibility). By contrast, prediction **P1** (`QxK - VxMLP` synergy on covert anchoring) dissociates cleanly by model: positive on `Varloop` ({{var_k5_p1_cov}} at `K = 5`, {{var_k3_p1_cov}} at `K = 3`) but negative on `Inkling-2-Mini` ({{ink_p1_cov}}, Holm `p =` {{ink_p1_cov_p}}), where native recurrence actively self-corrects covert anchoring across all four channels and Order-1 linear effects carry **{{ink_cov_ord1}}** of variance.",
+  "With all four gates closed, `Inkling-2-Mini` stalls at **{{p6_wht_0000}}** accuracy. Opening all four lifts exact zero-CoT accuracy to **{{p6_wht_1111}}**. Single-channel main effects explain **{{p6_wht_ord1}}** of log-probability variance, led by `MLP` ({{p6_wht_mlp}} nats) and `Q` ({{p6_wht_q}} nats) ahead of `V` ({{p6_wht_v}} nats) and `K` ({{p6_wht_k}} nats).",
+  "The pairwise terms ({{p6_wht_ord2}} of variance) reveal the exact division of labor neuroscientists see in cortical microcircuits. `Q` and `K` work as a superadditive **coincidence detector** (**{{p6_wht_qxk}}** nats on `Inkling-2-Mini`, climbing from {{var_wht_k2_qxk}} at `K = 2` to {{var_wht_k3_qxk}} at `K = 3` and **{{var_wht_k5_qxk}}** nats at `K = 5` on `Varloop`, and holding {{var_wht_k7_qxk}} at untrained `K = 7`). Sending a search query without a matching key barely clears **{{p6_wht_1100}}** accuracy; both fibers have to fire together to address the second hop. `V` and `MLP`, by contrast, run as redundant parallel backup tracts (**{{p6_wht_vxmlp}}** nats on `Inkling-2-Mini` and {{var_wht_k5_vxmlp}} on `Varloop` `K = 5`), carrying **{{p6_wht_0011}}** accuracy on their own so partial facts survive if one cable drops. Shutting the gates on Pass 3 alone collapses accuracy back to {{p6_wht_p3_ko}}, whereas shutting Pass 2 alone still leaves {{p6_wht_p2_ko}}, because the somatic reset wipes unforwarded state clean.",
+  "Moral distortion uses the opposite wiring. Across paired financial and tainted-money prompts, payload main effects (`V` plus `MLP`) outweigh routing (`Q` plus `K`) by **{{ink_p2_contrast}}** log-odds on `Inkling-2-Mini` and **{{var_k5_p2_contrast}}** on `Varloop` `K = 5` ({{var_k3_p2_contrast}} at `K = 3`, all Holm `p =` {{ink_p2_p}}). Positive `V`×`MLP` coupling reinforces that payload path (**{{ink_mor_vxmlp}}** on moral bias and **{{ink_ver_vxmlp}}** on verifier hacking). Covert numeric anchoring splits cleanly between checkpoints: routing-minus-payload synergy is positive on `Varloop` ({{var_k5_p1_cov}} at `K = 5` and {{var_k3_p1_cov}} at `K = 3`) yet flips negative on `Inkling-2-Mini` (**{{ink_p1_cov}}**, Holm `p =` {{ink_p1_cov_p}}). Native recurrence on `Inkling-2-Mini` actively self-corrects planted numbers across all four gates ({{ink_cov_ord1}} linear variance).",
 ]
 
 [[sections]]
 id = "non_normal"
-preprint_title = "Universal Non-Normal Transient Amplification and Training-Horizon Conditioning"
-monograph_title = "Non-Normal Amplification Inside Contractive Loops"
+preprint_title = "Contractive Loops Amplify Task Signals Along Orthogonal Singular Modes"
+monograph_title = "Every Loop Damps Random Static While Boosting Task Signals Sideways"
 paragraphs = [
-  "Balanced cortical circuits reconcile dynamical stability with selective computation through non-normal transient amplification: isotropic perturbations decay while orthogonal singular modes amplify specific task directions ([Ganguli et al.](#references); [Murphy & Miller](#references); [Hennequin et al.](#references)). Computing exact vector-Jacobian top singular values `sigma_max(J_p)` and isotropic random-tangent RMS gains across all three architectures confirms this law at billion-parameter scale.",
+  "Any circuit that reuses the exact same weights in a loop faces an obvious stability trap. If the loop amplifies signals back into the same directions they came from, tiny errors snowball and the network self-oscillates; if every direction shrinks, multi-step thoughts fade out.",
+  "Living cortex escapes that trap through balanced non-normal amplification ([Ganguli et al.](#references); [Murphy & Miller](#references); [Hennequin et al.](#references)). Surrounding inhibition damps random static on every cycle, while asymmetric connections sling task-aligned activity into fresh, nearly perpendicular directions before damping catches up. Measuring exact vector-Jacobian top singular values and random-tangent RMS gains shows all three recurrent transformers doing the exact same thing.",
 ]
 equations = ["eq-non-normal"]
+figures = ["fig-non-normal-amp"]
 tables = ["tbl-cross-arch"]
 post_paragraphs = [
-  "Across all three architectures, isotropic RMS gain stays strictly contractive (`< 1.0`), yet `sigma_max` jumps an order of magnitude higher with nearly orthogonal input-output singular vectors (`|u_1^T v_1| <= 0.052`). Crucially, depth-scaling reveals **training-horizon conditioning**: fixed-`K = 3` `Inkling-2-Mini` concentrates non-normal gain sharply into Pass 2 (`sigma_max =` **{{p6_sig_p2}}**, {{p6_aniso_p2}} isotropic RMS {{p6_iso_p2}}, {{p6_ray_p2}} above normal Rayleigh self-feedback, `cos =` {{p6_cos_p2}}), whereas variable-depth `Varloop` (`K = 1..5`) spreads gain smoothly across passes (`sigma_max =` {{var_sig_p1}}, {{var_sig_p2}}, peaking at Pass 3 **{{var_sig_p3}}**, and holding {{var_sig_p4}} to {{var_sig_p7}} out to OOD `K = 7`). Dense 3.5B `Huginn-0125` ([Geiping et al.](#references)) reproduces the exact same non-normal signature (`sigma_max =` **{{hug_sig_s1}}** at Step 1, {{hug_aniso_s1}} contractive RMS {{hug_iso_s1}}, `cos =` {{hug_cos_s1}}, {{hug_ray_s1}} Rayleigh, stabilizing at {{hug_sig_s4}} to {{hug_sig_s8}} through Step 8).",
+  "Random static shrinks on every pass across every model ({{p6_iso_p1}} to {{hug_iso_s1}} isotropic RMS, strictly below unity). Yet task-aligned singular gain surges to **{{p6_sig_p2}}** on `Inkling-2-Mini` Pass 2 ({{p6_aniso_p2}} above random noise and {{p6_ray_p2}} above normal Rayleigh self-feedback) while rotating the output nearly ninety degrees away from its input (`cos =` **{{p6_cos_p2}}**).",
+  "How a model budgets that gain depends on how it was trained. Fixed three-pass `Inkling-2-Mini` packs its burst into Pass 2 (**{{p6_sig_p2}}**), whereas variable-depth `Varloop` (`K = 1..5`) spreads gain evenly across passes, peaking at **{{var_sig_p3}}** on Pass 3 and staying bounded ({{var_sig_p4}} to {{var_sig_p7}}) even when stretched out to untrained `K = 7`. Dense `Huginn-0125` ([Geiping et al.](#references)) obeys the same law without Mixture-of-Experts routing or gated resets, hitting **{{hug_sig_s1}}** on Step 1 ({{hug_aniso_s1}} above random RMS {{hug_iso_s1_3d}}, `cos =` {{hug_cos_s1}}, {{hug_ray_s1}} Rayleigh) and holding {{hug_sig_s4}} to {{hug_sig_s8}} through Step 8.",
 ]
 quotes = [
-  "Looped transformers do not explode to think: isotropic noise contracts at every step while orthogonal singular modes selectively amplify task trajectories."
+  "A weight-sharing loop cannot amplify signals in place without ringing; it stays calm by shrinking random directions every pass and firing real work sideways."
 ]
 
 [[sections]]
 id = "spectral_pareto"
-preprint_title = "Spectral Orthogonal Separation and the Zero-FLOP Nullbridge Pareto Frontier"
-monograph_title = "Why Zero-Cost Safety Erasure Barely Touches Reasoning"
+preprint_title = "Dominant Pass-Two Input Modes Sit Perpendicular to the Four-Dimensional Safety Subspace"
+monograph_title = "Safety Shortcuts Ride Perpendicular to Dominant Reasoning Modes"
 paragraphs = [
-  "In [Part 3](/pubs/nullbridge/), Pass 2 simultaneously enabled multi-hop deduction and ignited covert moral bias ([Baker et al.](#references); [Gema et al.](#references)). Deflated top-8 VJP/JVP singular subspace iteration (`n = 128` prompts per model) tests directly whether Pass 2's dominant non-normal input modes `V_8` drive those safety shortcuts.",
-  "They do not. On `Inkling-2-Mini` (neutral `sigma_1 =` {{ink_a1_sig1}}), the top-8 Pass-2 input singular subspace `V_8` sits **{{ink_v_angle_min}} to {{ink_v_angle_max}}** orthogonal to the `<bos>`-safe 4D safety basis `Q_msg` (`Varloop` minimum angle {{var_v_angle_min}}; [Xiao et al.](#references)), with directional gains `g_2` staying near isotropic (`{{ink_a1_spite_g2}}` to `{{ink_a1_auth_g2}}`, well below a unified-mode threshold). Dominant non-normal modes therefore route multi-hop task computation while safety shortcuts occupy mid-spectrum (`k > 8`) sub-modes.",
+  "In [Part 3](/pubs/nullbridge/), Pass 2 turned on multi-hop deduction and moral bias at the exact same moment ([Baker et al.](#references); [Gema et al.](#references)). That raised a practical worry: if both ride the same high-gain singular modes, erasing safety shortcuts inside the gates should wreck reasoning too.",
+  "I extracted the top eight singular modes of Pass 2 (`n = 128` prompts per model; top neutral singular value {{ink_a1_sig1}}) to test whether they overlap the four-dimensional `<bos>`-safe safety subspace ([Xiao et al.](#references)). They do not. On `Inkling-2-Mini`, the top eight Pass-2 input modes sit **{{ink_v_angle_min}} to {{ink_v_angle_max}}** perpendicular to the safety basis ({{var_v_angle_min}} to {{var_v_angle_max}} on `Varloop`). Along the safety axes themselves, Pass-2 gain hovers near random noise ({{ink_a1_spite_g2}} for moral spite to {{ink_a1_auth_g2}} for authority framing). Dominant non-normal modes carry multi-hop reasoning; safety shortcuts ride quietly in mid-spectrum modes further down the tail.",
 ]
 figures = ["fig-pareto-frontier"]
 tables = ["tbl-pareto"]
 post_paragraphs = [
-  "This **spectral orthogonal separation** explains why offline rank-4 message-bank projection (`W_out (I - Q Q^T)`, `0` extra parameters, `0` extra runtime FLOPs, `<bos>` overlap {{p7_ink_bos}}; [Belrose et al.](#references)) operates at vanishing distribution shift: across all six channel-selective folds on `Inkling-2-Mini`, held-out KL stays within **{{ink_zff_q_kl}} to {{ink_zff_all4_kl}} nats**. Folding `QKV` attention channels (`KL =` {{ink_zff_qkv_kl}} nats) cuts covert wrong capture from {{ink_unc_cov}} to **{{ink_zff_qkv_cov}}**, lifts alias guardrails from {{ink_unc_alias}} to **{{ink_zff_qkv_alias}}**, and holds full **{{ink_zff_qkv_reas}}** biophysical reasoning accuracy, while `All-4` (`KL =` {{ink_zff_all4_kl}} nats) achieves the lowest covert capture (**{{ink_zff_all4_cov}}**) and lowest verifier susceptibility (**{{ink_zff_all4_susc}}** vs. {{ink_unc_susc}}).",
+  "That near-perpendicular geometry explains why folding a rank-four projection directly into the message-gate output weights costs zero extra parameters, zero runtime FLOPs, and almost zero distribution shift ([Belrose et al.](#references)). Across all six non-trivial gate folds on `Inkling-2-Mini` (`<bos>` sink overlap {{p7_ink_bos}}), held-out KL stays between **{{ink_zff_q_kl}} and {{ink_zff_all4_kl}} nats**.",
+  "Picking which gates to fold traces a clean trade-off. Folding the Query, Key, and Value gates ({{ink_zff_qkv_kl}} nats KL) cuts covert wrong-integer capture from {{ink_unc_cov}} to **{{ink_zff_qkv_cov}}**, lifts alias guardrails from {{ink_unc_alias}} to **{{ink_zff_qkv_alias}}**, and keeps the full **{{ink_zff_qkv_reas}}** multi-hop reasoning score. Folding all four gates ({{ink_zff_all4_kl}} nats KL) pushes covert capture down to **{{ink_zff_all4_cov}}** and drops verifier hacking susceptibility from {{ink_unc_susc}} to **{{ink_zff_all4_susc}}**.",
 ]
 
 [[sections]]
 id = "fisher_commitment"
-preprint_title = "Loop-to-Coda Fisher Pullback Cliffs and Two-Stage Commitment Horizons"
-monograph_title = "Deep Coda Cliffs vs. Smooth Two-Layer Readout"
+preprint_title = "Six-Layer Exit Decoders Create Sharp Fisher Readout Cliffs Where Shallow Decoders Read Out Gradually"
+monograph_title = "Deep Exit Blocks Act Like Premotor Output-Null Prisms"
 paragraphs = [
-  "Direct logit-lens readouts fail inside deep looped cores (`<=` {{p6_raw_lens_max}} on `Inkling-2-Mini`, vs. {{hug_raw_lens_max}} on 2-layer-Coda `Huginn-0125`; [Belrose et al.](#references); [Khalil & Hoque](#references)) because the recurrent core writes in coordinates tuned for Coda transport (task-over-random Coda Jacobian conductance reaches {{p6_cond_p3}} on `Inkling-2-Mini` Pass 3). Measuring the full-vocabulary Hutchinson VJP Fisher pullback trace `tr(G_t)` pinpoints where output sensitivity concentrates.",
+  "Premotor cortex rehearses an upcoming reach inside an output-null subspace perpendicular to spinal readout so your hand does not twitch while you are still deciding where to move ([Hennequin et al.](#references)). A looped language model has the same incentive: thinking directly in token coordinates would tug every intermediate hop toward a premature surface word ([Belrose et al.](#references); [Khalil & Hoque](#references)).",
+  "Keeping the loop rotated away from vocabulary space explains why raw logit lenses stall at {{p6_raw_lens_max}} on `Inkling-2-Mini` even while Coda Jacobian conductance favors task directions by **{{p6_cond_p3}}** on Pass 3. Measuring the full-vocabulary Hutchinson Fisher pullback trace across every layer shows exactly where each architecture refracts latent states into words.",
 ]
 equations = ["eq-fisher-pullback"]
 figures = ["fig-fisher-spike"]
 post_paragraphs = [
-  "Cross-architecture replication exposes a clean structural law. Models with a deep 6-layer MoE Coda exhibit massive sensitivity cliffs at the loop-to-Coda boundary: Fisher trace jumps **{{p6_fisher_ratio}}** on `Inkling-2-Mini` (`K = 3`), **{{var_k5_fisher_ratio}}** on `Varloop` (`K = 5`), and **{{var_k7_fisher_ratio}}** on `Varloop` (`K = 7`). By contrast, `Huginn-0125`'s shallow 2-layer dense Coda shows **no** boundary cliff (**{{hug_fisher_ratio}}** at `step_8 -> coda_L0`), instead climbing **{{hug_fisher_climb}}** smoothly across Steps 1 to 8 inside the loop itself. Meanwhile, tracking Coda-transported probabilities on `Inkling-2-Mini` confirms two-stage latent execution ([Saunshi et al.](#references); [Banino et al.](#references); [Bae et al.](#references)): arithmetic explicitly stages the intermediate Hop-1 integer on Pass 2 (**{{p6_arith_hop1_p2}}**) before locking **{{p6_arith_hop2_p3}}** mass onto the final Hop-2 answer on Pass 3.",
+  "Coda depth sets the entire readout geometry. Checkpoints with a six-layer Mixture-of-Experts Coda stay output-null inside the loop and refract across a steep sensitivity cliff right at the exit boundary: Fisher trace jumps **{{p6_fisher_ratio}}** entering Coda on `Inkling-2-Mini`, **{{var_k5_fisher_ratio}}** on `Varloop` at `K = 5`, and **{{var_k7_fisher_ratio}}** at `K = 7`. Transporting loop states through that six-layer prism reveals clean two-stage execution ([Saunshi et al.](#references); [Banino et al.](#references); [Bae et al.](#references)): two-step arithmetic stages the intermediate bridge integer on Pass 2 (**{{p6_arith_hop1_p2}}**) before locking **{{p6_arith_hop2_p3}}** probability onto the final answer on Pass 3.",
+  "Dense `Huginn-0125`, with only a two-layer Coda, cannot afford to wait until the exit to rotate into token coordinates. Its Fisher trace climbs **{{hug_fisher_climb}}** gradually across Steps 1 through 8 inside the loop itself ({{hug_raw_lens_max}} raw logit-lens accuracy) and crosses from the final loop step into the first Coda layer at a flat **{{hug_fisher_ratio}}** ratio.",
 ]
 
 [[sections]]
 id = "hysteresis_recall"
-preprint_title = "Testing Labovich's Recall Theorem: Somatic Reset vs. Linear Adapter Recurrence"
-monograph_title = "Why Both Somatic Reset and Prelude Recall Block Foil Capture"
+preprint_title = "Hard Somatic Resets and Continuous Prompt Recall Both Prevent Foil Bifurcation"
+monograph_title = "Somatic Resets Wipe Early Errors Clean While Continuous Loops Lean on Prompt Recall"
 paragraphs = [
-  "A central theoretical prediction of [Labovich](#references) is that continuous input recall stabilizes looped transformers against fixed-point collapse and perturbation drift. Comparing `Inkling-2-Mini` and `Varloop` (hard somatic reset to pre-loop activations on every pass) against `Huginn-0125` (continuous recurrent state `x` concatenated with prelude `input_embeds` through a linear adapter; [McLeish et al.](#references)) tests this theorem directly.",
+  "Looping a noisy hunch through shared weights risks locking into a false attractor. [Labovich](#references) proved theoretically that continually re-injecting the clean prompt shields a looped transformer against fixed-point collapse. Putting `Inkling-2-Mini` and `Varloop` alongside `Huginn-0125` tests two physical ways of building that anchor ([McLeish et al.](#references)).",
 ]
 equations = ["eq-somatic-vs-adapter"]
 figures = ["fig-hysteresis-shield"]
 post_paragraphs = [
-  "First, an exact `2^2 = 4` adapter Walsh-Hadamard knockout on `Huginn-0125` (calibrated to two-shot mode at {{hug_cal_2shot}} vs. {{hug_cal_0shot}} zero-shot; zero-state init KL {{hug_zero_kl}}) proves input recall is indispensable: ablating prelude `recall` while keeping recurrent `state` collapses `K = 8` accuracy from **{{hug_h1_full}}** straight to **{{hug_h1_state_only}}**, with a `recall` main effect of **{{hug_h1_recall_lp}}** nats versus **{{hug_h1_state_lp}}** nats for `state` and **{{hug_h1_inter_lp}}** nats of superadditive `state x recall` synergy. Second, replacing Pass-1 query states with on-manifold foil states (`beta` in `[0, 1.25]`) while keeping prelude recall intact produces **zero critical bifurcation (`beta_c = None`)** across all three architectures: `Inkling-2-Mini` suppresses Pass-2 foil mass by {{p6_foil_supp_pp}} to **{{p6_foil_cap_b1}}** capture, `Varloop` foil capture decreases with depth ({{var_k3_foil_cap}} at `K = 3` -> {{var_k5_foil_cap}} at `K = 5` -> {{var_k7_foil_cap}} at `K = 7`), and `Huginn-0125` holds flat at **{{hug_k8_foil_cap}}** capture while damping `1.0x` orthogonal tangent pulses to **{{hug_pulse_damp}}** (`KL =` {{hug_pulse_kl}}, vs. {{p6_pulse_coda}} residual deviation and `KL =` {{p6_pulse_kl}} on `Inkling-2-Mini`).",
+  "`Huginn-0125` carries a continuous recurrent state concatenated with clean prelude embeddings through a two-input linear adapter (calibrated at {{hug_cal_2shot}} two-shot accuracy versus {{hug_cal_0shot}} zero-shot; zero-state KL {{hug_zero_kl}}). Knocking out all four on-off combinations of those two adapter inputs proves the tether is doing real structural work. Cutting prompt recall while leaving recurrent state intact drops `K = 8` accuracy from **{{hug_h1_full}}** straight to **{{hug_h1_state_only}}**, with a **{{hug_h1_recall_lp}}** nats recall effect, **{{hug_h1_state_lp}}** nats state effect, and **{{hug_h1_inter_lp}}** nats of synergy.",
+  "When prompt anchoring stays intact, neither architecture family crosses a tipping point even when Pass 1 is completely replaced with a wrong-answer foil. `Inkling-2-Mini`'s hard somatic reset suppresses Pass-2 foil mass by {{p6_foil_supp_pp}}, leaving **{{p6_foil_cap_b1}}** foil survival at the output. On `Varloop`, extra passes scrub foil survival down from {{var_k3_foil_cap}} at `K = 3` to {{var_k5_foil_cap}} at `K = 5` and {{var_k7_foil_cap}} at `K = 7`. `Huginn-0125`'s continuous adapter lets **{{hug_k8_foil_cap}}** foil capture leak through at `K = 8`, while damping unit orthogonal tangent pulses to **{{hug_pulse_damp}}** (output KL {{hug_pulse_kl}}, versus {{p6_pulse_coda}} residual deviation and {{p6_pulse_kl}} on `Inkling-2-Mini`).",
 ]
 
 [[sections]]
 id = "neuromodulation_shunt"
-preprint_title = "Fixed-Weight Neuromodulatory Pass-Clocks and Coda Header Mode-Switching"
-monograph_title = "Inverted-U Conductance Gains and Coda Formatting Shunts"
+preprint_title = "Recurrent Conductance Follows an Inverted-U Curve Before Chat Headers Shunt Emission"
+monograph_title = "Recurrent Gain Peaks in a Goldilocks Window While Chat Headers Delay Emission by One Token"
 paragraphs = [
-  "Neither `Inkling-2-Mini` nor `Huginn-0125` uses explicit pass-index embeddings, yet scaling recurrent message or state conductance by a scalar `gamma` in `[0.00, 1.50]` reveals a universal inverted-U operating curve across both architectures (contrasting with training-free ODE looping and depth-wise LoRAs; [Chen et al.](#references); [Bae et al.](#references); [Hao et al.](#references); [Dehghani et al.](#references); [Giannou et al.](#references)).",
+  "Neither `Inkling-2-Mini` nor `Huginn-0125` uses explicit pass-number embeddings. Scaling recurrent gate or adapter conductance (`gamma`) from zero to {{gamma_max_val}} still traces the same inverted-U Goldilocks curve across both models. That sharp operating window sets trained recurrence apart from training-free ODE looping and per-pass LoRAs ([Chen et al.](#references); [Bae et al.](#references); [Hao et al.](#references); [Dehghani et al.](#references); [Giannou et al.](#references)).",
 ]
 figures = ["fig-gamma-clock"]
 post_paragraphs = [
-  "On `Inkling-2-Mini`, Hop-2 accuracy rises from `3.3%` (`gamma = 0.00`) to a native peak of **{{p6_gamma_10_pct}}** at `gamma = 1.00` before rolling over at `gamma = 1.50`; `Huginn-0125` traces the exact same inverted-U shape, peaking at **{{hug_gamma_075_pct}}** at `gamma = 0.75` (`40.0%` at `1.00`) before collapsing to `11.7%` at `1.50`. Finally, dissecting `Inkling-2-Mini`'s 6-layer Coda on chat headers explains why pre-shunt Coda Layer `L19` already surfaces **{{p6_shunt_l19_top5}}** Top-5 semantic answers before `L21..L22` shunt `100.0%` of probability mass into `<|content_thinking|>`: swapping somatic header anchors in Coda abolishes `99.4%` of formatting shunt mass (down to **{{p6_shunt_swap_final}}**), while full semantic emission (**{{p6_shunt_ct_prob}}** answer probability) recovers one token later at `<|content_text|>`.",
-  "All code, mock-PyTorch CPU unit tests, exact WHT and VJP solvers, SHA-256 weight manifests, and locked empirical JSON artifacts (`{{p7_total_sec}}` unified H100 runtime, `0.00e+00` unrolled equivalence across `Varloop` {{p7_varloop_equiv}} and `Huginn-0125` {{p7_huginn_equiv}}) are released under an MIT license at [github.com/xmattwest/nullbridge](https://github.com/xmattwest/nullbridge).",
+  "Turn conductance down to zero and multi-hop reasoning starves ({{p6_gamma_00_pct}} on `Inkling-2-Mini` and {{hug_gamma_00_pct}} on `Huginn-0125`). Accuracy peaks inside a narrow native window: **{{p6_gamma_10_pct}}** at `gamma =` {{gamma_unit_val}} on `Inkling-2-Mini` and **{{hug_gamma_075_pct}}** at `gamma =` {{gamma_opt_hug_val}} on `Huginn-0125` ({{hug_gamma_10_pct}} at unit gain). Push `gamma` to {{gamma_max_val}} and accuracy rolls over to {{p6_gamma_15_pct}} and {{hug_gamma_15_pct}} as over-driven updates overshoot the Coda readout manifold.",
+  "Inside `Inkling-2-Mini`'s Coda, one last circuit explains why chat-formatted prompts look mute right at the assistant header. Pre-shunt layer `L19` already surfaces **{{p6_shunt_l19_top5}}** Top-5 semantic answers before layers `L21..L22` route **{{p6_shunt_base_fmt}}** of probability mass into `<|content_thinking|>`. Transplanting clean somatic header carriers strips away {{p6_shunt_abolish_pct}} of that formatting shunt (down to **{{p6_shunt_swap_final}}**), and stepping forward a single token to `<|content_text|>` releases the semantic answer at **{{p6_shunt_ct_prob}}** probability.",
+  "All code, CPU verification tests, exact Walsh-Hadamard and vector-Jacobian solvers, interactive HTML circuit benches, and SHA-256-locked empirical JSON artifacts ({{p7_total_sec}} unified H100 runtime; unrolled equivalence {{p7_varloop_equiv}} on `Varloop` and {{p7_huginn_equiv}} on `Huginn-0125`) are available under an MIT license at [github.com/xmattwest/nullbridge](https://github.com/xmattwest/nullbridge).",
 ]
 
 # ---------------------------------------------------------------------------
-# Verified Citations (Section 4 of BIOPHYSICS_HANDOFF.md: 25 Entries)
+# Verified Citations (25 Entries)
 # ---------------------------------------------------------------------------
 
 [[citations]]
