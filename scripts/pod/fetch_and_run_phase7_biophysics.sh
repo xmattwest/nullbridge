@@ -280,7 +280,7 @@ cfg.padded_vocab_size = 256
 cfg.block_size = 32
 m = AutoModelForCausalLM.from_config(cfg, trust_remote_code=True).eval()
 with torch.no_grad():
-    out = m(input_ids=torch.ones((1, 4), dtype=torch.long), num_steps=torch.tensor(2, dtype=torch.long), use_cache=False)
+    out = m(input_ids=torch.ones((1, 4), dtype=torch.long), num_steps=2, use_cache=False)
 assert out.logits.shape == (1, 4, 256), f"unexpected logits shape: {out.logits.shape}"
 print("[nb-p7] Huginn RavenForCausalLM compatibility OK under", sys.executable)
 PY

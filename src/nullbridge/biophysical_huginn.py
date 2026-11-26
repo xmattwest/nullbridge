@@ -490,7 +490,7 @@ def run_huginn_preflight_equivalence(
         nat_out = ctrl.model(
             input_ids=inp,
             input_states=x0_matched.clone(),
-            num_steps=torch.tensor(k, dtype=torch.long),
+            num_steps=int(k),
             use_cache=False,
         ).logits[row_idx, col_idx].float()
 
