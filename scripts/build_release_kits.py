@@ -35,6 +35,9 @@ PART1_WEB_URL = "https://shelltoho.me/pubs/money-is-moral/"
 PART2_WEB_URL = "https://shelltoho.me/pubs/rotating-the-bottleneck/"
 PART3_WEB_URL = "https://shelltoho.me/pubs/nullbridge/"
 PART4_WEB_URL = "https://shelltoho.me/pubs/coherent-moral-utility/"
+PART5_WEB_URL = "https://shelltoho.me/pubs/biophysics-looped-transformer/"
+PART5_DOI_URL = "https://doi.org/10.5281/zenodo.24572570"
+PART5_HF_URL = "https://huggingface.co/datasets/xmattwest/biophysics-looped-transformer"
 DEFAULT_RAW_BASE_URL = "https://raw.githubusercontent.com/xmattwest/nullbridge/main/figures/substack"
 
 SUBSTACK_STYLE = """
@@ -606,6 +609,36 @@ def extract_substack_body(raw_html: str, slug: str) -> str:
             body,
         )
         assert n_eq == 1, f"Expected 1 R_safe equation in Part 3, found {n_eq}"
+    elif slug == "04_part5_biophysics":
+        part5_eqs = [
+            (
+                r"<blockquote><p><code>f\(m\) = sum_\{S subset \{Q,K,V,M\}\}[\s\S]*?</code></p></blockquote>",
+                '<figure><img src="figures/eq1_wht_parseval_2x.png" '
+                'alt="Exact 16-mask Walsh-Hadamard decomposition and Parseval variance conservation across subsets S of {Q, K, V, M}, with zero-loss Parseval variance sum over non-empty S of w_hat_S squared.">'
+                "<figcaption>Exact 16-mask Walsh-Hadamard Boolean gate decomposition and zero-loss Parseval variance conservation identity (1).</figcaption></figure>",
+            ),
+            (
+                r"<blockquote><p><code>sigma_max\(J_p\) = max \|\|J_p v\|\|_2[\s\S]*?</code></p></blockquote>",
+                '<figure><img src="figures/eq2_non_normal_gain_2x.png" '
+                'alt="Non-normal singular gain versus Rayleigh self-feedback and contractive isotropic RMS: sigma_max(J_p) vastly exceeds Rayleigh self-feedback, while isotropic RMS remains strictly below unity.">'
+                "<figcaption>Non-normal top singular gain exceeding Rayleigh self-feedback alongside strictly contractive isotropic RMS below unity (2).</figcaption></figure>",
+            ),
+            (
+                r"<blockquote><p><code>G_t = J_t\^T \(diag\(p\)[\s\S]*?</code></p></blockquote>",
+                '<figure><img src="figures/eq3_fisher_pullback_2x.png" '
+                'alt="Hutchinson vector-Jacobian Fisher information pullback: G_t equals J_t transpose times (diag(p) minus p p transpose) times J_t, with trace estimated over Gaussian probes z.">'
+                "<figcaption>Full-vocabulary Fisher information pullback metric and unbiased Hutchinson vector-Jacobian trace estimator (3).</figcaption></figure>",
+            ),
+            (
+                r"<blockquote><p><code>h_in\^\(p\) = \(1 - f_g\)[\s\S]*?</code></p></blockquote>",
+                '<figure><img src="figures/eq4_somatic_vs_adapter_2x.png" '
+                'alt="Hard somatic reset versus continuous linear adapter recurrence: Inkling-2-Mini and Varloop reload pre-loop Stem state h_pre across four message gates, whereas Huginn-0125 concatenates recurrent state with prelude embeddings e_pre through W_adp.">'
+                "<figcaption>Hard somatic Stem reset across four narrow message gates in Inkling-2-Mini and Varloop versus Huginn-0125&#x27;s continuous prompt-recall adapter (4).</figcaption></figure>",
+            ),
+        ]
+        for pat, eq_html in part5_eqs:
+            body, n_eq = re.subn(pat, eq_html, body)
+            assert n_eq == 1, f"Expected 1 match for {pat} in Part 5, found {n_eq}"
 
     body = body.replace("R = U V^T", "R = U V\u1d40")
     body = body.replace("<code>I \u2212 Q_42 Q_42^T</code>", "<code>I \u2212 Q Q\u1d40</code>")
@@ -828,12 +861,22 @@ def make_x_article_doc(
     x_body = x_body.replace(PART2_SUBSTACK_URL, PART2_WEB_URL)
     x_body = re.sub(r"<h3>Methods, Repo &amp; Technical Notes</h3>[\s\S]*$", "", x_body).strip()
     x_body = re.sub(r"<h2>Methods, Repo &amp; Technical Notes</h2>[\s\S]*$", "", x_body).strip()
-    x_body += (
-        f'\n<p>Interactive web edition, full tables, and PDF at '
-        f'<a href="{closing_url}">{closing_url}</a>. '
-        f'Open-source code and SHA-256-locked JSON outputs at '
-        f'<a href="{repo_url}">{repo_url}</a>.</p>'
-    )
+    if slug == "04_part5_biophysics":
+        x_body += (
+            f'\n<p>Preprint, PDF, and full tables at '
+            f'<a href="{closing_url}">{closing_url}</a>. '
+            f'Zenodo DOI: <a href="{PART5_DOI_URL}">{PART5_DOI_URL}</a>. '
+            f'Hugging Face Dataset: <a href="{PART5_HF_URL}">{PART5_HF_URL}</a>. '
+            f'Open-source code and SHA-256-locked JSON outputs at '
+            f'<a href="{repo_url}">{repo_url}</a>.</p>'
+        )
+    else:
+        x_body += (
+            f'\n<p>Interactive web edition, full tables, and PDF at '
+            f'<a href="{closing_url}">{closing_url}</a>. '
+            f'Open-source code and SHA-256-locked JSON outputs at '
+            f'<a href="{repo_url}">{repo_url}</a>.</p>'
+        )
     assert "substack.com" not in x_body, "Substack URL leaked into X Article body!"
 
     thumbs = []
@@ -917,6 +960,16 @@ PART4_METHODS_HTML = """
 </ul>
 """.strip()
 
+PART5_METHODS_HTML = """
+<h3>Methods, Repo &amp; Technical Notes</h3>
+<ul>
+  <li><strong>Academic preprint, PDF, DOI &amp; dataset:</strong> <a href="https://shelltoho.me/pubs/biophysics-looped-transformer/">shelltoho.me/pubs/biophysics-looped-transformer</a> · <a href="https://shelltoho.me/pubs/biophysics-looped-transformer/paper.pdf">PDF</a> · Zenodo DOI <a href="https://doi.org/10.5281/zenodo.24572570">10.5281/zenodo.24572570</a> · Hugging Face Dataset <a href="https://huggingface.co/datasets/xmattwest/biophysics-looped-transformer">xmattwest/biophysics-looped-transformer</a> · Open-source solvers and locked JSON artifacts at <a href="https://github.com/xmattwest/nullbridge">github.com/xmattwest/nullbridge</a>.</li>
+  <li><strong>Complete 5-part series:</strong> <a href="https://shelltoho.me/pubs/">All five parts in reading order at shelltoho.me/pubs</a> (building directly on <a href="https://shelltoho.me/pubs/nullbridge/">Part 3: Looping in the Dark</a> and <a href="https://shelltoho.me/pubs/coherent-moral-utility/">Part 4: Coherent Moral Utility</a>).</li>
+  <li><strong>Exact circuit &amp; spectral verification:</strong> Evaluated across <code>thinkingmachines/Inkling-2-Mini</code> (<code>K = 3</code>), variable-depth <code>thinkingmachines/TML-d24-varloop-research</code> (<code>K = 1..7</code>), and dense <code>tomg-group-umd/huginn-0125</code> (<code>K = 1..8</code>) with bit-exact unrolled logit equivalence (0.00e+00 on both <code>Varloop</code> and <code>Huginn-0125</code>) and Walsh-Hadamard Parseval conservation error at most 7.11e&minus;15 across 87 transforms.</li>
+  <li><strong>Cryptographic provenance:</strong> All 197 quantitative metrics in the manuscript are bound via RFC 6901 JSON Pointers to SHA-256-locked empirical artifacts (<a href="https://shelltoho.me/pubs/biophysics-looped-transformer/provenance.json">provenance.json</a>).</li>
+</ul>
+""".strip()
+
 
 def build_launchpad_html(kits: list[dict[str, object]]) -> str:
     cards = []
@@ -984,7 +1037,7 @@ def build_launchpad_html(kits: list[dict[str, object]]) -> str:
             </div>
             <pre>{html_mod.escape(reply_str)}</pre>
           </div>
-          <details class="fig-panel" {"open" if slug == "01_part2_bottleneck" else ""}>
+          <details class="fig-panel" {"open" if slug in ("01_part2_bottleneck", "04_part5_biophysics") else ""}>
             <summary>Inline Figures in Exact Drop Order ({len(figs)} files in <code>{html_mod.escape(str(fig_dir))}</code>)</summary>
             <ol class="fig-path-list">
               {"".join(fig_rows)}
@@ -996,7 +1049,7 @@ def build_launchpad_html(kits: list[dict[str, object]]) -> str:
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<title>X + Substack Release Launchpad · Parts 2, 3, and 4</title>
+<title>X + Substack Release Launchpad · Parts 2, 3, 4, and 5</title>
 <style>
   body {{ max-width: 940px; margin: 40px auto; padding: 0 24px 80px; background: #F7F6EF; color: #0F0F0F; font: 15px/1.6 Inter, -apple-system, BlinkMacSystemFont, sans-serif; }}
   h1 {{ font-family: Georgia, serif; font-size: 32px; margin: 0 0 8px; letter-spacing: -0.02em; }}
@@ -1029,7 +1082,7 @@ def build_launchpad_html(kits: list[dict[str, object]]) -> str:
 </head>
 <body>
   <h1>X + Substack Release Launchpad</h1>
-  <p class="lead">Staggered 3-drop kit matched to Part 1 (<em>How LLMs Price Spite, Disgust, and Dirty Money</em>).</p>
+  <p class="lead">Staggered 4-drop kit matched to Part 1 (<em>How LLMs Price Spite, Disgust, and Dirty Money</em>) through Part 5 (<em>Biophysics of a Looped Transformer</em>).</p>
   <div class="status-banner">
     <strong>Image paste fix active:</strong> Substack pages now reference public HTTPS URLs on <code>raw.githubusercontent.com/xmattwest/nullbridge/main/figures/substack/...</code> so Substack imports all figures automatically on paste (with a checkbox to also show local file paths inline). X Article pages use explicit <code>[DROP IMAGE XX: /exact/path]</code> text markers with zero broken image boxes.
   </div>
@@ -1042,9 +1095,11 @@ def build_launchpad_html(kits: list[dict[str, object]]) -> str:
 
 def main() -> None:
     parser = argparse.ArgumentParser(description="Build Substack + X Article release kits.")
-    parser.add_argument("--afriat-folio-dir", type=pathlib.Path, required=True)
-    parser.add_argument("--part3-folio-dir", type=pathlib.Path, required=True)
-    parser.add_argument("--part4-folio-dir", type=pathlib.Path, required=True)
+    parser.add_argument("--afriat-folio-dir", type=pathlib.Path, default=pathlib.Path("../afriat/runs/folio"))
+    parser.add_argument("--part3-folio-dir", type=pathlib.Path, default=pathlib.Path("runs/folio"))
+    parser.add_argument("--part4-folio-dir", type=pathlib.Path, default=pathlib.Path("runs/folio_inkling_afriat"))
+    parser.add_argument("--part5-folio-dir", type=pathlib.Path, default=pathlib.Path("runs/folio_biophysics"))
+    parser.add_argument("--only-slug", type=str, default="", help="Only rebuild files for this slug while indexing all kits.")
     parser.add_argument("--out-dir", type=pathlib.Path, default=pathlib.Path("runs/release_kits"))
     parser.add_argument("--public-fig-dir", type=pathlib.Path, default=pathlib.Path("figures/substack"))
     parser.add_argument("--raw-base-url", type=str, default=DEFAULT_RAW_BASE_URL)
@@ -1099,7 +1154,7 @@ def main() -> None:
         },
         {
             "slug": "03_part4_moral_utility",
-            "drop": "Drop 3 · Part 4 (Series Finale)",
+            "drop": "Drop 3 · Part 4",
             "window": "Day 7 · 9:00 AM MT",
             "title": "LLMs Exhibit Coherent Moral Utility",
             "subtitle": "When silent thinking loops double dirty-money rejection, is the model confused, or pricing clean hands and fairness like real economic goods?",
@@ -1118,12 +1173,46 @@ def main() -> None:
                 "Code: https://github.com/xmattwest/nullbridge"
             ),
         },
+        {
+            "slug": "04_part5_biophysics",
+            "drop": "Drop 4 · Part 5 (Biophysics Finale)",
+            "window": "Day 10 · 8:30 AM MT",
+            "title": "Looped Transformers Compute Like Balanced Cortical Circuits",
+            "subtitle": "Across Inkling-2-Mini, Varloop, and Huginn-0125, recurrent layers damp random noise below unity while amplifying task signals up to 13.6x into nearly perpendicular directions.",
+            "x_caption": (
+                "Word probes miss 93.3% of answers inside Inkling-2-Mini's silent loop, yet its 6-layer exit block decodes 70.0% accuracy with zero CoT.\n\n"
+                "Across 3 looped models, every pass damps random static while firing task signals up to 13.6x sideways."
+            ),
+            "folio_dir": args.part5_folio_dir,
+            "extra_methods": PART5_METHODS_HTML,
+            "closing_url": PART5_WEB_URL,
+            "repo_url": "https://github.com/xmattwest/nullbridge",
+            "self_reply": (
+                "Preprint, PDF, Zenodo DOI, Hugging Face dataset, and open-source circuit solvers:\n\n"
+                "Preprint & PDF: https://shelltoho.me/pubs/biophysics-looped-transformer/\n"
+                "DOI: https://doi.org/10.5281/zenodo.24572570\n"
+                "Dataset: https://huggingface.co/datasets/xmattwest/biophysics-looped-transformer\n"
+                "Code: https://github.com/xmattwest/nullbridge"
+            ),
+        },
     ]
 
     launchpad_kits: list[dict[str, object]] = []
     for sp in specs:
         slug = str(sp["slug"])
         kdir = out_dir / slug
+        if args.only_slug and slug != args.only_slug:
+            existing_figs = sorted(
+                f.name for f in (kdir / "figures").iterdir()
+                if f.is_file() and re.match(r"^\d{2}_(?!alt_)", f.name)
+            )
+            launchpad_kits.append({
+                **sp,
+                "figures": existing_figs,
+                "fig_dir": (kdir / "figures").resolve(),
+                "banner_path": (kdir / "x_banner_5x2.png").resolve(),
+            })
+            continue
         kdir.mkdir(parents=True, exist_ok=True)
         pub_sub_dir = pub_root / slug
         if pub_sub_dir.exists():
@@ -1132,8 +1221,11 @@ def main() -> None:
 
         raw_banner = kdir / "x_banner_5x2_raw.png"
         final_banner = kdir / "x_banner_5x2.png"
-        assert raw_banner.exists(), f"Missing generated raw banner: {raw_banner}"
-        fit_banner_5x2(raw_banner, final_banner)
+        if slug == "04_part5_biophysics" and final_banner.exists():
+            pass  # Already rendered at exact 2500x1000
+        else:
+            assert raw_banner.exists(), f"Missing generated raw banner: {raw_banner}"
+            fit_banner_5x2(raw_banner, final_banner)
 
         folio_sub = pathlib.Path(sp["folio_dir"]) / "substack"  # type: ignore[arg-type]
         with tempfile.TemporaryDirectory(prefix="stage-figs-") as stage_tmp:
@@ -1145,6 +1237,17 @@ def main() -> None:
                 render_equation_card_2x("part2", stage_fig_dir / "zero_cost_bridge_eq_2x.png")
             elif slug == "02_part3_looping":
                 render_equation_card_2x("part3", stage_fig_dir / "zero_cost_bridge_eq_2x.png")
+            elif slug == "04_part5_biophysics":
+                x_cards = pathlib.Path(sp["folio_dir"]) / "x-article" / "cards"  # type: ignore[arg-type]
+                for eq_name in [
+                    "eq1_wht_parseval_2x.png",
+                    "eq2_non_normal_gain_2x.png",
+                    "eq3_fisher_pullback_2x.png",
+                    "eq4_somatic_vs_adapter_2x.png",
+                ]:
+                    eq_src = x_cards / eq_name
+                    assert eq_src.exists(), f"Missing rendered LaTeX card: {eq_src}"
+                    shutil.copy2(eq_src, stage_fig_dir / eq_name)
 
             raw_sub_html = (folio_sub / "substack_paste_ready.html").read_text()
             body = extract_substack_body(raw_sub_html, slug)
